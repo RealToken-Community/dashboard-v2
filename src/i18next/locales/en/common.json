@@ -1,0 +1,54 @@
+{
+  "header": {
+    "title": "Realtoken Dashboard"
+  },
+  "settings": {
+    "title": "Language",
+    "french": "French",
+    "english": "English",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "numbers": {
+    "currency": "${{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}}",
+    "percent": "{{value, number(maximumFractionDigits: 2)}} %",
+    "decimal": "{{value, number(maximumFractionDigits: 2)}}",
+    "integer": "{{value, number(maximumFractionDigits: 0)}}"
+  },
+  "worthCard": {
+    "title": "RealTokens",
+    "total": "Total",
+    "ethereum": "Ethereum",
+    "gnosis": "Gnosis",
+    "rmm": "RMM"
+  },
+  "rentsCard": {
+    "title": "Rents",
+    "apr": "APR",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "yearly": "Yearly"
+  },
+  "propertiesCard": {
+    "title": "Properties",
+    "tokens": "Tokens",
+    "properties": "Properties",
+    "averageValue": "Average value",
+    "averageRent": "Average rent"
+  },
+  "assetCard": {
+    "tokens": "Tokens",
+    "apr": "APR",
+    "weekly": "Weekly rents",
+    "yearly": "Yearly rents",
+    "propertyValue": "Property value",
+    "viewOnRealt": "View on RealT"
+  },
+  "wallets": {
+    "value_zero": "No wallet",
+    "value_one": "1 wallet",
+    "value_other": "{{count}} wallets",
+    "manage": "Manage wallets"
+  }
+}
