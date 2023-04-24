@@ -96,14 +96,12 @@ const AssetCard: FC<{ value: Realtoken }> = (props) => {
   )
 }
 
-export const AssetGrid: FC = () => {
-  const realtokens = useSelector(selectOwnedRealtokens)
-
+export const AssetGrid: FC<{ realtokens: Realtoken[] }> = (props) => {
   return (
     <Grid>
-      {realtokens.map((realtoken) => (
-        <Grid.Col key={realtoken.id} span={12} sm={6} md={4} lg={3} xl={2}>
-          <AssetCard value={realtoken} />
+      {props.realtokens.map((item) => (
+        <Grid.Col key={item.id} span={12} sm={6} md={4} lg={3} xl={2}>
+          <AssetCard value={item} />
         </Grid.Col>
       ))}
     </Grid>

@@ -45,6 +45,15 @@
     "propertyValue": "Valeur de la propriété",
     "viewOnRealt": "Voir sur RealT"
   },
+  "assetTable": {
+    "property": "Propriété",
+    "apr": "APR",
+    "ownedTokens": "Tokens",
+    "ownedValue": "Valeur",
+    "weeklyRent": "Loyer hebdomadaire",
+    "yearlyRent": "Loyer annuel",
+    "propertyValue": "Valeur de la propriété"
+  },
   "wallets": {
     "value_zero": "Aucun portefeuille",
     "value_one": "1 portefeuille",

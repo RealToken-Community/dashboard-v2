@@ -45,6 +45,15 @@
     "propertyValue": "Property value",
     "viewOnRealt": "View on RealT"
   },
+  "assetTable": {
+    "property": "Property",
+    "apr": "Yield",
+    "ownedTokens": "Tokens",
+    "ownedValue": "Value",
+    "weeklyRents": "Weekly rents",
+    "yearlyRents": "Yearly rents",
+    "propertyValue": "Property value"
+  },
   "wallets": {
     "value_zero": "No wallet",
     "value_one": "1 wallet",
