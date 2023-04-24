@@ -1,13 +1,24 @@
 import _sumBy from 'lodash/sumBy'
 
-import { RealToken } from 'src/repositories'
 import { GetWalletBalance } from 'src/repositories/wallets.repository'
 import { RootState } from 'src/store/store'
+import { APIRealToken } from 'src/types/APIRealToken'
 
-export interface RealtokenItem extends RealToken {
+export interface Realtoken extends APIRealToken {
   id: string
   amount: number
   value: number
+}
+
+function isContractRelated(realtoken: APIRealToken, contractAddress: string) {
+  return [
+    realtoken.xDaiContract,
+    realtoken.gnosisContract,
+    realtoken.ethereumContract,
+  ]
+    .filter((item) => item)
+    .map((item) => (item ?? '').toLowerCase())
+    .includes(contractAddress.toLowerCase())
 }
 
 function getOwnedRealtokens(type: keyof GetWalletBalance) {
@@ -17,15 +28,16 @@ function getOwnedRealtokens(type: keyof GetWalletBalance) {
 
     return realtokens
       .map((realtoken) => {
-        const realtokenId = realtoken.token.id
-        const balance = balances[type].find(
-          (balance) => balance.address === realtokenId
+        const realtokenId = realtoken.uuid
+        const balance = balances[type].find((balance) =>
+          isContractRelated(realtoken, balance.address)
         )
+
         return {
           id: realtokenId,
           ...realtoken,
           amount: balance ? balance.amount : 0,
-          value: balance ? balance.amount * realtoken.token.value : 0,
+          value: balance ? balance.amount * realtoken.tokenPrice : 0,
         }
       })
       .filter((item) => item.amount > 0)
@@ -63,10 +75,10 @@ export const selectOwnedRealtokensRents = (state: RootState) => {
 
   return realtokens.reduce(
     (acc, item) => ({
-      daily: acc.daily + item.return.perDay * item.amount,
-      weekly: acc.weekly + item.return.perDay * 7 * item.amount,
-      monthly: acc.monthly + item.return.perMonth * item.amount,
-      yearly: acc.yearly + item.return.perYear * item.amount,
+      daily: acc.daily + item.netRentDayPerToken * item.amount,
+      weekly: acc.weekly + item.netRentDayPerToken * 7 * item.amount,
+      monthly: acc.monthly + item.netRentMonthPerToken * item.amount,
+      yearly: acc.yearly + item.netRentYearPerToken * item.amount,
     }),
     rentsSummary
   )

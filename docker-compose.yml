@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        BUILD_ENV: production
+        COMMUNITY_API_KEY_ARG: $COMMUNITY_API_KEY
 
     ports:
       - '3000:3000'

@@ -6,11 +6,11 @@ import { Badge, Button, Card, Grid, Group, Image, Text } from '@mantine/core'
 
 import { Divider } from 'src/components/Divider'
 import {
-  RealtokenItem,
+  Realtoken,
   selectOwnedRealtokens,
 } from 'src/store/features/wallets/walletsSelector'
 
-const AssetCard: FC<{ value: RealtokenItem }> = (props) => {
+const AssetCard: FC<{ value: Realtoken }> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
@@ -18,14 +18,14 @@ const AssetCard: FC<{ value: RealtokenItem }> = (props) => {
     <Card shadow='sm' radius='md' withBorder>
       <Card.Section>
         <Image
-          src={props.value.property.images[0]}
+          src={props.value.imageLink[0]}
           height={150}
-          alt={props.value.property.name}
+          alt={props.value.fullName}
         />
       </Card.Section>
 
       <Group position='apart' mt='md'>
-        <Text weight={500}>{props.value.property.shortName}</Text>
+        <Text weight={500}>{props.value.shortName}</Text>
         <Badge variant='light'>
           {tNumbers('currency', { value: props.value.value })}
         </Badge>
@@ -38,14 +38,14 @@ const AssetCard: FC<{ value: RealtokenItem }> = (props) => {
         <Text size='sm'>
           {tNumbers('decimal', { value: props.value.amount })}
           {' / '}
-          {tNumbers('integer', { value: props.value.token.supply })}
+          {tNumbers('integer', { value: props.value.totalTokens })}
         </Text>
       </Group>
 
       <Group position='apart'>
         <Text size='sm'>{t('apr')}</Text>
         <Text size='sm'>
-          {tNumbers('percent', { value: props.value.return.apr })}
+          {tNumbers('percent', { value: props.value.annualPercentageYield })}
         </Text>
       </Group>
 
@@ -53,7 +53,7 @@ const AssetCard: FC<{ value: RealtokenItem }> = (props) => {
         <Text size='sm'>{t('weekly')}</Text>
         <Text size='sm'>
           {tNumbers('currency', {
-            value: props.value.amount * props.value.return.perDay * 7,
+            value: props.value.amount * props.value.netRentDayPerToken * 7,
           })}
         </Text>
       </Group>
@@ -62,7 +62,7 @@ const AssetCard: FC<{ value: RealtokenItem }> = (props) => {
         <Text size='sm'>{t('yearly')}</Text>
         <Text size='sm'>
           {tNumbers('currency', {
-            value: props.value.amount * props.value.return.perYear,
+            value: props.value.amount * props.value.netRentYearPerToken,
           })}
         </Text>
       </Group>
@@ -71,7 +71,7 @@ const AssetCard: FC<{ value: RealtokenItem }> = (props) => {
         <Text size='sm'>{t('propertyValue')}</Text>
         <Text size='sm'>
           {tNumbers('currency', {
-            value: props.value.token.supply * props.value.token.value,
+            value: props.value.totalInvestment,
           })}
         </Text>
       </Group>
@@ -79,7 +79,7 @@ const AssetCard: FC<{ value: RealtokenItem }> = (props) => {
       <Divider height={1} my='xs' />
 
       <Text size='xs' align='center' mb='xs'>
-        {props.value.property.name}
+        {props.value.fullName}
       </Text>
 
       <Button
@@ -87,7 +87,7 @@ const AssetCard: FC<{ value: RealtokenItem }> = (props) => {
         fullWidth
         variant='outline'
         size='xs'
-        href={props.value.property.url}
+        href={props.value.marketplaceLink}
         target='_blank'
       >
         {t('viewOnRealt')}

@@ -1,10 +1,11 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
-import { RealToken, RealtokenRepository } from 'src/repositories'
+import { RealtokenRepository } from 'src/repositories'
 import { AppDispatch, RootState } from 'src/store/store'
+import { APIRealToken } from 'src/types/APIRealToken'
 
 interface RealtokenInitialStateType {
-  realtokens: RealToken[]
+  realtokens: APIRealToken[]
   isLoading: boolean
 }
 
@@ -18,7 +19,7 @@ export const realtokensChangedDispatchType = 'realtokens/realtokensChanged'
 export const realtokensIsLoadingDispatchType = 'realtokens/realtokensIsLoading'
 
 // ACTIONS
-export const realtokensChanged = createAction<RealToken[]>(
+export const realtokensChanged = createAction<APIRealToken[]>(
   realtokensChangedDispatchType
 )
 export const realtokensIsLoading = createAction<boolean>(
