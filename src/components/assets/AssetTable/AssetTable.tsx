@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { Table } from '@mantine/core'
 
-import { Realtoken } from 'src/store/features/wallets/walletsSelector'
+import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
 
-const AssetRow: FC<{ value: Realtoken }> = (props) => {
+const AssetRow: FC<{ value: OwnedRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
   return (
     <tr>
@@ -28,7 +28,7 @@ const AssetRow: FC<{ value: Realtoken }> = (props) => {
   )
 }
 
-export const AssetTable: FC<{ realtokens: Realtoken[] }> = (props) => {
+export const AssetTable: FC<{ realtokens: OwnedRealtoken[] }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetTable' })
 
   return (

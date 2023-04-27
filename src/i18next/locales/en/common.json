@@ -42,8 +42,15 @@
     "apr": "APR",
     "weekly": "Weekly rents",
     "yearly": "Yearly rents",
+    "rentedUnits": "Rented units",
     "propertyValue": "Property value",
-    "viewOnRealt": "View on RealT"
+    "viewOnRealt": "View on RealT",
+    "isRmmAvailable": "RMM",
+    "rentStatus": {
+      "full": "Rented",
+      "partial": "Partially rented",
+      "none": "Not rented"
+    }
   },
   "assetTable": {
     "property": "Property",

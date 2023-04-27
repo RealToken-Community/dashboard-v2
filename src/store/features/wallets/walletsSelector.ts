@@ -2,15 +2,15 @@ import _sumBy from 'lodash/sumBy'
 
 import { GetWalletBalance } from 'src/repositories/wallets.repository'
 import { RootState } from 'src/store/store'
-import { APIRealToken } from 'src/types/APIRealToken'
+import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'
 
-export interface Realtoken extends APIRealToken {
+export interface OwnedRealtoken extends Realtoken {
   id: string
   amount: number
   value: number
 }
 
-function isContractRelated(realtoken: APIRealToken, contractAddress: string) {
+function isContractRelated(realtoken: Realtoken, contractAddress: string) {
   return [
     realtoken.xDaiContract,
     realtoken.gnosisContract,
@@ -23,7 +23,7 @@ function isContractRelated(realtoken: APIRealToken, contractAddress: string) {
 
 function getOwnedRealtokens(type: keyof GetWalletBalance) {
   return (state: RootState) => {
-    const realtokens = state.realtokens.realtokens
+    const realtokens = selectRealtokens(state)
     const balances = state.wallets.balances
 
     return realtokens

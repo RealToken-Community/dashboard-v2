@@ -42,8 +42,15 @@
     "apr": "APR",
     "weekly": "Loyers hebdomadaires",
     "yearly": "Loyers annuels",
+    "rentedUnits": "Unités louées",
     "propertyValue": "Valeur de la propriété",
-    "viewOnRealt": "Voir sur RealT"
+    "viewOnRealt": "Voir sur RealT",
+    "isRmmAvailable": "RMM",
+    "rentStatus": {
+      "full": "Louée",
+      "partial": "Partiellement louée",
+      "none": "Non louée"
+    }
   },
   "assetTable": {
     "property": "Propriété",
