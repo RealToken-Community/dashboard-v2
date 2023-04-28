@@ -6,6 +6,9 @@ const nextConfig = {
   experimental: {
     outputStandalone: true,
   },
+  images: {
+    domains: ['realt.co']
+  }
 };
 
 module.exports = nextConfig;

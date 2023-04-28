@@ -1,7 +1,17 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Badge, Button, Card, Grid, Group, Image, Text } from '@mantine/core'
+import Image from 'next/image'
+
+import {
+  Badge,
+  Button,
+  Card,
+  Grid,
+  Group,
+  Text,
+  createStyles,
+} from '@mantine/core'
 
 import { Divider } from 'src/components/Divider'
 import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
@@ -34,6 +44,17 @@ const AssetCard: FC<{ value: OwnedRealtoken }> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
+  const { classes } = createStyles({
+    imageContainer: {
+      height: '150px',
+      position: 'relative',
+
+      '& > span': {
+        height: '100% !important',
+      },
+    },
+  })()
+
   return (
     <Card
       shadow={'sm'}
@@ -42,11 +63,15 @@ const AssetCard: FC<{ value: OwnedRealtoken }> = (props) => {
       style={{ height: '100%' }}
     >
       <Card.Section>
-        <Image
-          src={props.value.imageLink[0]}
-          height={150}
-          alt={props.value.fullName}
-        />
+        <div className={classes.imageContainer}>
+          <Image
+            src={props.value.imageLink[0]}
+            width={400}
+            height={300}
+            objectFit={'cover'}
+            alt={props.value.fullName}
+          />
+        </div>
       </Card.Section>
 
       <Group position={'apart'} mt={'md'}>
