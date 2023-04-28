@@ -31,7 +31,7 @@ interface WalletItemProps {
 
 const WalletItem: FC<WalletItemProps> = (props) => {
   return (
-    <Badge size='lg' variant='dot' fullWidth>
+    <Badge size={'md'} variant={'dot'} fullWidth={true}>
       {props.address}
     </Badge>
   )
@@ -40,7 +40,7 @@ WalletItem.displayName = 'WalletItem'
 
 const WalletItemList: FC<{ addressList: string[] }> = (props) => {
   return (
-    <Flex direction='column' gap='xs'>
+    <Flex direction={'column'} gap={'xs'}>
       {props.addressList
         .filter((item) => item)
         .map((address) => (
@@ -59,7 +59,7 @@ const ManageWalletButton: FC<{ onClick: () => void }> = (props) => {
     modals.openContextModal('manageWallets', { innerProps: {} })
 
   return (
-    <Box ta='center' mb='xs' mt='sm'>
+    <Box ta={'center'} mb={'xs'} mt={'sm'}>
       <Button
         onClick={() => {
           props.onClick()
@@ -99,7 +99,7 @@ export const WalletMenu: FC = () => {
       </Menu.Target>
       <Menu.Dropdown>
         <WalletItemList addressList={addressList} />
-        {cleanedAddressList.length ? <Menu.Divider mt='xs' /> : ''}
+        {cleanedAddressList.length ? <Menu.Divider mt={'xs'} /> : ''}
         <ManageWalletButton onClick={handlers.close} />
       </Menu.Dropdown>
     </Menu>

@@ -9,6 +9,11 @@
     "light": "Clair",
     "dark": "Sombre"
   },
+  "walletModal": {
+    "address": "Adresse {{value}}",
+    "close": "Fermer",
+    "submit": "Valider"
+  },
   "numbers": {
     "currency": "${{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}}",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",
