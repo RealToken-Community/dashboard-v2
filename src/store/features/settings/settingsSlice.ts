@@ -1,4 +1,3 @@
-import { useModals } from '@mantine/modals'
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
 const ADDRESS_LIST_LS_KEY = 'store:settings/addressList'

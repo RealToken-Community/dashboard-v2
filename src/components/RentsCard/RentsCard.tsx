@@ -2,8 +2,9 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { Box, Card, Grid, Title } from '@mantine/core'
+import { Box, Card, Grid, Skeleton, Title } from '@mantine/core'
 
+import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
 import {
   selectOwnedRealtokensAPY,
   selectOwnedRealtokensRents,
@@ -12,13 +13,19 @@ import {
 const APYValue: FC<{ label: string; value: number }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
 
+  const isLoading = useSelector(selectIsLoading)
+
   return (
-    <Grid justify='space-between'>
-      <Grid.Col span='auto'>
+    <Grid justify={'space-between'} align={'center'}>
+      <Grid.Col span={'auto'}>
         <div>{props.label}</div>
       </Grid.Col>
-      <Grid.Col span='content'>
-        <Box ta='right'>{t('percent', { value: props.value * 100 })}</Box>
+      <Grid.Col span={'content'}>
+        {isLoading ? (
+          <Skeleton width={100} height={15} />
+        ) : (
+          <Box ta={'right'}>{t('percent', { value: props.value * 100 })}</Box>
+        )}
       </Grid.Col>
     </Grid>
   )
@@ -28,13 +35,19 @@ APYValue.displayName = 'RentsValue'
 const RentsValue: FC<{ label: string; value: number }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
 
+  const isLoading = useSelector(selectIsLoading)
+
   return (
-    <Grid justify='space-between'>
-      <Grid.Col span='auto'>
+    <Grid justify={'space-between'} align={'center'}>
+      <Grid.Col span={'auto'}>
         <div>{props.label}</div>
       </Grid.Col>
-      <Grid.Col span='content'>
-        <Box ta='right'>{t('currency', { value: props.value })}</Box>
+      <Grid.Col span={'content'}>
+        {isLoading ? (
+          <Skeleton width={100} height={15} />
+        ) : (
+          <Box ta={'right'}>{t('currency', { value: props.value })}</Box>
+        )}
       </Grid.Col>
     </Grid>
   )
@@ -48,9 +61,9 @@ export const RentsCard: FC = () => {
   const apy = useSelector(selectOwnedRealtokensAPY)
 
   return (
-    <Card shadow='sm' radius='md' style={{ height: '100%' }}>
+    <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
       <Title order={4}>{t('title')}</Title>
-      <Box mx='sm' mt='xs'>
+      <Box mx={'sm'} mt={'xs'}>
         <APYValue label={t('apr')} value={apy} />
         <RentsValue label={t('daily')} value={rents.daily} />
         <RentsValue label={t('weekly')} value={rents.weekly} />

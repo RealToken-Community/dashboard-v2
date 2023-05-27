@@ -3,6 +3,11 @@ import { RootState } from 'src/store/store'
 export const selectIsInitialized = (state: RootState): boolean =>
   state.settings.isInitialized
 
+export const selectIsLoading = (state: RootState): boolean =>
+  !state.settings.isInitialized ||
+  state.realtokens.isLoading ||
+  state.wallets.isLoading
+
 export const selectAddressList = (state: RootState): string[] =>
   state.settings.addressList.map((item) => item.toLowerCase())
 

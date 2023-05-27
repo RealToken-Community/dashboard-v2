@@ -51,6 +51,7 @@ const AssetCard: FC<{ value: OwnedRealtoken }> = (props) => {
 
       '& > span': {
         height: '100% !important',
+        width: '100% !important',
       },
     },
   })()

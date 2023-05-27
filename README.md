@@ -3,7 +3,7 @@
 ## TODO
 
 - [x] Use Community API to get RealTokens data (and remove public/mock/realt.min.json)
-- [ ] Display assets in a table
+- [x] Display assets in a table
 - [ ] Allow to sort assets
 - [ ] Create Readme
 - [ ] Integrate CD/CI
