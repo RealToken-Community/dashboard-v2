@@ -42,6 +42,17 @@
     "averageValue": "Average value",
     "averageRent": "Average rent"
   },
+  "assetView": {
+    "sort": "Sort by",
+    "sortOptions": {
+      "name": "Name",
+      "apr": "APR",
+      "rent": "Rent",
+      "value": "Value",
+      "supply": "Property value"
+    },
+    "sortReverse": "Reverse" 
+  },
   "assetCard": {
     "tokens": "Tokens",
     "apr": "APR",

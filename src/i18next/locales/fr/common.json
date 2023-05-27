@@ -42,6 +42,17 @@
     "averageValue": "Valeur moyenne",
     "averageRent": "Loyer moyen"
   },
+  "assetView": {
+    "sort": "Trier par",
+    "sortOptions": {
+      "name": "Nom",
+      "apr": "APR",
+      "rent": "Loyer",
+      "value": "Valeur",
+      "supply": "Valeur propriété"
+    },
+    "sortReverse": "Inverser"
+  },
   "assetCard": {
     "tokens": "Tokens",
     "apr": "APR",
