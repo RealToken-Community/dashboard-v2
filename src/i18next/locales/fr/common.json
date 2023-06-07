@@ -43,7 +43,9 @@
     "averageRent": "Loyer moyen"
   },
   "assetView": {
+    "search": "Recherche",
     "sort": "Trier par",
+    "view": "Affichage",
     "sortOptions": {
       "name": "Nom",
       "apr": "APR",
@@ -51,7 +53,11 @@
       "value": "Valeur",
       "supply": "Valeur propriété"
     },
-    "sortReverse": "Inverser"
+    "sortReverse": "Inverser",
+    "viewOptions": {
+      "table": "Tableau",
+      "grid": "Carte"
+    }
   },
   "assetCard": {
     "tokens": "Tokens",

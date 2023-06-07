@@ -43,7 +43,9 @@
     "averageRent": "Average rent"
   },
   "assetView": {
+    "search": "Search",
     "sort": "Sort by",
+    "view": "View",
     "sortOptions": {
       "name": "Name",
       "apr": "APR",
@@ -51,7 +53,11 @@
       "value": "Value",
       "supply": "Property value"
     },
-    "sortReverse": "Reverse" 
+    "sortReverse": "Reverse" ,
+    "viewOptions": {
+      "table": "Table",
+      "grid": "Grid"
+    }
   },
   "assetCard": {
     "tokens": "Tokens",
