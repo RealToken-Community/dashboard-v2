@@ -2,6 +2,7 @@ import _sumBy from 'lodash/sumBy'
 
 import { GetWalletBalance } from 'src/repositories/wallets.repository'
 import { RootState } from 'src/store/store'
+
 import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'
 
 export interface OwnedRealtoken extends Realtoken {
@@ -43,6 +44,29 @@ function getOwnedRealtokens(type: keyof GetWalletBalance) {
       .filter((item) => item.amount > 0)
       .sort((a, b) => b.value - a.value)
   }
+}
+
+function getRmmDetails(state: RootState) {
+  const realtokens = selectRealtokens(state)
+  const rmmProtocol = state.wallets.balances.rmmProtocol
+
+  return rmmProtocol.reduce(
+    (acc, item) => {
+      const realtoken = realtokens.find((realtoken) =>
+        isContractRelated(realtoken, item.address)
+      )
+
+      if (realtoken) {
+        acc.totalDeposit += item.amount * realtoken.tokenPrice
+      } else {
+        acc.totalDeposit += item.amount
+        acc.stableDeposit += item.amount
+        acc.stableDebt += item.debt
+      }
+      return acc
+    },
+    { stableDeposit: 0, totalDeposit: 0, stableDebt: 0 }
+  )
 }
 
 export const selectOwnedRealtokens = (state: RootState) =>
@@ -89,3 +113,5 @@ export const selectOwnedRealtokensAPY = (state: RootState) => {
   const value = selectOwnedRealtokensValue(state)
   return value > 0 ? rents.yearly / value : 0
 }
+
+export const selectRmmDetails = (state: RootState) => getRmmDetails(state)

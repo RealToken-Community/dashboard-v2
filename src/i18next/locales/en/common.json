@@ -20,6 +20,13 @@
     "decimal": "{{value, number(maximumFractionDigits: 2)}}",
     "integer": "{{value, number(maximumFractionDigits: 0)}}"
   },
+  "summaryCard": {
+    "title": "Summary",
+    "netValue": "Net value",
+    "realtokenValue": "RealTokens",
+    "stableDeposit": "xDai RMM deposit",
+    "stableBorrow": "xDai RMM borrow"
+  },
   "worthCard": {
     "title": "RealTokens",
     "total": "Total",

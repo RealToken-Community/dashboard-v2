@@ -18,6 +18,7 @@ const walletsInitialState: WalletsInitialStateType = {
     gnosis: [],
     ethereum: [],
     rmm: [],
+    rmmProtocol: [],
     computed: [],
   },
   isLoading: false,
