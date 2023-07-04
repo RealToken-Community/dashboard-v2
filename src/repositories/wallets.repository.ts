@@ -230,8 +230,6 @@ export const WalletsRepository = {
       computed: [],
     }
 
-    console.log(response.rmmProtocol)
-
     const standardWalletList = walletsResult.filter(
       (item) => item.type !== WalletType.RMMProtocol
     ) as StandardWallet[]
@@ -245,7 +243,7 @@ export const WalletsRepository = {
         if (existingBalance) {
           existingBalance.amount += balance.amount
         } else {
-          acc[wallet.type].push(balance)
+          acc[wallet.type].push({ ...balance })
         }
 
         const computedBalance = acc.computed.find(
@@ -255,7 +253,7 @@ export const WalletsRepository = {
         if (computedBalance) {
           computedBalance.amount += balance.amount
         } else {
-          acc.computed.push(balance)
+          acc.computed.push({ ...balance })
         }
       })
 
