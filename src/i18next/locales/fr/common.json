@@ -24,8 +24,8 @@
     "title": "Résumé",
     "netValue": "Valeur nette",
     "realtokenValue": "RealTokens",
-    "stableDeposit": "Dépôt xDai RMM",
-    "stableBorrow": "Emprunt xDai RMM"
+    "stableDeposit": "Dépôt RMM",
+    "stableBorrow": "Emprunt RMM"
   },
   "worthCard": {
     "title": "RealTokens",

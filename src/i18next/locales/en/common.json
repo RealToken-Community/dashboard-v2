@@ -24,8 +24,8 @@
     "title": "Summary",
     "netValue": "Net value",
     "realtokenValue": "RealTokens",
-    "stableDeposit": "xDai RMM deposit",
-    "stableBorrow": "xDai RMM borrow"
+    "stableDeposit": "RMM deposit",
+    "stableBorrow": "RMM borrow"
   },
   "worthCard": {
     "title": "RealTokens",

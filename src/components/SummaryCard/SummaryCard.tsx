@@ -34,6 +34,30 @@ const SummaryValue: FC<{ label: string; value: number }> = (props) => {
 }
 SummaryValue.displayName = 'SummaryValue'
 
+const XdaiValue: FC<{ label: string; value: number }> = (props) => {
+  const { t } = useTranslation('common', { keyPrefix: 'numbers' })
+
+  const isLoading = useSelector(selectIsLoading)
+
+  return (
+    <Grid justify={'space-between'} align={'center'}>
+      <Grid.Col span={'auto'}>
+        <div>{props.label}</div>
+      </Grid.Col>
+      <Grid.Col span={'content'}>
+        {isLoading ? (
+          <Skeleton width={100} height={15} />
+        ) : (
+          <Box ta={'right'}>
+            {t('decimal', { value: props.value }) + ' xDai'}
+          </Box>
+        )}
+      </Grid.Col>
+    </Grid>
+  )
+}
+XdaiValue.displayName = 'XdaiValue'
+
 export const SummaryCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'summaryCard' })
 
@@ -54,8 +78,8 @@ export const SummaryCard: FC = () => {
           <SummaryValue label={t('netValue')} value={totalNetValue} />
         </Text>
         <SummaryValue label={t('realtokenValue')} value={realtokenValue} />
-        <SummaryValue label={t('stableDeposit')} value={stableDepositValue} />
-        <SummaryValue label={t('stableBorrow')} value={stableDebtValue} />
+        <XdaiValue label={t('stableDeposit')} value={stableDepositValue} />
+        <XdaiValue label={t('stableBorrow')} value={stableDebtValue} />
       </Box>
     </Card>
   )
