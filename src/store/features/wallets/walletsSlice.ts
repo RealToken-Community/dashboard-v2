@@ -19,7 +19,6 @@ const walletsInitialState: WalletsInitialStateType = {
     ethereum: [],
     rmm: [],
     rmmProtocol: [],
-    computed: [],
   },
   isLoading: false,
 }
