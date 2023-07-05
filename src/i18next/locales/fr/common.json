@@ -57,6 +57,7 @@
       "name": "Nom",
       "apr": "APR",
       "rent": "Loyer",
+      "rentStart": "Premier loyer",
       "value": "Valeur",
       "supply": "Valeur propriété"
     },

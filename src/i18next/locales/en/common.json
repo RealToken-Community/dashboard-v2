@@ -57,6 +57,7 @@
       "name": "Name",
       "apr": "APR",
       "rent": "Rent",
+      "rentStart": "Rent start",
       "value": "Value",
       "supply": "Property value"
     },

@@ -61,6 +61,8 @@ export const AssetView: FC = () => {
           return (
             b.amount * b.netRentDayPerToken - a.amount * a.netRentDayPerToken
           )
+        case AssetSortType.RENTSTART:
+          return a.rentStartDate.date.localeCompare(b.rentStartDate.date)
         case AssetSortType.NAME:
           return a.shortName.localeCompare(b.shortName)
         case AssetSortType.SUPPLY:
@@ -83,6 +85,7 @@ export const AssetView: FC = () => {
     { value: AssetSortType.SUPPLY, label: t('sortOptions.supply') },
     { value: AssetSortType.APR, label: t('sortOptions.apr') },
     { value: AssetSortType.RENT, label: t('sortOptions.rent') },
+    { value: AssetSortType.RENTSTART, label: t('sortOptions.rentStart') },
   ]
 
   const availableViews = useMemo(() => {
