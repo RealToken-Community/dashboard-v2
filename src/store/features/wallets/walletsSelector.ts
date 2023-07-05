@@ -30,15 +30,26 @@ function getOwnedRealtokens(type: keyof GetWalletBalance) {
     return realtokens
       .map((realtoken) => {
         const realtokenId = realtoken.uuid
-        const balance = balances[type].find((balance) =>
-          isContractRelated(realtoken, balance.address)
-        )
+        const balance = balances[type].find((balance) => {
+          if (type === 'ethereum') {
+            return (
+              balance.address.toLowerCase() ===
+              realtoken.ethereumContract?.toLowerCase()
+            )
+          }
+          if (type === 'gnosis' || type === 'rmm') {
+            return (
+              balance.address.toLowerCase() ===
+              realtoken.gnosisContract?.toLowerCase()
+            )
+          }
+        })
 
         return {
           id: realtokenId,
           ...realtoken,
-          amount: balance ? balance.amount : 0,
-          value: balance ? balance.amount * realtoken.tokenPrice : 0,
+          amount: balance?.amount ?? 0,
+          value: (balance?.amount ?? 0) * realtoken.tokenPrice,
         }
       })
       .filter((item) => item.amount > 0)
@@ -69,14 +80,30 @@ function getRmmDetails(state: RootState) {
   )
 }
 
-export const selectOwnedRealtokens = (state: RootState) =>
-  getOwnedRealtokens('computed')(state)
 export const selectOwnedRealtokensGnosis = (state: RootState) =>
   getOwnedRealtokens('gnosis')(state)
 export const selectOwnedRealtokensEthereum = (state: RootState) =>
   getOwnedRealtokens('ethereum')(state)
 export const selectOwnedRealtokensRmm = (state: RootState) =>
   getOwnedRealtokens('rmm')(state)
+export const selectOwnedRealtokens = (state: RootState) => {
+  const gnosis = selectOwnedRealtokensGnosis(state)
+  const ethereum = selectOwnedRealtokensEthereum(state)
+  const rmm = selectOwnedRealtokensRmm(state)
+
+  return [...gnosis, ...ethereum, ...rmm].reduce((acc, realtoken) => {
+    const existingRealtoken = acc.find((item) => item.id === realtoken.id)
+
+    if (existingRealtoken) {
+      existingRealtoken.amount += realtoken.amount
+      existingRealtoken.value += realtoken.value
+    } else {
+      acc.push({ ...realtoken })
+    }
+
+    return acc
+  }, [] as OwnedRealtoken[])
+}
 
 export const selectOwnedRealtokensValue = (state: RootState) =>
   _sumBy(selectOwnedRealtokens(state), 'value')

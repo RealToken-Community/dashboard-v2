@@ -194,7 +194,6 @@ export interface GetWalletBalance {
   ethereum: WalletBalance[]
   rmm: WalletBalance[]
   rmmProtocol: GetRMMProtocolBalance[]
-  computed: WalletBalance[]
 }
 
 function getRMMProtocol(wallets: Wallet[]): GetRMMProtocolBalance[] {
@@ -227,7 +226,6 @@ export const WalletsRepository = {
       [WalletType.Ethereum]: [],
       [WalletType.RMM]: [],
       [WalletType.RMMProtocol]: getRMMProtocol(walletsResult),
-      computed: [],
     }
 
     const standardWalletList = walletsResult.filter(
@@ -244,16 +242,6 @@ export const WalletsRepository = {
           existingBalance.amount += balance.amount
         } else {
           acc[wallet.type].push({ ...balance })
-        }
-
-        const computedBalance = acc.computed.find(
-          (b) => b.address === balance.address
-        )
-
-        if (computedBalance) {
-          computedBalance.amount += balance.amount
-        } else {
-          acc.computed.push({ ...balance })
         }
       })
 
