@@ -21,7 +21,7 @@ const RentStatus: FC<{ value: OwnedRealtoken }> = (props) => {
   switch (props.value.rentStatus) {
     case 'full':
       return (
-        <Badge size={'xs'} variant={'filled'} color={'green'}>
+        <Badge size={'xs'} variant={'dot'} color={'green'}>
           {t('rentStatus.full')}
         </Badge>
       )
