@@ -17,10 +17,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Copy environment variables from production env file
-ARG COMMUNITY_API_KEY_ARG
-RUN echo "COMMUNITY_API_KEY=${COMMUNITY_API_KEY_ARG}" >> ./.env
-
 RUN yarn build
 
 # 3. Production image, copy all the files and run next
