@@ -2,11 +2,10 @@ version: '3'
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        COMMUNITY_API_KEY_ARG: $COMMUNITY_API_KEY
+    image: registry.realt.community/realtdashboard_preprod:latest
+    container_name: realtdashboard_preprod
+    env_file:
+    - .env
     ports:
       - '3012:3000'
     networks:
