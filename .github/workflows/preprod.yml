@@ -42,4 +42,4 @@ jobs:
             SSH_PORT: ${{ secrets.SSH_PORT }}
 
         - name: pull & up!
-          run: ssh staging 'cd /home/realt/docker/dashboard-v2 && git pull && docker compose --file docker-compose.yml pull && docker compose --file docker-compose.yml up -d'
+          run: ssh staging 'cd /home/realt/docker/dashboard-v2/preprod && git pull && docker compose --file docker-compose.yml pull && docker compose --file docker-compose.yml up -d'
