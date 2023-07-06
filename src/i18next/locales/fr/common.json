@@ -36,7 +36,7 @@
   },
   "rentsCard": {
     "title": "Loyers",
-    "apr": "APR",
+    "apr": "Rendement annuel",
     "daily": "Journaliers",
     "weekly": "Hebdomadaires",
     "monthly": "Mensuels",
@@ -69,7 +69,7 @@
   },
   "assetCard": {
     "tokens": "Tokens",
-    "apr": "APR",
+    "apr": "Rendement annuel",
     "weekly": "Loyers hebdomadaires",
     "yearly": "Loyers annuels",
     "rentedUnits": "Unités louées",
@@ -84,7 +84,7 @@
   },
   "assetTable": {
     "property": "Propriété",
-    "apr": "APR",
+    "apr": "Rendement annuel",
     "ownedTokens": "Tokens",
     "ownedValue": "Valeur",
     "weeklyRent": "Loyer hebdomadaire",
