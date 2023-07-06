@@ -1,0 +1,45 @@
+name: To registry, pull and up
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - preprod
+      - develop
+
+jobs:
+  build:
+    name: Build, push, pull & up
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v3
+
+        - name: Build and push Docker image
+          uses: docker/build-push-action@v4
+          with:
+            context: .
+            push: true
+            tags: registry.realt.community/realtdashboard_preprod:latest
+                      
+        - name: Configure SSH
+          run: |
+            mkdir -p ~/.ssh/
+            echo "$SSH_KEY" > ~/.ssh/staging.key
+            chmod 600 ~/.ssh/staging.key
+            cat >>~/.ssh/config <<END
+            Host staging
+              HostName $SSH_HOST
+              User $SSH_USER
+              Port $SSH_PORT
+              IdentityFile ~/.ssh/staging.key
+              StrictHostKeyChecking no
+            END
+          env:
+            SSH_USER: ${{ secrets.SSH_USER }}
+            SSH_KEY: ${{ secrets.SSH_KEY }}
+            SSH_HOST: ${{ secrets.SSH_HOST }}
+            SSH_PORT: ${{ secrets.SSH_PORT }}
+
+        - name: pull & up!
+          run: ssh staging 'cd /home/realt/docker/dashboard-v2 && git pull && docker compose --file docker-compose.yml pull && docker compose --file docker-compose.yml up -d'
