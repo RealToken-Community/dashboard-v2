@@ -1,31 +1,55 @@
 import _sumBy from 'lodash/sumBy'
 
-import { RealToken } from 'src/repositories'
 import { GetWalletBalance } from 'src/repositories/wallets.repository'
 import { RootState } from 'src/store/store'
 
-export interface RealtokenItem extends RealToken {
+import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'
+
+export interface OwnedRealtoken extends Realtoken {
   id: string
   amount: number
   value: number
 }
 
+function isContractRelated(realtoken: Realtoken, contractAddress: string) {
+  return [
+    realtoken.xDaiContract,
+    realtoken.gnosisContract,
+    realtoken.ethereumContract,
+  ]
+    .filter((item) => item)
+    .map((item) => (item ?? '').toLowerCase())
+    .includes(contractAddress.toLowerCase())
+}
+
 function getOwnedRealtokens(type: keyof GetWalletBalance) {
   return (state: RootState) => {
-    const realtokens = state.realtokens.realtokens
+    const realtokens = selectRealtokens(state)
     const balances = state.wallets.balances
 
     return realtokens
       .map((realtoken) => {
-        const realtokenId = realtoken.token.id
-        const balance = balances[type].find(
-          (balance) => balance.address === realtokenId
-        )
+        const realtokenId = realtoken.uuid
+        const balance = balances[type].find((balance) => {
+          if (type === 'ethereum') {
+            return (
+              balance.address.toLowerCase() ===
+              realtoken.ethereumContract?.toLowerCase()
+            )
+          }
+          if (type === 'gnosis' || type === 'rmm') {
+            return (
+              balance.address.toLowerCase() ===
+              realtoken.gnosisContract?.toLowerCase()
+            )
+          }
+        })
+
         return {
           id: realtokenId,
           ...realtoken,
-          amount: balance ? balance.amount : 0,
-          value: balance ? balance.amount * realtoken.token.value : 0,
+          amount: balance?.amount ?? 0,
+          value: (balance?.amount ?? 0) * realtoken.tokenPrice,
         }
       })
       .filter((item) => item.amount > 0)
@@ -33,14 +57,53 @@ function getOwnedRealtokens(type: keyof GetWalletBalance) {
   }
 }
 
-export const selectOwnedRealtokens = (state: RootState) =>
-  getOwnedRealtokens('computed')(state)
+function getRmmDetails(state: RootState) {
+  const realtokens = selectRealtokens(state)
+  const rmmProtocol = state.wallets.balances.rmmProtocol
+
+  return rmmProtocol.reduce(
+    (acc, item) => {
+      const realtoken = realtokens.find((realtoken) =>
+        isContractRelated(realtoken, item.address)
+      )
+
+      if (realtoken) {
+        acc.totalDeposit += item.amount * realtoken.tokenPrice
+      } else {
+        acc.totalDeposit += item.amount
+        acc.stableDeposit += item.amount
+        acc.stableDebt += item.debt
+      }
+      return acc
+    },
+    { stableDeposit: 0, totalDeposit: 0, stableDebt: 0 }
+  )
+}
+
 export const selectOwnedRealtokensGnosis = (state: RootState) =>
   getOwnedRealtokens('gnosis')(state)
 export const selectOwnedRealtokensEthereum = (state: RootState) =>
   getOwnedRealtokens('ethereum')(state)
 export const selectOwnedRealtokensRmm = (state: RootState) =>
   getOwnedRealtokens('rmm')(state)
+export const selectOwnedRealtokens = (state: RootState) => {
+  const gnosis = selectOwnedRealtokensGnosis(state)
+  const ethereum = selectOwnedRealtokensEthereum(state)
+  const rmm = selectOwnedRealtokensRmm(state)
+
+  return [...gnosis, ...ethereum, ...rmm].reduce((acc, realtoken) => {
+    const existingRealtoken = acc.find((item) => item.id === realtoken.id)
+
+    if (existingRealtoken) {
+      existingRealtoken.amount += realtoken.amount
+      existingRealtoken.value += realtoken.value
+    } else {
+      acc.push({ ...realtoken })
+    }
+
+    return acc
+  }, [] as OwnedRealtoken[])
+}
 
 export const selectOwnedRealtokensValue = (state: RootState) =>
   _sumBy(selectOwnedRealtokens(state), 'value')
@@ -63,10 +126,10 @@ export const selectOwnedRealtokensRents = (state: RootState) => {
 
   return realtokens.reduce(
     (acc, item) => ({
-      daily: acc.daily + item.return.perDay * item.amount,
-      weekly: acc.weekly + item.return.perDay * 7 * item.amount,
-      monthly: acc.monthly + item.return.perMonth * item.amount,
-      yearly: acc.yearly + item.return.perYear * item.amount,
+      daily: acc.daily + item.netRentDayPerToken * item.amount,
+      weekly: acc.weekly + item.netRentDayPerToken * 7 * item.amount,
+      monthly: acc.monthly + item.netRentMonthPerToken * item.amount,
+      yearly: acc.yearly + item.netRentYearPerToken * item.amount,
     }),
     rentsSummary
   )
@@ -77,3 +140,5 @@ export const selectOwnedRealtokensAPY = (state: RootState) => {
   const value = selectOwnedRealtokensValue(state)
   return value > 0 ? rents.yearly / value : 0
 }
+
+export const selectRmmDetails = (state: RootState) => getRmmDetails(state)

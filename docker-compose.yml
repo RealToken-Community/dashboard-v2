@@ -2,11 +2,20 @@ version: '3'
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        BUILD_ENV: production
-
+    image: registry.realt.community/realtdashboard_preprod:latest
+    container_name: realtdashboard_preprod
+    env_file:
+    - .env
     ports:
-      - '3000:3000'
+      - '3012:3000'
+    networks:
+      - traefik-realt
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard-preprod.rule=Host(`dashboard.preprod.realt.community`)"
+      - "traefik.http.routers.dashboard-preprod.entrypoints=websecure"
+    restart: always
+
+networks:
+  traefik-realt:
+    external: true

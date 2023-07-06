@@ -2,15 +2,25 @@
 
 ## TODO
 
-- [ ] Use Community API to get RealTokens data (and remove public/mock/realt.min.json)
-- [ ] Display assets in a table
-- [ ] Allow to sort assets
+- [x] Use Community API to get RealTokens data (and remove public/mock/realt.min.json)
+- [x] Display assets in a table
+- [x] Allow to sort assets
 - [ ] Create Readme
 - [ ] Integrate CD/CI
 
 # Getting Started
 
 ## Requirements
+
+### <a name="env">Environement</a>
+
+To run the project you will need to set-up a `.env` file in the root folder:
+
+```
+COMMUNITY_API_KEY=XXXXXXXXXXXX
+```
+
+To get a `COMMUNITY_API_KEY`, join the dedicated [telegram dev channel](https://t.me/+XQyoaFfmN61yk7X0) then ask for.
 
 ### Node.js version
 
@@ -26,7 +36,8 @@
    ```sh
    npm i
    ```
-3. Start the application in dev mode
+3. Create the env file (instructions [here](#env))
+4. Start the application in dev mode
    ```sh
    npm run dev
    ```

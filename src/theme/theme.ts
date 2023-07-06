@@ -5,7 +5,8 @@ export const modalStyles: ModalProps['styles'] = {
   modal: {
     // margin: '100px auto',
     width: 'auto',
-    maxWidth: '700px',
+    maxWidth: 'calc(100vw - 20px - 32px)',
+    padding: '10px !important',
   },
 }
 

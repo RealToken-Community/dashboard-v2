@@ -19,7 +19,7 @@ export default function useInitStore() {
   useEffect(() => {
     dispatch(initializeSettings())
     dispatch(fetchRealtokens())
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (addressList.length) {
@@ -27,5 +27,5 @@ export default function useInitStore() {
     } else {
       dispatch(resetWallets())
     }
-  }, [addressList.join('_')])
+  }, [addressList.length, dispatch])
 }

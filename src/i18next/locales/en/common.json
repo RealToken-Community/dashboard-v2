@@ -9,11 +9,23 @@
     "light": "Light",
     "dark": "Dark"
   },
+  "walletModal": {
+    "address": "Address {{value}}",
+    "close": "Close",
+    "submit": "Submit"
+  },
   "numbers": {
     "currency": "${{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}}",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",
     "decimal": "{{value, number(maximumFractionDigits: 2)}}",
     "integer": "{{value, number(maximumFractionDigits: 0)}}"
+  },
+  "summaryCard": {
+    "title": "Summary",
+    "netValue": "Net value",
+    "realtokenValue": "RealTokens",
+    "stableDeposit": "RMM deposit",
+    "stableBorrow": "RMM borrow"
   },
   "worthCard": {
     "title": "RealTokens",
@@ -37,13 +49,47 @@
     "averageValue": "Average value",
     "averageRent": "Average rent"
   },
+  "assetView": {
+    "search": "Search",
+    "sort": "Sort by",
+    "view": "View",
+    "sortOptions": {
+      "name": "Name",
+      "apr": "APR",
+      "rent": "Rent",
+      "rentStart": "Rent start",
+      "value": "Value",
+      "supply": "Property value"
+    },
+    "sortReverse": "Reverse" ,
+    "viewOptions": {
+      "table": "Table",
+      "grid": "Grid"
+    }
+  },
   "assetCard": {
     "tokens": "Tokens",
     "apr": "APR",
     "weekly": "Weekly rents",
     "yearly": "Yearly rents",
+    "rentedUnits": "Rented units",
     "propertyValue": "Property value",
-    "viewOnRealt": "View on RealT"
+    "viewOnRealt": "View on RealT",
+    "isRmmAvailable": "RMM",
+    "rentStatus": {
+      "full": "Rented",
+      "partial": "Partially rented",
+      "none": "Not rented"
+    }
+  },
+  "assetTable": {
+    "property": "Property",
+    "apr": "Yield",
+    "ownedTokens": "Tokens",
+    "ownedValue": "Value",
+    "weeklyRents": "Weekly rents",
+    "yearlyRents": "Yearly rents",
+    "propertyValue": "Property value"
   },
   "wallets": {
     "value_zero": "No wallet",
