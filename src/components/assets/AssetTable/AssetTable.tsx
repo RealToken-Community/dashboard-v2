@@ -30,6 +30,14 @@ const AssetRow: FC<{ value: OwnedRealtoken }> = (props) => {
         })}
       </td>
       <td style={{ textAlign: 'right' }}>
+        {t('decimal', { value: props.value.rentedUnits })}
+        {' / '}
+        {t('decimal', { value: props.value.totalUnits })}
+        {` (${t('percentInteger', {
+          value: (props.value.rentedUnits / props.value.totalUnits) * 100,
+        })})`}
+      </td>
+      <td style={{ textAlign: 'right' }}>
         {t('currency', { value: props.value.totalInvestment })}
       </td>
     </tr>
@@ -50,6 +58,7 @@ export const AssetTable: FC<{ realtokens: OwnedRealtoken[] }> = (props) => {
             <th style={{ textAlign: 'right' }}>{t('ownedTokens')}</th>
             <th style={{ textAlign: 'right' }}>{t('weeklyRents')}</th>
             <th style={{ textAlign: 'right' }}>{t('yearlyRents')}</th>
+            <th style={{ textAlign: 'right' }}>{t('rentedUnits')}</th>
             <th style={{ textAlign: 'right' }}>{t('propertyValue')}</th>
           </tr>
         </thead>
