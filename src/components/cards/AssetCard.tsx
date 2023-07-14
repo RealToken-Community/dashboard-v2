@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import Image from 'next/image'
@@ -21,7 +21,7 @@ const useStyles = createStyles({
   },
 })
 
-export const AssetCard: FC<{ value: OwnedRealtoken }> = (props) => {
+const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
@@ -130,3 +130,4 @@ export const AssetCard: FC<{ value: OwnedRealtoken }> = (props) => {
     </Card>
   )
 }
+export const AssetCard = memo(AssetCardComponent)
