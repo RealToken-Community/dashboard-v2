@@ -21,11 +21,13 @@ export default function useInitStore() {
     dispatch(fetchRealtokens())
   }, [dispatch])
 
+  const addresses = addressList.join(',')
+
   useEffect(() => {
     if (addressList.length) {
       dispatch(fetchWallets())
     } else {
       dispatch(resetWallets())
     }
-  }, [addressList.length, dispatch])
+  }, [addressList.length, addresses, dispatch])
 }
