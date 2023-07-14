@@ -8,6 +8,7 @@ import _sumBy from 'lodash/sumBy'
 
 import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
 import {
+  OwnedRealtoken,
   selectOwnedRealtokens,
   selectOwnedRealtokensRents,
   selectOwnedRealtokensValue,
@@ -57,6 +58,39 @@ const WorthValue: FC<{ label: string; value: number }> = (props) => {
 }
 WorthValue.displayName = 'WorthValue'
 
+const RentedUnitsValue: FC<{ label: string; realtokens: OwnedRealtoken[] }> = (
+  props
+) => {
+  const { t } = useTranslation('common', { keyPrefix: 'numbers' })
+
+  const isLoading = useSelector(selectIsLoading)
+
+  const total = _sumBy(props.realtokens, 'totalUnits')
+  const rented = _sumBy(props.realtokens, 'rentedUnits')
+  const percent = total ? rented / total : 0
+
+  return (
+    <Grid justify={'space-between'} align={'center'}>
+      <Grid.Col span={'auto'}>
+        <div>{props.label}</div>
+      </Grid.Col>
+      <Grid.Col span={'content'}>
+        {isLoading ? (
+          <Skeleton width={100} height={15} />
+        ) : (
+          <Box ta={'right'}>
+            {t('integer', { value: rented })}
+            {' / '}
+            {t('integer', { value: total })}
+            {` (${t('percentInteger', { value: percent * 100 })})`}
+          </Box>
+        )}
+      </Grid.Col>
+    </Grid>
+  )
+}
+RentedUnitsValue.displayName = 'RentedUnitsValue'
+
 export const PropertiesCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'propertiesCard' })
 
@@ -76,6 +110,7 @@ export const PropertiesCard: FC = () => {
         <IntegerValue label={t('properties')} value={sumProperties} />
         <WorthValue label={t('averageValue')} value={meanValue} />
         <WorthValue label={t('averageRent')} value={meanRents} />
+        <RentedUnitsValue label={t('rentedUnits')} realtokens={realtokens} />
       </Box>
     </Card>
   )

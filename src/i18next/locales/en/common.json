@@ -17,6 +17,7 @@
   "numbers": {
     "currency": "${{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}}",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",
+    "percentInteger": "{{value, number(maximumFractionDigits: 0)}} %",
     "decimal": "{{value, number(maximumFractionDigits: 2)}}",
     "integer": "{{value, number(maximumFractionDigits: 0)}}"
   },
@@ -47,7 +48,8 @@
     "tokens": "Tokens",
     "properties": "Properties",
     "averageValue": "Average value",
-    "averageRent": "Average rent"
+    "averageRent": "Average rent",
+    "rentedUnits": "Rented units"
   },
   "assetView": {
     "search": "Search",
