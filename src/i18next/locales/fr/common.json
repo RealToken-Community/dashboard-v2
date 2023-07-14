@@ -49,7 +49,7 @@
     "properties": "Propriétés",
     "averageValue": "Valeur moyenne",
     "averageRent": "Loyer moyen",
-    "rentedUnits": "Logements louées"
+    "rentedUnits": "Logements loués"
   },
   "assetView": {
     "search": "Recherche",
@@ -64,7 +64,7 @@
       "supply": "Valeur propriété",
       "token": "Tokens",
       "totalUnit": "Logements",
-      "rentedUnit": "Logements louées",
+      "rentedUnit": "Logements loués",
       "occupancy": "Taux d'occupation"
     },
     "sortReverse": "Inverser",
@@ -78,7 +78,7 @@
     "apr": "Rendement annuel",
     "weekly": "Loyers hebdomadaires",
     "yearly": "Loyers annuels",
-    "rentedUnits": "Logements louées",
+    "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
     "viewOnRealt": "Voir sur RealT",
     "isRmmAvailable": "RMM",
@@ -95,7 +95,7 @@
     "ownedValue": "Valeur",
     "weeklyRents": "Loyer hebdomadaire",
     "yearlyRents": "Loyer annuel",
-    "rentedUnits": "Logements louées",
+    "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété"
   },
   "wallets": {
