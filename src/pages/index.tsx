@@ -2,11 +2,13 @@ import { NextPage } from 'next'
 
 import { Box, Flex, Grid } from '@mantine/core'
 
-import { PropertiesCard } from 'src/components/PropertiesCard/PropertiesCard'
-import { RentsCard } from 'src/components/RentsCard/RentsCard'
-import { SummaryCard } from 'src/components/SummaryCard/SummaryCard'
-import { WorthCard } from 'src/components/WorthCard/WorthCard'
-import { AssetView } from 'src/components/assets/AssetView/AssetView'
+import { AssetsView } from 'src/components/assetsView'
+import {
+  PropertiesCard,
+  RentsCard,
+  SummaryCard,
+  WorthCard,
+} from 'src/components/cards'
 
 const HomePage: NextPage = () => {
   return (
@@ -26,7 +28,7 @@ const HomePage: NextPage = () => {
         </Grid.Col>
       </Grid>
       <Box my={'md'}>
-        <AssetView />
+        <AssetsView />
       </Box>
     </Flex>
   )

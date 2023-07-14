@@ -1,14 +1,13 @@
 import { atomWithStorage } from 'jotai/utils'
 
-import { AssetSortType } from 'src/components/assets/assetSortType'
-import { AssetViewType } from 'src/components/assets/assetViewType'
+import { AssetSortType, AssetViewType } from 'src/components/assetsView/types'
 
-export const assetViewChoosedAtom = atomWithStorage<string>(
+export const assetViewChoosedAtom = atomWithStorage<AssetViewType>(
   'displayChoosed',
   AssetViewType.GRID
 )
 
-export const assetSortChoosedAtom = atomWithStorage<string>(
+export const assetSortChoosedAtom = atomWithStorage<AssetSortType>(
   'sortChoosed',
   AssetSortType.VALUE
 )

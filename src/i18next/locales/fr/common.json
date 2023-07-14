@@ -15,7 +15,7 @@
     "submit": "Valider"
   },
   "numbers": {
-    "currency": "${{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}}",
+    "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} $",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",
     "percentInteger": "{{value, number(maximumFractionDigits: 0)}} %",
     "decimal": "{{value, number(maximumFractionDigits: 2)}}",

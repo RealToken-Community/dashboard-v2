@@ -11,7 +11,7 @@ import { NotificationsProvider } from '@mantine/notifications'
 
 import { setCookies } from 'cookies-next'
 
-import { modals } from 'src/components'
+import { modals } from 'src/components/modals'
 import { modalStyles, theme } from 'src/theme'
 
 type MantineProvidersProps = {
