@@ -93,8 +93,8 @@
     "apr": "Rendement annuel",
     "ownedTokens": "Tokens",
     "ownedValue": "Valeur",
-    "weeklyRent": "Loyer hebdomadaire",
-    "yearlyRent": "Loyer annuel",
+    "weeklyRents": "Loyer hebdomadaire",
+    "yearlyRents": "Loyer annuel",
     "propertyValue": "Valeur de la propriété"
   },
   "wallets": {
