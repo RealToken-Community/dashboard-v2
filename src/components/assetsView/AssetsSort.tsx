@@ -71,7 +71,7 @@ export function useAssetsSort() {
       case AssetSortType.RENT:
         return b.amount * b.netRentDayPerToken - a.amount * a.netRentDayPerToken
       case AssetSortType.RENTSTART:
-        return a.rentStartDate.date.localeCompare(b.rentStartDate.date)
+        return b.rentStartDate.date.localeCompare(a.rentStartDate.date)
       case AssetSortType.NAME:
         return a.shortName.localeCompare(b.shortName)
       case AssetSortType.SUPPLY:
