@@ -67,6 +67,14 @@ export const AssetView: FC = () => {
           return a.shortName.localeCompare(b.shortName)
         case AssetSortType.SUPPLY:
           return b.totalInvestment - a.totalInvestment
+        case AssetSortType.TOKEN:
+          return b.amount - a.amount
+        case AssetSortType.TOTAL_UNIT:
+          return b.totalUnits - a.totalUnits
+        case AssetSortType.RENTED_UNIT:
+          return b.rentedUnits - a.rentedUnits
+        case AssetSortType.OCCUPANCY:
+          return b.rentedUnits / b.totalUnits - a.rentedUnits / a.totalUnits
         default:
           return 0
       }
@@ -86,6 +94,10 @@ export const AssetView: FC = () => {
     { value: AssetSortType.APR, label: t('sortOptions.apr') },
     { value: AssetSortType.RENT, label: t('sortOptions.rent') },
     { value: AssetSortType.RENTSTART, label: t('sortOptions.rentStart') },
+    { value: AssetSortType.TOKEN, label: t('sortOptions.token') },
+    { value: AssetSortType.TOTAL_UNIT, label: t('sortOptions.totalUnit') },
+    { value: AssetSortType.RENTED_UNIT, label: t('sortOptions.rentedUnit') },
+    { value: AssetSortType.OCCUPANCY, label: t('sortOptions.occupancy') },
   ]
 
   const availableViews = useMemo(() => {

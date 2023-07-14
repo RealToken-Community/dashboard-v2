@@ -61,7 +61,11 @@
       "rent": "Loyer",
       "rentStart": "Premier loyer",
       "value": "Valeur",
-      "supply": "Valeur propriété"
+      "supply": "Valeur propriété",
+      "token": "Tokens",
+      "totalUnit": "Unités",
+      "rentedUnit": "Unités louées",
+      "occupancy": "Taux d'occupation"
     },
     "sortReverse": "Inverser",
     "viewOptions": {

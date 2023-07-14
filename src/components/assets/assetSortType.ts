@@ -5,4 +5,8 @@ export enum AssetSortType {
   RENT = 'rent',
   RENTSTART = 'rentStart',
   SUPPLY = 'supply',
+  TOKEN = 'token',
+  TOTAL_UNIT = 'totalUnit',
+  RENTED_UNIT = 'rentedUnit',
+  OCCUPANCY = 'occupancy',
 }

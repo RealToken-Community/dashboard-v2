@@ -61,7 +61,11 @@
       "rent": "Rent",
       "rentStart": "Rent start",
       "value": "Value",
-      "supply": "Property value"
+      "supply": "Property value",
+      "token": "Tokens",
+      "totalUnit": "Units",
+      "rentedUnit": "Rented units",
+      "occupancy": "Occupancy rate"
     },
     "sortReverse": "Reverse" ,
     "viewOptions": {
