@@ -37,7 +37,7 @@ const WalletInput: FC<{
   )
 }
 
-export const ManageWalletModal: FC<ContextModalProps> = ({ context, id }) => {
+export const ManageWalletsModal: FC<ContextModalProps> = ({ context, id }) => {
   const { t } = useTranslation('common', { keyPrefix: 'walletModal' })
 
   const dispatch = useDispatch()

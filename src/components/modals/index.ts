@@ -1,5 +1,5 @@
-import { ManageWalletModal } from './ManageWalletsModal'
+import { ManageWalletsModal } from './ManageWalletsModal'
 
 export const modals = {
-  manageWallets: ManageWalletModal,
+  manageWallets: ManageWalletsModal,
 }
