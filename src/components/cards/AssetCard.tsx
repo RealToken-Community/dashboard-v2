@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import Image from 'next/image'
 
-import { Badge, Button, Card, Group, Text, createStyles } from '@mantine/core'
+import { Badge, Button, Card, Group, createStyles } from '@mantine/core'
 
 import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
 
@@ -17,6 +17,29 @@ const useStyles = createStyles({
     '& > span': {
       height: '100% !important',
       width: '100% !important',
+    },
+  },
+  textBold: {
+    fontWeight: 500,
+  },
+  textSm: {
+    fontSize: '14px',
+  },
+  textLocation: {
+    fontSize: '12px',
+    textAlign: 'center',
+    marginBottom: '10px',
+  },
+  groupApart: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    '& > *': {
+      boxSizing: 'border-box',
+      flexGrow: 0,
     },
   },
 })
@@ -47,7 +70,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       </Card.Section>
 
       <Group position={'apart'} mt={'md'}>
-        <Text weight={500}>{props.value.shortName}</Text>
+        <div className={classes.textBold}>{props.value.shortName}</div>
         <Badge variant={'light'}>
           {tNumbers('currency', { value: props.value.value })}
         </Badge>
@@ -60,62 +83,64 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
 
       <Divider height={1} my={'xs'} />
 
-      <Group position={'apart'}>
-        <Text size={'sm'}>{t('tokens')}</Text>
-        <Text size={'sm'}>
+      <div className={classes.groupApart}>
+        <div className={classes.textSm}>{t('tokens')}</div>
+        <div className={classes.textSm}>
           {tNumbers('decimal', { value: props.value.amount })}
           {' / '}
           {tNumbers('integer', { value: props.value.totalTokens })}
-        </Text>
-      </Group>
+        </div>
+      </div>
 
-      <Group position={'apart'}>
-        <Text size={'sm'}>{t('apr')}</Text>
-        <Text size={'sm'}>
+      <div className={classes.groupApart}>
+        <div className={classes.textSm}>{t('apr')}</div>
+        <div className={classes.textSm}>
           {tNumbers('percent', { value: props.value.annualPercentageYield })}
-        </Text>
-      </Group>
+        </div>
+      </div>
 
-      <Group position={'apart'}>
-        <Text size={'sm'}>{t('weekly')}</Text>
-        <Text size={'sm'}>
+      <div className={classes.groupApart}>
+        <div className={classes.textSm}>{t('weekly')}</div>
+        <div className={classes.textSm}>
           {tNumbers('currency', {
             value: props.value.amount * props.value.netRentDayPerToken * 7,
           })}
-        </Text>
-      </Group>
+        </div>
+      </div>
 
-      <Group position={'apart'}>
-        <Text size={'sm'}>{t('yearly')}</Text>
-        <Text size={'sm'}>
+      <div className={classes.groupApart}>
+        <div className={classes.textSm}>{t('yearly')}</div>
+        <div className={classes.textSm}>
           {tNumbers('currency', {
             value: props.value.amount * props.value.netRentYearPerToken,
           })}
-        </Text>
-      </Group>
+        </div>
+      </div>
 
-      <Group position={'apart'}>
-        <Text size={'sm'}>{t('rentedUnits')}</Text>
-        <Text size={'sm'}>
-          {tNumbers('integer', { value: props.value.rentedUnits })} {' / '}{' '}
+      <div className={classes.groupApart}>
+        <div className={classes.textSm}>{t('rentedUnits')}</div>
+        <div className={classes.textSm}>
+          {tNumbers('integer', { value: props.value.rentedUnits })}
+          {' / '}
           {tNumbers('integer', { value: props.value.totalUnits })}
-        </Text>
-      </Group>
+          {` (${tNumbers('percentInteger', {
+            value: (props.value.rentedUnits / props.value.totalUnits) * 100,
+          })})`}
+        </div>
+      </div>
 
-      <Group position={'apart'}>
-        <Text size={'sm'}>{t('propertyValue')}</Text>
-        <Text size={'sm'}>
+      <div className={classes.groupApart}>
+        <div className={classes.textSm}>{t('propertyValue')}</div>
+        <div className={classes.textSm}>
           {tNumbers('currency', {
             value: props.value.totalInvestment,
           })}
-        </Text>
-      </Group>
+        </div>
+      </div>
 
       <Divider height={1} my={'xs'} />
 
-      <Text size={'xs'} align={'center'} mb={'xs'}>
-        {props.value.fullName}
-      </Text>
+      <div className={classes.textLocation}>{props.value.fullName}</div>
 
       <Button
         component={'a'}
@@ -130,4 +155,5 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
     </Card>
   )
 }
+
 export const AssetCard = memo(AssetCardComponent)
