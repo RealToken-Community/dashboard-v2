@@ -57,15 +57,16 @@
     "view": "Affichage",
     "sortOptions": {
       "name": "Nom",
-      "apr": "APR",
-      "rent": "Loyer",
-      "rentStart": "Premier loyer",
+      "apr": "Rendement",
+      "rent": "Loyers perçus",
+      "rentStart": "Date du premier loyer",
       "value": "Valeur",
-      "supply": "Valeur propriété",
+      "supply": "Valeur de la propriété",
       "token": "Tokens",
-      "totalUnit": "Logements",
+      "totalUnit": "Logements totaux",
       "rentedUnit": "Logements loués",
-      "occupancy": "Taux d'occupation"
+      "occupancy": "Taux d'occupation",
+      "initialLaunch": "Mise en vente"
     },
     "sortReverse": "Inverser",
     "viewOptions": {

@@ -3,10 +3,11 @@ export enum AssetSortType {
   VALUE = 'value',
   APR = 'apr',
   RENT = 'rent',
-  RENTSTART = 'rentStart',
+  RENT_START = 'rentStart',
   SUPPLY = 'supply',
   TOKEN = 'token',
   TOTAL_UNIT = 'totalUnit',
   RENTED_UNIT = 'rentedUnit',
   OCCUPANCY = 'occupancy',
+  INITIAL_LAUNCH = 'initialLaunch',
 }

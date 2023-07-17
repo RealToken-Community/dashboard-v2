@@ -65,7 +65,8 @@
       "token": "Tokens",
       "totalUnit": "Units",
       "rentedUnit": "Rented units",
-      "occupancy": "Occupancy rate"
+      "occupancy": "Occupancy rate",
+      "initialLaunch": "Initial launch"
     },
     "sortReverse": "Reverse" ,
     "viewOptions": {

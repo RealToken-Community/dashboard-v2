@@ -21,14 +21,18 @@ export const AssetsSort: FC = () => {
   const sortOptions = [
     { value: AssetSortType.NAME, label: t('sortOptions.name') },
     { value: AssetSortType.VALUE, label: t('sortOptions.value') },
-    { value: AssetSortType.SUPPLY, label: t('sortOptions.supply') },
     { value: AssetSortType.APR, label: t('sortOptions.apr') },
+    {
+      value: AssetSortType.INITIAL_LAUNCH,
+      label: t('sortOptions.initialLaunch'),
+    },
+    { value: AssetSortType.OCCUPANCY, label: t('sortOptions.occupancy') },
     { value: AssetSortType.RENT, label: t('sortOptions.rent') },
-    { value: AssetSortType.RENTSTART, label: t('sortOptions.rentStart') },
     { value: AssetSortType.TOKEN, label: t('sortOptions.token') },
+    { value: AssetSortType.RENT_START, label: t('sortOptions.rentStart') },
     { value: AssetSortType.TOTAL_UNIT, label: t('sortOptions.totalUnit') },
     { value: AssetSortType.RENTED_UNIT, label: t('sortOptions.rentedUnit') },
-    { value: AssetSortType.OCCUPANCY, label: t('sortOptions.occupancy') },
+    { value: AssetSortType.SUPPLY, label: t('sortOptions.supply') },
   ]
 
   const { classes: inputClasses } = useInputStyles()
@@ -70,7 +74,7 @@ export function useAssetsSort() {
         return b.annualPercentageYield - a.annualPercentageYield
       case AssetSortType.RENT:
         return b.amount * b.netRentDayPerToken - a.amount * a.netRentDayPerToken
-      case AssetSortType.RENTSTART:
+      case AssetSortType.RENT_START:
         return b.rentStartDate.date.localeCompare(a.rentStartDate.date)
       case AssetSortType.NAME:
         return a.shortName.localeCompare(b.shortName)
@@ -84,6 +88,8 @@ export function useAssetsSort() {
         return b.rentedUnits - a.rentedUnits
       case AssetSortType.OCCUPANCY:
         return b.rentedUnits / b.totalUnits - a.rentedUnits / a.totalUnits
+      case AssetSortType.INITIAL_LAUNCH:
+        return b.initialLaunchDate.date.localeCompare(a.initialLaunchDate.date)
     }
   }
 
