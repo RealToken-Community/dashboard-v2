@@ -7,7 +7,8 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next build && next export",
-    "graphql": "yarn graphclient build"
+    "graphql": "yarn graphclient build",
+    "docker:local": "docker compose -f docker-compose.local.yml up --force-recreate --build"
   },
   "dependencies": {
     "@apollo/client": "^3.7.3",
