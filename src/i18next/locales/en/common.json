@@ -17,6 +17,7 @@
   "numbers": {
     "currency": "${{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}}",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",
+    "percentInteger": "{{value, number(maximumFractionDigits: 0)}} %",
     "decimal": "{{value, number(maximumFractionDigits: 2)}}",
     "integer": "{{value, number(maximumFractionDigits: 0)}}"
   },
@@ -47,7 +48,8 @@
     "tokens": "Tokens",
     "properties": "Properties",
     "averageValue": "Average value",
-    "averageRent": "Average rent"
+    "averageRent": "Average rent",
+    "rentedUnits": "Rented units"
   },
   "assetView": {
     "search": "Search",
@@ -59,7 +61,12 @@
       "rent": "Rent",
       "rentStart": "Rent start",
       "value": "Value",
-      "supply": "Property value"
+      "supply": "Property value",
+      "token": "Tokens",
+      "totalUnit": "Units",
+      "rentedUnit": "Rented units",
+      "occupancy": "Occupancy rate",
+      "initialLaunch": "Initial launch"
     },
     "sortReverse": "Reverse" ,
     "viewOptions": {
@@ -89,6 +96,7 @@
     "ownedValue": "Value",
     "weeklyRents": "Weekly rents",
     "yearlyRents": "Yearly rents",
+    "rentedUnits": "Rented units",
     "propertyValue": "Property value"
   },
   "wallets": {

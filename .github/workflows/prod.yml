@@ -3,13 +3,8 @@ name: To registry, pull and up
 on:
   workflow_dispatch:
   pull_request:
-      branches:
-      - preprod
-      - develop
-  push:
     branches:
-      - preprod
-      - develop
+      - prod
 
 jobs:
   build:
@@ -23,7 +18,7 @@ jobs:
           with:
             context: .
             push: true
-            tags: registry.realt.community/realtdashboard_preprod:latest
+            tags: registry.realt.community/realtdashboard_prod:latest
                       
         - name: Configure SSH
           run: |
@@ -45,4 +40,4 @@ jobs:
             SSH_PORT: ${{ secrets.SSH_PORT }}
 
         - name: pull & up!
-          run: ssh staging 'cd /home/realt/docker/dashboard-v2/preprod && git pull origin develop && docker compose --file docker-compose-preprod.yml pull && docker compose --file docker-compose-preprod.yml up -d'
+          run: ssh staging 'cd /home/realt/docker/dashboard-v2/prod && git pull origin master && docker compose --file docker-compose-prod.yml pull && docker compose --file docker-compose-prod.yml up -d'

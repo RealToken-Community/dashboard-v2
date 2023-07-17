@@ -9,9 +9,13 @@ export const selectIsLoading = (state: RootState): boolean =>
   state.wallets.isLoading
 
 export const selectAddressList = (state: RootState): string[] =>
-  state.settings.addressList.map((item) => item.toLowerCase())
+  state.settings.addressList
 
 export const selectCleanedAddressList = (state: RootState): string[] =>
-  state.settings.addressList
-    .filter((item) => item !== '')
-    .map((item) => item.toLowerCase())
+  Array.from(
+    new Set(
+      state.settings.addressList
+        .filter((item) => item !== '')
+        .map((item) => item.toLowerCase())
+    )
+  )

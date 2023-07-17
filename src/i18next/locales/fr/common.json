@@ -15,8 +15,9 @@
     "submit": "Valider"
   },
   "numbers": {
-    "currency": "${{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}}",
+    "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} $",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",
+    "percentInteger": "{{value, number(maximumFractionDigits: 0)}} %",
     "decimal": "{{value, number(maximumFractionDigits: 2)}}",
     "integer": "{{value, number(maximumFractionDigits: 0)}}"
   },
@@ -36,7 +37,7 @@
   },
   "rentsCard": {
     "title": "Loyers",
-    "apr": "APR",
+    "apr": "Rendement annuel",
     "daily": "Journaliers",
     "weekly": "Hebdomadaires",
     "monthly": "Mensuels",
@@ -47,7 +48,8 @@
     "tokens": "Tokens",
     "properties": "Propriétés",
     "averageValue": "Valeur moyenne",
-    "averageRent": "Loyer moyen"
+    "averageRent": "Loyer moyen",
+    "rentedUnits": "Logements loués"
   },
   "assetView": {
     "search": "Recherche",
@@ -55,11 +57,16 @@
     "view": "Affichage",
     "sortOptions": {
       "name": "Nom",
-      "apr": "APR",
-      "rent": "Loyer",
-      "rentStart": "Premier loyer",
+      "apr": "Rendement",
+      "rent": "Loyers perçus",
+      "rentStart": "Date du premier loyer",
       "value": "Valeur",
-      "supply": "Valeur propriété"
+      "supply": "Valeur de la propriété",
+      "token": "Tokens",
+      "totalUnit": "Logements totaux",
+      "rentedUnit": "Logements loués",
+      "occupancy": "Taux d'occupation",
+      "initialLaunch": "Mise en vente"
     },
     "sortReverse": "Inverser",
     "viewOptions": {
@@ -69,10 +76,10 @@
   },
   "assetCard": {
     "tokens": "Tokens",
-    "apr": "APR",
+    "apr": "Rendement annuel",
     "weekly": "Loyers hebdomadaires",
     "yearly": "Loyers annuels",
-    "rentedUnits": "Unités louées",
+    "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
     "viewOnRealt": "Voir sur RealT",
     "isRmmAvailable": "RMM",
@@ -84,11 +91,12 @@
   },
   "assetTable": {
     "property": "Propriété",
-    "apr": "APR",
+    "apr": "Rendement annuel",
     "ownedTokens": "Tokens",
     "ownedValue": "Valeur",
-    "weeklyRent": "Loyer hebdomadaire",
-    "yearlyRent": "Loyer annuel",
+    "weeklyRents": "Loyer hebdomadaire",
+    "yearlyRents": "Loyer annuel",
+    "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété"
   },
   "wallets": {

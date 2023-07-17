@@ -11,9 +11,8 @@ import { ColorScheme } from '@mantine/core'
 import { getCookie } from 'cookies-next'
 import { Provider as JotaiProvider } from 'jotai'
 
-import { Head } from 'src/components'
+import { Head, MainLayout } from 'src/components/layouts'
 import 'src/i18next'
-import { Layout } from 'src/layouts'
 import { MantineProviders } from 'src/providers'
 import InitStoreProvider from 'src/providers/InitStoreProvider'
 import store from 'src/store/store'
@@ -53,9 +52,9 @@ const App = ({ Component, pageProps, colorScheme, locale }: AppProps) => {
             />
             <MantineProviders initialColorScheme={colorScheme}>
               <LanguageInit initialLocale={locale} />
-              <Layout>
+              <MainLayout>
                 <Component {...pageProps} />
-              </Layout>
+              </MainLayout>
             </MantineProviders>
           </InitStoreProvider>
         </Provider>

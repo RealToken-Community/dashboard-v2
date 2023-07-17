@@ -2,31 +2,33 @@ import { NextPage } from 'next'
 
 import { Box, Flex, Grid } from '@mantine/core'
 
-import { PropertiesCard } from 'src/components/PropertiesCard/PropertiesCard'
-import { RentsCard } from 'src/components/RentsCard/RentsCard'
-import { SummaryCard } from 'src/components/SummaryCard/SummaryCard'
-import { WorthCard } from 'src/components/WorthCard/WorthCard'
-import { AssetView } from 'src/components/assets/AssetView/AssetView'
+import { AssetsView } from 'src/components/assetsView'
+import {
+  PropertiesCard,
+  RentsCard,
+  SummaryCard,
+  WorthCard,
+} from 'src/components/cards'
 
 const HomePage: NextPage = () => {
   return (
     <Flex my={'xl'} direction={'column'}>
       <Grid>
-        <Grid.Col md={3} span={12}>
+        <Grid.Col lg={3} sm={6} span={12}>
           <SummaryCard />
         </Grid.Col>
-        <Grid.Col md={3} span={12}>
+        <Grid.Col lg={3} sm={6} span={12}>
           <WorthCard />
         </Grid.Col>
-        <Grid.Col md={3} span={12}>
+        <Grid.Col lg={3} sm={6} span={12}>
           <RentsCard />
         </Grid.Col>
-        <Grid.Col md={3} span={12}>
+        <Grid.Col lg={3} sm={6} span={12}>
           <PropertiesCard />
         </Grid.Col>
       </Grid>
       <Box my={'md'}>
-        <AssetView />
+        <AssetsView />
       </Box>
     </Flex>
   )

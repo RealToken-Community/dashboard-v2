@@ -12,7 +12,7 @@
 
 ## Requirements
 
-### <a name="env">Environement</a>
+### <a name="env">Environment</a>
 
 To run the project you will need to set-up a `.env` file in the root folder:
 
