@@ -14,16 +14,16 @@ const HomePage: NextPage = () => {
   return (
     <Flex my={'xl'} direction={'column'}>
       <Grid>
-        <Grid.Col md={3} span={12}>
+        <Grid.Col lg={3} sm={6} span={12}>
           <SummaryCard />
         </Grid.Col>
-        <Grid.Col md={3} span={12}>
+        <Grid.Col lg={3} sm={6} span={12}>
           <WorthCard />
         </Grid.Col>
-        <Grid.Col md={3} span={12}>
+        <Grid.Col lg={3} sm={6} span={12}>
           <RentsCard />
         </Grid.Col>
-        <Grid.Col md={3} span={12}>
+        <Grid.Col lg={3} sm={6} span={12}>
           <PropertiesCard />
         </Grid.Col>
       </Grid>
