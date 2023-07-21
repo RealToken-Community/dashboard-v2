@@ -7,7 +7,7 @@ const handler: NextApiHandler = async (
   res: NextApiResponse
 ) => {
   try {
-    const response = await fetch('https://api.prod.realt.community/v1/token', {
+    const response = await fetch('https://api.realt.community/v1/token', {
       method: 'GET',
       headers: {
         'X-AUTH-REALT-TOKEN': process.env.COMMUNITY_API_KEY ?? '',
