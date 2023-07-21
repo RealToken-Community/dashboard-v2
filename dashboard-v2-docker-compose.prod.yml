@@ -12,8 +12,8 @@ services:
       - traefik-realt
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.dashboard-preprod.rule=Host(`dashboard.realt.community`)"
-      - "traefik.http.routers.dashboard-preprod.entrypoints=websecure"
+      - "traefik.http.routers.dashboard-prod.rule=Host(`dashboard.realt.community`)"
+      - "traefik.http.routers.dashboard-prod.entrypoints=websecure"
     restart: always
 
 networks:
