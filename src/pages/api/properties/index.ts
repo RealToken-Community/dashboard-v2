@@ -7,15 +7,12 @@ const handler: NextApiHandler = async (
   res: NextApiResponse
 ) => {
   try {
-    const response = await fetch(
-      'https://api.preprod.realt.community/v1/token',
-      {
-        method: 'GET',
-        headers: {
-          'X-AUTH-REALT-TOKEN': process.env.COMMUNITY_API_KEY ?? '',
-        },
-      }
-    )
+    const response = await fetch('https://api.prod.realt.community/v1/token', {
+      method: 'GET',
+      headers: {
+        'X-AUTH-REALT-TOKEN': process.env.COMMUNITY_API_KEY ?? '',
+      },
+    })
 
     if (!response.ok) {
       throw new Error('Failed to fetch properties')
