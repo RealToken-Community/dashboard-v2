@@ -56,9 +56,5 @@ jobs:
             ssh staging 'cd /home/realt/docker/dashboard-v2/preprod
             git pull origin develop
             docker compose --file docker-compose-preprod.yml pull
-            docker login -u $DOCKERUSER -p $DOCKERPASSWD $DOCKERURL
+            docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWD }} ${{ secrets.DOCKER_REGISTRY }}
             docker compose --file docker-compose-preprod.yml up -d'
-          env:
-            DOCKERUSER: ${{ secrets.DOCKER_LOGIN }}
-            DOCKERPASSWD: ${{ secrets.DOCKER_PASSWD }}
-            DOCKERURL: ${{ secrets.DOCKER_REGISTRY }}
