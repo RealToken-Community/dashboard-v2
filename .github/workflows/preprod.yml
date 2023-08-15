@@ -52,4 +52,13 @@ jobs:
             SSH_PORT: ${{ secrets.SSH_PORT }}
 
         - name: pull & up!
-          run: ssh staging 'cd /home/realt/docker/dashboard-v2/preprod && git pull origin develop && docker compose --file docker-compose-preprod.yml pull && docker compose --file docker-compose-preprod.yml up -d'
+          run: |
+            ssh staging 'cd /home/realt/docker/dashboard-v2/preprod
+            git pull origin develop
+            docker compose --file docker-compose-preprod.yml pull
+            docker login -u $DOCKERUSER -p $DOCKERPASSWD $DOCKERURL
+            docker compose --file docker-compose-preprod.yml up -d'
+          env:
+            DOCKERUSER: ${{ secrets.DOCKER_LOGIN }}
+            DOCKERPASSWD: ${{ secrets.DOCKER_PASSWD }}
+            DOCKERURL: ${{ secrets.DOCKER_REGISTRY }}
