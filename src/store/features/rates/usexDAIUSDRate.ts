@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 
-const usexDAIPriceFeed = (): number | undefined => {
-  const [xDaiPrice, setXDaiPrice] = useState<number>();
+const usexDAIUSDRate = (): number | undefined => {
+  const [xDaiUSDRate, setXDaiUSDRate] = useState<number>();
 
   useEffect(() => {
     (async () => {
@@ -17,13 +17,13 @@ const usexDAIPriceFeed = (): number | undefined => {
         const decimals = 8;
         const priceFeedResponse = await contract.latestAnswer();
         const priceFeed = Number(ethers.formatUnits(priceFeedResponse, decimals));
-        setXDaiPrice(priceFeed);
+        setXDaiUSDRate(priceFeed);
       } catch (error) {
         console.error('Error fetching xDai price:', error);
       }
     })();
   }, []);
-  return xDaiPrice;
+  return xDaiUSDRate;
 }
 
-export default usexDAIPriceFeed;
+export default usexDAIUSDRate;

@@ -12,7 +12,7 @@ import {
 } from 'src/store/features/wallets/walletsSelector'
 
 import { CurrencyField, DecimalField } from '../../commons'
-import usexDAIPriceFeed from 'src/store/features/rates/xDaiPriceFeed'
+import usexDAIUSDRate from 'src/store/features/rates/usexDAIUSDRate'
 
 export const SummaryCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'summaryCard' })
@@ -24,7 +24,7 @@ export const SummaryCard: FC = () => {
   const realtokenValue = gnosisValue + ethereumValue + rmmValue
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
-  const xDaiUSDRate = usexDAIPriceFeed();
+  const xDaiUSDRate = usexDAIUSDRate();
   if(!xDaiUSDRate) return null;
   const totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate;
 
