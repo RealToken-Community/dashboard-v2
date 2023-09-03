@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 
-const usexDAIPriceFeed = (): number => {
-  const [xDaiPrice, setXDaiPrice] = useState<number>(1);
+const usexDAIPriceFeed = (): number | undefined => {
+  const [xDaiPrice, setXDaiPrice] = useState<number>();
 
   useEffect(() => {
     (async () => {

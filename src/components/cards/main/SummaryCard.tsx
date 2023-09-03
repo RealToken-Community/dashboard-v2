@@ -25,7 +25,8 @@ export const SummaryCard: FC = () => {
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
   const xDaiUSDRate = usexDAIPriceFeed();
-  const totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate
+  if(!xDaiUSDRate) return null;
+  const totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate;
 
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
