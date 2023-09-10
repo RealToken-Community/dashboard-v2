@@ -7,7 +7,7 @@ import { Badge, Button, Card, Group, createStyles } from '@mantine/core'
 
 import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
 
-import { Divider, RentStatusTag, RmmStatusTag } from '../commons'
+import { Divider, RentStatusTag, RmmStatusTag, SubsidyStatusTag } from '../commons'
 
 const useStyles = createStyles({
   imageContainer: {
@@ -78,6 +78,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
 
       <Group position={'left'} mt={'xs'}>
         <RentStatusTag value={props.value} />
+        <SubsidyStatusTag value={props.value} />
         {props.value.isRmmAvailable ? <RmmStatusTag /> : null}
       </Group>
 
