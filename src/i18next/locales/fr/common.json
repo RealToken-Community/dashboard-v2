@@ -87,6 +87,10 @@
       "full": "Louée",
       "partial": "Partiellement louée",
       "none": "Non louée"
+    },
+    "subsidyStatus": {
+      "full": "Subventionnée",
+      "partial": "Partiellement subventionnée"
     }
   },
   "assetTable": {

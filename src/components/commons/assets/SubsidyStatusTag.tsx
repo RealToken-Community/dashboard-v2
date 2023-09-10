@@ -13,13 +13,13 @@ export const SubsidyStatusTag: FC<{ value: OwnedRealtoken }> = (props) => {
     case 'yes':
       return (
         <Badge size={'xs'} variant={'dot'} color={'blue'}>
-          Subsidy
+          {t('subsidyStatus.full')}
         </Badge>
       )
     case 'partial':
       return (
         <Badge size={'xs'} variant={'filled'} color={'cyan.4'}>
-          Partial Subsidy
+          {t('subsidyStatus.partial')}
         </Badge>
       )
     default:
