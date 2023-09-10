@@ -7,9 +7,11 @@ import { selectOwnedRealtokens } from 'src/store/features/wallets/walletsSelecto
 
 import { AssetsSearch, useAssetsSearch } from './AssetsSearch'
 import { AssetsSort, useAssetsSort } from './AssetsSort'
+import { AttestsSubsidyFilter, useAttestsSubsidyFilter } from './AttestsSubsidyFilter'
 import { AssetsViewSelect, useAssetsViewSelect } from './assetsViewSelect'
 import { AssetViewType } from './types'
 import { AssetGrid, AssetTable } from './views'
+import { Realtoken } from 'src/store/features/realtokens/realtokensSelector'
 
 export const AssetsView: FC = () => {
   const { assetSortFunction } = useAssetsSort()
@@ -18,9 +20,12 @@ export const AssetsView: FC = () => {
 
   const realtokens = useSelector(selectOwnedRealtokens)
 
+  const assetSubsidyFilterFunction = useAttestsSubsidyFilter()
+
   const data = useMemo(
-    () => realtokens.filter(assetSearchFunction).sort(assetSortFunction),
-    [realtokens, assetSearchFunction, assetSortFunction]
+    () => realtokens.filter(assetSearchFunction).filter(assetSubsidyFilterFunction)
+    .sort(assetSortFunction),
+    [realtokens, assetSearchFunction, assetSortFunction, assetSubsidyFilterFunction]
   )
 
   return (
@@ -37,6 +42,9 @@ export const AssetsView: FC = () => {
           <Flex align={'center'} gap={'sm'}>
             <AssetsSort />
           </Flex>
+        </Grid.Col>
+        <Grid.Col xs={12} sm={'content'}>
+          <AttestsSubsidyFilter />
         </Grid.Col>
         <Grid.Col xs={12} sm={'content'}>
           <AssetsViewSelect />
