@@ -68,7 +68,7 @@
       "occupancy": "Occupancy rate",
       "initialLaunch": "Initial launch"
     },
-    "sortReverse": "Reverse" ,
+    "sortReverse": "Reverse",
     "viewOptions": {
       "table": "Table",
       "grid": "Grid"
@@ -87,7 +87,8 @@
       "full": "Rented",
       "partial": "Partially rented",
       "none": "Not rented"
-    }
+    },
+    "subsidy": "Subsidy"
   },
   "assetTable": {
     "property": "Property",
