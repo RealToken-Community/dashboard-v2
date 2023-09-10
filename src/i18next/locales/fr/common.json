@@ -77,7 +77,7 @@
   "assetSubsidy": {
     "label": "Loyers subventionnés",
     "options": {
-      "all": "Non filtré",
+      "all": "Non filtrés",
       "fullySubsidized": "Entièrement subventionnés",
       "subsidized": "Subventionnés",
       "notSubsidized": "Non subventionnés"
