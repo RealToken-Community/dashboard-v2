@@ -66,6 +66,7 @@ const App = ({ Component, pageProps, colorScheme, locale }: AppProps) => {
 App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
   colorScheme: getCookie('mantine-color-scheme', ctx) || 'dark',
   locale: getCookie('react-i18next', ctx) || 'fr',
+  currency: getCookie('fiat-currency', ctx) || 'eur'
 })
 
 export default App

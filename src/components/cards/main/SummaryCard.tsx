@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { getCookie } from 'cookies-next'
 
 import { Box, Card, Text, Title } from '@mantine/core'
 
@@ -13,6 +14,7 @@ import {
 
 import { CurrencyField, DecimalField } from '../../commons'
 import usexDAIUSDRate from 'src/store/features/rates/usexDAIUSDRate'
+import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
 
 export const SummaryCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'summaryCard' })
@@ -24,9 +26,21 @@ export const SummaryCard: FC = () => {
   const realtokenValue = gnosisValue + ethereumValue + rmmValue
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
-  const xDaiUSDRate = usexDAIUSDRate();
-  if(!xDaiUSDRate) return null;
-  const totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate;
+  const totalNetValue = 0
+
+  const currentCurrency = getCookie('fiat-currency')
+
+  if (currentCurrency == 'eur') {
+    const eURUSDRate = useEURUSDRate();
+    if(!eURUSDRate) return null;
+
+    totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) / eURUSDRate;
+  } else {
+    const xDaiUSDRate = usexDAIUSDRate();
+    if(!xDaiUSDRate) return null;
+
+    totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate;
+  }
 
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>

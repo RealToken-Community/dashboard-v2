@@ -11,7 +11,7 @@ import {
   useMantineColorScheme,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconLanguage, IconMoon, IconSettings, IconSun } from '@tabler/icons'
+import { IconLanguage, IconCash, IconMoon, IconSettings, IconSun } from '@tabler/icons'
 
 import { setCookies } from 'cookies-next'
 
@@ -82,6 +82,37 @@ const LanguageSelect: FC = () => {
   )
 }
 
+const CurrencySelect: FC = () => {
+  const { i18n, t } = useTranslation('common', { keyPrefix: 'settings' })
+
+  const updateCurrency = useCallback(
+    (updatedCurrency: string) => {
+      if (i18n.currency !== updatedCurrency) {
+        setCookies('fiat-currency', updatedCurrency)
+        // FIXME: Find a way to make it reactive
+        // setCurrency(updatedCurrency)
+      }
+    },
+    [i18n]
+  )
+
+  return (
+    <>
+      <Menu.Label pb={0}>{t('currencyTitle')}</Menu.Label>
+      <Select
+        p={5}
+        value={i18n.currency}
+        onChange={updateCurrency}
+        data={[
+          { value: 'usd', label: t('usd') },
+          { value: 'eur', label: t('eur') },
+        ]}
+        icon={<IconCash size={16} />}
+      />
+    </>
+  )
+}
+
 export const SettingsMenu: FC = () => {
   const [isOpen, handlers] = useDisclosure(false)
 
@@ -99,6 +130,8 @@ export const SettingsMenu: FC = () => {
       </Menu.Target>
       <Menu.Dropdown>
         <LanguageSelect />
+        <Menu.Divider />
+        <CurrencySelect />
         <Menu.Divider />
         <ColorSchemeMenuItem />
       </Menu.Dropdown>
