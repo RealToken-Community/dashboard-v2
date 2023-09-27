@@ -1,5 +1,6 @@
 import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import { getCookie } from 'cookies-next'
 
 import {
   ActionIcon,
@@ -101,7 +102,7 @@ const CurrencySelect: FC = () => {
       <Menu.Label pb={0}>{t('currencyTitle')}</Menu.Label>
       <Select
         p={5}
-        value={i18n.currency}
+        value={getCookie('fiat-currency')}
         onChange={updateCurrency}
         data={[
           { value: 'usd', label: t('usd') },
