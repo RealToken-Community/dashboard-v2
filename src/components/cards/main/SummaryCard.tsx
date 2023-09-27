@@ -26,20 +26,22 @@ export const SummaryCard: FC = () => {
   const realtokenValue = gnosisValue + ethereumValue + rmmValue
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
-  const totalNetValue = 0
+  let totalNetValue = 0
 
   const currentCurrency = getCookie('fiat-currency')
+  const xDaiUSDRate = usexDAIUSDRate();
+  const eURUSDRate = useEURUSDRate();
+
+  if(!xDaiUSDRate) return null;
+
+  // In dollars
+  totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate;
 
   if (currentCurrency == 'eur') {
-    const eURUSDRate = useEURUSDRate();
     if(!eURUSDRate) return null;
 
-    totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) / eURUSDRate;
-  } else {
-    const xDaiUSDRate = usexDAIUSDRate();
-    if(!xDaiUSDRate) return null;
-
-    totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate;
+    // Dollars to Euros
+    totalNetValue = totalNetValue / eURUSDRate;
   }
 
   return (

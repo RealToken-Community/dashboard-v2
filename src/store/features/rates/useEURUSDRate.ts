@@ -24,7 +24,7 @@ const useEURUSDRate = (): number | undefined => {
       }
     })();
   }, []);
-  console.log(EURUSDRate)
+
   return EURUSDRate;
 }
 
