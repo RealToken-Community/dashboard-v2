@@ -19,7 +19,8 @@
     "submit": "Submit"
   },
   "walletButton": {
-    "connectWallet": "Connect wallet"
+    "connectWallet": "Connect wallet",
+    "disconnectWallet": "Disconnect wallet"
   },
   "numbers": {
     "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} {{symbol}}",

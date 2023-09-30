@@ -96,7 +96,7 @@ const ConnectButton : FC<ConnectButtonProps> = ({ setWeb3Address }) => {
   const modals = useModals();
 
   const { t } = useTranslation('common', { keyPrefix: 'walletButton' });
-  const { account } = useWeb3React();
+  const { account, connector } = useWeb3React();
 
   useEffect(() => {
     console.log('account', account)
@@ -106,8 +106,25 @@ const ConnectButton : FC<ConnectButtonProps> = ({ setWeb3Address }) => {
   }
   , [account])
 
+  const onDisconnect = useCallback(async () => {
+    if (connector.deactivate) {
+      await connector.deactivate();
+    } else {
+      await connector.resetState();
+    }
+    setWeb3Address('');
+  }, [connector]);
+
   const openWalletModal = () =>
     modals.openContextModal('web3Wallets', { innerProps: {} })
+
+  if (account) {
+    return (
+      <Button onClick={onDisconnect}>
+        {t('disconnectWallet')}
+      </Button>
+    );
+  }
 
   return (
     <Button onClick={openWalletModal}>
