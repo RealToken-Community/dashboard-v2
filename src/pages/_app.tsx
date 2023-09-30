@@ -20,16 +20,11 @@ import store from 'src/store/store'
 
 import { 
   ChainSelectConfig,
-  Layout, 
- 
-  RealtProvider, 
-  Web3Providers, 
-  Websites, 
+  Web3Providers,  
   getConnectors, 
   getWalletConnectV2, 
   gnosisHooks, 
   gnosisSafe, 
-  initLanguage, 
   metaMask, 
   metaMaskHooks, 
   parseAllowedChain 
