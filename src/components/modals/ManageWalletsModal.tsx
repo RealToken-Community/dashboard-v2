@@ -55,7 +55,7 @@ export const ManageWalletsModal: FC<ContextModalProps> = ({ context, id }) => {
     onClose()
   }
 
-  const setWeb3Address = (value: string) => setAddressList([addressList[0], addressList[1], value])
+  const setWeb3Address = (value: string) => setAddressList([value, addressList[1]])
 
   return (
     <Stack
@@ -73,11 +73,6 @@ export const ManageWalletsModal: FC<ContextModalProps> = ({ context, id }) => {
           label={t('address', { value: 2 })}
           value={addressList[1]}
           onChange={(value) => setAddressList([addressList[0], value])}
-        />
-        <WalletInput
-          label={t('address', { value: 3 })}
-          value={addressList[2]}
-          onChange={(value) => setAddressList([addressList[0], addressList[1], value])}
         />
       </Flex>
       <Flex gap={'lg'}>
