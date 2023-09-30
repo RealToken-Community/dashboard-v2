@@ -100,7 +100,7 @@ interface ConnectButtonProps {
 const ConnectButton : FC<ConnectButtonProps> = ({ setWeb3Address }) => {
   const modals = useModals();
 
-  const { t } = useTranslation('common', { keyPrefix: 'wallet' });
+  const { t } = useTranslation('common', { keyPrefix: 'walletButton' });
   const { account } = useWeb3React();
 
   useEffect(() => {
@@ -115,8 +115,8 @@ const ConnectButton : FC<ConnectButtonProps> = ({ setWeb3Address }) => {
     modals.openContextModal('web3Wallets', { innerProps: {} })
 
   return (
-    <Button aria-label={t('title')} onClick={openWalletModal}>
-      {t('title')}
+    <Button onClick={openWalletModal}>
+      {t('connectWallet')}
     </Button>
   );
 };

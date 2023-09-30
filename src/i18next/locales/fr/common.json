@@ -18,6 +18,9 @@
     "close": "Fermer",
     "submit": "Valider"
   },
+  "walletButton": {
+    "connectWallet": "Connecter mon portefeuille"
+  },
   "numbers": {
     "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} {{symbol}}",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",

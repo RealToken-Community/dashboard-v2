@@ -18,6 +18,9 @@
     "close": "Close",
     "submit": "Submit"
   },
+  "walletButton": {
+    "connectWallet": "Connect wallet"
+  },
   "numbers": {
     "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} {{symbol}}",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",
