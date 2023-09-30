@@ -51,9 +51,10 @@ type AppProps = NextAppProps & { colorScheme: ColorScheme; locale: string }
 
 const queryClient = new QueryClient({})
 
-
 const libraryConnectors = getConnectors(
-  [metaMask, metaMaskHooks],
+  {
+    metaMask: [metaMask, metaMaskHooks],
+  }
 );
 
 const App = ({ Component, pageProps, colorScheme, locale }: AppProps) => {
