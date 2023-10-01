@@ -100,7 +100,8 @@
     "subsidyStatus": {
       "full": "Subsidized",
       "partial": "Partially subsidized"
-    }
+    },
+    "subsidy": "Subsidy"
   },
   "assetTable": {
     "property": "Property",

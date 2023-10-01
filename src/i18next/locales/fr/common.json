@@ -100,7 +100,8 @@
     "subsidyStatus": {
       "full": "Subventionnée",
       "partial": "Partiellement subventionnée"
-    }
+    },
+    "subsidy": "Loyer subventioné"
   },
   "assetTable": {
     "property": "Propriété",

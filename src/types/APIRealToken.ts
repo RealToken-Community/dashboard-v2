@@ -148,6 +148,7 @@ export interface APIRealToken {
   grossRentYear: number
   grossRentMonth: number
   subsidyStatus: string
+  subsidyStatusValue: number
 
   // Monthly expenses
   insurance: number
