@@ -6,33 +6,35 @@ import { Select } from '@mantine/core'
 import { useAtom } from 'jotai'
 
 import { assetSubsidyChoosedAtom } from 'src/states'
+import { Realtoken } from 'src/store/features/realtokens/realtokensSelector'
 
 import { useInputStyles } from '../inputs/useInputStyles'
 import { AssetSubsidyType } from './types'
-import { Realtoken } from 'src/store/features/realtokens/realtokensSelector'
 
-export const AttestsSubsidyFilter: FC = () => {
+export const AssetsSubsidyFilter: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'assetSubsidy' })
   const { classes: inputClasses } = useInputStyles()
 
-  const [choosenSubsidyType, setChoosenSubsidyType] = useAtom(assetSubsidyChoosedAtom)
+  const [choosenSubsidyType, setChoosenSubsidyType] = useAtom(
+    assetSubsidyChoosedAtom
+  )
 
   const viewOptions = [
     {
       value: AssetSubsidyType.ALL,
-      label: t('options.all')
+      label: t('options.all'),
     },
     {
       value: AssetSubsidyType.FULLY_SUBSIDIZED,
-      label: t('options.fullySubsidized')
+      label: t('options.fullySubsidized'),
     },
     {
       value: AssetSubsidyType.SUBSIDIZED,
-      label: t('options.subsidized')
+      label: t('options.subsidized'),
     },
     {
       value: AssetSubsidyType.NOT_SUBSIDIZED,
-      label: t('options.notSubsidized')
+      label: t('options.notSubsidized'),
     },
   ]
 
@@ -41,22 +43,24 @@ export const AttestsSubsidyFilter: FC = () => {
       label={t('label')}
       data={viewOptions}
       value={choosenSubsidyType}
-      onChange={(value: AssetSubsidyType) => value && setChoosenSubsidyType(value)}
+      onChange={(value: AssetSubsidyType) =>
+        value && setChoosenSubsidyType(value)
+      }
       classNames={inputClasses}
     />
   )
 }
-AttestsSubsidyFilter.displayName = 'AssetsSubsidyFilter'
+AssetsSubsidyFilter.displayName = 'AssetsSubsidyFilter'
 
-export function useAttestsSubsidyFilter() {
+export function useAssetsSubsidyFilter() {
   const [choosenSubsidyType] = useAtom(assetSubsidyChoosedAtom)
 
   return (asset: Realtoken) => {
     switch (choosenSubsidyType) {
       case AssetSubsidyType.FULLY_SUBSIDIZED:
-        return asset.subsidyStatus === 'yes'
+        return asset.subsidyStatus === 'yes' && !!asset.subsidyStatusValue
       case AssetSubsidyType.SUBSIDIZED:
-        return asset.subsidyStatus === 'partial' || asset.subsidyStatus === 'yes'
+        return asset.subsidyStatus !== 'no' && !!asset.subsidyStatusValue
       case AssetSubsidyType.NOT_SUBSIDIZED:
         return !asset.subsidyStatus || asset.subsidyStatus === 'no'
       default:

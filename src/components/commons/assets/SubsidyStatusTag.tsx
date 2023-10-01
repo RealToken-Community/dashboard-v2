@@ -7,7 +7,11 @@ import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 export const SubsidyStatusTag: FC<{ value: OwnedRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
-  const { subsidyStatus } = props.value;
+  const { subsidyStatus, subsidyStatusValue } = props.value
+
+  if (!subsidyStatusValue) {
+    return <></>
+  }
 
   switch (subsidyStatus) {
     case 'yes':
@@ -23,7 +27,7 @@ export const SubsidyStatusTag: FC<{ value: OwnedRealtoken }> = (props) => {
         </Badge>
       )
     default:
-      return (<></>)
+      return <></>
   }
 }
 SubsidyStatusTag.displayName = 'SubsidyStatusTag'
