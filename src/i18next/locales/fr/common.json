@@ -74,6 +74,15 @@
       "grid": "Carte"
     }
   },
+  "assetSubsidy": {
+    "label": "Loyers subventionnés",
+    "options": {
+      "all": "Non filtrés",
+      "fullySubsidized": "Entièrement subventionnés",
+      "subsidized": "Subventionnés",
+      "notSubsidized": "Non subventionnés"
+    }
+  },
   "assetCard": {
     "tokens": "Tokens",
     "apr": "Rendement annuel",
@@ -87,6 +96,10 @@
       "full": "Louée",
       "partial": "Partiellement louée",
       "none": "Non louée"
+    },
+    "subsidyStatus": {
+      "full": "Subventionnée",
+      "partial": "Partiellement subventionnée"
     },
     "subsidy": "Loyer subventioné"
   },

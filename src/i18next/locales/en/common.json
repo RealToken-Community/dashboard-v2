@@ -74,6 +74,15 @@
       "grid": "Grid"
     }
   },
+  "assetSubsidy": {
+    "label": "Subsidized rent",
+    "options": {
+      "all": "No filtered",
+      "fullySubsidized": "Fully subsidized",
+      "subsidized": "Subsidized",
+      "notSubsidized": "Not subsidized"
+    }
+  },
   "assetCard": {
     "tokens": "Tokens",
     "apr": "APR",
@@ -87,6 +96,10 @@
       "full": "Rented",
       "partial": "Partially rented",
       "none": "Not rented"
+    },
+    "subsidyStatus": {
+      "full": "Subsidized",
+      "partial": "Partially subsidized"
     },
     "subsidy": "Subsidy"
   },
