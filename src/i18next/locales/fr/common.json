@@ -87,7 +87,8 @@
       "full": "Louée",
       "partial": "Partiellement louée",
       "none": "Non louée"
-    }
+    },
+    "subsidy": "Loyer subventioné"
   },
   "assetTable": {
     "property": "Propriété",
