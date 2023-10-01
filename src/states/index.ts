@@ -10,7 +10,7 @@ export const assetViewChoosedAtom = atomWithStorage<AssetViewType>(
 
 export const assetSubsidyChoosedAtom = atomWithStorage<AssetSubsidyType>(
   'subsidyChoosed',
-  AssetSubsidyType.FULLY_SUBSIDIZED
+  AssetSubsidyType.ALL
 )
 
 export const assetSortChoosedAtom = atomWithStorage<AssetSortType>(
