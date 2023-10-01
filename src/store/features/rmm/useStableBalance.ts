@@ -14,10 +14,6 @@ const useStableBalance = (props : balanceType): number | undefined => {
   const contractAddress = props.type === 'deposit' ? '0x7349C9eaA538e118725a6130e0f8341509b9f8A0' : '0x6a7CeD66902D07066Ad08c81179d17d0fbE36829';
 
   useEffect(() => {
-    console.log({ stableBalance });
-  }, [stableBalance]);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         const RPC = 'https://rpc.ankr.com/gnosis';
@@ -32,7 +28,6 @@ const useStableBalance = (props : balanceType): number | undefined => {
         const balances = await Promise.all(
           addressList.map(async (item: string) => {
             const balanceResponse = await contract.balanceOf(item);
-            console.log({ balanceResponse })
             return Number(ethers.utils.formatUnits(balanceResponse, decimals));
           })
         );
