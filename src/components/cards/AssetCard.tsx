@@ -49,7 +49,8 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
   const { classes } = useStyles()
-  const isSubsidized = props.value.subsidyStatus !== 'no'
+  const isSubsidized =
+    props.value.subsidyStatus !== 'no' && props.value.subsidyStatusValue
 
   return (
     <Card
@@ -135,7 +136,9 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
           <div className={classes.textSm}>{t('subsidy')}</div>
           <div className={classes.textSm}>
             {tNumbers('percentInteger', {
-              value: (props.value.subsidyStatusValue / props.value.grossRentMonth) * 100,
+              value:
+                (props.value.subsidyStatusValue / props.value.grossRentMonth) *
+                100,
             })}
           </div>
         </div>
