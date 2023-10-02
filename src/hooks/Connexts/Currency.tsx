@@ -9,14 +9,14 @@ export enum APIRealTokenCurrency {
 }
 
 interface CurrencyContextProps {
-  currency: APIRealTokenCurrency;
-  setCurrency: React.Dispatch<React.SetStateAction<APIRealTokenCurrency>>;
+  currency: APIRealTokenCurrency | undefined;
+  setCurrency: React.Dispatch<React.SetStateAction<APIRealTokenCurrency | undefined>>;
 }
 
 const CurrencyContext = createContext<CurrencyContextProps | undefined>(undefined);
 
 export const CurrencyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [currency, setCurrency] = useState<APIRealTokenCurrency>();
+  const [currency, setCurrency] = useState<APIRealTokenCurrency | undefined>();
 
   useEffect(() => {
     const cookieCurrency = getCookie('currency');
