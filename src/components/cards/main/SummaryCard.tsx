@@ -15,8 +15,9 @@ import {
 import { CurrencyField, DecimalField } from '../../commons'
 import usexDAIUSDRate from 'src/store/features/rates/usexDAIUSDRate'
 import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
-import { useCurrency } from 'src/hooks/Connexts/Currency'
 import { APIRealTokenCurrency } from 'src/types/APIRealToken'
+import { useDispatch } from 'react-redux'
+import { setCurrency } from 'src/store/features/currencies/currenciesSlice'
 
 export const SummaryCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'summaryCard' })
@@ -30,7 +31,9 @@ export const SummaryCard: FC = () => {
   const stableDebtValue = rmmDetails.stableDebt
   let totalNetValue = 0
 
-  const { currency, setCurrency } = useCurrency();
+  const dispatch = useDispatch();
+  const currency = useSelector((state) => state.currency.value);
+  
   const xDaiUSDRate = usexDAIUSDRate();
   const eURUSDRate = useEURUSDRate();
 

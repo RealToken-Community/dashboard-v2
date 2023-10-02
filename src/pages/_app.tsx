@@ -16,7 +16,6 @@ import 'src/i18next'
 import { MantineProviders } from 'src/providers'
 import InitStoreProvider from 'src/providers/InitStoreProvider'
 import store from 'src/store/store'
-import { CurrencyProvider } from 'src/hooks/Connexts/Currency'
 
 type TestProps = {
   initialLocale: string
@@ -41,29 +40,27 @@ const queryClient = new QueryClient({})
 
 const App = ({ Component, pageProps, colorScheme, locale }: AppProps) => {
   return (
-    <CurrencyProvider >
-      <QueryClientProvider client={queryClient}>
-        <JotaiProvider>
-          <Provider store={store}>
-            <InitStoreProvider>
-              
-                <Head
-                  title={'Realtoken Dashboard'}
-                  description={
-                    'A Realtoken Dashboard for follow assets related to RealT'
-                  }
-                />
-                <MantineProviders initialColorScheme={colorScheme}>
-                  <LanguageInit initialLocale={locale} />
-                  <MainLayout>
-                    <Component {...pageProps} />
-                  </MainLayout>
-                </MantineProviders>
-            </InitStoreProvider>
-          </Provider>
-        </JotaiProvider>
-      </QueryClientProvider>
-    </CurrencyProvider>
+    <QueryClientProvider client={queryClient}>
+      <JotaiProvider>
+        <Provider store={store}>
+          <InitStoreProvider>
+            
+              <Head
+                title={'Realtoken Dashboard'}
+                description={
+                  'A Realtoken Dashboard for follow assets related to RealT'
+                }
+              />
+              <MantineProviders initialColorScheme={colorScheme}>
+                <LanguageInit initialLocale={locale} />
+                <MainLayout>
+                  <Component {...pageProps} />
+                </MainLayout>
+              </MantineProviders>
+          </InitStoreProvider>
+        </Provider>
+      </JotaiProvider>
+    </QueryClientProvider>
   )
 }
 

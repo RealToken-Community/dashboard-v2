@@ -15,8 +15,11 @@ import { useDisclosure } from '@mantine/hooks'
 import { IconLanguage, IconCash, IconMoon, IconSettings, IconSun } from '@tabler/icons'
 
 import { setCookie } from 'cookies-next'
-import { useCurrency } from 'src/hooks/Connexts/Currency'
 import { APIRealTokenCurrency } from 'src/types/APIRealToken'
+import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { setCurrency } from 'src/store/features/currencies/currenciesSlice'
+import { RootState } from 'src/store/store'
 
 const ColorSchemeMenuItem: FC = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
@@ -88,12 +91,13 @@ const LanguageSelect: FC = () => {
 const CurrencySelect: FC = () => {
   const { i18n, t } = useTranslation('common', { keyPrefix: 'settings' })
 
-  const { currency, setCurrency } = useCurrency();
+  const dispatch = useDispatch();
+  const currency = useSelector((state : RootState) => state.currency.value);
 
   const updateCurrency = useCallback(
     (updatedCurrency: APIRealTokenCurrency) => {
-      console.log({ currency, updatedCurrency })
-      setCurrency(updatedCurrency)
+      console.log({ currency, updatedCurrency: updatedCurrency as APIRealTokenCurrency})
+      dispatch(setCurrency(updatedCurrency as APIRealTokenCurrency));
     },
     [currency]
   )
