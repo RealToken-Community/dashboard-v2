@@ -16,8 +16,7 @@ import { IconLanguage, IconCash, IconMoon, IconSettings, IconSun } from '@tabler
 
 import { setCookie } from 'cookies-next'
 import { APIRealTokenCurrency } from 'src/types/APIRealToken'
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { setCurrency } from 'src/store/features/currencies/currenciesSlice'
 import { RootState } from 'src/store/store'
 

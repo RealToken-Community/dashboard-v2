@@ -10,15 +10,31 @@ import {
   selectOwnedRealtokensValueRmm,
 } from 'src/store/features/wallets/walletsSelector'
 
+import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
+import { APIRealTokenCurrency } from 'src/types/APIRealToken'
+import { RootState } from 'src/store/store'
+
 import { CurrencyField } from '../../commons'
 
 export const WorthCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'worthCard' })
 
-  const gnosisValue = useSelector(selectOwnedRealtokensValueGnosis)
-  const ethereumValue = useSelector(selectOwnedRealtokensValueEthereum)
-  const rmmValue = useSelector(selectOwnedRealtokensValueRmm)
-  const totalValue = gnosisValue + ethereumValue + rmmValue
+  // In Dollars
+  let gnosisValue = useSelector(selectOwnedRealtokensValueGnosis)
+  let ethereumValue = useSelector(selectOwnedRealtokensValueEthereum)
+  let rmmValue = useSelector(selectOwnedRealtokensValueRmm)
+  let totalValue = gnosisValue + ethereumValue + rmmValue
+
+  const currency = useSelector((state : RootState) => state.currency.value);
+  const eURUSDRate = useEURUSDRate();
+
+  if (currency === APIRealTokenCurrency.EUR){
+    // Dollars to Euros
+    gnosisValue = gnosisValue / eURUSDRate;
+    ethereumValue = ethereumValue / eURUSDRate;
+    rmmValue = rmmValue / eURUSDRate;
+    totalValue = totalValue / eURUSDRate;
+  }
 
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>

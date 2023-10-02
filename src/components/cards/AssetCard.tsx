@@ -1,5 +1,6 @@
 import { FC, memo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import Image from 'next/image'
 
@@ -7,7 +8,10 @@ import { Badge, Button, Card, Group, createStyles } from '@mantine/core'
 
 import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
 
-import { Divider, RentStatusTag, RmmStatusTag, SubsidyStatusTag } from '../commons'
+import { Divider, RentStatusTag, RmmStatusTag, SubsidyStatusTag, CurrencyField } from '../commons'
+
+import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
+import { APIRealTokenCurrency } from 'src/types/APIRealToken'
 
 const useStyles = createStyles({
   imageContainer: {
@@ -52,6 +56,25 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
   const isSubsidized =
     props.value.subsidyStatus !== 'no' && props.value.subsidyStatusValue
 
+  const currency = useSelector((state : RootState) => state.currency.value);
+  const eURUSDRate = useEURUSDRate();
+
+  // In Dollars
+  let value = props.value.value
+  let weeklyAmount = props.value.amount * props.value.netRentDayPerToken * 7
+  let yearlyAmount = props.value.amount * props.value.netRentYearPerToken
+  let totalInvestment = props.value.totalInvestment
+
+  if (currency === APIRealTokenCurrency.EUR){
+    if(!eURUSDRate) return null;
+
+    // Dollars to Euros
+    value = value / eURUSDRate;
+    weeklyAmount = weeklyAmount / eURUSDRate;
+    yearlyAmount = yearlyAmount / eURUSDRate;
+    totalInvestment = totalInvestment / eURUSDRate;
+  }
+
   return (
     <Card
       shadow={'sm'}
@@ -74,7 +97,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       <Group position={'apart'} mt={'md'}>
         <div className={classes.textBold}>{props.value.shortName}</div>
         <Badge variant={'light'}>
-          {tNumbers('currency', { value: props.value.value })}
+          <CurrencyField value={value} />
         </Badge>
       </Group>
 
@@ -105,18 +128,14 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       <div className={classes.groupApart}>
         <div className={classes.textSm}>{t('weekly')}</div>
         <div className={classes.textSm}>
-          {tNumbers('currency', {
-            value: props.value.amount * props.value.netRentDayPerToken * 7,
-          })}
+          <CurrencyField value={weeklyAmount} />
         </div>
       </div>
 
       <div className={classes.groupApart}>
         <div className={classes.textSm}>{t('yearly')}</div>
         <div className={classes.textSm}>
-          {tNumbers('currency', {
-            value: props.value.amount * props.value.netRentYearPerToken,
-          })}
+          <CurrencyField value={yearlyAmount} />
         </div>
       </div>
 
@@ -148,9 +167,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       <div className={classes.groupApart}>
         <div className={classes.textSm}>{t('propertyValue')}</div>
         <div className={classes.textSm}>
-          {tNumbers('currency', {
-            value: props.value.totalInvestment,
-          })}
+          <CurrencyField value={totalInvestment} />
         </div>
       </div>
 

@@ -44,19 +44,18 @@ const App = ({ Component, pageProps, colorScheme, locale }: AppProps) => {
       <JotaiProvider>
         <Provider store={store}>
           <InitStoreProvider>
-            
-              <Head
-                title={'Realtoken Dashboard'}
-                description={
-                  'A Realtoken Dashboard for follow assets related to RealT'
-                }
-              />
-              <MantineProviders initialColorScheme={colorScheme}>
-                <LanguageInit initialLocale={locale} />
-                <MainLayout>
-                  <Component {...pageProps} />
-                </MainLayout>
-              </MantineProviders>
+            <Head
+              title={'Realtoken Dashboard'}
+              description={
+                'A Realtoken Dashboard for follow assets related to RealT'
+              }
+            />
+            <MantineProviders initialColorScheme={colorScheme}>
+              <LanguageInit initialLocale={locale} />
+              <MainLayout>
+                <Component {...pageProps} />
+              </MainLayout>
+            </MantineProviders>
           </InitStoreProvider>
         </Provider>
       </JotaiProvider>
