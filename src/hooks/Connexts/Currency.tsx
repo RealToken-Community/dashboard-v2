@@ -1,6 +1,7 @@
 // @ts-ignore
 
-import React, { useState, createContext, useContext, ReactNode } from "react";
+import React, { useState, createContext, useContext, ReactNode, useEffect } from "react";
+import { getCookie, setCookie } from 'cookies-next';
 
 export enum APIRealTokenCurrency {
   USD = 'USD',
@@ -15,7 +16,27 @@ interface CurrencyContextProps {
 const CurrencyContext = createContext<CurrencyContextProps | undefined>(undefined);
 
 export const CurrencyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [currency, setCurrency] = useState<APIRealTokenCurrency>(APIRealTokenCurrency.USD);
+  const [currency, setCurrency] = useState<APIRealTokenCurrency>();
+
+  useEffect(() => {
+    const cookieCurrency = getCookie('currency');
+    console.log({ cookieCurrency });
+    if(!cookieCurrency){
+      setCurrency(APIRealTokenCurrency.USD);
+      setCookie('currency', APIRealTokenCurrency.USD);
+      return;
+    }
+
+    setCurrency(cookieCurrency as APIRealTokenCurrency);
+  }, []);
+
+
+  useEffect(() => {
+    if(!currency) return;
+    console.log('update currency', { currency })
+    setCookie('currency', currency);
+  }, [currency]);
+    
 
   return (
     <CurrencyContext.Provider value={{ currency, setCurrency }}>
