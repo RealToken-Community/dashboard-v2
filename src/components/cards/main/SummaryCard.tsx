@@ -15,6 +15,7 @@ import {
 import { CurrencyField, DecimalField } from '../../commons'
 import usexDAIUSDRate from 'src/store/features/rates/usexDAIUSDRate'
 import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
+import { useCurrency } from 'src/hooks/Connexts/Currency'
 
 export const SummaryCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'summaryCard' })
@@ -28,16 +29,19 @@ export const SummaryCard: FC = () => {
   const stableDebtValue = rmmDetails.stableDebt
   let totalNetValue = 0
 
-  const currentCurrency = getCookie('fiat-currency')
+  const { currency, setCurrency } = useCurrency();
   const xDaiUSDRate = usexDAIUSDRate();
   const eURUSDRate = useEURUSDRate();
+
+
+  console.log({ currency })
 
   if(!xDaiUSDRate) return null;
 
   // In dollars
   totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate;
 
-  if (currentCurrency == 'eur') {
+  if (currency === 'EUR') {
     if(!eURUSDRate) return null;
 
     // Dollars to Euros

@@ -15,6 +15,8 @@ import { useDisclosure } from '@mantine/hooks'
 import { IconLanguage, IconCash, IconMoon, IconSettings, IconSun } from '@tabler/icons'
 
 import { setCookies } from 'cookies-next'
+import { useCurrency } from 'src/hooks/Connexts/Currency'
+import { APIRealTokenCurrency } from 'src/types/APIRealToken'
 
 const ColorSchemeMenuItem: FC = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
@@ -86,15 +88,14 @@ const LanguageSelect: FC = () => {
 const CurrencySelect: FC = () => {
   const { i18n, t } = useTranslation('common', { keyPrefix: 'settings' })
 
+  const { currency, setCurrency } = useCurrency();
+
   const updateCurrency = useCallback(
-    (updatedCurrency: string) => {
-      if (i18n.currency !== updatedCurrency) {
-        setCookies('fiat-currency', updatedCurrency)
-        // FIXME: Find a way to make it reactive
-        // setCurrency(updatedCurrency)
-      }
+    (updatedCurrency: APIRealTokenCurrency) => {
+      console.log({ currency, updatedCurrency })
+      setCurrency(updatedCurrency)
     },
-    [i18n]
+    [currency]
   )
 
   return (
@@ -102,11 +103,11 @@ const CurrencySelect: FC = () => {
       <Menu.Label pb={0}>{t('currencyTitle')}</Menu.Label>
       <Select
         p={5}
-        value={getCookie('fiat-currency')}
+        value={currency}
         onChange={updateCurrency}
         data={[
-          { value: 'usd', label: t('usd') },
-          { value: 'eur', label: t('eur') },
+          { value: APIRealTokenCurrency.USD, label: t('usd') },
+          { value: APIRealTokenCurrency.EUR, label: t('eur') },
         ]}
         icon={<IconCash size={16} />}
       />
