@@ -16,6 +16,7 @@ import { CurrencyField, DecimalField } from '../../commons'
 import usexDAIUSDRate from 'src/store/features/rates/usexDAIUSDRate'
 import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
 import { useCurrency } from 'src/hooks/Connexts/Currency'
+import { APIRealTokenCurrency } from 'src/types/APIRealToken'
 
 export const SummaryCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'summaryCard' })
@@ -41,7 +42,7 @@ export const SummaryCard: FC = () => {
   // In dollars
   totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate;
 
-  if (currency === 'EUR') {
+  if (currency === APIRealTokenCurrency.EUR){
     if(!eURUSDRate) return null;
 
     // Dollars to Euros
