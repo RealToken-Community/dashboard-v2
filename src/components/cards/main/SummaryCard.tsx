@@ -17,7 +17,7 @@ import usexDAIUSDRate from 'src/store/features/rates/usexDAIUSDRate'
 import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
 import { APIRealTokenCurrency } from 'src/types/APIRealToken'
 import { useDispatch } from 'react-redux'
-import { setCurrency } from 'src/store/features/currencies/currenciesSlice'
+import { RootState } from 'src/store/store'
 
 export const SummaryCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'summaryCard' })
@@ -32,7 +32,7 @@ export const SummaryCard: FC = () => {
   let totalNetValue = 0
 
   const dispatch = useDispatch();
-  const currency = useSelector((state) => state.currency.value);
+  const currency = useSelector((state : RootState) => state.currency.value);
   
   const xDaiUSDRate = usexDAIUSDRate();
   const eURUSDRate = useEURUSDRate();
