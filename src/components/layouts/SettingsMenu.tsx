@@ -96,7 +96,6 @@ const CurrencySelect: FC = () => {
 
   const updateCurrency = useCallback(
     (updatedCurrency: APIRealTokenCurrency) => {
-      console.log({ currency, updatedCurrency: updatedCurrency as APIRealTokenCurrency})
       dispatch(setCurrency(updatedCurrency as APIRealTokenCurrency));
     },
     [currency]

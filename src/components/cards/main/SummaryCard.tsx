@@ -37,9 +37,6 @@ export const SummaryCard: FC = () => {
   const xDaiUSDRate = usexDAIUSDRate();
   const eURUSDRate = useEURUSDRate();
 
-
-  console.log({ currency })
-
   if(!xDaiUSDRate) return null;
 
   // In dollars
