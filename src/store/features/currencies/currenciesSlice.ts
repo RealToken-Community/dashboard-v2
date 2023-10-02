@@ -1,8 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { APIRealTokenCurrency } from 'src/types/APIRealToken';
+import { setCookie, getCookie } from 'cookies-next'
+
+const cookieCurrency = getCookie('currency') as APIRealTokenCurrency;
 
 const initialState = {
-  value: APIRealTokenCurrency.USD,
+  value: cookieCurrency ? cookieCurrency : APIRealTokenCurrency.USD,
 };
 
 const currencySlice = createSlice({
@@ -10,7 +13,8 @@ const currencySlice = createSlice({
   initialState,
   reducers: {
     setCurrency: (state, action) => {
-      state.value = action.payload;
+      state.value = action.payload
+      setCookie('currency', action.payload);
     },
   },
 });
