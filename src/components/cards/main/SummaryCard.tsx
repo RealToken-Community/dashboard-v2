@@ -39,9 +39,7 @@ export const SummaryCard: FC = () => {
   // In dollars
   totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate;
 
-  if (currency === APIRealTokenCurrency.EUR){
-    if(!eURUSDRate) return null;
-
+  if (currency === APIRealTokenCurrency.EUR && eURUSDRate){
     // Dollars to Euros
     totalNetValue = totalNetValue / eURUSDRate;
     realtokenValue = realtokenValue / eURUSDRate;

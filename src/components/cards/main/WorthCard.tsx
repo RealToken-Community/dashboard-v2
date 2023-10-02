@@ -28,7 +28,7 @@ export const WorthCard: FC = () => {
   const currency = useSelector((state : RootState) => state.currency.value);
   const eURUSDRate = useEURUSDRate();
 
-  if (currency === APIRealTokenCurrency.EUR){
+  if (currency === APIRealTokenCurrency.EUR && eURUSDRate){
     // Dollars to Euros
     gnosisValue = gnosisValue / eURUSDRate;
     ethereumValue = ethereumValue / eURUSDRate;

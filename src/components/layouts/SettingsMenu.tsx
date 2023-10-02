@@ -1,6 +1,5 @@
 import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getCookie } from 'cookies-next'
 
 import {
   ActionIcon,
@@ -88,7 +87,7 @@ const LanguageSelect: FC = () => {
 }
 
 const CurrencySelect: FC = () => {
-  const { i18n, t } = useTranslation('common', { keyPrefix: 'settings' })
+  const { t } = useTranslation('common', { keyPrefix: 'settings' })
 
   const dispatch = useDispatch();
   const currency = useSelector((state : RootState) => state.currency.value);
@@ -97,7 +96,7 @@ const CurrencySelect: FC = () => {
     (updatedCurrency: APIRealTokenCurrency) => {
       dispatch(setCurrency(updatedCurrency as APIRealTokenCurrency));
     },
-    [currency]
+    [dispatch]
   )
 
   return (

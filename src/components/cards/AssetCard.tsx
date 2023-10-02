@@ -12,6 +12,7 @@ import { Divider, RentStatusTag, RmmStatusTag, SubsidyStatusTag, CurrencyField }
 
 import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
 import { APIRealTokenCurrency } from 'src/types/APIRealToken'
+import { RootState } from 'src/store/store'
 
 const useStyles = createStyles({
   imageContainer: {
@@ -65,9 +66,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
   let yearlyAmount = props.value.amount * props.value.netRentYearPerToken
   let totalInvestment = props.value.totalInvestment
 
-  if (currency === APIRealTokenCurrency.EUR){
-    if(!eURUSDRate) return null;
-
+  if (currency === APIRealTokenCurrency.EUR && eURUSDRate){
     // Dollars to Euros
     value = value / eURUSDRate;
     weeklyAmount = weeklyAmount / eURUSDRate;
@@ -97,7 +96,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       <Group position={'apart'} mt={'md'}>
         <div className={classes.textBold}>{props.value.shortName}</div>
         <Badge variant={'light'}>
-          <CurrencyField value={value} />
+          <CurrencyField label={""} value={value} />
         </Badge>
       </Group>
 
@@ -128,14 +127,14 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       <div className={classes.groupApart}>
         <div className={classes.textSm}>{t('weekly')}</div>
         <div className={classes.textSm}>
-          <CurrencyField value={weeklyAmount} />
+          <CurrencyField label={""} value={weeklyAmount} />
         </div>
       </div>
 
       <div className={classes.groupApart}>
         <div className={classes.textSm}>{t('yearly')}</div>
         <div className={classes.textSm}>
-          <CurrencyField value={yearlyAmount} />
+          <CurrencyField label={""} value={yearlyAmount} />
         </div>
       </div>
 
@@ -167,7 +166,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       <div className={classes.groupApart}>
         <div className={classes.textSm}>{t('propertyValue')}</div>
         <div className={classes.textSm}>
-          <CurrencyField value={totalInvestment} />
+          <CurrencyField label={""} value={totalInvestment} />
         </div>
       </div>
 

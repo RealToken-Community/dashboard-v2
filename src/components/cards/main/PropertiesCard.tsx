@@ -58,13 +58,13 @@ export const PropertiesCard: FC = () => {
   const sumProperties = realtokens.length
 
   // In Dollars
-  const meanValue = value ? value / sumProperties : 0
-  const meanRents = rents.yearly ? rents.yearly / sumProperties : 0
+  let meanValue = value ? value / sumProperties : 0
+  let meanRents = rents.yearly ? rents.yearly / sumProperties : 0
 
   const currency = useSelector((state : RootState) => state.currency.value);
   const eURUSDRate = useEURUSDRate();
 
-  if (currency === APIRealTokenCurrency.EUR){
+  if (currency === APIRealTokenCurrency.EUR && eURUSDRate) {
     // Dollars to Euros
     meanValue = meanValue / eURUSDRate;
     meanRents = meanRents / eURUSDRate;

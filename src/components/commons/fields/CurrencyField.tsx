@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getCookie } from 'cookies-next'
 
 import { StringField } from './StringField'
 import { APIRealTokenCurrencySymbol } from 'src/types/APIRealToken'
