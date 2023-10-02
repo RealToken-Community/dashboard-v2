@@ -26,7 +26,7 @@ export const SummaryCard: FC = () => {
   const ethereumValue = useSelector(selectOwnedRealtokensValueEthereum)
   const rmmValue = useSelector(selectOwnedRealtokensValueRmm)
   const rmmDetails = useSelector(selectRmmDetails)
-  const realtokenValue = gnosisValue + ethereumValue + rmmValue
+  let realtokenValue = gnosisValue + ethereumValue + rmmValue
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
   let totalNetValue = 0
@@ -47,6 +47,7 @@ export const SummaryCard: FC = () => {
 
     // Dollars to Euros
     totalNetValue = totalNetValue / eURUSDRate;
+    realtokenValue = realtokenValue / eURUSDRate;
   }
 
   return (
