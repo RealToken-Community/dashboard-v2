@@ -8,10 +8,10 @@ import { Badge, Button, Card, Group, createStyles } from '@mantine/core'
 
 import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
 
-import { Divider, RentStatusTag, RmmStatusTag, SubsidyStatusTag, CurrencyField } from '../commons'
+import { Divider, RentStatusTag, RmmStatusTag, SubsidyStatusTag } from '../commons'
 
 import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
-import { APIRealTokenCurrency } from 'src/types/APIRealToken'
+import { APIRealTokenCurrency, APIRealTokenCurrencySymbol } from 'src/types/APIRealToken'
 import { RootState } from 'src/store/store'
 
 const useStyles = createStyles({
@@ -57,8 +57,9 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
   const isSubsidized =
     props.value.subsidyStatus !== 'no' && props.value.subsidyStatusValue
 
-  const currency = useSelector((state : RootState) => state.currency.value);
   const eURUSDRate = useEURUSDRate();
+  const currency = useSelector((state : RootState) => state.currency.value);
+  const symbol = APIRealTokenCurrencySymbol[currency as keyof typeof APIRealTokenCurrencySymbol];
 
   // In Dollars
   let value = props.value.value
@@ -96,7 +97,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       <Group position={'apart'} mt={'md'}>
         <div className={classes.textBold}>{props.value.shortName}</div>
         <Badge variant={'light'}>
-          <CurrencyField label={""} value={value} />
+          {tNumbers('currency', { value, symbol })}
         </Badge>
       </Group>
 
@@ -127,14 +128,14 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       <div className={classes.groupApart}>
         <div className={classes.textSm}>{t('weekly')}</div>
         <div className={classes.textSm}>
-          <CurrencyField label={""} value={weeklyAmount} />
+          {tNumbers('currency', { value: weeklyAmount, symbol: symbol })}
         </div>
       </div>
 
       <div className={classes.groupApart}>
         <div className={classes.textSm}>{t('yearly')}</div>
         <div className={classes.textSm}>
-          <CurrencyField label={""} value={yearlyAmount} />
+          {tNumbers('currency', { value: yearlyAmount, symbol: symbol })}
         </div>
       </div>
 
@@ -166,7 +167,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       <div className={classes.groupApart}>
         <div className={classes.textSm}>{t('propertyValue')}</div>
         <div className={classes.textSm}>
-          <CurrencyField label={""} value={totalInvestment} />
+          {tNumbers('currency', { value: totalInvestment, symbol: symbol })}
         </div>
       </div>
 
