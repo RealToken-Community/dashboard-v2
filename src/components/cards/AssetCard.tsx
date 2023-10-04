@@ -49,7 +49,7 @@ const useStyles = createStyles({
   },
 })
 
-const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
+const AssetCardComponent: FC<{ value: OwnedRealtoken, eurusdrate: Number }> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
@@ -57,7 +57,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
   const isSubsidized =
     props.value.subsidyStatus !== 'no' && props.value.subsidyStatusValue
 
-  const eURUSDRate = useEURUSDRate();
+  const eURUSDRate = props.eurusdrate;
   const currency = useSelector((state : RootState) => state.currency.value);
   const symbol = APIRealTokenCurrencySymbol[currency as keyof typeof APIRealTokenCurrencySymbol];
 

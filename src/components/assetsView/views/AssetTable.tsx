@@ -5,12 +5,14 @@ import { useSelector } from 'react-redux'
 import { ScrollArea, Table } from '@mantine/core'
 
 import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
-
 import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
+
 import { APIRealTokenCurrency, APIRealTokenCurrencySymbol } from 'src/types/APIRealToken'
 import { RootState } from 'src/store/store'
 
 export const AssetTable: FC<{ realtokens: OwnedRealtoken[] }> = (props) => {
+  const eURUSDRate = useEURUSDRate();
+
   return (
     <ScrollArea>
       <Table>
@@ -20,7 +22,7 @@ export const AssetTable: FC<{ realtokens: OwnedRealtoken[] }> = (props) => {
 
         <tbody>
           {props.realtokens.map((item) => (
-            <AssetTableRow key={item.id} value={item} />
+            <AssetTableRow key={item.id} value={item} eurusdrate={eURUSDRate} />
           ))}
         </tbody>
       </Table>
@@ -47,10 +49,10 @@ const AssetTableHeader: FC = () => {
 }
 AssetTableHeader.displayName = 'AssetTableHeader'
 
-const AssetTableRow: FC<{ value: OwnedRealtoken }> = (props) => {
+const AssetTableRow: FC<{ value: OwnedRealtoken, eurusdrate: Number }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
 
-  const eURUSDRate = useEURUSDRate();
+  const eURUSDRate = props.eurusdrate;
   const currency = useSelector((state : RootState) => state.currency.value);
   const symbol = APIRealTokenCurrencySymbol[currency as keyof typeof APIRealTokenCurrencySymbol];
 
