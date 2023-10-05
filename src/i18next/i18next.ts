@@ -11,7 +11,7 @@ i18next.use(initReactI18next).init({
   resources: resources,
   defaultNS: DEFAULT_NS,
   fallbackLng: FALLBACK_LNG,
-  debug: process.env.NODE_ENV === 'development',
+  debug: false,
   interpolation: {
     escapeValue: false,
   },
