@@ -6,6 +6,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "prettier:check": "prettier --check src/.",
+    "prettier:format": "prettier --write src/.",
     "export": "next build && next export",
     "graphql": "yarn graphclient build",
     "docker:local": "docker compose -f docker-compose.local.yml up --force-recreate --build"

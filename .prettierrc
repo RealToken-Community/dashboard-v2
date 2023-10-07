@@ -5,7 +5,7 @@
   "jsxSingleQuote": true,
   "semi": false,
   "insertFinalNewline": true,
-  "endOfLine": "lf",
+  "endOfLine": "auto",
   "importOrder": [
     "^react",
     "^next",
