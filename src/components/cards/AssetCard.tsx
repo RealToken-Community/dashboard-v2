@@ -84,7 +84,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken, eurusdrate: number | undef
       shadow={'sm'}
       radius={'md'}
       withBorder={true}
-      style={{ height: '100%' }}
+      style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
     >
       <Card.Section>
         <div className={classes.imageContainer}>
@@ -175,6 +175,7 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken, eurusdrate: number | undef
         </div>
       </div>
 
+      <div style={{ flex: '1 1 auto' }} />
       <Divider height={1} my={'xs'} />
 
       <div className={classes.textLocation}>{props.value.fullName}</div>
