@@ -1,15 +1,17 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
+import currencyReducers from './features/currencies/currenciesSlice'
+import { ratesReducers } from './features/rates/ratesSlice'
 import { realtokensReducers } from './features/realtokens/realtokensSlice'
 import { settingsReducers } from './features/settings/settingsSlice'
 import { walletsReducers } from './features/wallets/walletsSlice'
-import currencyReducers from './features/currencies/currenciesSlice'
 
 const rootReducer = combineReducers({
   settings: settingsReducers,
   realtokens: realtokensReducers,
   wallets: walletsReducers,
   currency: currencyReducers,
+  rates: ratesReducers,
 })
 
 const store = configureStore({

@@ -6,7 +6,8 @@ export const selectIsInitialized = (state: RootState): boolean =>
 export const selectIsLoading = (state: RootState): boolean =>
   !state.settings.isInitialized ||
   state.realtokens.isLoading ||
-  state.wallets.isLoading
+  state.wallets.isLoading ||
+  state.rates.isLoading
 
 export const selectAddressList = (state: RootState): string[] =>
   state.settings.addressList

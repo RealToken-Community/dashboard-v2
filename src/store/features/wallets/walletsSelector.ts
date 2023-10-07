@@ -163,3 +163,14 @@ export const selectRmmDetails = createSelector(
       { stableDeposit: 0, totalDeposit: 0, stableDebt: 0 }
     )
 )
+
+export const selectRmmDetailsInUsd = createSelector(
+  selectRmmDetails,
+  (state: RootState) => state.rates.rates,
+  (rmmDetails, rates) => ({
+    ...rmmDetails,
+    totalDeposit: rmmDetails.totalDeposit * rates.XdaiUsd,
+    stableDeposit: rmmDetails.stableDeposit * rates.XdaiUsd,
+    stableDebt: rmmDetails.stableDebt * rates.XdaiUsd,
+  })
+)
