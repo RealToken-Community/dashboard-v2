@@ -8,7 +8,12 @@ import { Badge, Button, Card, Group, createStyles } from '@mantine/core'
 
 import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
 
-import { Divider, RentStatusTag, RmmStatusTag, SubsidyStatusTag } from '../commons'
+import {
+  Divider,
+  RentStatusTag,
+  RmmStatusTag,
+  SubsidyStatusTag,
+} from '../commons'
 
 import { APIRealTokenCurrency, APIRealTokenCurrencySymbol } from 'src/types/APIRealToken'
 import { RootState } from 'src/store/store'
