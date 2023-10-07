@@ -2,6 +2,8 @@ import { ethers } from 'ethers'
 
 export interface CurrencyRates {
   XdaiUsd: number
+  EurUsd: number
+  ChfUsd: number
 }
 
 const RPC_URL = 'https://rpc.ankr.com/gnosis'
@@ -23,9 +25,23 @@ const getXdaiUsd = getChainlinkHandler({
   decimals: 8,
 })
 
+const getEurUsd = getChainlinkHandler({
+  priceFeedContract: '0xab70BCB260073d036d1660201e9d5405F5829b7a',
+  decimals: 8,
+})
+
+const getChfUsd = getChainlinkHandler({
+  priceFeedContract: '0xFb00261Af80ADb1629D3869E377ae1EEC7bE659F',
+  decimals: 8,
+})
+
 export const RatesRepository = {
   async getRates(): Promise<CurrencyRates> {
-    const [XdaiUsd] = await Promise.all([getXdaiUsd()])
-    return { XdaiUsd }
+    const [XdaiUsd, EurUsd, ChfUsd] = await Promise.all([
+      getXdaiUsd(),
+      getEurUsd(),
+      getChfUsd(),
+    ])
+    return { XdaiUsd, EurUsd, ChfUsd }
   },
 }

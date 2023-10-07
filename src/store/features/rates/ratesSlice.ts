@@ -14,6 +14,8 @@ interface RatesInitialStateType {
 const ratesInitialState: RatesInitialStateType = {
   rates: {
     XdaiUsd: 1,
+    EurUsd: 1,
+    ChfUsd: 1,
   },
   isLoading: false,
 }
