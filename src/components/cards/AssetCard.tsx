@@ -10,7 +10,6 @@ import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { Divider, RentStatusTag, RmmStatusTag, SubsidyStatusTag } from '../commons'
 
-import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
 import { APIRealTokenCurrency, APIRealTokenCurrencySymbol } from 'src/types/APIRealToken'
 import { RootState } from 'src/store/store'
 
@@ -49,7 +48,7 @@ const useStyles = createStyles({
   },
 })
 
-const AssetCardComponent: FC<{ value: OwnedRealtoken, eurusdrate: Number }> = (props) => {
+const AssetCardComponent: FC<{ value: OwnedRealtoken, eurusdrate: number }> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
