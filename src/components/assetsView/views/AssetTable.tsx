@@ -49,7 +49,7 @@ const AssetTableHeader: FC = () => {
 }
 AssetTableHeader.displayName = 'AssetTableHeader'
 
-const AssetTableRow: FC<{ value: OwnedRealtoken, eurusdrate: Number }> = (props) => {
+const AssetTableRow: FC<{ value: OwnedRealtoken, eurusdrate: number | undefined }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
 
   const eURUSDRate = props.eurusdrate;
