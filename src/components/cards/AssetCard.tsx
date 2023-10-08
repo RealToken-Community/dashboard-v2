@@ -48,7 +48,7 @@ const useStyles = createStyles({
   },
 })
 
-const AssetCardComponent: FC<{ value: OwnedRealtoken, eurusdrate: number }> = (props) => {
+const AssetCardComponent: FC<{ value: OwnedRealtoken, eurusdrate: number | undefined }> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
