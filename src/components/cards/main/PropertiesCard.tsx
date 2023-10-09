@@ -13,6 +13,10 @@ import {
   selectOwnedRealtokensValue,
 } from 'src/store/features/wallets/walletsSelector'
 
+import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
+import { APIRealTokenCurrency } from 'src/types/APIRealToken'
+import { RootState } from 'src/store/store'
+
 import {
   CurrencyField,
   DecimalField,
@@ -52,8 +56,19 @@ export const PropertiesCard: FC = () => {
 
   const sumRealtokens = _sumBy(realtokens, 'amount')
   const sumProperties = realtokens.length
-  const meanValue = value ? value / sumProperties : 0
-  const meanRents = rents.yearly ? rents.yearly / sumProperties : 0
+
+  // In Dollars
+  let meanValue = value ? value / sumProperties : 0
+  let meanRents = rents.yearly ? rents.yearly / sumProperties : 0
+
+  const currency = useSelector((state : RootState) => state.currency.value);
+  const eURUSDRate = useEURUSDRate();
+
+  if (currency === APIRealTokenCurrency.EUR && eURUSDRate) {
+    // Dollars to Euros
+    meanValue = meanValue / eURUSDRate;
+    meanRents = meanRents / eURUSDRate;
+  }
 
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>

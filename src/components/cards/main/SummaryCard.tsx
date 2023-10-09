@@ -13,6 +13,9 @@ import {
 
 import { CurrencyField, DecimalField } from '../../commons'
 import usexDAIUSDRate from 'src/store/features/rates/usexDAIUSDRate'
+import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
+import { APIRealTokenCurrency } from 'src/types/APIRealToken'
+import { RootState } from 'src/store/store'
 
 export const SummaryCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'summaryCard' })
@@ -21,12 +24,26 @@ export const SummaryCard: FC = () => {
   const ethereumValue = useSelector(selectOwnedRealtokensValueEthereum)
   const rmmValue = useSelector(selectOwnedRealtokensValueRmm)
   const rmmDetails = useSelector(selectRmmDetails)
-  const realtokenValue = gnosisValue + ethereumValue + rmmValue
+  let realtokenValue = gnosisValue + ethereumValue + rmmValue
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
+  let totalNetValue = 0
+
+  const currency = useSelector((state : RootState) => state.currency.value);
+
   const xDaiUSDRate = usexDAIUSDRate();
+  const eURUSDRate = useEURUSDRate();
+
   if(!xDaiUSDRate) return null;
-  const totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate;
+
+  // In dollars
+  totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue) * xDaiUSDRate;
+
+  if (currency === APIRealTokenCurrency.EUR && eURUSDRate){
+    // Dollars to Euros
+    totalNetValue = totalNetValue / eURUSDRate;
+    realtokenValue = realtokenValue / eURUSDRate;
+  }
 
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>

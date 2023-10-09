@@ -11,9 +11,13 @@ import {
   useMantineColorScheme,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconLanguage, IconMoon, IconSettings, IconSun } from '@tabler/icons'
+import { IconLanguage, IconCash, IconMoon, IconSettings, IconSun } from '@tabler/icons'
 
-import { setCookies } from 'cookies-next'
+import { setCookie } from 'cookies-next'
+import { APIRealTokenCurrency } from 'src/types/APIRealToken'
+import { useSelector, useDispatch } from 'react-redux'
+import { setCurrency } from 'src/store/features/currencies/currenciesSlice'
+import { RootState } from 'src/store/store'
 
 const ColorSchemeMenuItem: FC = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
@@ -58,7 +62,7 @@ const LanguageSelect: FC = () => {
   const updateLocale = useCallback(
     (updatedLocale: string) => {
       if (i18n.language !== updatedLocale) {
-        setCookies('react-i18next', updatedLocale)
+        setCookie('react-i18next', updatedLocale)
         i18n.changeLanguage(updatedLocale)
       }
     },
@@ -82,6 +86,36 @@ const LanguageSelect: FC = () => {
   )
 }
 
+const CurrencySelect: FC = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'settings' })
+
+  const dispatch = useDispatch();
+  const currency = useSelector((state : RootState) => state.currency.value);
+
+  const updateCurrency = useCallback(
+    (updatedCurrency: APIRealTokenCurrency) => {
+      dispatch(setCurrency(updatedCurrency as APIRealTokenCurrency));
+    },
+    [dispatch]
+  )
+
+  return (
+    <>
+      <Menu.Label pb={0}>{t('currencyTitle')}</Menu.Label>
+      <Select
+        p={5}
+        value={currency}
+        onChange={updateCurrency}
+        data={[
+          { value: APIRealTokenCurrency.USD, label: t('usd') },
+          { value: APIRealTokenCurrency.EUR, label: t('eur') },
+        ]}
+        icon={<IconCash size={16} />}
+      />
+    </>
+  )
+}
+
 export const SettingsMenu: FC = () => {
   const [isOpen, handlers] = useDisclosure(false)
 
@@ -99,6 +133,8 @@ export const SettingsMenu: FC = () => {
       </Menu.Target>
       <Menu.Dropdown>
         <LanguageSelect />
+        <Menu.Divider />
+        <CurrencySelect />
         <Menu.Divider />
         <ColorSchemeMenuItem />
       </Menu.Dropdown>

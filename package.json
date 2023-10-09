@@ -66,7 +66,7 @@
     "@typechain/ethers-v5": "^10.1.0",
     "@types/lodash": "^4.14.191",
     "@types/node": "18.0.0",
-    "@types/react": "18.0.14",
+    "@types/react": "^18.2.25",
     "@types/react-dom": "18.0.5",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
