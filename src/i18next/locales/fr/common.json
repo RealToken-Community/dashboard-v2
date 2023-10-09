@@ -9,6 +9,7 @@
     "currencyTitle": "Devise",
     "usd": "USD ($)",
     "eur": "Euro (€)",
+    "chf": "Franc suisse (CHF)",
     "light": "Clair",
     "dark": "Sombre"
   },

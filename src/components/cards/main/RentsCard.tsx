@@ -9,10 +9,6 @@ import {
   selectOwnedRealtokensRents,
 } from 'src/store/features/wallets/walletsSelector'
 
-import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
-import { APIRealTokenCurrency } from 'src/types/APIRealToken'
-import { RootState } from 'src/store/store'
-
 import { CurrencyField, PercentField } from '../../commons'
 
 export const RentsCard: FC = () => {
@@ -22,21 +18,10 @@ export const RentsCard: FC = () => {
   const apy = useSelector(selectOwnedRealtokensAPY)
 
   // In Dollars
-  let dailyRents = rents.daily
-  let weeklyRents = rents.weekly
-  let monthlyRents = rents.monthly
-  let yearlyRents = rents.yearly
-
-  const currency = useSelector((state : RootState) => state.currency.value);
-  const eURUSDRate = useEURUSDRate();
-
-  if (currency === APIRealTokenCurrency.EUR && eURUSDRate){
-    // Dollars to Euros
-    dailyRents = dailyRents / eURUSDRate;
-    weeklyRents = weeklyRents / eURUSDRate;
-    monthlyRents = monthlyRents / eURUSDRate;
-    yearlyRents = yearlyRents / eURUSDRate;
-  }
+  const dailyRents = rents.daily
+  const weeklyRents = rents.weekly
+  const monthlyRents = rents.monthly
+  const yearlyRents = rents.yearly
 
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>

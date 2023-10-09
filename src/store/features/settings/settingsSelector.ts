@@ -7,7 +7,7 @@ export const selectIsLoading = (state: RootState): boolean =>
   !state.settings.isInitialized ||
   state.realtokens.isLoading ||
   state.wallets.isLoading ||
-  state.rates.isLoading
+  state.currencies.isLoading
 
 export const selectAddressList = (state: RootState): string[] =>
   state.settings.addressList
@@ -20,3 +20,6 @@ export const selectCleanedAddressList = (state: RootState): string[] =>
         .map((item) => item.toLowerCase())
     )
   )
+
+export const selectUserCurrency = (state: RootState): string =>
+  state.settings.userCurrency

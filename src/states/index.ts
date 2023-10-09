@@ -2,6 +2,7 @@ import { atomWithStorage } from 'jotai/utils'
 
 import { AssetSortType, AssetViewType } from 'src/components/assetsView/types'
 import { AssetSubsidyType } from 'src/components/assetsView/types'
+import { Currency } from 'src/types/Currencies'
 
 export const assetViewChoosedAtom = atomWithStorage<AssetViewType>(
   'displayChoosed',
@@ -21,4 +22,9 @@ export const assetSortChoosedAtom = atomWithStorage<AssetSortType>(
 export const assetSortReverseAtom = atomWithStorage<boolean>(
   'sortReverse',
   false
+)
+
+export const userCurrencyAtom = atomWithStorage<Currency>(
+  'userCurrency',
+  Currency.USD
 )

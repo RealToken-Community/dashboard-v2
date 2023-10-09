@@ -1,21 +1,14 @@
 import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+
+import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 
 import { StringField } from './StringField'
-import { APIRealTokenCurrencySymbol } from 'src/types/APIRealToken'
-import { useSelector } from 'react-redux'
-import { RootState } from 'src/store/store'
 
-export const CurrencyField: FC<{ label: string; value: number }> = (props) => {
-  const { t } = useTranslation('common', { keyPrefix: 'numbers' })
-  const currency = useSelector((state : RootState) => state.currency.value);
-
-  const symbol = APIRealTokenCurrencySymbol[currency as keyof typeof APIRealTokenCurrencySymbol];
-
+export const CurrencyField: FC<{ label: string; value?: number }> = (props) => {
   return (
     <StringField
       label={props.label}
-      value={t('currency', { value: props.value, symbol: symbol })}
+      value={useCurrencyValue(props.value ?? 0)}
     />
   )
 }

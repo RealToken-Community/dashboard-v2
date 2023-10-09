@@ -35,7 +35,7 @@ const getChfUsd = getChainlinkHandler({
   decimals: 8,
 })
 
-export const RatesRepository = {
+export const CurrenciesRepository = {
   async getRates(): Promise<CurrencyRates> {
     const [XdaiUsd, EurUsd, ChfUsd] = await Promise.all([
       getXdaiUsd(),

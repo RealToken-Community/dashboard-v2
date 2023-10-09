@@ -141,7 +141,7 @@ export const selectOwnedRealtokensAPY = createSelector(
   (rents, value) => (value > 0 ? rents.yearly / value : 0)
 )
 
-export const selectRmmDetails = createSelector(
+const selectRmmDetailsInXdai = createSelector(
   selectRealtokens,
   (state: RootState) => state.wallets.balances.rmmProtocol,
   (realtokens, rmmProtocol) =>
@@ -164,13 +164,13 @@ export const selectRmmDetails = createSelector(
     )
 )
 
-export const selectRmmDetailsInUsd = createSelector(
-  selectRmmDetails,
-  (state: RootState) => state.rates.rates,
+export const selectRmmDetails = createSelector(
+  selectRmmDetailsInXdai,
+  (state: RootState) => state.currencies.rates,
   (rmmDetails, rates) => ({
     ...rmmDetails,
-    totalDeposit: rmmDetails.totalDeposit * rates.XdaiUsd,
-    stableDeposit: rmmDetails.stableDeposit * rates.XdaiUsd,
-    stableDebt: rmmDetails.stableDebt * rates.XdaiUsd,
+    totalDeposit: rmmDetails.totalDeposit / rates.XDAI,
+    stableDeposit: rmmDetails.stableDeposit / rates.XDAI,
+    stableDebt: rmmDetails.stableDebt / rates.XDAI,
   })
 )

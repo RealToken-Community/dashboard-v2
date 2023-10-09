@@ -1,18 +1,12 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { ScrollArea, Table } from '@mantine/core'
 
+import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
-import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
-
-import { APIRealTokenCurrency, APIRealTokenCurrencySymbol } from 'src/types/APIRealToken'
-import { RootState } from 'src/store/store'
 
 export const AssetTable: FC<{ realtokens: OwnedRealtoken[] }> = (props) => {
-  const eURUSDRate = useEURUSDRate();
-
   return (
     <ScrollArea>
       <Table>
@@ -22,7 +16,7 @@ export const AssetTable: FC<{ realtokens: OwnedRealtoken[] }> = (props) => {
 
         <tbody>
           {props.realtokens.map((item) => (
-            <AssetTableRow key={item.id} value={item} eurusdrate={eURUSDRate} />
+            <AssetTableRow key={item.id} value={item} />
           ))}
         </tbody>
       </Table>
@@ -49,45 +43,26 @@ const AssetTableHeader: FC = () => {
 }
 AssetTableHeader.displayName = 'AssetTableHeader'
 
-const AssetTableRow: FC<{ value: OwnedRealtoken, eurusdrate: number | undefined }> = (props) => {
+const AssetTableRow: FC<{ value: OwnedRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
 
-  const eURUSDRate = props.eurusdrate;
-  const currency = useSelector((state : RootState) => state.currency.value);
-  const symbol = APIRealTokenCurrencySymbol[currency as keyof typeof APIRealTokenCurrencySymbol];
-
-  // In Dollars
-  let value = props.value.value
-  let weeklyAmount = props.value.amount * props.value.netRentDayPerToken * 7
-  let yearlyAmount = props.value.amount * props.value.netRentYearPerToken
-  let totalInvestment = props.value.totalInvestment
-
-  if (currency === APIRealTokenCurrency.EUR && eURUSDRate){
-    // Dollars to Euros
-    value = value / eURUSDRate;
-    weeklyAmount = weeklyAmount / eURUSDRate;
-    yearlyAmount = yearlyAmount / eURUSDRate;
-    totalInvestment = totalInvestment / eURUSDRate;
-  }
+  const value = props.value.value
+  const weeklyAmount = props.value.amount * props.value.netRentDayPerToken * 7
+  const yearlyAmount = props.value.amount * props.value.netRentYearPerToken
+  const totalInvestment = props.value.totalInvestment
 
   return (
     <tr>
       <td>{props.value.shortName}</td>
-      <td style={{ textAlign: 'right' }}>
-        {t('currency', { value, symbol })}
-      </td>
+      <td style={{ textAlign: 'right' }}>{useCurrencyValue(value)}</td>
       <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {t('percent', { value: props.value.annualPercentageYield })}
       </td>
       <td style={{ textAlign: 'right' }}>
         {t('decimal', { value: props.value.amount })}
       </td>
-      <td style={{ textAlign: 'right' }}>
-        {t('currency', { value: weeklyAmount, symbol: symbol })}
-      </td>
-      <td style={{ textAlign: 'right' }}>
-        {t('currency', { value: yearlyAmount, symbol: symbol })}
-      </td>
+      <td style={{ textAlign: 'right' }}>{useCurrencyValue(weeklyAmount)}</td>
+      <td style={{ textAlign: 'right' }}>{useCurrencyValue(yearlyAmount)}</td>
       <td style={{ textAlign: 'right' }}>
         {t('decimal', { value: props.value.rentedUnits })}
         {' / '}
@@ -97,7 +72,7 @@ const AssetTableRow: FC<{ value: OwnedRealtoken, eurusdrate: number | undefined 
         })})`}
       </td>
       <td style={{ textAlign: 'right' }}>
-        {t('currency', { value: totalInvestment, symbol: symbol })}
+        {useCurrencyValue(totalInvestment)}
       </td>
     </tr>
   )

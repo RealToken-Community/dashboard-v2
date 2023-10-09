@@ -4,16 +4,12 @@ import { useSelector } from 'react-redux'
 
 import { Box, Card, Text, Title } from '@mantine/core'
 
-import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
-import usexDAIUSDRate from 'src/store/features/rates/usexDAIUSDRate'
 import {
   selectOwnedRealtokensValueEthereum,
   selectOwnedRealtokensValueGnosis,
   selectOwnedRealtokensValueRmm,
-  selectRmmDetailsInUsd,
+  selectRmmDetails,
 } from 'src/store/features/wallets/walletsSelector'
-import { RootState } from 'src/store/store'
-import { APIRealTokenCurrency } from 'src/types/APIRealToken'
 
 import { CurrencyField } from '../../commons'
 
@@ -23,28 +19,12 @@ export const SummaryCard: FC = () => {
   const gnosisValue = useSelector(selectOwnedRealtokensValueGnosis)
   const ethereumValue = useSelector(selectOwnedRealtokensValueEthereum)
   const rmmValue = useSelector(selectOwnedRealtokensValueRmm)
-  const rmmDetails = useSelector(selectRmmDetailsInUsd)
-  let realtokenValue = gnosisValue + ethereumValue + rmmValue
+  const rmmDetails = useSelector(selectRmmDetails)
 
-  const currency = useSelector((state: RootState) => state.currency.value)
-
-  const xDaiUSDRate = usexDAIUSDRate()
-  const eURUSDRate = useEURUSDRate()
-
-  if (!xDaiUSDRate) return null
-
-  // In dollars
-  let stableDepositValue = rmmDetails.stableDeposit * xDaiUSDRate
-  let stableDebtValue = rmmDetails.stableDebt * xDaiUSDRate
-  let totalNetValue = realtokenValue + (stableDepositValue - stableDebtValue)
-
-  if (currency === APIRealTokenCurrency.EUR && eURUSDRate) {
-    // Dollars to Euros
-    totalNetValue = totalNetValue / eURUSDRate
-    realtokenValue = realtokenValue / eURUSDRate
-    stableDepositValue = stableDepositValue / eURUSDRate
-    stableDebtValue = stableDebtValue / eURUSDRate
-  }
+  const realtokenValue = gnosisValue + ethereumValue + rmmValue
+  const stableDepositValue = rmmDetails.stableDeposit
+  const stableDebtValue = rmmDetails.stableDebt
+  const totalNetValue = realtokenValue + stableDepositValue - stableDebtValue
 
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>

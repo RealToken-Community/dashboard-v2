@@ -2,13 +2,11 @@ import { FC, useEffect, useMemo, useState } from 'react'
 
 import { Grid, Group, Pagination } from '@mantine/core'
 
-import useEURUSDRate from 'src/store/features/rates/useEURUSDRate'
 import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { AssetCard } from '../../cards'
 
 export const AssetGrid: FC<{ realtokens: OwnedRealtoken[] }> = (props) => {
-  const eURUSDRate = useEURUSDRate()
   const [page, setPage] = useState<number>(1)
   const pageSize = 24
 
@@ -32,7 +30,7 @@ export const AssetGrid: FC<{ realtokens: OwnedRealtoken[] }> = (props) => {
       <Grid className={'asset-grid'}>
         {paginationOffers.map((item) => (
           <Grid.Col key={item.id} span={12} sm={6} lg={4} xl={3}>
-            <AssetCard value={item} eurusdrate={eURUSDRate} />
+            <AssetCard value={item} />
           </Grid.Col>
         ))}
       </Grid>

@@ -5,12 +5,7 @@ export enum APIRealTokenCanal {
 
 export enum APIRealTokenCurrency {
   USD = 'USD',
-  EUR = 'EUR'
-}
-
-export enum APIRealTokenCurrencySymbol {
-  USD = '$',
-  EUR = '€'
+  EUR = 'EUR',
 }
 
 export enum APIRealTokenPropertyType {
@@ -60,8 +55,7 @@ export interface APIRealToken {
   totalTokens: number
   totalTokensRegSummed: number
   tokenPrice: number
-  currency: APIRealTokenCurrency,
-  currencySymbol: APIRealTokenCurrencySymbol,
+  currency: APIRealTokenCurrency
 
   // Dates
   rentStartDate: APIRealTokenDate

@@ -1,5 +1,7 @@
 import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import {
   ActionIcon,
@@ -11,13 +13,20 @@ import {
   useMantineColorScheme,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconLanguage, IconCash, IconMoon, IconSettings, IconSun } from '@tabler/icons'
+import {
+  IconCash,
+  IconLanguage,
+  IconMoon,
+  IconSettings,
+  IconSun,
+} from '@tabler/icons'
 
 import { setCookie } from 'cookies-next'
-import { APIRealTokenCurrency } from 'src/types/APIRealToken'
-import { useSelector, useDispatch } from 'react-redux'
-import { setCurrency } from 'src/store/features/currencies/currenciesSlice'
-import { RootState } from 'src/store/store'
+import { useAtom } from 'jotai'
+
+import { selectUserCurrency } from 'src/store/features/settings/settingsSelector'
+import { userCurrencyChanged } from 'src/store/features/settings/settingsSlice'
+import { Currency } from 'src/types/Currencies'
 
 const ColorSchemeMenuItem: FC = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
@@ -88,27 +97,24 @@ const LanguageSelect: FC = () => {
 
 const CurrencySelect: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'settings' })
+  const dispatch = useDispatch()
+  const userCurrency = useSelector(selectUserCurrency)
 
-  const dispatch = useDispatch();
-  const currency = useSelector((state : RootState) => state.currency.value);
-
-  const updateCurrency = useCallback(
-    (updatedCurrency: APIRealTokenCurrency) => {
-      dispatch(setCurrency(updatedCurrency as APIRealTokenCurrency));
-    },
-    [dispatch]
-  )
+  function setUserCurrency(currency: Currency) {
+    dispatch(userCurrencyChanged(currency))
+  }
 
   return (
     <>
       <Menu.Label pb={0}>{t('currencyTitle')}</Menu.Label>
       <Select
         p={5}
-        value={currency}
-        onChange={updateCurrency}
+        value={userCurrency}
+        onChange={(value) => setUserCurrency(value as Currency)}
         data={[
-          { value: APIRealTokenCurrency.USD, label: t('usd') },
-          { value: APIRealTokenCurrency.EUR, label: t('eur') },
+          { value: Currency.USD, label: t('usd') },
+          { value: Currency.EUR, label: t('eur') },
+          { value: Currency.CHF, label: t('chf') },
         ]}
         icon={<IconCash size={16} />}
       />
