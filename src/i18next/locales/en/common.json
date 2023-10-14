@@ -127,7 +127,8 @@
     "viewOnRealt": "View on RealT",
     "tabs": {
       "main": "Main informations",
-      "property": "Property details"
+      "property": "Property details",
+      "transfers": "My transactions"
     },
     "main": {
       "ownedValue": "My investment",
@@ -158,6 +159,19 @@
       "propertyUnits": "Number of units",
       "lotSize": "Lot size",
       "interiorSize": "Interior size"
+    },
+    "transfers": {
+      "swapcatIn": "Purchase on Swapcat",
+      "swapcatOut": "Sale on Swapcat",
+      "yamIn": "Purchase on YAM",
+      "yamOut": "Sale on YAM",
+      "primaryIn": "Purchase from RealT",
+      "primaryOut": "Sale to RealT",
+      "rmmIn": "Deposit on RMM",
+      "rmmOut": "Withdrawal from RMM",
+      "reinvest": "Rent reinvest",
+      "internal": "Internal transaction",
+      "unknown": "Other"
     }
   }
 }

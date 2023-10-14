@@ -11,6 +11,7 @@ import { IconExternalLink } from '@tabler/icons'
 
 import { AssetPageMainTab } from 'src/components/assetPage/assetPageMainTab'
 import { AssetPagePropertyTab } from 'src/components/assetPage/assetPagePropertyPage'
+import { AssetPageTransfersTab } from 'src/components/assetPage/assetPageTransfersTab'
 import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
 import { selectOwnedRealtokens } from 'src/store/features/wallets/walletsSelector'
 
@@ -24,6 +25,7 @@ const useStyles = createStyles({
 enum Tabs {
   Main = 'main',
   Property = 'property',
+  Transfers = 'transfers',
 }
 
 interface TabButtonProps {
@@ -101,6 +103,17 @@ const AssetPage: NextPage = () => {
           {activeTab === Tabs.Property ? (
             <div style={{ margin: '5px 10px' }}>
               <AssetPagePropertyTab data={data} />
+            </div>
+          ) : null}
+
+          <TabButton
+            label={t('tabs.transfers')}
+            active={activeTab === Tabs.Transfers}
+            onClick={() => setActiveTab(Tabs.Transfers)}
+          />
+          {activeTab === Tabs.Transfers ? (
+            <div style={{ margin: '5px 10px' }}>
+              <AssetPageTransfersTab data={data} />
             </div>
           ) : null}
 
