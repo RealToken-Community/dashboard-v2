@@ -128,7 +128,8 @@
     "tabs": {
       "main": "Main informations",
       "property": "Property details",
-      "transfers": "My transactions"
+      "transfers": "My transactions",
+      "yamStatistics": "Secondary market statistics (Yam)"
     },
     "main": {
       "ownedValue": "My investment",
@@ -172,6 +173,12 @@
       "reinvest": "Rent reinvest",
       "internal": "Internal transaction",
       "unknown": "Other"
+    },
+    "yamStatistics": {
+      "tokenPrice": "RealT price",
+      "yamPrice": "Yam price (30 days)",
+      "yamDifference": "Difference",
+      "yamVolume": "Volume (30 days)"
     }
   }
 }

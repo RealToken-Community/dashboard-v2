@@ -12,6 +12,7 @@ import { IconExternalLink } from '@tabler/icons'
 import { AssetPageMainTab } from 'src/components/assetPage/assetPageMainTab'
 import { AssetPagePropertyTab } from 'src/components/assetPage/assetPagePropertyPage'
 import { AssetPageTransfersTab } from 'src/components/assetPage/assetPageTransfersTab'
+import { AssetPageYamStatisticsTab } from 'src/components/assetPage/assetPageYamStatisticsTab'
 import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
 import { selectOwnedRealtokens } from 'src/store/features/wallets/walletsSelector'
 
@@ -26,6 +27,7 @@ enum Tabs {
   Main = 'main',
   Property = 'property',
   Transfers = 'transfers',
+  YamStatistics = 'yamStatistics',
 }
 
 interface TabButtonProps {
@@ -114,6 +116,17 @@ const AssetPage: NextPage = () => {
           {activeTab === Tabs.Transfers ? (
             <div style={{ margin: '5px 10px' }}>
               <AssetPageTransfersTab data={data} />
+            </div>
+          ) : null}
+
+          <TabButton
+            label={t('tabs.yamStatistics')}
+            active={activeTab === Tabs.YamStatistics}
+            onClick={() => setActiveTab(Tabs.YamStatistics)}
+          />
+          {activeTab === Tabs.YamStatistics ? (
+            <div style={{ margin: '5px 10px' }}>
+              <AssetPageYamStatisticsTab data={data} />
             </div>
           ) : null}
 
