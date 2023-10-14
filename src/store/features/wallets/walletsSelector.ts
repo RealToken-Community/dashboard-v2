@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit'
 
 import _sumBy from 'lodash/sumBy'
 
-import { GetWalletBalance } from 'src/repositories/wallets.repository'
+import { GetWalletBalance } from 'src/repositories'
 import { RootState } from 'src/store/store'
 
 import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'

@@ -1,9 +1,6 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
-import {
-  GetWalletBalance,
-  WalletsRepository,
-} from 'src/repositories/wallets.repository'
+import { GetWalletBalance, WalletsRepository } from 'src/repositories'
 import { AppDispatch, RootState } from 'src/store/store'
 
 import { selectCleanedAddressList } from '../settings/settingsSelector'

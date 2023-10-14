@@ -1,6 +1,6 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
-import { CurrenciesRepository } from 'src/repositories/currencies.repository'
+import { CurrenciesRepository } from 'src/repositories'
 import { AppDispatch, RootState } from 'src/store/store'
 import { Currency } from 'src/types/Currencies'
 
