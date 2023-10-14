@@ -1,5 +1,7 @@
 import { ethers } from 'ethers'
 
+import { useCacheWithLocalStorage } from 'src/utils/useCache'
+
 export interface CurrencyRates {
   XdaiUsd: number
   EurUsd: number
@@ -16,8 +18,16 @@ function getChainlinkHandler(options: {
   const { priceFeedContract, decimals } = options
   const ABI = ['function latestAnswer() view returns (int256)']
   const contract = new ethers.Contract(priceFeedContract, ABI, RpcProvider)
-  return async () =>
-    Number(ethers.utils.formatUnits(await contract.latestAnswer(), decimals))
+
+  return useCacheWithLocalStorage(
+    async () =>
+      Number(ethers.utils.formatUnits(await contract.latestAnswer(), decimals)),
+    {
+      duration: 1000 * 60 * 60 * 24, // 24 hours
+      key: priceFeedContract,
+      usePreviousValueOnError: true,
+    }
+  )
 }
 
 const getXdaiUsd = getChainlinkHandler({

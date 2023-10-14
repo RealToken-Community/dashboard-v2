@@ -25,3 +25,42 @@ export function useCache<T>(
     }
   }
 }
+
+export function useCacheWithLocalStorage<T>(
+  handler: () => Promise<T>,
+  options: {
+    duration: number
+    key: string
+    usePreviousValueOnError?: boolean
+  }
+) {
+  return async function () {
+    const now = Date.now()
+
+    const cached = localStorage.getItem(options.key)
+    if (cached) {
+      const { timestamp, value } = JSON.parse(cached)
+      if (now - timestamp < options.duration) {
+        return value as T
+      }
+    }
+
+    try {
+      const result = await handler()
+      localStorage.setItem(
+        options.key,
+        JSON.stringify({ timestamp: now, value: result })
+      )
+      return result
+    } catch (err) {
+      if (options.usePreviousValueOnError) {
+        const cached = localStorage.getItem(options.key)
+        if (cached) {
+          const { value } = JSON.parse(cached)
+          return value as T
+        }
+      }
+      throw err
+    }
+  }
+}
