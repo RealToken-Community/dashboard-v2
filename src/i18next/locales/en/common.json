@@ -94,7 +94,6 @@
     "yearly": "Yearly rents",
     "rentedUnits": "Rented units",
     "propertyValue": "Property value",
-    "viewOnRealt": "View on RealT",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Rented",
@@ -122,5 +121,43 @@
     "value_one": "1 wallet",
     "value_other": "{{count}} wallets",
     "manage": "Manage wallets"
+  },
+  "assetPage": {
+    "home": "Home",
+    "viewOnRealt": "View on RealT",
+    "tabs": {
+      "main": "Main informations",
+      "property": "Property details"
+    },
+    "main": {
+      "ownedValue": "My investment",
+      "annualYield": "Annual yield",
+      "rentWeek": "Weekly rent",
+      "rentMonth": "Monthly rent",
+      "rentYear": "Yearly rent",
+      "nbToken": "Tokens owned",
+      "rentedUnits":"Rented units"
+    },
+    "property": {
+      "initialLaunchDate": "Launch date",
+      "totalValue": "Investment value",
+      "assetPrice": "Asset value",
+      "initialMaintenanceReserve": "Maintenance reserve",
+      "rentalType": "Rental type",
+      "rentalTypeValue": {
+        "shortTerm": "Short term",
+        "longTerm": "Long term"
+      },
+      "rentStartDate": "First rent",
+      "rentedUnits": "Rented units",
+      "grossRentMonth": "Gross monthly rent",
+      "netRentMonth": "Net monthly rent",
+      "annualYield": "Annual yield",
+      "constructionYear": "Construction year",
+      "propertyStories": "Number of stories",
+      "propertyUnits": "Number of units",
+      "lotSize": "Lot size",
+      "interiorSize": "Interior size"
+    }
   }
 }

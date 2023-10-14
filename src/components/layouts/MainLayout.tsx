@@ -45,7 +45,9 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   return (
     <div className={classes.container}>
       <Header />
-      <div className={classes.main}>{children}</div>
+      <div id={'main-layout-container'} className={classes.main}>
+        {children}
+      </div>
       <Footer />
     </div>
   )

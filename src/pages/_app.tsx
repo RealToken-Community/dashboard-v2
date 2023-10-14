@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 
 import { GetServerSidePropsContext } from 'next'
 import type { AppProps as NextAppProps } from 'next/app'
+import { Router } from 'next/router'
 
 import { ColorScheme } from '@mantine/core'
 
@@ -39,6 +40,16 @@ type AppProps = NextAppProps & { colorScheme: ColorScheme; locale: string }
 const queryClient = new QueryClient({})
 
 const App = ({ Component, pageProps, colorScheme, locale }: AppProps) => {
+  function scrollToTop() {
+    document.getElementById('main-layout-container')?.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'auto',
+    })
+    Router.events.off('routeChangeComplete', scrollToTop)
+  }
+  Router.events.on('routeChangeComplete', scrollToTop)
+
   return (
     <QueryClientProvider client={queryClient}>
       <JotaiProvider>

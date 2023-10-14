@@ -34,7 +34,6 @@ const useStyles = createStyles({
   textLocation: {
     fontSize: '12px',
     textAlign: 'center',
-    marginBottom: '10px',
   },
   groupApart: {
     boxSizing: 'border-box',
@@ -48,9 +47,21 @@ const useStyles = createStyles({
       flexGrow: 0,
     },
   },
+  clickable: {
+    cursor: 'pointer',
+    transition: 'transform 0.1s ease-in-out',
+    '&:hover': {
+      transform: 'scale(1.03)',
+    },
+  },
 })
 
-const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
+interface AssetCardProps {
+  value: OwnedRealtoken
+  onClick?: (id: string) => unknown
+}
+
+const AssetCardComponent: FC<AssetCardProps> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
@@ -70,6 +81,8 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       radius={'md'}
       withBorder={true}
       style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+      className={props.onClick ? classes.clickable : undefined}
+      onClick={() => props.onClick?.(props.value.id)}
     >
       <Card.Section>
         <div className={classes.imageContainer}>
@@ -158,17 +171,6 @@ const AssetCardComponent: FC<{ value: OwnedRealtoken }> = (props) => {
       <Divider height={1} my={'xs'} />
 
       <div className={classes.textLocation}>{props.value.fullName}</div>
-
-      <Button
-        component={'a'}
-        fullWidth={true}
-        variant={'outline'}
-        size={'xs'}
-        href={props.value.marketplaceLink}
-        target={'_blank'}
-      >
-        {t('viewOnRealt')}
-      </Button>
     </Card>
   )
 }

@@ -1,7 +1,9 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ScrollArea, Table } from '@mantine/core'
+import { useRouter } from 'next/router'
+
+import { Anchor, ScrollArea, Table } from '@mantine/core'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
@@ -45,6 +47,7 @@ AssetTableHeader.displayName = 'AssetTableHeader'
 
 const AssetTableRow: FC<{ value: OwnedRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
+  const router = useRouter()
 
   const value = props.value.value
   const weeklyAmount = props.value.amount * props.value.netRentDayPerToken * 7
@@ -53,17 +56,27 @@ const AssetTableRow: FC<{ value: OwnedRealtoken }> = (props) => {
 
   return (
     <tr>
-      <td>{props.value.shortName}</td>
-      <td style={{ textAlign: 'right' }}>{useCurrencyValue(value)}</td>
+      <td style={{ minWidth: '150px' }}>
+        <Anchor onClick={() => router.push(`/asset/${props.value.id}`)}>
+          {props.value.shortName}
+        </Anchor>
+      </td>
+      <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+        {useCurrencyValue(value)}
+      </td>
       <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {t('percent', { value: props.value.annualPercentageYield })}
       </td>
-      <td style={{ textAlign: 'right' }}>
+      <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {t('decimal', { value: props.value.amount })}
       </td>
-      <td style={{ textAlign: 'right' }}>{useCurrencyValue(weeklyAmount)}</td>
-      <td style={{ textAlign: 'right' }}>{useCurrencyValue(yearlyAmount)}</td>
-      <td style={{ textAlign: 'right' }}>
+      <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+        {useCurrencyValue(weeklyAmount)}
+      </td>
+      <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+        {useCurrencyValue(yearlyAmount)}
+      </td>
+      <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {t('decimal', { value: props.value.rentedUnits })}
         {' / '}
         {t('decimal', { value: props.value.totalUnits })}
@@ -71,7 +84,7 @@ const AssetTableRow: FC<{ value: OwnedRealtoken }> = (props) => {
           value: (props.value.rentedUnits / props.value.totalUnits) * 100,
         })})`}
       </td>
-      <td style={{ textAlign: 'right' }}>
+      <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {useCurrencyValue(totalInvestment)}
       </td>
     </tr>

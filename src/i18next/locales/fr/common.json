@@ -94,7 +94,6 @@
     "yearly": "Loyers annuels",
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
-    "viewOnRealt": "Voir sur RealT",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Louée",
@@ -122,5 +121,43 @@
     "value_one": "1 portefeuille",
     "value_other": "{{count}} portefeuilles",
     "manage": "Gérer les portefeuilles"
+  },
+  "assetPage": {
+    "home": "Accueil",
+    "viewOnRealt": "Voir sur RealT",
+    "tabs": {
+      "main": "Informations générales",
+      "property": "Détail du bien"
+    },
+    "main": {
+      "ownedValue": "Mon investissement",
+      "annualYield": "Rendement annuel",
+      "rentWeek": "Loyer hebdomadaire",
+      "rentMonth": "Loyer mensuel",
+      "rentYear": "Loyer annuel",
+      "nbToken": "Nombre de tokens",
+      "rentedUnits":"Logements loués"
+    },
+    "property": {
+      "initialLaunchDate": "Mise en vente",
+      "totalValue": "Valeur de l'investissement",
+      "assetPrice": "Valeur du bien",
+      "initialMaintenanceReserve": "Réserve de maintenance",
+      "rentalType": "Type de location",
+      "rentalTypeValue": {
+        "shortTerm": "Courte durée",
+        "longTerm": "Longue durée"
+      },
+      "rentStartDate": "Premier loyer",
+      "rentedUnits": "Logements loués",
+      "grossRentMonth": "Loyer brut mensuel",
+      "netRentMonth": "Loyer net mensuel",
+      "annualYield": "Rendement annuel",
+      "constructionYear": "Année de construction",
+      "propertyStories": "Nombre d'étages",
+      "propertyUnits": "Nombre de logements",
+      "lotSize": "Taille du terrain",
+      "interiorSize": "Taille intérieure"
+    }
   }
 }
