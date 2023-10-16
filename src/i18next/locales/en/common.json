@@ -168,8 +168,8 @@
       "yamOut": "Sale on YAM",
       "primaryIn": "Purchase from RealT",
       "primaryOut": "Sale to RealT",
-      "rmmIn": "Deposit on RMM",
-      "rmmOut": "Withdrawal from RMM",
+      "rmmIn": "Withdrawal from RMM",
+      "rmmOut": "Deposit on RMM",
       "reinvest": "Rent reinvest",
       "internal": "Internal transaction",
       "unknown": "Other"

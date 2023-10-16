@@ -168,8 +168,8 @@
       "yamOut": "Vente sur Yam",
       "primaryIn": "Achat sur RealT",
       "primaryOut": "Vente à RealT",
-      "rmmIn": "Dépôt sur le RMM",
-      "rmmOut": "Retrait du RMM",
+      "rmmIn": "Retrait du RMM",
+      "rmmOut": "Dépôt sur le RMM",
       "reinvest": "Réinvestissement des loyers",
       "internal": "Transfert interne",
       "unknown": "Autre"
