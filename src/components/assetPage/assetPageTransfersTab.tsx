@@ -50,7 +50,7 @@ const TransferRow: FC<{ item: RealTokenTransfer }> = ({ item }) => {
   return (
     <tr
       style={{
-        color: isInternal ? 'grey' : 'black',
+        opacity: isInternal ? 0.5 : 1,
         fontWeight: isInternal ? 'lighter' : 'initial',
       }}
     >
@@ -63,7 +63,7 @@ const TransferRow: FC<{ item: RealTokenTransfer }> = ({ item }) => {
           textAlign: 'right',
           fontStyle: isInternal ? 'italic' : 'normal',
           fontWeight: isInternal ? 'inherit' : '500',
-          color: isPositive ? 'green' : isNegative ? 'red' : 'black',
+          color: isPositive ? 'green' : isNegative ? 'red' : undefined,
         }}
         title={item.amount.toString()}
       >
