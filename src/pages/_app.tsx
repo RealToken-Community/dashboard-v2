@@ -19,15 +19,19 @@ import InitStoreProvider from 'src/providers/InitStoreProvider'
 import store from 'src/store/store'
 
 import { 
+  CHAINS,
   ChainSelectConfig,
+  ChainsID,
   Web3Providers,  
   getConnectors, 
+  getReadOnlyConnector, 
   getWalletConnectV2, 
   gnosisHooks, 
   gnosisSafe, 
   metaMask, 
   metaMaskHooks, 
-  parseAllowedChain 
+  parseAllowedChain,
+  Chain as RealtChains,
 } from '@realtoken/realt-commons'
 
 type TestProps = {
@@ -51,9 +55,23 @@ type AppProps = NextAppProps & { colorScheme: ColorScheme; locale: string }
 
 const queryClient = new QueryClient({})
 
+const dashbordChains: ChainSelectConfig<RealtChains> = {
+  allowedChains: parseAllowedChain(ChainsID),
+  chainsConfig: CHAINS
+}
+
+const env = process.env.NEXT_PUBLIC_ENV ?? "development";
+const walletConnectKey = process.env.NEXT_PUBLIC_WALLET_CONNECT_KEY ?? "";
+
+const readOnly = getReadOnlyConnector(dashbordChains);
+const walletConnect = getWalletConnectV2(dashbordChains, env, walletConnectKey, false)
+
 const libraryConnectors = getConnectors(
   {
-    metaMask: [metaMask, metaMaskHooks],
+    metamask: [metaMask, metaMaskHooks],
+    gnosisSafe: [gnosisSafe, gnosisHooks],
+    readOnly: readOnly,
+    walletConnectV2: walletConnect
   }
 );
 
