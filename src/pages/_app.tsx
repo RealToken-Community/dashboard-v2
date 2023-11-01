@@ -17,6 +17,7 @@ import 'src/i18next'
 import { MantineProviders } from 'src/providers'
 import InitStoreProvider from 'src/providers/InitStoreProvider'
 import store from 'src/store/store'
+import { resources } from 'src/i18next'
 
 import { 
   CHAINS,
@@ -32,24 +33,11 @@ import {
   metaMaskHooks, 
   parseAllowedChain,
   Chain as RealtChains,
+  initLanguage,
+  LanguageInit,
 } from '@realtoken/realt-commons'
 
-type TestProps = {
-  initialLocale: string
-}
-
-const LanguageInit: FC<TestProps> = ({ initialLocale }) => {
-  const { i18n } = useTranslation()
-  const [lng] = useState<string>(initialLocale)
-
-  useEffect(() => {
-    if (i18n.language !== lng) {
-      i18n.changeLanguage(lng)
-    }
-  }, [i18n, lng])
-
-  return null
-}
+const i18n = initLanguage(resources);
 
 type AppProps = NextAppProps & { colorScheme: ColorScheme; locale: string }
 
@@ -99,7 +87,7 @@ const App = ({ Component, pageProps, colorScheme, locale }: AppProps) => {
                 }
               />
               <MantineProviders initialColorScheme={colorScheme}>
-                <LanguageInit initialLocale={locale} />
+                <LanguageInit i={i18n} />
                 <MainLayout>
                   <Component {...pageProps} />
                 </MainLayout>
