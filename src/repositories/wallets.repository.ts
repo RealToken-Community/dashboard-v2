@@ -15,6 +15,11 @@ const RMMClient = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
+const LevinSwapClient = new ApolloClient({
+  uri: 'https://api.thegraph.com/subgraphs/name/levinswap/uniswap-v2',
+  cache: new InMemoryCache(),
+})
+
 const RealTokenQuery = gql`
   query RealTokenQuery($addressList: [String]!) {
     accounts(where: { address_in: $addressList }) {
@@ -84,15 +89,60 @@ interface RMMResult {
   }[]
 }
 
+const LevinSwapQuery = gql`
+  query LevinSwapQuery($addressList: [String]!) {
+    users(where: { id_in: $addressList }) {
+      id
+      liquidityPositions(first: 400) {
+        liquidityTokenBalance
+        pair {
+          totalSupply
+          token0 {
+            id
+            name
+          }
+          token1 {
+            id
+            name
+          }
+          reserve0
+          reserve1
+        }
+      }
+    }
+  }
+`
+
+interface LevinSwapResult {
+  users: {
+    id: string
+    liquidityPositions: {
+      liquidityTokenBalance: string
+      pair: {
+        totalSupply: string
+        token0: { id: string; name: string }
+        token1: { id: string; name: string }
+        reserve0: string
+        reserve1: string
+      }
+    }[]
+  }[]
+}
+
 enum WalletType {
   Gnosis = 'gnosis',
   Ethereum = 'ethereum',
   RMM = 'rmm',
   RMMProtocol = 'rmmProtocol',
+  LevinSwap = 'levinSwap',
 }
 
 interface StandardWallet {
-  type: WalletType.Gnosis | WalletType.Ethereum | WalletType.RMM
+  type:
+    | WalletType.Gnosis
+    | WalletType.Ethereum
+    | WalletType.RMM
+    | WalletType.LevinSwap
   address: string
   balances: {
     address: string
@@ -114,20 +164,25 @@ interface RMMProtocolWallet {
 type Wallet = StandardWallet | RMMProtocolWallet
 
 async function getWalletsResult(addressList: string[]): Promise<Wallet[]> {
-  const [gnosisResult, ethereumResult, rmmResult] = await Promise.all([
-    GnosisClient.query<RealTokenResult>({
-      query: RealTokenQuery,
-      variables: { addressList },
-    }),
-    EthereumClient.query<RealTokenResult>({
-      query: RealTokenQuery,
-      variables: { addressList },
-    }),
-    RMMClient.query<RMMResult>({
-      query: RMMQuery,
-      variables: { addressList },
-    }),
-  ])
+  const [gnosisResult, ethereumResult, rmmResult, levinSwapResult] =
+    await Promise.all([
+      GnosisClient.query<RealTokenResult>({
+        query: RealTokenQuery,
+        variables: { addressList },
+      }),
+      EthereumClient.query<RealTokenResult>({
+        query: RealTokenQuery,
+        variables: { addressList },
+      }),
+      RMMClient.query<RMMResult>({
+        query: RMMQuery,
+        variables: { addressList },
+      }),
+      LevinSwapClient.query<LevinSwapResult>({
+        query: LevinSwapQuery,
+        variables: { addressList },
+      }),
+    ])
 
   const gnosisWallets: StandardWallet[] = gnosisResult.data.accounts.map(
     (account) => ({
@@ -174,7 +229,39 @@ async function getWalletsResult(addressList: string[]): Promise<Wallet[]> {
     })),
   }))
 
-  return [...gnosisWallets, ...ethereumWallets, ...rmmWallets, ...rmmProtocol]
+  const levinSwapWallets: StandardWallet[] = levinSwapResult.data.users.map(
+    (user) => {
+      const balances: Record<string, number> = {}
+      user.liquidityPositions.forEach((position) => {
+        const share =
+          parseFloat(position.liquidityTokenBalance) /
+          parseFloat(position.pair.totalSupply)
+        const token0 = position.pair.token0.id
+        const token1 = position.pair.token1.id
+        balances[token0] =
+          (balances[token0] ?? 0) + parseFloat(position.pair.reserve0) * share
+        balances[token1] =
+          (balances[token1] ?? 0) + parseFloat(position.pair.reserve1) * share
+      })
+
+      return {
+        type: WalletType.LevinSwap,
+        address: user.id,
+        balances: Object.entries(balances).map(([address, amount]) => ({
+          address,
+          amount,
+        })),
+      }
+    }
+  )
+
+  return [
+    ...gnosisWallets,
+    ...ethereumWallets,
+    ...rmmWallets,
+    ...rmmProtocol,
+    ...levinSwapWallets,
+  ]
 }
 
 interface WalletBalance {
@@ -194,6 +281,7 @@ export interface GetWalletBalance {
   ethereum: WalletBalance[]
   rmm: WalletBalance[]
   rmmProtocol: GetRMMProtocolBalance[]
+  levinSwap: WalletBalance[]
 }
 
 function getRMMProtocol(wallets: Wallet[]): GetRMMProtocolBalance[] {
@@ -226,6 +314,7 @@ export const WalletsRepository = {
       [WalletType.Ethereum]: [],
       [WalletType.RMM]: [],
       [WalletType.RMMProtocol]: getRMMProtocol(walletsResult),
+      [WalletType.LevinSwap]: [],
     }
 
     const standardWalletList = walletsResult.filter(

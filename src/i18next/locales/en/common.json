@@ -41,7 +41,8 @@
     "total": "Total",
     "ethereum": "Ethereum",
     "gnosis": "Gnosis",
-    "rmm": "RMM"
+    "rmm": "RMM",
+    "levinSwap": "LevinSwap"
   },
   "rentsCard": {
     "title": "Rents",

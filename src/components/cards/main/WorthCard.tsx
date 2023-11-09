@@ -7,6 +7,7 @@ import { Box, Card, Text, Title } from '@mantine/core'
 import {
   selectOwnedRealtokensValueEthereum,
   selectOwnedRealtokensValueGnosis,
+  selectOwnedRealtokensValueLevinSwap,
   selectOwnedRealtokensValueRmm,
 } from 'src/store/features/wallets/walletsSelector'
 
@@ -19,6 +20,7 @@ export const WorthCard: FC = () => {
   const gnosisValue = useSelector(selectOwnedRealtokensValueGnosis)
   const ethereumValue = useSelector(selectOwnedRealtokensValueEthereum)
   const rmmValue = useSelector(selectOwnedRealtokensValueRmm)
+  const levinSwapValue = useSelector(selectOwnedRealtokensValueLevinSwap)
   const totalValue = gnosisValue + ethereumValue + rmmValue
 
   return (
@@ -31,6 +33,7 @@ export const WorthCard: FC = () => {
         <CurrencyField label={t('ethereum')} value={ethereumValue} />
         <CurrencyField label={t('gnosis')} value={gnosisValue} />
         <CurrencyField label={t('rmm')} value={rmmValue} />
+        <CurrencyField label={t('levinSwap')} value={levinSwapValue} />
       </Box>
     </Card>
   )

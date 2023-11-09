@@ -16,6 +16,7 @@ const walletsInitialState: WalletsInitialStateType = {
     ethereum: [],
     rmm: [],
     rmmProtocol: [],
+    levinSwap: [],
   },
   isLoading: false,
 }

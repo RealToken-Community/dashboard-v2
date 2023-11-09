@@ -31,10 +31,12 @@ function findBalances(
 ) {
   return balances[type].find((balance) => {
     const address = balance.address.toLowerCase()
+
     return {
       ['ethereum']: address === realtoken.ethereumContract?.toLowerCase(),
       ['gnosis']: address === realtoken.gnosisContract?.toLowerCase(),
       ['rmm']: address === realtoken.gnosisContract?.toLowerCase(),
+      ['levinSwap']: address === realtoken.gnosisContract?.toLowerCase(),
       ['rmmProtocol']: false,
     }[type]
   })
@@ -85,10 +87,18 @@ export const selectOwnedRealtokensRmm = createSelector(
   (realtokens, balances) => getOwnedRealtokens(realtokens, balances, 'rmm')
 )
 
+export const selectOwnedRealtokensLevinSwap = createSelector(
+  selectRealtokens,
+  (state: RootState) => state.wallets.balances,
+  (realtokens, balances) =>
+    getOwnedRealtokens(realtokens, balances, 'levinSwap')
+)
+
 export const selectOwnedRealtokens = createSelector(
   selectOwnedRealtokensGnosis,
   selectOwnedRealtokensEthereum,
   selectOwnedRealtokensRmm,
+  selectOwnedRealtokensLevinSwap,
   (...realtokens) =>
     realtokens.flat().reduce((acc, realtoken) => {
       const existingRealtoken = acc.find((item) => item.id === realtoken.id)
@@ -118,6 +128,10 @@ export const selectOwnedRealtokensValueEthereum = createSelector(
 )
 export const selectOwnedRealtokensValueRmm = createSelector(
   selectOwnedRealtokensRmm,
+  (realtokens) => _sumBy(realtokens, 'value')
+)
+export const selectOwnedRealtokensValueLevinSwap = createSelector(
+  selectOwnedRealtokensLevinSwap,
   (realtokens) => _sumBy(realtokens, 'value')
 )
 
