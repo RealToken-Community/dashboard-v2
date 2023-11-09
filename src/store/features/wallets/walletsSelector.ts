@@ -11,6 +11,24 @@ export interface OwnedRealtoken extends Realtoken {
   id: string
   amount: number
   value: number
+  balance: {
+    ethereum: {
+      amount: number
+      value: number
+    }
+    gnosis: {
+      amount: number
+      value: number
+    }
+    rmm: {
+      amount: number
+      value: number
+    }
+    levinSwap: {
+      amount: number
+      value: number
+    }
+  }
 }
 
 function isContractRelated(realtoken: Realtoken, contractAddress: string) {
@@ -95,11 +113,12 @@ export const selectOwnedRealtokensLevinSwap = createSelector(
 )
 
 export const selectOwnedRealtokens = createSelector(
+  (state: RootState) => state.wallets.balances,
   selectOwnedRealtokensGnosis,
   selectOwnedRealtokensEthereum,
   selectOwnedRealtokensRmm,
   selectOwnedRealtokensLevinSwap,
-  (...realtokens) =>
+  (balances, ...realtokens) =>
     realtokens.flat().reduce((acc, realtoken) => {
       const existingRealtoken = acc.find((item) => item.id === realtoken.id)
 
@@ -107,12 +126,43 @@ export const selectOwnedRealtokens = createSelector(
         existingRealtoken.amount += realtoken.amount
         existingRealtoken.value += realtoken.value
       } else {
-        acc.push({ ...realtoken })
+        acc.push({
+          ...realtoken,
+          balance: getBalancesForProperty(realtoken, balances),
+        })
       }
 
       return acc
     }, [] as OwnedRealtoken[])
 )
+
+function getBalancesForProperty(
+  realtoken: Realtoken,
+  balances: GetWalletBalance
+) {
+  return {
+    ethereum: getBalanceForProperty(realtoken, balances, 'ethereum'),
+    gnosis: getBalanceForProperty(realtoken, balances, 'gnosis'),
+    rmm: getBalanceForProperty(realtoken, balances, 'rmm'),
+    levinSwap: getBalanceForProperty(realtoken, balances, 'levinSwap'),
+  }
+}
+
+function getBalanceForProperty(
+  realtoken: Realtoken,
+  balances: GetWalletBalance,
+  type: keyof GetWalletBalance
+) {
+  const balance = balances[type].find(
+    (item) =>
+      item.address.toLowerCase() === realtoken.gnosisContract?.toLowerCase()
+  )
+
+  return {
+    amount: balance?.amount ?? 0,
+    value: (balance?.amount ?? 0) * realtoken.tokenPrice,
+  }
+}
 
 export const selectOwnedRealtokensValue = createSelector(
   selectOwnedRealtokens,

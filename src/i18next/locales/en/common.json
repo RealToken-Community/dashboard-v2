@@ -138,11 +138,16 @@
     },
     "main": {
       "ownedValue": "My investment",
+      "ownedEthereumValue": "Ethereum",
+      "ownedGnosisValue": "Gnosis",
+      "ownedRmmValue": "RMM",
+      "ownedLevinSwapValue": "LevinSwap",
       "annualYield": "Annual yield",
+      "nbToken": "Tokens owned",
+      "tokenPrice": "Token price",
       "rentWeek": "Weekly rent",
       "rentMonth": "Monthly rent",
       "rentYear": "Yearly rent",
-      "nbToken": "Tokens owned",
       "rentedUnits":"Rented units"
     },
     "property": {

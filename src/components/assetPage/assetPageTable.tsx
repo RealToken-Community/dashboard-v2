@@ -15,6 +15,8 @@ interface AssetPageTableProps {
   data: {
     label: string
     value: string
+    isHidden?: boolean
+    isIndented?: boolean
   }[]
 }
 
@@ -23,12 +25,17 @@ export const AssetPageTable: FC<AssetPageTableProps> = ({ data }) => {
   return (
     <table className={classes.table}>
       <tbody>
-        {data.map((item, index) => (
-          <tr key={index}>
-            <td>{item.label}</td>
-            <td>{item.value}</td>
-          </tr>
-        ))}
+        {data
+          .filter((item) => !item.isHidden)
+          .map((item, index) => (
+            <tr key={index}>
+              <td style={item.isIndented ? { paddingLeft: '10px' } : undefined}>
+                {item.isIndented && <span>{'- '}</span>}
+                {item.label}
+              </td>
+              <td>{item.value}</td>
+            </tr>
+          ))}
       </tbody>
     </table>
   )
