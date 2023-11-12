@@ -1,56 +1,9 @@
-import { gql } from '@apollo/client'
-
 import _groupBy from 'lodash/groupBy'
 import _sumBy from 'lodash/sumBy'
 
 import { APIRealToken } from 'src/types/APIRealToken'
 
-import { YamStatisticsClient } from './subgraphs/clients'
 import { getRealtokenYamStatistics } from './subgraphs/queries/yam.queries'
-
-const YamStatisticsQuery = gql`
-  query GetTokenVolumes(
-    $address: String!
-    $stables: [String!]
-    $limitDate: String!
-  ) {
-    token(id: $address) {
-      decimals
-      volumes(where: { token_in: $stables }) {
-        token {
-          decimals
-        }
-        quantity
-        volume
-        volumeDays(
-          orderBy: date
-          orderDirection: desc
-          where: { date_gte: $limitDate }
-        ) {
-          date
-          quantity
-          volume
-        }
-      }
-    }
-  }
-`
-
-interface YamStatisticsResult {
-  token: {
-    decimals: string
-    volumes: {
-      token: { decimals: string }
-      quantity: string
-      volume: string
-      volumeDays: {
-        date: string
-        quantity: string
-        volume: string
-      }[]
-    }[]
-  }
-}
 
 export interface YamStatistics {
   quantity: number
@@ -94,13 +47,4 @@ export async function GetYamStatistics(params: {
     volume: _sumBy(groupedValues, 'volume'),
     days: groupedValues.sort((a, b) => a.date.localeCompare(b.date)),
   }
-}
-
-function getLimitDate() {
-  const date = new Date()
-  date.setMonth(date.getMonth() - 1)
-  const year = date.getFullYear().toString()
-  const month = (date.getMonth() + 1).toString().padStart(2, '0')
-  const day = date.getDate().toString().padStart(2, '0')
-  return `${year}-${month}-${day}`
 }
