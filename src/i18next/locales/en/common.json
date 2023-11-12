@@ -180,6 +180,8 @@
       "primaryOut": "Sale to RealT",
       "rmmIn": "Withdrawal from RMM",
       "rmmOut": "Deposit on RMM",
+      "levinSwapIn": "Purchase/Withdrawal on LevinSwap",
+      "levinSwapOut": "Sale/Deposit on LevinSwap",
       "reinvest": "Rent reinvest",
       "internal": "Internal transaction",
       "unknown": "Other"

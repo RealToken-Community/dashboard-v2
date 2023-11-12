@@ -21,6 +21,8 @@ function getTransferTitle(item: RealTokenTransfer) {
       return item.direction === 'in' ? t('primaryIn') : t('primaryOut')
     case TransferOrigin.rmm:
       return item.direction === 'in' ? t('rmmIn') : t('rmmOut')
+    case TransferOrigin.levinSwap:
+      return item.direction === 'in' ? t('levinSwapIn') : t('levinSwapOut')
     case TransferOrigin.reinvest:
       return t('reinvest')
     case TransferOrigin.internal:

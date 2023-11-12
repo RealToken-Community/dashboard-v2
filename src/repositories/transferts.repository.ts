@@ -11,6 +11,7 @@ export enum TransferOrigin {
   swapcat = 'swapcat',
   yam = 'yam',
   rmm = 'rmm',
+  levinSwap = 'levinSwap',
   internal = 'internal',
   other = 'other',
 }
@@ -67,6 +68,9 @@ function getTransferOrigin(
   const addresses = [item.source, item.destination]
   const { distributor, rmmPoolAddress } =
     realtoken?.blockchainAddresses.xDai ?? {}
+  const levinSwapPool = realtoken?.secondaryMarketplaces.find(
+    (item) => item.dexName === 'LevinSwap'
+  )
 
   if (
     addressList.includes(item.source) &&
@@ -87,6 +91,10 @@ function getTransferOrigin(
 
   if (item.transaction.to === YAM_CONTRACT) {
     return TransferOrigin.yam
+  }
+
+  if (item.destination === levinSwapPool?.contractPool) {
+    return TransferOrigin.levinSwap
   }
 
   if (addresses.includes((rmmPoolAddress || '').toLowerCase())) {
