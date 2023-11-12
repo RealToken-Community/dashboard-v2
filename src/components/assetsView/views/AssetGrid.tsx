@@ -48,7 +48,7 @@ export const AssetGrid: FC<{ realtokens: OwnedRealtoken[] }> = (props) => {
         style={{ width: '100%' }}
       >
         <Pagination
-          page={page}
+          value={page}
           total={Math.ceil(props.realtokens.length / pageSize)}
           boundaries={1}
           siblings={1}

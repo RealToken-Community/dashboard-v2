@@ -11,11 +11,6 @@
     "react/jsx-curly-brace-presence": ["warn", "always"],
     "react/jsx-boolean-value": ["warn", "always"],
     "react-hooks/rules-of-hooks": "off",
-    "react-hooks/exhaustive-deps": [
-      "warn",
-      {
-        "additionalHooks": "useAsync"
-      }
-    ]
+    "react-hooks/exhaustive-deps": "off"
   }
 }
