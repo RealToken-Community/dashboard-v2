@@ -1,56 +1,9 @@
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
-
 import { APIRealToken } from 'src/types/APIRealToken'
 
-const RealtokenClient = new ApolloClient({
-  uri: 'https://api.thegraph.com/subgraphs/name/realtoken-thegraph/realtoken-xdai',
-  cache: new InMemoryCache(),
-})
-
-const RealTokenTransferQuery = gql`
-  query RealTokenTransferQuery(
-    $addressList: [String!]!
-    $tokenList: [String!]!
-  ) {
-    transferEvents(
-      where: {
-        and: [
-          { token_in: $tokenList }
-          {
-            or: [{ source_in: $addressList }, { destination_in: $addressList }]
-          }
-        ]
-      }
-      orderBy: timestamp
-      orderDirection: desc
-      first: 1000
-    ) {
-      amount
-      source
-      destination
-      sender
-      timestamp
-      token {
-        id
-      }
-      transaction {
-        id
-        to
-      }
-    }
-  }
-`
-
-interface RealTokenTransferResult {
-  transferEvents: {
-    amount: string
-    source: string
-    destination: string
-    timestamp: string
-    token: { id: string }
-    transaction: { id: string; to: string }
-  }[]
-}
+import {
+  TransferEvent,
+  getRealTokenTransfers,
+} from './subgraphs/queries/transfers.queries'
 
 export enum TransferOrigin {
   primary = 'primary',
@@ -79,16 +32,13 @@ export async function GetRealTokenTransfers(params: {
   realtokenList: APIRealToken[]
 }) {
   const addressList = params.addressList.map((item) => item.toLowerCase())
-  const tokenList = params.realtokenList.map((item) =>
-    item.blockchainAddresses.xDai.contract.toLowerCase()
+
+  const transferEvents = await getRealTokenTransfers(
+    params.addressList,
+    params.realtokenList.map((item) => item.blockchainAddresses.xDai.contract)
   )
 
-  const result = await RealtokenClient.query<RealTokenTransferResult>({
-    query: RealTokenTransferQuery,
-    variables: { addressList, tokenList },
-  })
-
-  return result.data.transferEvents.map<RealTokenTransfer>((transfer) => ({
+  return transferEvents.map<RealTokenTransfer>((transfer) => ({
     timestamp: Number(transfer.timestamp),
     amount: Number(transfer.amount),
     direction: addressList.includes(transfer.source)
@@ -110,7 +60,7 @@ const SWAPCAT_CONTRACT = '0xb18713ac02fc2090c0447e539524a5c76f327a3b'
 const YAM_CONTRACT = '0xc759aa7f9dd9720a1502c104dae4f9852bb17c14'
 
 function getTransferOrigin(
-  item: RealTokenTransferResult['transferEvents'][0],
+  item: TransferEvent,
   addressList: string[],
   realtoken?: APIRealToken
 ) {

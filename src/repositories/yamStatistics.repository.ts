@@ -1,15 +1,12 @@
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
 
 import _groupBy from 'lodash/groupBy'
-import _mapValues from 'lodash/mapValues'
 import _sumBy from 'lodash/sumBy'
 
 import { APIRealToken } from 'src/types/APIRealToken'
 
-const YamStatisticsClient = new ApolloClient({
-  uri: 'https://api.thegraph.com/subgraphs/name/jycssu-com/yam-history-gnosis',
-  cache: new InMemoryCache(),
-})
+import { YamStatisticsClient } from './subgraphs/clients'
+import { getRealtokenYamStatistics } from './subgraphs/queries/yam.queries'
 
 const YamStatisticsQuery = gql`
   query GetTokenVolumes(
@@ -71,32 +68,15 @@ export async function GetYamStatistics(params: {
   const address =
     params.realtoken.blockchainAddresses.xDai.contract.toLowerCase()
 
-  const result = await YamStatisticsClient.query<YamStatisticsResult>({
-    query: YamStatisticsQuery,
-    variables: {
-      address,
-      limitDate: getLimitDate(),
-      stables: [
-        '0xe91d153e0b41518a2ce8dd3d7944fa863463a97d', // WxDai
-        '0xddafbb505ad214d7b80b1f830fccc89b60fb7a83', // USDC
-        '0x7349c9eaa538e118725a6130e0f8341509b9f8a0', // armmWxDai
-      ],
-    },
-  })
-
-  const decimals = parseInt(result.data.token.decimals)
-  const volumes = result.data.token.volumes
+  const volumes = await getRealtokenYamStatistics(address)
 
   const parsedValues = volumes
-    .map(({ token, volumeDays }) =>
-      volumeDays.map(({ date, quantity, volume }) => ({
-        date,
-        quantity: +quantity / Math.pow(10, decimals),
-        volume: +volume / Math.pow(10, +token.decimals),
-        average:
-          +volume /
-          Math.pow(10, +token.decimals) /
-          (+quantity / Math.pow(10, +token.decimals)),
+    .map((volume) =>
+      volume.volumeDays.map((volumeDay) => ({
+        date: volumeDay.date,
+        quantity: volumeDay.quantity,
+        volume: volumeDay.volume,
+        average: volumeDay.volume / volumeDay.quantity,
       }))
     )
     .flat()

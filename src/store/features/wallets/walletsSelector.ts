@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit'
 
 import _sumBy from 'lodash/sumBy'
 
-import { GetWalletBalance } from 'src/repositories'
+import { WalletBalances, WalletType } from 'src/repositories'
 import { RootState } from 'src/store/store'
 
 import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'
@@ -11,24 +11,13 @@ export interface OwnedRealtoken extends Realtoken {
   id: string
   amount: number
   value: number
-  balance: {
-    ethereum: {
+  balance: Record<
+    WalletType,
+    {
       amount: number
       value: number
     }
-    gnosis: {
-      amount: number
-      value: number
-    }
-    rmm: {
-      amount: number
-      value: number
-    }
-    levinSwap: {
-      amount: number
-      value: number
-    }
-  }
+  >
 }
 
 function isContractRelated(realtoken: Realtoken, contractAddress: string) {
@@ -44,11 +33,11 @@ function isContractRelated(realtoken: Realtoken, contractAddress: string) {
 
 function findBalances(
   realtoken: Realtoken,
-  balances: GetWalletBalance,
-  type: keyof GetWalletBalance
+  balances: WalletBalances,
+  type: keyof WalletBalances
 ) {
   return balances[type].find((balance) => {
-    const address = balance.address.toLowerCase()
+    const address = balance.token.toLowerCase()
 
     return {
       ['ethereum']: address === realtoken.ethereumContract?.toLowerCase(),
@@ -62,8 +51,8 @@ function findBalances(
 
 function mapOwnedRealtoken(
   realtoken: Realtoken,
-  balances: GetWalletBalance,
-  type: keyof GetWalletBalance
+  balances: WalletBalances,
+  type: keyof WalletBalances
 ) {
   const realtokenId = realtoken.uuid
   const balance = findBalances(realtoken, balances, type)
@@ -78,8 +67,8 @@ function mapOwnedRealtoken(
 
 function getOwnedRealtokens(
   realtokens: Realtoken[],
-  balances: GetWalletBalance,
-  type: keyof GetWalletBalance
+  balances: WalletBalances,
+  type: keyof WalletBalances
 ) {
   return realtokens
     .map((realtoken) => mapOwnedRealtoken(realtoken, balances, type))
@@ -90,26 +79,29 @@ function getOwnedRealtokens(
 export const selectOwnedRealtokensGnosis = createSelector(
   selectRealtokens,
   (state: RootState) => state.wallets.balances,
-  (realtokens, balances) => getOwnedRealtokens(realtokens, balances, 'gnosis')
+  (realtokens, balances) =>
+    getOwnedRealtokens(realtokens, balances, WalletType.Gnosis)
 )
 
 export const selectOwnedRealtokensEthereum = createSelector(
   selectRealtokens,
   (state: RootState) => state.wallets.balances,
-  (realtokens, balances) => getOwnedRealtokens(realtokens, balances, 'ethereum')
+  (realtokens, balances) =>
+    getOwnedRealtokens(realtokens, balances, WalletType.Ethereum)
 )
 
 export const selectOwnedRealtokensRmm = createSelector(
   selectRealtokens,
   (state: RootState) => state.wallets.balances,
-  (realtokens, balances) => getOwnedRealtokens(realtokens, balances, 'rmm')
+  (realtokens, balances) =>
+    getOwnedRealtokens(realtokens, balances, WalletType.RMM)
 )
 
 export const selectOwnedRealtokensLevinSwap = createSelector(
   selectRealtokens,
   (state: RootState) => state.wallets.balances,
   (realtokens, balances) =>
-    getOwnedRealtokens(realtokens, balances, 'levinSwap')
+    getOwnedRealtokens(realtokens, balances, WalletType.LevinSwap)
 )
 
 export const selectOwnedRealtokens = createSelector(
@@ -138,24 +130,24 @@ export const selectOwnedRealtokens = createSelector(
 
 function getBalancesForProperty(
   realtoken: Realtoken,
-  balances: GetWalletBalance
+  balances: WalletBalances
 ) {
   return {
-    ethereum: getBalanceForProperty(realtoken, balances, 'ethereum'),
-    gnosis: getBalanceForProperty(realtoken, balances, 'gnosis'),
-    rmm: getBalanceForProperty(realtoken, balances, 'rmm'),
-    levinSwap: getBalanceForProperty(realtoken, balances, 'levinSwap'),
+    ethereum: getBalanceForProperty(realtoken, balances, WalletType.Ethereum),
+    gnosis: getBalanceForProperty(realtoken, balances, WalletType.Gnosis),
+    rmm: getBalanceForProperty(realtoken, balances, WalletType.RMM),
+    levinSwap: getBalanceForProperty(realtoken, balances, WalletType.LevinSwap),
   }
 }
 
 function getBalanceForProperty(
   realtoken: Realtoken,
-  balances: GetWalletBalance,
-  type: keyof GetWalletBalance
+  balances: WalletBalances,
+  type: keyof WalletBalances
 ) {
   const balance = balances[type].find(
     (item) =>
-      item.address.toLowerCase() === realtoken.gnosisContract?.toLowerCase()
+      item.token.toLowerCase() === realtoken.gnosisContract?.toLowerCase()
   )
 
   return {
@@ -207,12 +199,12 @@ export const selectOwnedRealtokensAPY = createSelector(
 
 const selectRmmDetailsInXdai = createSelector(
   selectRealtokens,
-  (state: RootState) => state.wallets.balances.rmmProtocol,
+  (state: RootState) => state.wallets.rmmPositions,
   (realtokens, rmmProtocol) =>
     rmmProtocol.reduce(
       (acc, item) => {
         const realtoken = realtokens.find((realtoken) =>
-          isContractRelated(realtoken, item.address)
+          isContractRelated(realtoken, item.token)
         )
 
         if (realtoken) {

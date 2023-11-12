@@ -1,12 +1,17 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
-import { GetWalletBalance, WalletsRepository } from 'src/repositories'
+import { WalletBalances, WalletsRepository } from 'src/repositories'
+import {
+  RmmRepository,
+  WalletRmmPosition,
+} from 'src/repositories/rmm.repository'
 import { AppDispatch, RootState } from 'src/store/store'
 
 import { selectCleanedAddressList } from '../settings/settingsSelector'
 
 interface WalletsInitialStateType {
-  balances: GetWalletBalance
+  balances: WalletBalances
+  rmmPositions: WalletRmmPosition[]
   isLoading: boolean
 }
 
@@ -15,23 +20,25 @@ const walletsInitialState: WalletsInitialStateType = {
     gnosis: [],
     ethereum: [],
     rmm: [],
-    rmmProtocol: [],
     levinSwap: [],
   },
+  rmmPositions: [],
   isLoading: false,
 }
 
 // DISPATCH TYPE
-export const balancesChangedDispatchType = 'wallets/balancesChanged'
-export const balancesIsLoadingDispatchType = 'wallets/balancesIsLoading'
+const balancesChangedDispatchType = 'wallets/balancesChanged'
+const rmmPositionsChangedDispatchType = 'wallets/rmmPositionsChanged'
+const isLoadingDispatchType = 'wallets/isLoading'
 
 // ACTIONS
-export const balancesChanged = createAction<GetWalletBalance>(
+const balancesChanged = createAction<WalletBalances>(
   balancesChangedDispatchType
 )
-export const balancesIsLoading = createAction<boolean>(
-  balancesIsLoadingDispatchType
+const rmmPositionsChanged = createAction<WalletRmmPosition[]>(
+  rmmPositionsChangedDispatchType
 )
+const balancesIsLoading = createAction<boolean>(isLoadingDispatchType)
 
 // THUNKS
 export function fetchWallets() {
@@ -41,14 +48,18 @@ export function fetchWallets() {
     const addressList = selectCleanedAddressList(state)
 
     if (isLoading) return
-    dispatch({ type: balancesIsLoadingDispatchType, payload: true })
+    dispatch({ type: isLoadingDispatchType, payload: true })
     try {
-      const data = await WalletsRepository.getBalances(addressList)
-      dispatch({ type: balancesChangedDispatchType, payload: data })
+      const [balances, rmmPositions] = await Promise.all([
+        WalletsRepository.getBalances(addressList),
+        RmmRepository.getPositions(addressList),
+      ])
+      dispatch({ type: balancesChangedDispatchType, payload: balances })
+      dispatch({ type: rmmPositionsChangedDispatchType, payload: rmmPositions })
     } catch (error) {
       console.log(error)
     } finally {
-      dispatch({ type: balancesIsLoadingDispatchType, payload: false })
+      dispatch({ type: isLoadingDispatchType, payload: false })
     }
   }
 }
@@ -65,6 +76,9 @@ export function resetWallets() {
 export const walletsReducers = createReducer(walletsInitialState, (builder) => {
   builder.addCase(balancesChanged, (state, action) => {
     state.balances = action.payload
+  })
+  builder.addCase(rmmPositionsChanged, (state, action) => {
+    state.rmmPositions = action.payload
   })
   builder.addCase(balancesIsLoading, (state, action) => {
     state.isLoading = action.payload

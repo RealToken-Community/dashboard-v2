@@ -1,3 +1,5 @@
+import { WaitingQueue } from './waitingQueue'
+
 export function useCache<T>(
   handler: () => Promise<T>,
   options: { duration: number }
@@ -26,40 +28,56 @@ export function useCache<T>(
   }
 }
 
-export function useCacheWithLocalStorage<T>(
-  handler: () => Promise<T>,
+export function useCacheWithLocalStorage<T extends unknown[], R>(
+  handler: (...args: T) => Promise<R>,
   options: {
     duration: number
     key: string
     usePreviousValueOnError?: boolean
   }
 ) {
-  return async function () {
+  const waitingQueues: Record<string, WaitingQueue<R>> = {}
+
+  return async function (...args: T) {
     const now = Date.now()
 
-    const cached = localStorage.getItem(options.key)
+    const storageKey = args.length
+      ? `${options.key}-${args.join('-')}`
+      : options.key
+
+    if (waitingQueues[storageKey]?.isWaiting) {
+      return waitingQueues[storageKey].wait()
+    } else {
+      waitingQueues[storageKey] = new WaitingQueue()
+    }
+
+    const cached = localStorage.getItem(storageKey)
     if (cached) {
       const { timestamp, value } = JSON.parse(cached)
       if (now - timestamp < options.duration) {
-        return value as T
+        waitingQueues[storageKey].resolve(value)
+        return value as R
       }
     }
 
     try {
-      const result = await handler()
+      const result = await handler(...args)
       localStorage.setItem(
-        options.key,
+        storageKey,
         JSON.stringify({ timestamp: now, value: result })
       )
+      waitingQueues[storageKey].resolve(result)
       return result
     } catch (err) {
       if (options.usePreviousValueOnError) {
-        const cached = localStorage.getItem(options.key)
+        const cached = localStorage.getItem(storageKey)
         if (cached) {
           const { value } = JSON.parse(cached)
-          return value as T
+          waitingQueues[storageKey].resolve(value)
+          return value as R
         }
       }
+      waitingQueues[storageKey].reject(err)
       throw err
     }
   }
