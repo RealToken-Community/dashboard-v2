@@ -6,36 +6,35 @@ import type { AppProps as NextAppProps } from 'next/app'
 import { Router } from 'next/router'
 
 import { ColorScheme } from '@mantine/core'
+import {
+  CHAINS,
+  ChainSelectConfig,
+  ChainsID,
+  LanguageInit,
+  Chain as RealtChains,
+  Web3Providers,
+  getConnectors,
+  getReadOnlyConnector,
+  getWalletConnectV2,
+  gnosisHooks,
+  gnosisSafe,
+  initLanguage,
+  metaMask,
+  metaMaskHooks,
+  parseAllowedChain,
+} from '@realtoken/realt-commons'
 
 import { getCookie } from 'cookies-next'
 import { Provider as JotaiProvider } from 'jotai'
 
 import { Head, MainLayout } from 'src/components/layouts'
 import 'src/i18next'
+import { resources } from 'src/i18next'
 import { MantineProviders } from 'src/providers'
 import InitStoreProvider from 'src/providers/InitStoreProvider'
 import store from 'src/store/store'
-import { resources } from 'src/i18next'
 
-import { 
-  CHAINS,
-  ChainSelectConfig,
-  ChainsID,
-  Web3Providers,  
-  getConnectors, 
-  getReadOnlyConnector, 
-  getWalletConnectV2, 
-  gnosisHooks, 
-  gnosisSafe, 
-  metaMask, 
-  metaMaskHooks, 
-  parseAllowedChain,
-  Chain as RealtChains,
-  initLanguage,
-  LanguageInit,
-} from '@realtoken/realt-commons'
-
-const i18n = initLanguage(resources);
+const i18n = initLanguage(resources)
 
 type AppProps = NextAppProps & { colorScheme: ColorScheme; locale: string }
 
@@ -43,25 +42,28 @@ const queryClient = new QueryClient({})
 
 const dashbordChains: ChainSelectConfig<RealtChains> = {
   allowedChains: parseAllowedChain(ChainsID),
-  chainsConfig: CHAINS
+  chainsConfig: CHAINS,
 }
 
-const env = process.env.NEXT_PUBLIC_ENV ?? "development";
-const walletConnectKey = process.env.NEXT_PUBLIC_WALLET_CONNECT_KEY ?? "";
+const env = process.env.NEXT_PUBLIC_ENV ?? 'development'
+const walletConnectKey = process.env.NEXT_PUBLIC_WALLET_CONNECT_KEY ?? ''
 
-const readOnly = getReadOnlyConnector(dashbordChains);
-const walletConnect = getWalletConnectV2(dashbordChains, env, walletConnectKey, false)
+const readOnly = getReadOnlyConnector(dashbordChains)
+const walletConnect = getWalletConnectV2(
+  dashbordChains,
+  env,
+  walletConnectKey,
+  false
+)
 
-const libraryConnectors = getConnectors(
-  {
-    metamask: [metaMask, metaMaskHooks],
-    gnosisSafe: [gnosisSafe, gnosisHooks],
-    readOnly: readOnly,
-    walletConnectV2: walletConnect
-  }
-);
+const libraryConnectors = getConnectors({
+  metamask: [metaMask, metaMaskHooks],
+  gnosisSafe: [gnosisSafe, gnosisHooks],
+  readOnly: readOnly,
+  walletConnectV2: walletConnect,
+})
 
-const App = ({ Component, pageProps, colorScheme, locale }: AppProps) => {
+const App = ({ Component, pageProps, colorScheme }: AppProps) => {
   function scrollToTop() {
     document.getElementById('main-layout-container')?.scroll({
       top: 0,

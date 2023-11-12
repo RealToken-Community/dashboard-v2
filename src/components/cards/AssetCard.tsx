@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import Image from 'next/image'
 
-import { Badge, Button, Card, Group, createStyles } from '@mantine/core'
+import { Badge, Card, Group, createStyles } from '@mantine/core'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
