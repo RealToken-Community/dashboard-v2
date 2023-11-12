@@ -8,7 +8,6 @@ import {
   Title,
   createStyles,
 } from '@mantine/core'
-import { NextLink } from '@mantine/next'
 import {
   IconBrandDiscord,
   IconBrandMedium,
@@ -46,7 +45,7 @@ export const Footer: FC = () => {
       <Group>
         <ActionIcon
           variant={'subtle'}
-          component={NextLink}
+          component={'a'}
           href={'https://discord.gg/9fQz6jYmcT'}
           aria-label={'Discord'}
           target={'_blank'}
@@ -56,7 +55,7 @@ export const Footer: FC = () => {
 
         <ActionIcon
           variant={'subtle'}
-          component={NextLink}
+          component={'a'}
           href={'https://t.me/Realtoken_welcome/'}
           aria-label={'Telegram'}
           target={'_blank'}
@@ -65,7 +64,7 @@ export const Footer: FC = () => {
         </ActionIcon>
         <ActionIcon
           variant={'subtle'}
-          component={NextLink}
+          component={'a'}
           href={'https://realt.co/blog/'}
           aria-label={'Blog'}
           target={'_blank'}

@@ -7,7 +7,7 @@ import {
 } from '@mantine/core'
 import { useHotkeys } from '@mantine/hooks'
 import { ModalsProvider } from '@mantine/modals'
-import { NotificationsProvider } from '@mantine/notifications'
+import { Notifications } from '@mantine/notifications'
 
 import { setCookies } from 'cookies-next'
 
@@ -45,18 +45,17 @@ export const MantineProviders: FC<MantineProvidersProps> = ({
         withNormalizeCSS={true}
         theme={{ colorScheme, ...theme }}
       >
-        <NotificationsProvider autoClose={6000}>
-          <ModalsProvider
-            modals={modals}
-            modalProps={{
-              centered: true,
-              withCloseButton: false,
-              styles: modalStyles,
-            }}
-          >
-            {children}
-          </ModalsProvider>
-        </NotificationsProvider>
+        <Notifications autoClose={6000} />
+        <ModalsProvider
+          modals={modals}
+          modalProps={{
+            centered: true,
+            withCloseButton: false,
+            styles: modalStyles,
+          }}
+        >
+          {children}
+        </ModalsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   )

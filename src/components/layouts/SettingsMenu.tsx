@@ -22,7 +22,6 @@ import {
 } from '@tabler/icons'
 
 import { setCookie } from 'cookies-next'
-import { useAtom } from 'jotai'
 
 import { selectUserCurrency } from 'src/store/features/settings/settingsSelector'
 import { userCurrencyChanged } from 'src/store/features/settings/settingsSlice'

@@ -1,5 +1,3 @@
-import { FC, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
 

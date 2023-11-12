@@ -1,14 +1,14 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 
-import { Button, Flex, MediaQuery, Stack, TextInput, Title } from '@mantine/core'
+import { Button, Flex, MediaQuery, Stack, TextInput } from '@mantine/core'
 import { ContextModalProps, useModals } from '@mantine/modals'
+import { useWeb3React } from '@web3-react/core'
 
 import { selectAddressList } from 'src/store/features/settings/settingsSelector'
 import { addressListChanged } from 'src/store/features/settings/settingsSlice'
-import { useWeb3React } from '@web3-react/core'
 
 const WalletInput: FC<{
   label: string
@@ -55,7 +55,8 @@ export const ManageWalletsModal: FC<ContextModalProps> = ({ context, id }) => {
     onClose()
   }
 
-  const setWeb3Address = (value: string) => setAddressList([value, addressList[1]])
+  const setWeb3Address = (value: string) =>
+    setAddressList([value, addressList[1]])
 
   return (
     <Stack
@@ -89,46 +90,36 @@ export const ManageWalletsModal: FC<ContextModalProps> = ({ context, id }) => {
 }
 
 interface ConnectButtonProps {
-  setWeb3Address: (address: string) => void;
+  setWeb3Address: (address: string) => void
 }
 
-const ConnectButton : FC<ConnectButtonProps> = ({ setWeb3Address }) => {
-  const modals = useModals();
+const ConnectButton: FC<ConnectButtonProps> = ({ setWeb3Address }) => {
+  const modals = useModals()
 
-  const { t } = useTranslation('common', { keyPrefix: 'walletButton' });
-  const { account, connector } = useWeb3React();
+  const { t } = useTranslation('common', { keyPrefix: 'walletButton' })
+  const { account, connector } = useWeb3React()
 
   useEffect(() => {
-    console.log('account', account)
     if (account) {
       setWeb3Address(account)
     }
-  }
-  , [account])
+  }, [account])
 
   const onDisconnect = useCallback(async () => {
     if (connector.deactivate) {
-      await connector.deactivate();
+      await connector.deactivate()
     } else {
-      await connector.resetState();
+      await connector.resetState()
     }
-    setWeb3Address('');
-  }, [connector]);
+    setWeb3Address('')
+  }, [connector])
 
   const openWalletModal = () =>
     modals.openContextModal('web3Wallets', { innerProps: {} })
 
   if (account) {
-    return (
-      <Button onClick={onDisconnect}>
-        {t('disconnectWallet')}
-      </Button>
-    );
+    return <Button onClick={onDisconnect}>{t('disconnectWallet')}</Button>
   }
 
-  return (
-    <Button onClick={openWalletModal}>
-      {t('connectWallet')}
-    </Button>
-  );
-};
+  return <Button onClick={openWalletModal}>{t('connectWallet')}</Button>
+}
