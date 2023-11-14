@@ -70,6 +70,10 @@ export function resetWallets() {
       type: balancesChangedDispatchType,
       payload: walletsInitialState.balances,
     })
+    dispatch({
+      type: rmmPositionsChangedDispatchType,
+      payload: walletsInitialState.rmmPositions,
+    })
   }
 }
 
