@@ -25,7 +25,7 @@ const useStyles = createStyles((theme) => ({
     flexDirection: 'column',
     flexGrow: 1,
     overflowY: 'auto',
-    padding: `0 ${theme.spacing.xl}px`,
+    padding: `0 ${theme.spacing.sm}`,
   },
 }))
 
