@@ -1,6 +1,7 @@
 import { atomWithStorage } from 'jotai/utils'
 
 import {
+  AssetRentStatusType,
   AssetSortType,
   AssetSubsidyType,
   AssetUserStatusType,
@@ -17,6 +18,7 @@ export interface AssetsViewFilterType {
   sortReverse: boolean
   subsidy: AssetSubsidyType
   userStatus: AssetUserStatusType
+  rentStatus: AssetRentStatusType
 }
 
 export const assetsViewDefaultFilter: AssetsViewFilterType = {
@@ -24,6 +26,7 @@ export const assetsViewDefaultFilter: AssetsViewFilterType = {
   sortReverse: false,
   subsidy: AssetSubsidyType.ALL,
   userStatus: AssetUserStatusType.OWNED,
+  rentStatus: AssetRentStatusType.ALL,
 }
 
 export const assetsViewFilterAtom = atomWithStorage<AssetsViewFilterType>(

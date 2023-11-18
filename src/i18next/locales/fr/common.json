@@ -93,7 +93,7 @@
   "assetSubsidy": {
     "label": "Loyers subventionnés",
     "options": {
-      "all": "Non filtrés",
+      "all": "Tous",
       "fullySubsidized": "Subventionnés",
       "subsidized": "Partiellement subventionnés",
       "notSubsidized": "Non subventionnés"
@@ -108,6 +108,15 @@
       "whitelistedNotOwned": "Whitelistées non possédées",
       "notOwned": "Non possédées",
       "notWhitelisted": "Non whitelistées"
+    }
+  },
+  "assetRentStatus": {
+    "label": "Loyers",
+    "options": {
+      "all": "Tous",
+      "rented": "Loués",
+      "notRented": "Non loués",
+      "partiallyRented": "Partiellement loués"
     }
   },
   "assetCard": {

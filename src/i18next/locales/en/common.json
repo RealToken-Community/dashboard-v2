@@ -91,7 +91,7 @@
     "close": "Close"
   },
   "assetSubsidy": {
-    "label": "Subsidized rent",
+    "label": "All",
     "options": {
       "all": "No filtered",
       "fullySubsidized": "Subsidized",
@@ -108,6 +108,16 @@
       "whitelistedNotOwned": "Whitelisted not owned",
       "notOwned": "Not owned",
       "notWhitelisted": "Not whitelisted"
+    }
+  },
+  
+  "assetRentStatus": {
+    "label": "Rent",
+    "options": {
+      "all": "All",
+      "rented": "Rented",
+      "notRented": "Not rented",
+      "partiallyRented": "Partially rented"
     }
   },
   "assetCard": {

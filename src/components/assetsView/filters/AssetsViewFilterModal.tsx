@@ -12,6 +12,7 @@ import {
   assetsViewFilterAtom,
 } from 'src/states'
 
+import { AssetsViewRentStatusFilter } from './AssetsViewRentStatusFilter'
 import { AssetsViewSort } from './AssetsViewSort'
 import { AssetsViewSubsidyFilter } from './AssetsViewSubsidyFilter'
 import { AssetsViewUserStatusFilter } from './AssetsViewUserStatusFilter'
@@ -49,6 +50,12 @@ export const AssetsViewFilterModal: FC<ContextModalProps> = ({
           }}
         />
         <AssetsViewUserStatusFilter
+          filter={filterModel}
+          onChange={(value) => {
+            setFilterModel({ ...filterModel, ...value })
+          }}
+        />
+        <AssetsViewRentStatusFilter
           filter={filterModel}
           onChange={(value) => {
             setFilterModel({ ...filterModel, ...value })
