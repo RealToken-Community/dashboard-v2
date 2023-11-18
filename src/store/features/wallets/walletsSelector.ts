@@ -45,22 +45,25 @@ function getRealtokenBalances(
   })
 }
 
-export const selectOwnedRealtokens = createSelector(
+export const selectUserRealtokens = createSelector(
   selectRealtokens,
   (state: RootState) => state.wallets.balances,
   (realtokens, walletBalances) =>
-    realtokens
-      .map((realtoken) => {
-        const balances = getRealtokenBalances(realtoken, walletBalances)
-        return {
-          ...realtoken,
-          id: realtoken.uuid,
-          balance: balances,
-          amount: _sumBy(Object.values(balances), 'amount'),
-          value: _sumBy(Object.values(balances), 'value'),
-        }
-      })
-      .filter((item) => item.amount > 0)
+    realtokens.map((realtoken) => {
+      const balances = getRealtokenBalances(realtoken, walletBalances)
+      return {
+        ...realtoken,
+        id: realtoken.uuid,
+        balance: balances,
+        amount: _sumBy(Object.values(balances), 'amount'),
+        value: _sumBy(Object.values(balances), 'value'),
+      }
+    })
+)
+
+export const selectOwnedRealtokens = createSelector(
+  selectUserRealtokens,
+  (realtokens) => realtokens.filter((item) => item.amount > 0)
 )
 
 export const selectOwnedRealtokensValue = createSelector(

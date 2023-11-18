@@ -14,7 +14,7 @@ import { AssetPagePropertyTab } from 'src/components/assetPage/assetPageProperty
 import { AssetPageTransfersTab } from 'src/components/assetPage/assetPageTransfersTab'
 import { AssetPageYamStatisticsTab } from 'src/components/assetPage/assetPageYamStatisticsTab'
 import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
-import { selectOwnedRealtokens } from 'src/store/features/wallets/walletsSelector'
+import { selectUserRealtokens } from 'src/store/features/wallets/walletsSelector'
 
 const useStyles = createStyles({
   imageContainer: {
@@ -50,7 +50,7 @@ const TabButton: FC<TabButtonProps> = ({ label, active, onClick }) => {
 
 const AssetPage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'assetPage' })
-  const realtokens = useSelector(selectOwnedRealtokens)
+  const realtokens = useSelector(selectUserRealtokens)
   const isLoading = useSelector(selectIsLoading)
   const { classes } = useStyles()
   const router = useRouter()
