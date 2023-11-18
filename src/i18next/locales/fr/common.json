@@ -119,6 +119,14 @@
       "partiallyRented": "Partiellement loués"
     }
   },
+  "assetRmmStatus": {
+    "label": "Disponible sur le RMM",
+    "options": {
+      "all": "Tous",
+      "available": "Oui",
+      "notAvailable": "Non"
+    }
+  },
   "assetCard": {
     "tokens": "Tokens",
     "apr": "Rendement annuel",

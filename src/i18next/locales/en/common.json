@@ -110,7 +110,6 @@
       "notWhitelisted": "Not whitelisted"
     }
   },
-  
   "assetRentStatus": {
     "label": "Rent",
     "options": {
@@ -118,6 +117,14 @@
       "rented": "Rented",
       "notRented": "Not rented",
       "partiallyRented": "Partially rented"
+    }
+  },
+  "assetRmmStatus": {
+    "label": "Available on RMM",
+    "options": {
+      "all": "All",
+      "available": "Yes",
+      "notAvailable": "No"
     }
   },
   "assetCard": {
