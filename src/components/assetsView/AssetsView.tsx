@@ -3,39 +3,25 @@ import { useSelector } from 'react-redux'
 
 import { Flex, Grid } from '@mantine/core'
 
-import { selectOwnedRealtokens } from 'src/store/features/wallets/walletsSelector'
+import { selectUserRealtokens } from 'src/store/features/wallets/walletsSelector'
 
-import { AssetsSearch, useAssetsSearch } from './AssetsSearch'
-import { AssetsSort, useAssetsSort } from './AssetsSort'
-import {
-  AssetsSubsidyFilter,
-  useAssetsSubsidyFilter,
-} from './AssetsSubsidyFilter'
+import { AssetsViewSearch, useAssetsViewSearch } from './AssetsViewSearch'
 import { AssetsViewSelect, useAssetsViewSelect } from './assetsViewSelect'
+import { AssetsViewFilterButton } from './filters/AssetsViewFilterButton'
+import { useAssetsViewFilters } from './filters/useFilters'
 import { AssetViewType } from './types'
 import { AssetGrid, AssetTable } from './views'
 
 export const AssetsView: FC = () => {
-  const { assetSortFunction } = useAssetsSort()
-  const { assetSearchFunction, assetSearchProps } = useAssetsSearch()
+  const { assetsViewFilterFunction } = useAssetsViewFilters()
+  const { assetSearchFunction, assetSearchProps } = useAssetsViewSearch()
   const { choosenAssetView } = useAssetsViewSelect()
 
-  const realtokens = useSelector(selectOwnedRealtokens)
-
-  const assetSubsidyFilterFunction = useAssetsSubsidyFilter()
+  const realtokens = useSelector(selectUserRealtokens)
 
   const data = useMemo(
-    () =>
-      realtokens
-        .filter(assetSearchFunction)
-        .filter(assetSubsidyFilterFunction)
-        .sort(assetSortFunction),
-    [
-      realtokens,
-      assetSearchFunction,
-      assetSortFunction,
-      assetSubsidyFilterFunction,
-    ]
+    () => assetsViewFilterFunction(realtokens.filter(assetSearchFunction)),
+    [realtokens, assetSearchFunction, assetsViewFilterFunction]
   )
 
   return (
@@ -46,15 +32,12 @@ export const AssetsView: FC = () => {
           sm={'content'}
           style={{ width: '300px', maxWidth: '100%' }}
         >
-          <AssetsSearch {...assetSearchProps} />
+          <AssetsViewSearch {...assetSearchProps} />
         </Grid.Col>
         <Grid.Col span={'auto'}>
           <Flex align={'center'} gap={'sm'}>
-            <AssetsSort />
+            <AssetsViewFilterButton />
           </Flex>
-        </Grid.Col>
-        <Grid.Col xs={12} sm={'content'}>
-          <AssetsSubsidyFilter />
         </Grid.Col>
         <Grid.Col xs={12} sm={'content'}>
           <AssetsViewSelect />

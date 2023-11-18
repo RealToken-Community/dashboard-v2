@@ -3,21 +3,25 @@ import { useTranslation } from 'react-i18next'
 
 import { Select } from '@mantine/core'
 
-import { useAtom } from 'jotai'
-
-import { assetSubsidyChoosedAtom } from 'src/states'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
-import { useInputStyles } from '../inputs/useInputStyles'
-import { AssetSubsidyType } from './types'
+import { useInputStyles } from '../../inputs/useInputStyles'
+import { AssetSubsidyType } from '../types'
 
-export const AssetsSubsidyFilter: FC = () => {
+interface AssetsViewSubsidyFilterModel {
+  subsidy: AssetSubsidyType
+}
+
+interface AssetsViewSubsidyFilterProps {
+  filter: AssetsViewSubsidyFilterModel
+  onChange: (value: AssetsViewSubsidyFilterModel) => void
+}
+export const AssetsViewSubsidyFilter: FC<AssetsViewSubsidyFilterProps> = ({
+  filter,
+  onChange,
+}) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetSubsidy' })
   const { classes: inputClasses } = useInputStyles()
-
-  const [choosenSubsidyType, setChoosenSubsidyType] = useAtom(
-    assetSubsidyChoosedAtom
-  )
 
   const viewOptions = [
     {
@@ -42,29 +46,29 @@ export const AssetsSubsidyFilter: FC = () => {
     <Select
       label={t('label')}
       data={viewOptions}
-      value={choosenSubsidyType}
-      onChange={(value: AssetSubsidyType) =>
-        value && setChoosenSubsidyType(value)
-      }
+      value={filter.subsidy}
+      onChange={(value: AssetSubsidyType) => onChange({ subsidy: value })}
       classNames={inputClasses}
     />
   )
 }
-AssetsSubsidyFilter.displayName = 'AssetsSubsidyFilter'
+AssetsViewSubsidyFilter.displayName = 'AssetsViewSubsidyFilter'
 
-export function useAssetsSubsidyFilter() {
-  const [choosenSubsidyType] = useAtom(assetSubsidyChoosedAtom)
-
-  return (asset: UserRealtoken) => {
-    switch (choosenSubsidyType) {
+export function useAssetsViewSubsidyFilter(
+  filter: AssetsViewSubsidyFilterModel
+) {
+  function assetSubsidyFilterFunction(asset: UserRealtoken) {
+    switch (filter.subsidy) {
+      case AssetSubsidyType.ALL:
+        return true
       case AssetSubsidyType.FULLY_SUBSIDIZED:
         return asset.subsidyStatus === 'yes' && !!asset.subsidyStatusValue
       case AssetSubsidyType.SUBSIDIZED:
         return asset.subsidyStatus !== 'no' && !!asset.subsidyStatusValue
       case AssetSubsidyType.NOT_SUBSIDIZED:
         return !asset.subsidyStatus || asset.subsidyStatus === 'no'
-      default:
-        return true
     }
   }
+
+  return { assetSubsidyFilterFunction }
 }

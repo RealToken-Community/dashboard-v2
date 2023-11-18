@@ -1,22 +1,28 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Select, Switch } from '@mantine/core'
+import { Grid, Select, Switch } from '@mantine/core'
 
-import { useAtom } from 'jotai'
-
-import { assetSortChoosedAtom, assetSortReverseAtom } from 'src/states'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
-import { useInputStyles } from '../inputs/useInputStyles'
-import { AssetSortType } from './types'
+import { useInputStyles } from '../../inputs/useInputStyles'
+import { AssetSortType } from '../types'
 
-export const AssetsSort: FC = () => {
+interface AssetsViewSortFilter {
+  sortBy: AssetSortType
+  sortReverse: boolean
+}
+
+interface AssetsViewSortProps {
+  filter: AssetsViewSortFilter
+  onChange: (value: AssetsViewSortFilter) => void
+}
+
+export const AssetsViewSort: FC<AssetsViewSortProps> = ({
+  filter,
+  onChange,
+}) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetView' })
-
-  const [choosenAssetSort, setChoosenAssetSort] = useAtom(assetSortChoosedAtom)
-  const [choosenAssetSortReverse, setChoosenAssetSortReverse] =
-    useAtom(assetSortReverseAtom)
 
   const sortOptions = [
     { value: AssetSortType.NAME, label: t('sortOptions.name') },
@@ -38,36 +44,39 @@ export const AssetsSort: FC = () => {
   const { classes: inputClasses } = useInputStyles()
 
   return (
-    <>
-      <Select
-        label={t('sort')}
-        data={sortOptions}
-        value={choosenAssetSort}
-        onChange={(value: AssetSortType) => value && setChoosenAssetSort(value)}
-        classNames={inputClasses}
-      />
-      <span>{t('sortReverse')}</span>
-      <Switch
-        checked={choosenAssetSortReverse}
-        onChange={(value) =>
-          setChoosenAssetSortReverse(value.currentTarget.checked)
-        }
-      />
-    </>
+    <Grid>
+      <Grid.Col span={'auto'}>
+        <Select
+          label={t('sort')}
+          data={sortOptions}
+          value={filter.sortBy}
+          onChange={(value: AssetSortType) =>
+            onChange({ ...filter, sortBy: value })
+          }
+          classNames={inputClasses}
+        />
+      </Grid.Col>
+      <Grid.Col span={'content'}>
+        <span>{t('sortReverse')}</span>
+        <Switch
+          checked={filter.sortReverse}
+          onChange={(value) =>
+            onChange({ ...filter, sortReverse: value.currentTarget.checked })
+          }
+        />
+      </Grid.Col>
+    </Grid>
   )
 }
-AssetsSort.displayName = 'AssetsSort'
+AssetsViewSort.displayName = 'AssetsViewSort'
 
-export function useAssetsSort() {
-  const [choosenAssetSort] = useAtom(assetSortChoosedAtom)
-  const [choosenAssetSortReverse] = useAtom(assetSortReverseAtom)
-
+export function useAssetsViewSort(filter: AssetsViewSortFilter) {
   function assetSortFunction(a: UserRealtoken, b: UserRealtoken) {
     const value = getAssetSortValue(a, b)
-    return choosenAssetSortReverse ? value * -1 : value
+    return filter.sortReverse ? value * -1 : value
   }
   function getAssetSortValue(a: UserRealtoken, b: UserRealtoken) {
-    switch (choosenAssetSort) {
+    switch (filter.sortBy) {
       case AssetSortType.VALUE:
         return b.value - a.value
       case AssetSortType.APR:

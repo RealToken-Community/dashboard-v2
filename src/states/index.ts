@@ -1,30 +1,32 @@
 import { atomWithStorage } from 'jotai/utils'
 
-import { AssetSortType, AssetViewType } from 'src/components/assetsView/types'
-import { AssetSubsidyType } from 'src/components/assetsView/types'
-import { Currency } from 'src/types/Currencies'
+import {
+  AssetSortType,
+  AssetSubsidyType,
+  AssetUserStatusType,
+  AssetViewType,
+} from 'src/components/assetsView/types'
 
 export const assetViewChoosedAtom = atomWithStorage<AssetViewType>(
   'displayChoosed',
   AssetViewType.GRID
 )
 
-export const assetSubsidyChoosedAtom = atomWithStorage<AssetSubsidyType>(
-  'subsidyChoosed',
-  AssetSubsidyType.ALL
-)
+export interface AssetsViewFilterType {
+  sortBy: AssetSortType
+  sortReverse: boolean
+  subsidy: AssetSubsidyType
+  userStatus: AssetUserStatusType
+}
 
-export const assetSortChoosedAtom = atomWithStorage<AssetSortType>(
-  'sortChoosed',
-  AssetSortType.VALUE
-)
+export const assetsViewDefaultFilter: AssetsViewFilterType = {
+  sortBy: AssetSortType.VALUE,
+  sortReverse: false,
+  subsidy: AssetSubsidyType.ALL,
+  userStatus: AssetUserStatusType.OWNED,
+}
 
-export const assetSortReverseAtom = atomWithStorage<boolean>(
-  'sortReverse',
-  false
-)
-
-export const userCurrencyAtom = atomWithStorage<Currency>(
-  'userCurrency',
-  Currency.USD
+export const assetsViewFilterAtom = atomWithStorage<AssetsViewFilterType>(
+  'assetsViewFilter',
+  assetsViewDefaultFilter
 )

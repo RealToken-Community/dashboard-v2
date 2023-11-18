@@ -7,11 +7,11 @@ import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { useInputStyles } from '../inputs/useInputStyles'
 
-interface AssetsSearchProps {
+interface AssetsViewSearchProps {
   value: string
   onChange: (event: string) => void
 }
-export const AssetsSearch: FC<AssetsSearchProps> = (props) => {
+export const AssetsViewSearch: FC<AssetsViewSearchProps> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetView' })
   const { classes: inputClasses } = useInputStyles()
 
@@ -26,9 +26,9 @@ export const AssetsSearch: FC<AssetsSearchProps> = (props) => {
     />
   )
 }
-AssetsSearch.displayName = 'AssetsSearch'
+AssetsViewSearch.displayName = 'AssetsViewSearch'
 
-export function useAssetsSearch() {
+export function useAssetsViewSearch() {
   const [assetSearch, setAssetSearch] = useState('')
 
   const cleanSearch = useMemo(

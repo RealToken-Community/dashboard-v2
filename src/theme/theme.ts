@@ -6,6 +6,7 @@ export const modalStyles: ModalProps['styles'] = {
     width: 'auto',
     maxWidth: 'calc(100vw - 20px - 32px)',
     padding: '10px !important',
+    overflowY: 'unset !important' as 'unset',
   },
 }
 

@@ -10,6 +10,7 @@ import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'
 
 export interface UserRealtoken extends Realtoken {
   id: string
+  isWhitelisted: boolean
   amount: number
   value: number
   balance: Record<
@@ -46,13 +47,17 @@ function getRealtokenBalances(
 }
 
 export const selectUserRealtokens = createSelector(
+  (state: RootState) => state.settings.user,
   selectRealtokens,
   (state: RootState) => state.wallets.balances,
-  (realtokens, walletBalances) =>
-    realtokens.map((realtoken) => {
+  (user, realtokens, walletBalances) =>
+    realtokens.map<UserRealtoken>((realtoken) => {
       const balances = getRealtokenBalances(realtoken, walletBalances)
       return {
         ...realtoken,
+        isWhitelisted: (user?.whitelistAttributeKeys ?? []).includes(
+          realtoken.tokenIdRules.toString()
+        ),
         id: realtoken.uuid,
         balance: balances,
         amount: _sumBy(Object.values(balances), 'amount'),

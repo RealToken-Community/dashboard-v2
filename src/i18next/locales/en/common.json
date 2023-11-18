@@ -83,13 +83,31 @@
       "grid": "Grid"
     }
   },
+  "assetsViewFilterButton": {
+    "filter": "Advanced filters"
+  },
+  "assetsViewFilterModal": {
+    "submit": "Submit",
+    "close": "Close"
+  },
   "assetSubsidy": {
     "label": "Subsidized rent",
     "options": {
       "all": "No filtered",
-      "fullySubsidized": "Fully subsidized",
-      "subsidized": "Subsidized",
+      "fullySubsidized": "Subsidized",
+      "subsidized": "Partially subsidized",
       "notSubsidized": "Not subsidized"
+    }
+  },
+  "assetUserStatus": {
+    "label": "Properties",
+    "options": {
+      "all": "All",
+      "owned": "Owned",
+      "whitelisted": "Whitelisted",
+      "whitelistedNotOwned": "Whitelisted not owned",
+      "notOwned": "Not owned",
+      "notWhitelisted": "Not whitelisted"
     }
   },
   "assetCard": {

@@ -83,13 +83,31 @@
       "grid": "Carte"
     }
   },
+  "assetsViewFilterButton": {
+    "filter": "Filtres avancés"
+  },
+  "assetsViewFilterModal": {
+    "submit": "Valider",
+    "close": "Fermer"
+  },
   "assetSubsidy": {
     "label": "Loyers subventionnés",
     "options": {
       "all": "Non filtrés",
-      "fullySubsidized": "Entièrement subventionnés",
-      "subsidized": "Subventionnés",
+      "fullySubsidized": "Subventionnés",
+      "subsidized": "Partiellement subventionnés",
       "notSubsidized": "Non subventionnés"
+    }
+  },
+  "assetUserStatus": {
+    "label": "Propriétés",
+    "options": {
+      "all": "Toutes",
+      "owned": "Possédées",
+      "whitelisted": "Whitelistées",
+      "whitelistedNotOwned": "Whitelistées non possédées",
+      "notOwned": "Non possédées",
+      "notWhitelisted": "Non whitelistées"
     }
   },
   "assetCard": {
