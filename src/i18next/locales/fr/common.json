@@ -127,6 +127,16 @@
       "notAvailable": "Non"
     }
   },
+  "assetUserProtocol": {
+    "label": "Possédées sur",
+    "options": {
+      "all": "Tous",
+      "ethereum": "Ethereum",
+      "gnosis": "Gnosis",
+      "rmm": "RMM",
+      "levinSwap": "LevinSwap"
+    }
+  },
   "assetCard": {
     "tokens": "Tokens",
     "apr": "Rendement annuel",

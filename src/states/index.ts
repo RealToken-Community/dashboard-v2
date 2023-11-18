@@ -5,6 +5,7 @@ import {
   AssetRmmStatusType,
   AssetSortType,
   AssetSubsidyType,
+  AssetUserProtocolType,
   AssetUserStatusType,
   AssetViewType,
 } from 'src/components/assetsView/types'
@@ -21,6 +22,7 @@ export interface AssetsViewFilterType {
   userStatus: AssetUserStatusType
   rentStatus: AssetRentStatusType
   rmmStatus: AssetRmmStatusType
+  userProtocol: AssetUserProtocolType
 }
 
 export const assetsViewDefaultFilter: AssetsViewFilterType = {
@@ -30,6 +32,7 @@ export const assetsViewDefaultFilter: AssetsViewFilterType = {
   userStatus: AssetUserStatusType.OWNED,
   rentStatus: AssetRentStatusType.ALL,
   rmmStatus: AssetRmmStatusType.ALL,
+  userProtocol: AssetUserProtocolType.ALL,
 }
 
 export const assetsViewFilterAtom = atomWithStorage<AssetsViewFilterType>(

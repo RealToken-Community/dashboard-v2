@@ -7,6 +7,7 @@ import { useAssetsViewRentStatusFilter } from './AssetsViewRentStatusFilter'
 import { useAssetsViewRmmStatusFilter } from './AssetsViewRmmStatusFilter'
 import { useAssetsViewSort } from './AssetsViewSort'
 import { useAssetsViewSubsidyFilter } from './AssetsViewSubsidyFilter'
+import { useAssetsViewUserProtocolFilter } from './AssetsViewUserProtocolFilter'
 import { useAssetsViewUserStatusFilter } from './AssetsViewUserStatusFilter'
 
 export function useAssetsViewFilters() {
@@ -22,10 +23,13 @@ export function useAssetsViewFilters() {
     useAssetsViewRentStatusFilter(activeFilter)
   const { assetRmmStatusFilterFunction } =
     useAssetsViewRmmStatusFilter(activeFilter)
+  const { assetUserProtocolFilterFunction } =
+    useAssetsViewUserProtocolFilter(activeFilter)
 
   function assetsViewFilterFunction(tokenList: UserRealtoken[]) {
     return tokenList
       .filter(assetUserStatusFilterFunction)
+      .filter(assetUserProtocolFilterFunction)
       .filter(assetRentStatusFilterFunction)
       .filter(assetSubsidyFilterFunction)
       .filter(assetRmmStatusFilterFunction)

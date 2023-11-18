@@ -127,6 +127,16 @@
       "notAvailable": "No"
     }
   },
+  "assetUserProtocol": {
+    "label": "Owned on",
+    "options": {
+      "all": "All",
+      "ethereum": "Ethereum",
+      "gnosis": "Gnosis",
+      "rmm": "RMM",
+      "levinSwap": "LevinSwap"
+    }
+  },
   "assetCard": {
     "tokens": "Tokens",
     "apr": "APR",
