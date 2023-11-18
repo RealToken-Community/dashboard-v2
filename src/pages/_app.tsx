@@ -10,14 +10,13 @@ import {
   CHAINS,
   ChainSelectConfig,
   ChainsID,
+  ConnectorsAvailable,
   LanguageInit,
   Chain as RealtChains,
   Web3Providers,
   getConnectors,
   getReadOnlyConnector,
   getWalletConnectV2,
-  gnosisHooks,
-  gnosisSafe,
   initLanguage,
   metaMask,
   metaMaskHooks,
@@ -57,11 +56,10 @@ const walletConnect = getWalletConnectV2(
 )
 
 const libraryConnectors = getConnectors({
-  metamask: [metaMask, metaMaskHooks],
-  gnosisSafe: [gnosisSafe, gnosisHooks],
   readOnly: readOnly,
+  metamask: [metaMask, metaMaskHooks],
   walletConnectV2: walletConnect,
-})
+} as unknown as ConnectorsAvailable)
 
 const App = ({ Component, pageProps, colorScheme }: AppProps) => {
   function scrollToTop() {

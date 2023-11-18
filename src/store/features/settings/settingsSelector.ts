@@ -1,3 +1,5 @@
+import { createSelector } from '@reduxjs/toolkit'
+
 import { RootState } from 'src/store/store'
 
 export const selectIsInitialized = (state: RootState): boolean =>
@@ -10,16 +12,13 @@ export const selectIsLoading = (state: RootState): boolean =>
   state.currencies.isLoading
 
 export const selectAddressList = (state: RootState): string[] =>
-  state.settings.addressList
+  state.settings.user?.addressList ?? []
 
-export const selectCleanedAddressList = (state: RootState): string[] =>
-  Array.from(
-    new Set(
-      state.settings.addressList
-        .filter((item) => item !== '')
-        .map((item) => item.toLowerCase())
-    )
-  )
+export const selectCleanedAddressList = createSelector(
+  selectAddressList,
+  (addressList) =>
+    Array.from(new Set(addressList.map((item) => item.toLowerCase())))
+)
 
 export const selectUserCurrency = (state: RootState): string =>
   state.settings.userCurrency

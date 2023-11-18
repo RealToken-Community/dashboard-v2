@@ -38,7 +38,7 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
   useEffect(() => {
     if (isInitialized && addressList.length === 0) {
-      modals.openContextModal('manageWallets', { innerProps: {} })
+      modals.openContextModal('web3Wallets', { innerProps: {} })
     }
   }, [isInitialized]) // eslint-disable-line react-hooks/exhaustive-deps
 
