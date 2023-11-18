@@ -2,15 +2,13 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
-import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 import { APIRealTokenRentalType } from 'src/types/APIRealToken'
 
 import { Divider } from '../commons'
 import { AssetPageTable } from './assetPageTable'
 
-export const AssetPagePropertyTab: FC<{ data: OwnedRealtoken }> = ({
-  data,
-}) => {
+export const AssetPagePropertyTab: FC<{ data: UserRealtoken }> = ({ data }) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetPage.property' })
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
 

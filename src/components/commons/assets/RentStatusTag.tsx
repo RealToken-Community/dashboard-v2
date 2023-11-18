@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { Badge } from '@mantine/core'
 
-import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
-export const RentStatusTag: FC<{ value: OwnedRealtoken }> = (props) => {
+export const RentStatusTag: FC<{ value: UserRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
   switch (props.value.rentStatus) {

@@ -2,11 +2,11 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
-import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { AssetPageTable } from './assetPageTable'
 
-export const AssetPageMainTab: FC<{ data: OwnedRealtoken }> = ({ data }) => {
+export const AssetPageMainTab: FC<{ data: UserRealtoken }> = ({ data }) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetPage.main' })
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const lowValue = '< ' + useCurrencyValue(0.01)

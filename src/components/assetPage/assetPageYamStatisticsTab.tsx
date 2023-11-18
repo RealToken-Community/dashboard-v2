@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { GetYamStatistics, YamStatistics } from 'src/repositories'
-import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { AssetPageTable } from './assetPageTable'
 
 const YamStatisticsTable: FC<{
-  data: OwnedRealtoken
+  data: UserRealtoken
   statistics: YamStatistics
 }> = ({ data, statistics }) => {
   const { t } = useTranslation('common', {
@@ -43,7 +43,7 @@ const YamStatisticsTable: FC<{
     />
   )
 }
-export const AssetPageYamStatisticsTab: FC<{ data: OwnedRealtoken }> = ({
+export const AssetPageYamStatisticsTab: FC<{ data: UserRealtoken }> = ({
   data,
 }) => {
   const [statistics, setStatistics] = useState<YamStatistics | null>(null)

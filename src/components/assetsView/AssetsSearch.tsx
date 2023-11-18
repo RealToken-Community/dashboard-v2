@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { TextInput } from '@mantine/core'
 
-import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { useInputStyles } from '../inputs/useInputStyles'
 
@@ -36,7 +36,7 @@ export function useAssetsSearch() {
     [assetSearch]
   )
 
-  function assetSearchFunction(realtoken: OwnedRealtoken) {
+  function assetSearchFunction(realtoken: UserRealtoken) {
     return (
       !cleanSearch ||
       realtoken.shortName.toLowerCase().includes(cleanSearch) ||

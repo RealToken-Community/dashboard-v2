@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Badge, Card, Group, createStyles } from '@mantine/core'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
-import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import {
   Divider,
@@ -57,7 +57,7 @@ const useStyles = createStyles({
 })
 
 interface AssetCardProps {
-  value: OwnedRealtoken
+  value: UserRealtoken
   onClick?: (id: string) => unknown
 }
 

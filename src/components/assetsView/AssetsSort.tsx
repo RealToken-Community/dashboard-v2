@@ -6,7 +6,7 @@ import { Select, Switch } from '@mantine/core'
 import { useAtom } from 'jotai'
 
 import { assetSortChoosedAtom, assetSortReverseAtom } from 'src/states'
-import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { useInputStyles } from '../inputs/useInputStyles'
 import { AssetSortType } from './types'
@@ -62,11 +62,11 @@ export function useAssetsSort() {
   const [choosenAssetSort] = useAtom(assetSortChoosedAtom)
   const [choosenAssetSortReverse] = useAtom(assetSortReverseAtom)
 
-  function assetSortFunction(a: OwnedRealtoken, b: OwnedRealtoken) {
+  function assetSortFunction(a: UserRealtoken, b: UserRealtoken) {
     const value = getAssetSortValue(a, b)
     return choosenAssetSortReverse ? value * -1 : value
   }
-  function getAssetSortValue(a: OwnedRealtoken, b: OwnedRealtoken) {
+  function getAssetSortValue(a: UserRealtoken, b: UserRealtoken) {
     switch (choosenAssetSort) {
       case AssetSortType.VALUE:
         return b.value - a.value

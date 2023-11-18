@@ -6,9 +6,9 @@ import { useRouter } from 'next/router'
 import { Anchor, ScrollArea, Table } from '@mantine/core'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
-import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
-export const AssetTable: FC<{ realtokens: OwnedRealtoken[] }> = (props) => {
+export const AssetTable: FC<{ realtokens: UserRealtoken[] }> = (props) => {
   return (
     <ScrollArea>
       <Table>
@@ -45,7 +45,7 @@ const AssetTableHeader: FC = () => {
 }
 AssetTableHeader.displayName = 'AssetTableHeader'
 
-const AssetTableRow: FC<{ value: OwnedRealtoken }> = (props) => {
+const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
   const router = useRouter()
 

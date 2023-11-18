@@ -7,7 +7,7 @@ import { Box, Card, Title } from '@mantine/core'
 import _sumBy from 'lodash/sumBy'
 
 import {
-  OwnedRealtoken,
+  UserRealtoken,
   selectOwnedRealtokens,
   selectOwnedRealtokensRents,
   selectOwnedRealtokensValue,
@@ -20,7 +20,7 @@ import {
   StringField,
 } from '../../commons'
 
-const RentedUnitsField: FC<{ label: string; realtokens: OwnedRealtoken[] }> = (
+const RentedUnitsField: FC<{ label: string; realtokens: UserRealtoken[] }> = (
   props
 ) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
@@ -46,14 +46,16 @@ RentedUnitsField.displayName = 'RentedUnitsField'
 export const PropertiesCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'propertiesCard' })
 
-  const value = useSelector(selectOwnedRealtokensValue)
+  const realtokensValue = useSelector(selectOwnedRealtokensValue)
   const realtokens = useSelector(selectOwnedRealtokens)
   const rents = useSelector(selectOwnedRealtokensRents)
 
   const sumRealtokens = _sumBy(realtokens, 'amount')
   const sumProperties = realtokens.length
 
-  const meanValue = value ? value / sumProperties : 0
+  const meanValue = realtokensValue.total
+    ? realtokensValue.total / sumProperties
+    : 0
   const meanRents = rents.yearly ? rents.yearly / sumProperties : 0
 
   return (

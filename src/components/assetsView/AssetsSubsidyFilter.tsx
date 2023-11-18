@@ -6,7 +6,7 @@ import { Select } from '@mantine/core'
 import { useAtom } from 'jotai'
 
 import { assetSubsidyChoosedAtom } from 'src/states'
-import { Realtoken } from 'src/store/features/realtokens/realtokensSelector'
+import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { useInputStyles } from '../inputs/useInputStyles'
 import { AssetSubsidyType } from './types'
@@ -55,7 +55,7 @@ AssetsSubsidyFilter.displayName = 'AssetsSubsidyFilter'
 export function useAssetsSubsidyFilter() {
   const [choosenSubsidyType] = useAtom(assetSubsidyChoosedAtom)
 
-  return (asset: Realtoken) => {
+  return (asset: UserRealtoken) => {
     switch (choosenSubsidyType) {
       case AssetSubsidyType.FULLY_SUBSIDIZED:
         return asset.subsidyStatus === 'yes' && !!asset.subsidyStatusValue

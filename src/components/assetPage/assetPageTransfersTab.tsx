@@ -8,7 +8,7 @@ import {
   TransferOrigin,
 } from 'src/repositories/transferts.repository'
 import { selectAddressList } from 'src/store/features/settings/settingsSelector'
-import { OwnedRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 function getTransferTitle(item: RealTokenTransfer) {
   const { t } = useTranslation('common', { keyPrefix: 'assetPage.transfers' })
@@ -77,7 +77,7 @@ const TransferRow: FC<{ item: RealTokenTransfer }> = ({ item }) => {
   )
 }
 
-export const AssetPageTransfersTab: FC<{ data: OwnedRealtoken }> = ({
+export const AssetPageTransfersTab: FC<{ data: UserRealtoken }> = ({
   data,
 }) => {
   const addressList = useSelector(selectAddressList)
