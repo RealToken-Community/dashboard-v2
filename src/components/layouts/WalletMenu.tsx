@@ -1,47 +1,28 @@
-import { FC, forwardRef, useCallback } from 'react'
+import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import {
+  ActionIcon,
   Badge,
   Box,
   Button,
-  ButtonProps,
   Flex,
   Menu,
   createStyles,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useModals } from '@mantine/modals'
-import { IconChevronDown, IconChevronUp } from '@tabler/icons'
+import { IconWallet } from '@tabler/icons'
 import { useWeb3React } from '@web3-react/core'
 
 import { utils as EthersUtils } from 'ethers'
 
 import { useAppDispatch } from 'src/hooks/react-hooks'
-import {
-  selectAddressList,
-  selectUser,
-} from 'src/store/features/settings/settingsSelector'
+import { selectUser } from 'src/store/features/settings/settingsSelector'
 import { setUserAddress } from 'src/store/features/settings/settingsSlice'
-import { FRC } from 'src/types'
 
 import { IntegerField, StringField } from '../commons'
-
-const WalletButton: FRC<
-  ButtonProps & { addressList: string[] },
-  HTMLButtonElement
-> = forwardRef(({ addressList, ...props }, ref) => {
-  const { t } = useTranslation('common', { keyPrefix: 'wallets' })
-  const count = addressList.filter((item) => item).length
-
-  return (
-    <Button {...props} ref={ref} aria-label={t('value', { count })}>
-      {t('value', { count })}
-    </Button>
-  )
-})
-WalletButton.displayName = 'WalletButton'
 
 interface WalletItemProps {
   address: string
@@ -103,14 +84,10 @@ const ConnectWalletButton: FC<{ onClick?: () => void }> = (props) => {
     modals.openContextModal('web3Wallets', { innerProps: {} })
   }
 
-  return (
-    <Box ta={'center'} mb={'xs'} mt={'sm'}>
-      {account ? (
-        <Button onClick={onDisconnect}>{t('disconnectWallet')}</Button>
-      ) : (
-        <Button onClick={openWalletModal}>{t('connectWallet')}</Button>
-      )}
-    </Box>
+  return account ? (
+    <Button onClick={onDisconnect}>{t('disconnectWallet')}</Button>
+  ) : (
+    <Button onClick={openWalletModal}>{t('connectWallet')}</Button>
   )
 }
 ConnectWalletButton.displayName = 'ConnectWalletButton'
@@ -118,9 +95,11 @@ ConnectWalletButton.displayName = 'ConnectWalletButton'
 export const WalletMenu: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'walletMenu' })
   const [isOpen, handlers] = useDisclosure(false)
-  const addressList = useSelector(selectAddressList)
   const user = useSelector(selectUser)
-  const cleanedAddressList = addressList.filter((item) => item)
+
+  if (!user) {
+    return <ConnectWalletButton />
+  }
 
   return (
     <Menu
@@ -130,16 +109,9 @@ export const WalletMenu: FC = () => {
       onClose={handlers.close}
     >
       <Menu.Target>
-        <WalletButton
-          addressList={addressList}
-          rightIcon={
-            isOpen ? (
-              <IconChevronUp size={16} stroke={3} />
-            ) : (
-              <IconChevronDown size={16} stroke={3} />
-            )
-          }
-        />
+        <ActionIcon size={36} color={'brand'}>
+          <IconWallet size={20} aria-label={'Wallet'} />
+        </ActionIcon>
       </Menu.Target>
       <Menu.Dropdown>
         {user ? (
@@ -156,15 +128,17 @@ export const WalletMenu: FC = () => {
               />
             </Box>
 
-            {cleanedAddressList.length ? <Menu.Divider my={'xs'} /> : ''}
+            <Menu.Divider my={'xs'} />
 
-            <WalletItemList addressList={cleanedAddressList} />
+            <WalletItemList addressList={user.addressList} />
 
-            {cleanedAddressList.length ? <Menu.Divider mt={'xs'} /> : ''}
+            <Menu.Divider mt={'xs'} />
           </>
         ) : undefined}
 
-        <ConnectWalletButton onClick={handlers.close} />
+        <Box ta={'center'} mb={'xs'} mt={'sm'}>
+          <ConnectWalletButton onClick={handlers.close} />
+        </Box>
       </Menu.Dropdown>
     </Menu>
   )

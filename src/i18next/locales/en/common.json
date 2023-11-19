@@ -166,12 +166,6 @@
     "rentedUnits": "Rented units",
     "propertyValue": "Property value"
   },
-  "wallets": {
-    "value_zero": "No wallet",
-    "value_one": "1 wallet",
-    "value_other": "{{count}} wallets",
-    "manage": "Manage wallets"
-  },
   "assetPage": {
     "home": "Home",
     "viewOnRealt": "View on RealT",

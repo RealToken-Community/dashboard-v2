@@ -166,12 +166,6 @@
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété"
   },
-  "wallets": {
-    "value_zero": "Aucun portefeuille",
-    "value_one": "1 portefeuille",
-    "value_other": "{{count}} portefeuilles",
-    "manage": "Gérer les portefeuilles"
-  },
   "assetPage": {
     "home": "Accueil",
     "viewOnRealt": "Voir sur RealT",

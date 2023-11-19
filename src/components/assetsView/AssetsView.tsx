@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Flex, Grid } from '@mantine/core'
+import { Grid } from '@mantine/core'
 
 import { selectUserRealtokens } from 'src/store/features/wallets/walletsSelector'
 
@@ -26,20 +26,18 @@ export const AssetsView: FC = () => {
 
   return (
     <>
-      <Grid>
+      <Grid align={'center'}>
         <Grid.Col
-          xs={12}
+          span={'auto'}
           sm={'content'}
           style={{ width: '300px', maxWidth: '100%' }}
         >
           <AssetsViewSearch {...assetSearchProps} />
         </Grid.Col>
-        <Grid.Col span={'auto'}>
-          <Flex align={'center'} gap={'sm'}>
-            <AssetsViewFilterButton />
-          </Flex>
+        <Grid.Col span={'content'} sm={'auto'} pl={'0px'}>
+          <AssetsViewFilterButton />
         </Grid.Col>
-        <Grid.Col xs={12} sm={'content'}>
+        <Grid.Col span={12} sm={'content'}>
           <AssetsViewSelect />
         </Grid.Col>
       </Grid>
