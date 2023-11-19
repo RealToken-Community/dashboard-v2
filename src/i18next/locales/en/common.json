@@ -13,14 +13,14 @@
     "light": "Light",
     "dark": "Dark"
   },
-  "walletModal": {
-    "address": "Address {{value}}",
-    "close": "Close",
-    "submit": "Submit"
-  },
   "walletButton": {
     "connectWallet": "Connect wallet",
     "disconnectWallet": "Disconnect wallet"
+  },
+  "walletMenu": {
+    "userId": "Identifier",
+    "addresses": "Addresses",
+    "whitelists": "Whitelists"
   },
   "numbers": {
     "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} {{symbol}}",

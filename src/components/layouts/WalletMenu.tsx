@@ -2,16 +2,31 @@ import { FC, forwardRef, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { Badge, Box, Button, ButtonProps, Flex, Menu } from '@mantine/core'
+import {
+  Badge,
+  Box,
+  Button,
+  ButtonProps,
+  Flex,
+  Menu,
+  createStyles,
+} from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useModals } from '@mantine/modals'
 import { IconChevronDown, IconChevronUp } from '@tabler/icons'
 import { useWeb3React } from '@web3-react/core'
 
+import { utils as EthersUtils } from 'ethers'
+
 import { useAppDispatch } from 'src/hooks/react-hooks'
-import { selectAddressList } from 'src/store/features/settings/settingsSelector'
+import {
+  selectAddressList,
+  selectUser,
+} from 'src/store/features/settings/settingsSelector'
 import { setUserAddress } from 'src/store/features/settings/settingsSlice'
 import { FRC } from 'src/types'
+
+import { IntegerField, StringField } from '../commons'
 
 const WalletButton: FRC<
   ButtonProps & { addressList: string[] },
@@ -32,10 +47,23 @@ interface WalletItemProps {
   address: string
 }
 
+const useStyles = createStyles({
+  address: {
+    span: { fontFamily: 'monospace', fontSize: '12px' },
+  },
+})
+
 const WalletItem: FC<WalletItemProps> = (props) => {
+  const { classes } = useStyles()
   return (
-    <Badge size={'md'} variant={'dot'} fullWidth={true}>
-      {props.address}
+    <Badge
+      size={'md'}
+      variant={'dot'}
+      fullWidth={true}
+      className={classes.address}
+      style={{ textTransform: 'none', justifyContent: 'space-between' }}
+    >
+      {EthersUtils.getAddress(props.address)}
     </Badge>
   )
 }
@@ -88,8 +116,10 @@ const ConnectWalletButton: FC<{ onClick?: () => void }> = (props) => {
 ConnectWalletButton.displayName = 'ConnectWalletButton'
 
 export const WalletMenu: FC = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'walletMenu' })
   const [isOpen, handlers] = useDisclosure(false)
   const addressList = useSelector(selectAddressList)
+  const user = useSelector(selectUser)
   const cleanedAddressList = addressList.filter((item) => item)
 
   return (
@@ -112,9 +142,27 @@ export const WalletMenu: FC = () => {
         />
       </Menu.Target>
       <Menu.Dropdown>
-        <WalletItemList addressList={addressList} />
+        {user ? (
+          <>
+            <Box mx={'sm'} mt={'xs'}>
+              <StringField label={t('userId')} value={user.id} />
+              <IntegerField
+                label={t('addresses')}
+                value={user.addressList.length}
+              />
+              <IntegerField
+                label={t('whitelists')}
+                value={user.whitelistAttributeKeys.length}
+              />
+            </Box>
 
-        {cleanedAddressList.length ? <Menu.Divider mt={'xs'} /> : ''}
+            {cleanedAddressList.length ? <Menu.Divider my={'xs'} /> : ''}
+
+            <WalletItemList addressList={cleanedAddressList} />
+
+            {cleanedAddressList.length ? <Menu.Divider mt={'xs'} /> : ''}
+          </>
+        ) : undefined}
 
         <ConnectWalletButton onClick={handlers.close} />
       </Menu.Dropdown>

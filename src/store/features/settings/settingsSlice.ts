@@ -9,7 +9,7 @@ import { Currency } from 'src/types/Currencies'
 const USER_LS_KEY = 'store:settings/user'
 const USER_CURRENCY_LS_KEY = 'store:settings/userCurrency'
 
-interface User {
+export interface User {
   id: string
   mainAddress: string
   addressList: string[]
