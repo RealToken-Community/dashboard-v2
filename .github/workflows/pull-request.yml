@@ -1,7 +1,7 @@
 name: Test merge requests
 
 on:
-  merge_request:
+  pull_request:
     branches:
       - develop
 
