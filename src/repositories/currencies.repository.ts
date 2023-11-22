@@ -24,7 +24,7 @@ function getChainlinkHandler(options: {
       Number(ethers.utils.formatUnits(await contract.latestAnswer(), decimals)),
     {
       duration: 1000 * 60 * 60 * 24, // 24 hours
-      key: priceFeedContract,
+      key: `getChainlinkHandler-${priceFeedContract}`,
       usePreviousValueOnError: true,
     }
   )
