@@ -3,7 +3,7 @@ name: Test and deploy to prod
 on:
   push:
     branches:
-      - prod
+      - master
 
 jobs:
   validate:
