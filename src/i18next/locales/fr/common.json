@@ -89,7 +89,8 @@
   },
   "assetsViewFilterModal": {
     "submit": "Valider",
-    "close": "Fermer"
+    "close": "Fermer",
+    "resetFilter": "Réinitialiser"
   },
   "assetSubsidy": {
     "label": "Loyers subventionnés",

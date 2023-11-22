@@ -19,6 +19,21 @@ import { AssetsViewSubsidyFilter } from './AssetsViewSubsidyFilter'
 import { AssetsViewUserProtocolFilter } from './AssetsViewUserProtocolFilter'
 import { AssetsViewUserStatusFilter } from './AssetsViewUserStatusFilter'
 
+const ResetFilterButton: FC<{ onClick?: () => void }> = ({ onClick }) => {
+  const { t } = useTranslation('common', { keyPrefix: 'assetsViewFilterModal' })
+  const [, applyFilter] = useAtom(assetsViewFilterAtom)
+  function reset() {
+    applyFilter(assetsViewDefaultFilter)
+    onClick?.()
+  }
+
+  return (
+    <Button onClick={reset} variant={'subtle'}>
+      {t('resetFilter')}
+    </Button>
+  )
+}
+
 export const AssetsViewFilterModal: FC<ContextModalProps> = ({
   context,
   id,
@@ -82,11 +97,16 @@ export const AssetsViewFilterModal: FC<ContextModalProps> = ({
           }}
         />
       </Flex>
-      <Flex gap={'lg'} justify={'center'}>
-        <Button onClick={onClose} variant={'subtle'}>
-          {t('close')}
-        </Button>
-        <Button onClick={onSubmit}>{t('submit')}</Button>
+      <Flex justify={'space-between'}>
+        <ResetFilterButton onClick={onClose} />
+        <div>
+          <Flex gap={'sm'}>
+            <Button onClick={onClose} variant={'subtle'}>
+              {t('close')}
+            </Button>
+            <Button onClick={onSubmit}>{t('submit')}</Button>
+          </Flex>
+        </div>
       </Flex>
     </Stack>
   )

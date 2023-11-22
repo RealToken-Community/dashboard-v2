@@ -89,7 +89,8 @@
   },
   "assetsViewFilterModal": {
     "submit": "Submit",
-    "close": "Close"
+    "close": "Close",
+    "resetFilter": "Reset"
   },
   "assetSubsidy": {
     "label": "All",
