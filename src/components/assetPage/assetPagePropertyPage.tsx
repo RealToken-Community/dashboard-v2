@@ -75,7 +75,7 @@ export const AssetPagePropertyTab: FC<{ data: UserRealtoken }> = ({ data }) => {
           {
             label: t('subsidyBy'),
             value: subsidyBy ?? '',
-            isHidden: subsidyBy === 'no',
+            isHidden: (subsidyBy ?? 'no') === 'no',
           },
           {
             label: t('rentStartDate'),
@@ -88,7 +88,7 @@ export const AssetPagePropertyTab: FC<{ data: UserRealtoken }> = ({ data }) => {
           {
             label: t('subsidyShare'),
             value: subsidyShare,
-            isHidden: subsidyBy === 'no',
+            isHidden: (subsidyBy ?? 'no') === 'no',
           },
           {
             label: t('grossRentMonth'),
