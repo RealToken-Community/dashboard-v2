@@ -22,6 +22,7 @@ function mergeWalletsPositions(wallets: RmmPosition[]) {
 
       if (existingPosition) {
         existingPosition.amount += position.amount
+        existingPosition.debt += position.debt
       } else {
         acc.push({ ...position })
       }
