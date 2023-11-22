@@ -22,6 +22,7 @@ interface SettingsInitialStateType {
   user?: User
   userCurrency: Currency
   isInitialized: boolean
+  version?: string
 }
 
 const settingsInitialState: SettingsInitialStateType = {
@@ -96,8 +97,9 @@ export const settingsReducers = createReducer(
         const { publicRuntimeConfig } = getConfig() as {
           publicRuntimeConfig?: { version: string }
         }
-        const version = publicRuntimeConfig?.version
-        localStorage.setItem('lastVersionUsed', version ?? '')
+        const version = publicRuntimeConfig?.version ?? ''
+        localStorage.setItem('lastVersionUsed', version)
+        state.version = version
 
         state.isInitialized = true
       })

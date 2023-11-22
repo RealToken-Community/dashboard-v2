@@ -24,7 +24,10 @@ import {
 
 import { setCookie } from 'cookies-next'
 
-import { selectUserCurrency } from 'src/store/features/settings/settingsSelector'
+import {
+  selectUserCurrency,
+  selectVersion,
+} from 'src/store/features/settings/settingsSelector'
 import { userCurrencyChanged } from 'src/store/features/settings/settingsSlice'
 import { Currency } from 'src/types/Currencies'
 import { expiresLocalStorageCaches } from 'src/utils/useCache'
@@ -141,6 +144,7 @@ const RefreshDataButton: FC = () => {
 
 export const SettingsMenu: FC = () => {
   const [isOpen, handlers] = useDisclosure(false)
+  const version = useSelector(selectVersion)
 
   return (
     <Menu
@@ -162,6 +166,14 @@ export const SettingsMenu: FC = () => {
         <ColorSchemeMenuItem />
         <Menu.Divider />
         <RefreshDataButton />
+        <Menu.Divider />
+        <Box
+          ta={'center'}
+          style={{
+            fontStyle: 'italic',
+            fontSize: '12px',
+          }}
+        >{`v${version}`}</Box>
       </Menu.Dropdown>
     </Menu>
   )
