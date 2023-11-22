@@ -210,7 +210,9 @@
       "propertyStories": "Nombre d'étages",
       "propertyUnits": "Nombre de logements",
       "lotSize": "Taille du terrain",
-      "interiorSize": "Taille intérieure"
+      "interiorSize": "Taille intérieure",
+      "subsidyBy": "Subvention",
+      "subsidyShare": "Loyer subventionné"
     },
     "transfers": {
       "swapcatIn": "Achat sur Swapcat",

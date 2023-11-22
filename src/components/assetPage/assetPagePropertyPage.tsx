@@ -18,6 +18,10 @@ export const AssetPagePropertyTab: FC<{ data: UserRealtoken }> = ({ data }) => {
     [APIRealTokenRentalType.ShortTerm]: t('rentalTypeValue.shortTerm'),
     [APIRealTokenRentalType.LongTerm]: t('rentalTypeValue.longTerm'),
   }
+  const subsidyBy = data.subsidyBy
+  const subsidyShare = tNumbers('percent', {
+    value: (data.subsidyStatusValue / data.grossRentMonth) * 100,
+  })
   const grossRentMonth = useCurrencyValue(data.grossRentMonth)
   const netRentMonth = useCurrencyValue(data.netRentMonth)
   const initialMaintenanceReserve = useCurrencyValue(
@@ -69,12 +73,22 @@ export const AssetPagePropertyTab: FC<{ data: UserRealtoken }> = ({ data }) => {
             value: rentalType[data.rentalType],
           },
           {
+            label: t('subsidyBy'),
+            value: subsidyBy ?? '',
+            isHidden: subsidyBy === 'no',
+          },
+          {
             label: t('rentStartDate'),
             value: rentStartDate.toLocaleDateString(),
           },
           {
             label: t('rentedUnits'),
             value: `${rentedUnits} / ${totalUnits}`,
+          },
+          {
+            label: t('subsidyShare'),
+            value: subsidyShare,
+            isHidden: subsidyBy === 'no',
           },
           {
             label: t('grossRentMonth'),

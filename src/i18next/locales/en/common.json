@@ -210,7 +210,9 @@
       "propertyStories": "Number of stories",
       "propertyUnits": "Number of units",
       "lotSize": "Lot size",
-      "interiorSize": "Interior size"
+      "interiorSize": "Interior size",
+      "subsidyBy": "Subsidy",
+      "subsidyShare": "Rent Subsidized"
     },
     "transfers": {
       "swapcatIn": "Purchase on Swapcat",

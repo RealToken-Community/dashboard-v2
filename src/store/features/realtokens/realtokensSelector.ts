@@ -25,5 +25,8 @@ export const selectRealtokens = createSelector(
       ...item,
       isRmmAvailable: !!item.blockchainAddresses.xDai.rmmPoolAddress,
       rentStatus: getRentStatus(item),
+      // Some sections 8 are not correctly set in the API
+      subsidyBy:
+        item.subsidyBy ?? (item.subsidyStatus !== 'no' ? 'Section 8' : null),
     }))
 )
