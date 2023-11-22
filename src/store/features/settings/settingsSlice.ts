@@ -1,3 +1,5 @@
+import getConfig from 'next/config'
+
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
 import { t } from 'i18next'
@@ -90,6 +92,13 @@ export const settingsReducers = createReducer(
         state.userCurrency = userCurrency
           ? (userCurrency as Currency)
           : Currency.USD
+
+        const { publicRuntimeConfig } = getConfig() as {
+          publicRuntimeConfig?: { version: string }
+        }
+        const version = publicRuntimeConfig?.version
+        localStorage.setItem('lastVersionUsed', version ?? '')
+
         state.isInitialized = true
       })
   }
