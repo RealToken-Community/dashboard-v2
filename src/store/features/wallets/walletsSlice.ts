@@ -7,6 +7,7 @@ import {
 } from 'src/repositories/rmm.repository'
 import { AppDispatch, RootState } from 'src/store/store'
 
+import { Realtoken } from '../realtokens/realtokensSelector'
 import { selectCleanedAddressList } from '../settings/settingsSelector'
 
 interface WalletsInitialStateType {
@@ -41,7 +42,7 @@ const rmmPositionsChanged = createAction<WalletRmmPosition[]>(
 const balancesIsLoading = createAction<boolean>(isLoadingDispatchType)
 
 // THUNKS
-export function fetchWallets() {
+export function fetchWallets(realtokens: Realtoken[]) {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState()
     const isLoading = state.wallets.isLoading
@@ -51,7 +52,7 @@ export function fetchWallets() {
     dispatch({ type: isLoadingDispatchType, payload: true })
     try {
       const [balances, rmmPositions] = await Promise.all([
-        WalletsRepository.getBalances(addressList),
+        WalletsRepository.getBalances(addressList, realtokens),
         RmmRepository.getPositions(addressList),
       ])
       dispatch({ type: balancesChangedDispatchType, payload: balances })

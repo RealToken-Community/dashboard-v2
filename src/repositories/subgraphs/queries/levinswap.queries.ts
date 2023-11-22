@@ -1,14 +1,18 @@
 import { gql } from '@apollo/client'
 
+import { Realtoken } from 'src/store/features/realtokens/realtokensSelector'
 import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
 import { LevinSwapClient } from '../clients'
 
-export async function getLevinSwapBalances(addressList: string[]) {
+export async function getLevinSwapBalances(
+  addressList: string[],
+  realtokens: Realtoken[]
+) {
   const result = await executeQuery(
     addressList.map((item) => item.toLowerCase())
   )
-  return formatBalances(result.data.users)
+  return formatBalances(result.data.users, realtokens)
 }
 
 const executeQuery = useCacheWithLocalStorage(
@@ -64,7 +68,10 @@ interface LevinSwapResult {
   }[]
 }
 
-function formatBalances(users: LevinSwapResult['users']) {
+function formatBalances(
+  users: LevinSwapResult['users'],
+  realtokens: Realtoken[]
+) {
   return users.map((user) => {
     const balances: Record<string, number> = {}
     user.liquidityPositions.forEach((position) => {
@@ -79,11 +86,19 @@ function formatBalances(users: LevinSwapResult['users']) {
         (balances[token1] ?? 0) + parseFloat(position.pair.reserve1) * share
     })
 
+    const isRealtoken = (address: string) =>
+      realtokens.find((item) =>
+        [
+          item.gnosisContract?.toLowerCase(),
+          item.ethereumContract?.toLowerCase(),
+        ].includes(address.toLowerCase())
+      )
+
     return {
       address: user.id,
       balances: Object.entries(balances).map(([address, amount]) => ({
         token: address,
-        amount,
+        amount: amount / 10 ** (isRealtoken(address) ? 18 : 0),
       })),
     }
   })

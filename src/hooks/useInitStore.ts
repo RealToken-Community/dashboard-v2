@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { useWeb3React } from '@web3-react/core'
 
 import { fetchCurrenciesRates } from 'src/store/features/currencies/currenciesSlice'
+import { selectRealtokens } from 'src/store/features/realtokens/realtokensSelector'
 import { fetchRealtokens } from 'src/store/features/realtokens/realtokensSlice'
 import { selectCleanedAddressList } from 'src/store/features/settings/settingsSelector'
 import {
@@ -21,6 +22,7 @@ export default function useInitStore() {
   const dispatch = useAppDispatch()
 
   const addressList = useSelector(selectCleanedAddressList)
+  const realtokens = useSelector(selectRealtokens)
   const { account } = useWeb3React()
 
   useEffect(() => {
@@ -40,9 +42,11 @@ export default function useInitStore() {
 
   useEffect(() => {
     if (addressList.length) {
-      dispatch(fetchWallets())
+      if (realtokens.length) {
+        dispatch(fetchWallets(realtokens))
+      }
     } else {
       dispatch(resetWallets())
     }
-  }, [addressList.length, addresses, dispatch])
+  }, [realtokens, addresses, dispatch])
 }

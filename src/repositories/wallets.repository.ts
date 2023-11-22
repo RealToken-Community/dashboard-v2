@@ -1,3 +1,5 @@
+import { Realtoken } from 'src/store/features/realtokens/realtokensSelector'
+
 import { getLevinSwapBalances } from './subgraphs/queries/levinswap.queries'
 import { getRealtokenBalances } from './subgraphs/queries/realtoken.queries'
 import { getRmmBalances } from './subgraphs/queries/rmm.queries'
@@ -17,16 +19,21 @@ interface WalletBalance {
 export type WalletBalances = Record<WalletType, WalletBalance[]>
 
 export const WalletsRepository = {
-  getBalances: async (addressList: string[]): Promise<WalletBalances> =>
-    getWalletsBalances(addressList),
+  getBalances: async (
+    addressList: string[],
+    realtokens: Realtoken[]
+  ): Promise<WalletBalances> => getWalletsBalances(addressList, realtokens),
 }
 
-async function getWalletsBalances(addressList: string[]) {
+async function getWalletsBalances(
+  addressList: string[],
+  realtokens: Realtoken[]
+) {
   const [realtokenBalances, rmmBalances, levinSwapBalances] = await Promise.all(
     [
       getRealtokenBalances(addressList),
       getRmmBalances(addressList),
-      getLevinSwapBalances(addressList),
+      getLevinSwapBalances(addressList, realtokens),
     ]
   )
 
