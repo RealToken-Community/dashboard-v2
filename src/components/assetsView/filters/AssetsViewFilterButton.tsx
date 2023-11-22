@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button, Indicator } from '@mantine/core'
@@ -15,7 +15,11 @@ export const AssetsViewFilterButton: FC = () => {
   })
   const modals = useModals()
   const [currentFilter] = useAtom(assetsViewFilterAtom)
-  const hasActiveFilter = !_isEqual(currentFilter, assetsViewDefaultFilter)
+  const [hasActiveFilter, setHasActiveFilter] = useState(false)
+
+  useEffect(() => {
+    setHasActiveFilter(!_isEqual(currentFilter, assetsViewDefaultFilter))
+  })
 
   function openModal() {
     modals.openContextModal('assetsViewFilterModal', { innerProps: {} })
