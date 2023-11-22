@@ -19,7 +19,10 @@ import { useWeb3React } from '@web3-react/core'
 import { utils as EthersUtils } from 'ethers'
 
 import { useAppDispatch } from 'src/hooks/react-hooks'
-import { selectUser } from 'src/store/features/settings/settingsSelector'
+import {
+  selectIsInitialized,
+  selectUser,
+} from 'src/store/features/settings/settingsSelector'
 import { setUserAddress } from 'src/store/features/settings/settingsSlice'
 
 import { IntegerField, StringField } from '../commons'
@@ -96,9 +99,16 @@ export const WalletMenu: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'walletMenu' })
   const [isOpen, handlers] = useDisclosure(false)
   const user = useSelector(selectUser)
+  const isInitialized = useSelector(selectIsInitialized)
 
   if (!user) {
-    return <ConnectWalletButton />
+    return isInitialized ? (
+      <ConnectWalletButton />
+    ) : (
+      <ActionIcon size={36} color={'brand'}>
+        <IconWallet size={20} aria-label={'Wallet'} />
+      </ActionIcon>
+    )
   }
 
   return (
