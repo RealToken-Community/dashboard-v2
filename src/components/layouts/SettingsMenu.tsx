@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import {
   ActionIcon,
   Box,
+  Button,
   Center,
   Menu,
   SegmentedControl,
@@ -26,6 +27,7 @@ import { setCookie } from 'cookies-next'
 import { selectUserCurrency } from 'src/store/features/settings/settingsSelector'
 import { userCurrencyChanged } from 'src/store/features/settings/settingsSlice'
 import { Currency } from 'src/types/Currencies'
+import { expiresLocalStorageCaches } from 'src/utils/useCache'
 
 const ColorSchemeMenuItem: FC = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
@@ -121,6 +123,22 @@ const CurrencySelect: FC = () => {
   )
 }
 
+const RefreshDataButton: FC = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'settings' })
+
+  function refresh() {
+    expiresLocalStorageCaches()
+    window.location.reload()
+  }
+  return (
+    <Box ta={'center'}>
+      <Button onClick={refresh} size={'sm'} compact={true} variant={'subtle'}>
+        {t('refreshDataButton')}
+      </Button>
+    </Box>
+  )
+}
+
 export const SettingsMenu: FC = () => {
   const [isOpen, handlers] = useDisclosure(false)
 
@@ -142,6 +160,8 @@ export const SettingsMenu: FC = () => {
         <CurrencySelect />
         <Menu.Divider />
         <ColorSchemeMenuItem />
+        <Menu.Divider />
+        <RefreshDataButton />
       </Menu.Dropdown>
     </Menu>
   )

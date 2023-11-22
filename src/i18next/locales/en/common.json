@@ -11,7 +11,8 @@
     "eur": "Euro (€)",
     "chf": "Swiss franc (CHF)",
     "light": "Light",
-    "dark": "Dark"
+    "dark": "Dark",
+    "refreshDataButton": "Refresh data"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",

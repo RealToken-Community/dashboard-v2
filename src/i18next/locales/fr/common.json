@@ -11,7 +11,8 @@
     "eur": "Euro (€)",
     "chf": "Franc suisse (CHF)",
     "light": "Clair",
-    "dark": "Sombre"
+    "dark": "Sombre",
+    "refreshDataButton": "Actualiser les données"
   },
   "walletButton": {
     "connectWallet": "Connecter mon portefeuille",

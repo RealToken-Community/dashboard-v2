@@ -28,6 +28,52 @@ export function useCache<T>(
   }
 }
 
+const LOCAL_STORAGE_LIST_KEY = 'useCacheWithLocalStorage-list'
+
+function getLocalStorageKeys() {
+  const list = localStorage.getItem(LOCAL_STORAGE_LIST_KEY)
+  if (list) {
+    return JSON.parse(list) as string[]
+  }
+  return []
+}
+function registerLocalStorageKey(key: string) {
+  const keys = getLocalStorageKeys()
+  if (!keys.includes(key)) {
+    localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify([...keys, key]))
+  }
+}
+
+export function clearExpiredLocalStorageCache() {
+  const now = Date.now()
+  const keys = getLocalStorageKeys()
+  keys.forEach((key) => {
+    const cached = localStorage.getItem(key)
+    if (cached) {
+      const { expires } = JSON.parse(cached)
+      if (now > expires) {
+        localStorage.removeItem(key)
+      }
+    }
+  })
+}
+
+export function expiresLocalStorageCaches() {
+  const keys = getLocalStorageKeys()
+  keys.forEach(expiresLocalStorageCache)
+}
+
+export function expiresLocalStorageCache(key: string) {
+  const cached = localStorage.getItem(key)
+  if (cached) {
+    const now = Date.now()
+    const { expires, ...rest } = JSON.parse(cached)
+    if (now < expires) {
+      localStorage.setItem(key, JSON.stringify({ ...rest, expires: now }))
+    }
+  }
+}
+
 export function useCacheWithLocalStorage<T extends unknown[], R>(
   handler: (...args: T) => Promise<R>,
   options: {
@@ -45,6 +91,8 @@ export function useCacheWithLocalStorage<T extends unknown[], R>(
       ? `${options.key}-${args.join('-')}`
       : options.key
 
+    registerLocalStorageKey(storageKey)
+
     if (waitingQueues[storageKey]?.isWaiting) {
       return waitingQueues[storageKey].wait()
     } else {
@@ -53,8 +101,8 @@ export function useCacheWithLocalStorage<T extends unknown[], R>(
 
     const cached = localStorage.getItem(storageKey)
     if (cached) {
-      const { timestamp, value } = JSON.parse(cached)
-      if (now - timestamp < options.duration) {
+      const { expires, value } = JSON.parse(cached)
+      if (now < expires) {
         waitingQueues[storageKey].resolve(value)
         return value as R
       }
@@ -64,7 +112,10 @@ export function useCacheWithLocalStorage<T extends unknown[], R>(
       const result = await handler(...args)
       localStorage.setItem(
         storageKey,
-        JSON.stringify({ timestamp: now, value: result })
+        JSON.stringify({
+          expires: now + options.duration,
+          value: result,
+        })
       )
       waitingQueues[storageKey].resolve(result)
       return result
