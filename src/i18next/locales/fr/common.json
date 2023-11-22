@@ -96,8 +96,12 @@
     "label": "Loyers subventionnés",
     "options": {
       "all": "Tous",
-      "fullySubsidized": "Subventionnés",
-      "subsidized": "Partiellement subventionnés",
+      "subsidized": "Subventionnés",
+      "fullySubsidized": "Entièrement subventionnés",
+      "partiallySubsidized": "Partiellement subventionnés",
+      "section8": "Section 8",
+      "section42": "Section 42",
+      "otherSubsidy": "Autres types de subventions",
       "notSubsidized": "Non subventionnés"
     }
   },

@@ -29,12 +29,28 @@ export const AssetsViewSubsidyFilter: FC<AssetsViewSubsidyFilterProps> = ({
       label: t('options.all'),
     },
     {
+      value: AssetSubsidyType.SUBSIDIZED,
+      label: t('options.subsidized'),
+    },
+    {
       value: AssetSubsidyType.FULLY_SUBSIDIZED,
       label: t('options.fullySubsidized'),
     },
     {
-      value: AssetSubsidyType.SUBSIDIZED,
-      label: t('options.subsidized'),
+      value: AssetSubsidyType.PARTIALLY_SUBSIDIZED,
+      label: t('options.partiallySubsidized'),
+    },
+    {
+      value: AssetSubsidyType.SECTION_8,
+      label: t('options.section8'),
+    },
+    {
+      value: AssetSubsidyType.SECTION_42,
+      label: t('options.section42'),
+    },
+    {
+      value: AssetSubsidyType.OTHER_SUBSIDY,
+      label: t('options.otherSubsidy'),
     },
     {
       value: AssetSubsidyType.NOT_SUBSIDIZED,
@@ -61,10 +77,21 @@ export function useAssetsViewSubsidyFilter(
     switch (filter.subsidy) {
       case AssetSubsidyType.ALL:
         return true
+      case AssetSubsidyType.SUBSIDIZED:
+        return asset.subsidyStatus !== 'no'
       case AssetSubsidyType.FULLY_SUBSIDIZED:
         return asset.subsidyStatus === 'yes' && !!asset.subsidyStatusValue
-      case AssetSubsidyType.SUBSIDIZED:
+      case AssetSubsidyType.PARTIALLY_SUBSIDIZED:
         return asset.subsidyStatus !== 'no' && !!asset.subsidyStatusValue
+      case AssetSubsidyType.SECTION_8:
+        return asset.subsidyStatus !== 'no' && asset.subsidyBy === 'Section 8'
+      case AssetSubsidyType.SECTION_42:
+        return asset.subsidyStatus !== 'no' && asset.subsidyBy === 'Section 42'
+      case AssetSubsidyType.OTHER_SUBSIDY:
+        return (
+          asset.subsidyStatus !== 'no' &&
+          !['Section 8', 'Section 42'].includes(asset.subsidyBy ?? '')
+        )
       case AssetSubsidyType.NOT_SUBSIDIZED:
         return !asset.subsidyStatus || asset.subsidyStatus === 'no'
     }

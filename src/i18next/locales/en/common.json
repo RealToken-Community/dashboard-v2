@@ -96,8 +96,12 @@
     "label": "All",
     "options": {
       "all": "No filtered",
-      "fullySubsidized": "Subsidized",
-      "subsidized": "Partially subsidized",
+      "subsidized": "Subsidized",
+      "fullySubsidized": "Fully subsidized",
+      "partiallySubsidized": "Partially subsidized",
+      "section8": "Section 8",
+      "section42": "Section 42",
+      "otherSubsidy": "Other subsidy types",
       "notSubsidized": "Not subsidized"
     }
   },
