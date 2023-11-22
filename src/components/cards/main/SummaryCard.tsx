@@ -5,25 +5,22 @@ import { useSelector } from 'react-redux'
 import { Box, Card, Text, Title } from '@mantine/core'
 
 import {
-  selectOwnedRealtokensValueEthereum,
-  selectOwnedRealtokensValueGnosis,
-  selectOwnedRealtokensValueRmm,
+  selectOwnedRealtokensValue,
   selectRmmDetails,
 } from 'src/store/features/wallets/walletsSelector'
 
-import { CurrencyField, DecimalField } from '../../commons'
+import { CurrencyField } from '../../commons'
 
 export const SummaryCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'summaryCard' })
 
-  const gnosisValue = useSelector(selectOwnedRealtokensValueGnosis)
-  const ethereumValue = useSelector(selectOwnedRealtokensValueEthereum)
-  const rmmValue = useSelector(selectOwnedRealtokensValueRmm)
+  const realtokensValue = useSelector(selectOwnedRealtokensValue)
   const rmmDetails = useSelector(selectRmmDetails)
-  const realtokenValue = gnosisValue + ethereumValue + rmmValue
+
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
-  const totalNetValue = realtokenValue + stableDepositValue - stableDebtValue
+  const totalNetValue =
+    realtokensValue.total + stableDepositValue - stableDebtValue
 
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
@@ -32,17 +29,12 @@ export const SummaryCard: FC = () => {
         <Text fz={'lg'} fw={500}>
           <CurrencyField label={t('netValue')} value={totalNetValue} />
         </Text>
-        <CurrencyField label={t('realtokenValue')} value={realtokenValue} />
-        <DecimalField
-          label={t('stableDeposit')}
-          value={stableDepositValue}
-          suffix={' xDai'}
+        <CurrencyField
+          label={t('realtokenValue')}
+          value={realtokensValue.total}
         />
-        <DecimalField
-          label={t('stableBorrow')}
-          value={stableDebtValue}
-          suffix={' xDai'}
-        />
+        <CurrencyField label={t('stableDeposit')} value={stableDepositValue} />
+        <CurrencyField label={t('stableBorrow')} value={stableDebtValue} />
       </Box>
     </Card>
   )

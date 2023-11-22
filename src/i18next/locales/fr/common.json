@@ -6,16 +6,25 @@
     "title": "Langue",
     "french": "Français",
     "english": "Anglais",
+    "currencyTitle": "Devise",
+    "usd": "USD ($)",
+    "eur": "Euro (€)",
+    "chf": "Franc suisse (CHF)",
     "light": "Clair",
-    "dark": "Sombre"
+    "dark": "Sombre",
+    "refreshDataButton": "Actualiser les données"
   },
-  "walletModal": {
-    "address": "Adresse {{value}}",
-    "close": "Fermer",
-    "submit": "Valider"
+  "walletButton": {
+    "connectWallet": "Connecter mon portefeuille",
+    "disconnectWallet": "Déconnecter mon portefeuille"
+  },
+  "walletMenu": {
+    "userId": "Identifiant",
+    "addresses": "Adresses",
+    "whitelists": "Whitelists"
   },
   "numbers": {
-    "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} $",
+    "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} {{symbol}}",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",
     "percentInteger": "{{value, number(maximumFractionDigits: 0)}} %",
     "decimal": "{{value, number(maximumFractionDigits: 2)}}",
@@ -33,7 +42,8 @@
     "total": "Total",
     "ethereum": "Ethereum",
     "gnosis": "Gnosis",
-    "rmm": "RMM"
+    "rmm": "RMM",
+    "levinSwap": "LevinSwap"
   },
   "rentsCard": {
     "title": "Loyers",
@@ -74,6 +84,65 @@
       "grid": "Carte"
     }
   },
+  "assetsViewFilterButton": {
+    "filter": "Filtres avancés"
+  },
+  "assetsViewFilterModal": {
+    "submit": "Valider",
+    "close": "Fermer",
+    "resetFilter": "Réinitialiser"
+  },
+  "assetSubsidy": {
+    "label": "Loyers subventionnés",
+    "options": {
+      "all": "Tous",
+      "subsidized": "Subventionnés",
+      "fullySubsidized": "Entièrement subventionnés",
+      "partiallySubsidized": "Partiellement subventionnés",
+      "section8": "Section 8",
+      "section42": "Section 42",
+      "otherSubsidy": "Autres types de subventions",
+      "notSubsidized": "Non subventionnés"
+    }
+  },
+  "assetUserStatus": {
+    "label": "Propriétés",
+    "options": {
+      "all": "Toutes",
+      "owned": "Possédées",
+      "whitelisted": "Whitelistées",
+      "whitelistedNotOwned": "Whitelistées non possédées",
+      "notOwned": "Non possédées",
+      "notWhitelisted": "Non whitelistées"
+    }
+  },
+  "assetRentStatus": {
+    "label": "Loyers",
+    "options": {
+      "all": "Tous",
+      "rented": "Loués",
+      "notRented": "Non loués",
+      "partiallyRented": "Partiellement loués"
+    }
+  },
+  "assetRmmStatus": {
+    "label": "Disponible sur le RMM",
+    "options": {
+      "all": "Tous",
+      "available": "Oui",
+      "notAvailable": "Non"
+    }
+  },
+  "assetUserProtocol": {
+    "label": "Possédées sur",
+    "options": {
+      "all": "Tous",
+      "ethereum": "Ethereum",
+      "gnosis": "Gnosis",
+      "rmm": "RMM",
+      "levinSwap": "LevinSwap"
+    }
+  },
   "assetCard": {
     "tokens": "Tokens",
     "apr": "Rendement annuel",
@@ -81,13 +150,17 @@
     "yearly": "Loyers annuels",
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
-    "viewOnRealt": "Voir sur RealT",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Louée",
       "partial": "Partiellement louée",
       "none": "Non louée"
-    }
+    },
+    "subsidyStatus": {
+      "full": "Subventionnée",
+      "partial": "Partiellement subventionnée"
+    },
+    "subsidy": "Loyer subventioné"
   },
   "assetTable": {
     "property": "Propriété",
@@ -99,10 +172,72 @@
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété"
   },
-  "wallets": {
-    "value_zero": "Aucun portefeuille",
-    "value_one": "1 portefeuille",
-    "value_other": "{{count}} portefeuilles",
-    "manage": "Gérer les portefeuilles"
+  "assetPage": {
+    "home": "Accueil",
+    "viewOnRealt": "Voir sur RealT",
+    "tabs": {
+      "main": "Informations générales",
+      "property": "Détail du bien",
+      "transfers": "Mes transactions",
+      "yamStatistics": "Statistiques marché secondaire (Yam)"
+    },
+    "main": {
+      "ownedValue": "Mon investissement",
+      "ownedEthereumValue": "Ethereum",
+      "ownedGnosisValue": "Gnosis",
+      "ownedRmmValue": "RMM",
+      "ownedLevinSwapValue": "LevinSwap",
+      "annualYield": "Rendement annuel",
+      "nbToken": "Nombre de tokens",
+      "tokenPrice": "Prix d'un token",
+      "rentWeek": "Loyer hebdomadaire",
+      "rentMonth": "Loyer mensuel",
+      "rentYear": "Loyer annuel",
+      "rentedUnits":"Logements loués"
+    },
+    "property": {
+      "initialLaunchDate": "Mise en vente",
+      "totalValue": "Valeur de l'investissement",
+      "assetPrice": "Valeur du bien",
+      "initialMaintenanceReserve": "Réserve de maintenance",
+      "rentalType": "Type de location",
+      "rentalTypeValue": {
+        "shortTerm": "Courte durée",
+        "longTerm": "Longue durée"
+      },
+      "rentStartDate": "Premier loyer",
+      "rentedUnits": "Logements loués",
+      "grossRentMonth": "Loyer brut mensuel",
+      "netRentMonth": "Loyer net mensuel",
+      "annualYield": "Rendement annuel",
+      "constructionYear": "Année de construction",
+      "propertyStories": "Nombre d'étages",
+      "propertyUnits": "Nombre de logements",
+      "lotSize": "Taille du terrain",
+      "interiorSize": "Taille intérieure",
+      "subsidyBy": "Subvention",
+      "subsidyShare": "Loyer subventionné"
+    },
+    "transfers": {
+      "swapcatIn": "Achat sur Swapcat",
+      "swapcatOut": "Vente sur Swapcat",
+      "yamIn": "Achat sur Yam",
+      "yamOut": "Vente sur Yam",
+      "primaryIn": "Achat sur RealT",
+      "primaryOut": "Vente à RealT",
+      "rmmIn": "Retrait du RMM",
+      "rmmOut": "Dépôt sur le RMM",
+      "levinSwapIn": "Achat/Retrait sur LevinSwap",
+      "levinSwapOut": "Vente/Dépôt sur LevinSwap",
+      "reinvest": "Réinvestissement des loyers",
+      "internal": "Transfert interne",
+      "unknown": "Autre"
+    },
+    "yamStatistics": {
+      "tokenPrice": "Prix RealT",
+      "yamPrice": "Prix Yam (30 jours)",
+      "yamDifference": "Différence",
+      "yamVolume": "Volume (30 jours)"
+    }
   }
 }

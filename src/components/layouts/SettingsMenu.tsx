@@ -1,9 +1,12 @@
 import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import {
   ActionIcon,
   Box,
+  Button,
   Center,
   Menu,
   SegmentedControl,
@@ -11,9 +14,23 @@ import {
   useMantineColorScheme,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconLanguage, IconMoon, IconSettings, IconSun } from '@tabler/icons'
+import {
+  IconCash,
+  IconLanguage,
+  IconMoon,
+  IconSettings,
+  IconSun,
+} from '@tabler/icons'
 
-import { setCookies } from 'cookies-next'
+import { setCookie } from 'cookies-next'
+
+import {
+  selectUserCurrency,
+  selectVersion,
+} from 'src/store/features/settings/settingsSelector'
+import { userCurrencyChanged } from 'src/store/features/settings/settingsSlice'
+import { Currency } from 'src/types/Currencies'
+import { expiresLocalStorageCaches } from 'src/utils/useCache'
 
 const ColorSchemeMenuItem: FC = () => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
@@ -58,7 +75,7 @@ const LanguageSelect: FC = () => {
   const updateLocale = useCallback(
     (updatedLocale: string) => {
       if (i18n.language !== updatedLocale) {
-        setCookies('react-i18next', updatedLocale)
+        setCookie('react-i18next', updatedLocale)
         i18n.changeLanguage(updatedLocale)
       }
     },
@@ -82,8 +99,52 @@ const LanguageSelect: FC = () => {
   )
 }
 
+const CurrencySelect: FC = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'settings' })
+  const dispatch = useDispatch()
+  const userCurrency = useSelector(selectUserCurrency)
+
+  function setUserCurrency(currency: Currency) {
+    dispatch(userCurrencyChanged(currency))
+  }
+
+  return (
+    <>
+      <Menu.Label pb={0}>{t('currencyTitle')}</Menu.Label>
+      <Select
+        p={5}
+        value={userCurrency}
+        onChange={(value) => setUserCurrency(value as Currency)}
+        data={[
+          { value: Currency.USD, label: t('usd') },
+          { value: Currency.EUR, label: t('eur') },
+          { value: Currency.CHF, label: t('chf') },
+        ]}
+        icon={<IconCash size={16} />}
+      />
+    </>
+  )
+}
+
+const RefreshDataButton: FC = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'settings' })
+
+  function refresh() {
+    expiresLocalStorageCaches()
+    window.location.reload()
+  }
+  return (
+    <Box ta={'center'}>
+      <Button onClick={refresh} size={'sm'} compact={true} variant={'subtle'}>
+        {t('refreshDataButton')}
+      </Button>
+    </Box>
+  )
+}
+
 export const SettingsMenu: FC = () => {
   const [isOpen, handlers] = useDisclosure(false)
+  const version = useSelector(selectVersion)
 
   return (
     <Menu
@@ -100,7 +161,19 @@ export const SettingsMenu: FC = () => {
       <Menu.Dropdown>
         <LanguageSelect />
         <Menu.Divider />
+        <CurrencySelect />
+        <Menu.Divider />
         <ColorSchemeMenuItem />
+        <Menu.Divider />
+        <RefreshDataButton />
+        <Menu.Divider />
+        <Box
+          ta={'center'}
+          style={{
+            fontStyle: 'italic',
+            fontSize: '12px',
+          }}
+        >{`v${version}`}</Box>
       </Menu.Dropdown>
     </Menu>
   )

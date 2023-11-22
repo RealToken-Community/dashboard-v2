@@ -1,15 +1,14 @@
 import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+
+import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 
 import { StringField } from './StringField'
 
-export const CurrencyField: FC<{ label: string; value: number }> = (props) => {
-  const { t } = useTranslation('common', { keyPrefix: 'numbers' })
-
+export const CurrencyField: FC<{ label: string; value?: number }> = (props) => {
   return (
     <StringField
       label={props.label}
-      value={t('currency', { value: props.value })}
+      value={useCurrencyValue(props.value ?? 0)}
     />
   )
 }

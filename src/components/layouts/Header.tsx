@@ -18,13 +18,7 @@ import { WalletMenu } from './WalletMenu'
 
 const useStyles = createStyles((theme) => ({
   container: {
-    [theme.fn.smallerThan('xs')]: {
-      padding: theme.spacing.xs,
-    },
-
-    [theme.fn.largerThan('xs')]: {
-      padding: theme.spacing.md,
-    },
+    padding: theme.spacing.xs,
   },
 }))
 

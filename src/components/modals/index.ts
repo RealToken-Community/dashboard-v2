@@ -1,5 +1,8 @@
-import { ManageWalletsModal } from './ManageWalletsModal'
+import { WalletModal } from '@realtoken/realt-commons'
+
+import { AssetsViewFilterModal } from '../assetsView/filters/AssetsViewFilterModal'
 
 export const modals = {
-  manageWallets: ManageWalletsModal,
+  web3Wallets: WalletModal,
+  assetsViewFilterModal: AssetsViewFilterModal,
 }

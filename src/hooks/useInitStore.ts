@@ -1,9 +1,15 @@
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
+import { useWeb3React } from '@web3-react/core'
+
+import { fetchCurrenciesRates } from 'src/store/features/currencies/currenciesSlice'
 import { fetchRealtokens } from 'src/store/features/realtokens/realtokensSlice'
 import { selectCleanedAddressList } from 'src/store/features/settings/settingsSelector'
-import { initializeSettings } from 'src/store/features/settings/settingsSlice'
+import {
+  initializeSettings,
+  setUserAddress,
+} from 'src/store/features/settings/settingsSlice'
 import {
   fetchWallets,
   resetWallets,
@@ -15,10 +21,19 @@ export default function useInitStore() {
   const dispatch = useAppDispatch()
 
   const addressList = useSelector(selectCleanedAddressList)
+  const { account } = useWeb3React()
+
+  useEffect(() => {
+    const accountAddress = account?.toLowerCase()
+    if (accountAddress && !addressList.includes(accountAddress)) {
+      dispatch(setUserAddress(accountAddress))
+    }
+  }, [account, addressList])
 
   useEffect(() => {
     dispatch(initializeSettings())
     dispatch(fetchRealtokens())
+    dispatch(fetchCurrenciesRates())
   }, [dispatch])
 
   const addresses = addressList.join(',')

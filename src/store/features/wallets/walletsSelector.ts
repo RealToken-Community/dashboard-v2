@@ -1,124 +1,85 @@
 import { createSelector } from '@reduxjs/toolkit'
 
+import _mapValues from 'lodash/mapValues'
 import _sumBy from 'lodash/sumBy'
 
-import { GetWalletBalance } from 'src/repositories/wallets.repository'
+import { WalletBalances, WalletType } from 'src/repositories'
 import { RootState } from 'src/store/store'
 
 import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'
 
-export interface OwnedRealtoken extends Realtoken {
+export interface UserRealtoken extends Realtoken {
   id: string
+  isWhitelisted: boolean
   amount: number
   value: number
+  balance: Record<
+    WalletType,
+    {
+      amount: number
+      value: number
+    }
+  >
 }
 
-function isContractRelated(realtoken: Realtoken, contractAddress: string) {
-  return [
-    realtoken.xDaiContract,
-    realtoken.gnosisContract,
-    realtoken.ethereumContract,
-  ]
-    .filter((item) => item)
-    .map((item) => (item ?? '').toLowerCase())
-    .includes(contractAddress.toLowerCase())
-}
-
-function findBalances(
+function getRealtokenBalances(
   realtoken: Realtoken,
-  balances: GetWalletBalance,
-  type: keyof GetWalletBalance
+  walletBalances: WalletBalances
 ) {
-  return balances[type].find((balance) => {
-    const address = balance.address.toLowerCase()
+  const ethereumContract = realtoken.ethereumContract?.toLowerCase() ?? ''
+  const gnosisContract = realtoken.gnosisContract?.toLowerCase() ?? ''
+
+  return _mapValues(walletBalances, (balances, type) => {
+    const balance = balances.find((item) => {
+      return {
+        ['ethereum']: item.token === ethereumContract,
+        ['gnosis']: item.token === gnosisContract,
+        ['rmm']: item.token === gnosisContract,
+        ['levinSwap']: item.token === gnosisContract,
+      }[type]
+    })
+
     return {
-      ['ethereum']: address === realtoken.ethereumContract?.toLowerCase(),
-      ['gnosis']: address === realtoken.gnosisContract?.toLowerCase(),
-      ['rmm']: address === realtoken.gnosisContract?.toLowerCase(),
-      ['rmmProtocol']: false,
-    }[type]
+      amount: balance?.amount ?? 0,
+      value: (balance?.amount ?? 0) * realtoken.tokenPrice,
+    }
   })
 }
 
-function mapOwnedRealtoken(
-  realtoken: Realtoken,
-  balances: GetWalletBalance,
-  type: keyof GetWalletBalance
-) {
-  const realtokenId = realtoken.uuid
-  const balance = findBalances(realtoken, balances, type)
-
-  return {
-    id: realtokenId,
-    ...realtoken,
-    amount: balance?.amount ?? 0,
-    value: (balance?.amount ?? 0) * realtoken.tokenPrice,
-  }
-}
-
-function getOwnedRealtokens(
-  realtokens: Realtoken[],
-  balances: GetWalletBalance,
-  type: keyof GetWalletBalance
-) {
-  return realtokens
-    .map((realtoken) => mapOwnedRealtoken(realtoken, balances, type))
-    .filter((item) => item.amount > 0)
-    .sort((a, b) => b.value - a.value)
-}
-
-export const selectOwnedRealtokensGnosis = createSelector(
+export const selectUserRealtokens = createSelector(
+  (state: RootState) => state.settings.user,
   selectRealtokens,
   (state: RootState) => state.wallets.balances,
-  (realtokens, balances) => getOwnedRealtokens(realtokens, balances, 'gnosis')
-)
-
-export const selectOwnedRealtokensEthereum = createSelector(
-  selectRealtokens,
-  (state: RootState) => state.wallets.balances,
-  (realtokens, balances) => getOwnedRealtokens(realtokens, balances, 'ethereum')
-)
-
-export const selectOwnedRealtokensRmm = createSelector(
-  selectRealtokens,
-  (state: RootState) => state.wallets.balances,
-  (realtokens, balances) => getOwnedRealtokens(realtokens, balances, 'rmm')
+  (user, realtokens, walletBalances) =>
+    realtokens.map<UserRealtoken>((realtoken) => {
+      const balances = getRealtokenBalances(realtoken, walletBalances)
+      return {
+        ...realtoken,
+        isWhitelisted: (user?.whitelistAttributeKeys ?? []).includes(
+          realtoken.tokenIdRules.toString()
+        ),
+        id: realtoken.uuid,
+        balance: balances,
+        amount: _sumBy(Object.values(balances), 'amount'),
+        value: _sumBy(Object.values(balances), 'value'),
+      }
+    })
 )
 
 export const selectOwnedRealtokens = createSelector(
-  selectOwnedRealtokensGnosis,
-  selectOwnedRealtokensEthereum,
-  selectOwnedRealtokensRmm,
-  (...realtokens) =>
-    realtokens.flat().reduce((acc, realtoken) => {
-      const existingRealtoken = acc.find((item) => item.id === realtoken.id)
-
-      if (existingRealtoken) {
-        existingRealtoken.amount += realtoken.amount
-        existingRealtoken.value += realtoken.value
-      } else {
-        acc.push({ ...realtoken })
-      }
-
-      return acc
-    }, [] as OwnedRealtoken[])
+  selectUserRealtokens,
+  (realtokens) => realtokens.filter((item) => item.amount > 0)
 )
 
 export const selectOwnedRealtokensValue = createSelector(
   selectOwnedRealtokens,
-  (realtokens) => _sumBy(realtokens, 'value')
-)
-export const selectOwnedRealtokensValueGnosis = createSelector(
-  selectOwnedRealtokensGnosis,
-  (realtokens) => _sumBy(realtokens, 'value')
-)
-export const selectOwnedRealtokensValueEthereum = createSelector(
-  selectOwnedRealtokensEthereum,
-  (realtokens) => _sumBy(realtokens, 'value')
-)
-export const selectOwnedRealtokensValueRmm = createSelector(
-  selectOwnedRealtokensRmm,
-  (realtokens) => _sumBy(realtokens, 'value')
+  (realtokens) => ({
+    total: _sumBy(realtokens, 'value'),
+    ethereum: _sumBy(realtokens, (item) => item.balance.ethereum.value),
+    gnosis: _sumBy(realtokens, (item) => item.balance.gnosis.value),
+    rmm: _sumBy(realtokens, (item) => item.balance.rmm.value),
+    levinSwap: _sumBy(realtokens, (item) => item.balance.levinSwap.value),
+  })
 )
 
 export const selectOwnedRealtokensRents = createSelector(
@@ -138,17 +99,18 @@ export const selectOwnedRealtokensRents = createSelector(
 export const selectOwnedRealtokensAPY = createSelector(
   selectOwnedRealtokensRents,
   selectOwnedRealtokensValue,
-  (rents, value) => (value > 0 ? rents.yearly / value : 0)
+  (rents, value) => (value.total > 0 ? rents.yearly / value.total : 0)
 )
 
 export const selectRmmDetails = createSelector(
   selectRealtokens,
-  (state: RootState) => state.wallets.balances.rmmProtocol,
-  (realtokens, rmmProtocol) =>
-    rmmProtocol.reduce(
+  (state: RootState) => state.wallets.rmmPositions,
+  (state: RootState) => state.currencies.rates,
+  (realtokens, rmmProtocol, rates) => {
+    const rmmDetails = rmmProtocol.reduce(
       (acc, item) => {
-        const realtoken = realtokens.find((realtoken) =>
-          isContractRelated(realtoken, item.address)
+        const realtoken = realtokens.find(
+          (realtoken) => item.token === realtoken.gnosisContract?.toLowerCase()
         )
 
         if (realtoken) {
@@ -162,4 +124,7 @@ export const selectRmmDetails = createSelector(
       },
       { stableDeposit: 0, totalDeposit: 0, stableDebt: 0 }
     )
+
+    return _mapValues(rmmDetails, (value) => value / rates.XDAI)
+  }
 )

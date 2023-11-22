@@ -5,6 +5,7 @@ export enum APIRealTokenCanal {
 
 export enum APIRealTokenCurrency {
   USD = 'USD',
+  EUR = 'EUR',
 }
 
 export enum APIRealTokenPropertyType {
@@ -147,6 +148,9 @@ export interface APIRealToken {
   section8paid: number
   grossRentYear: number
   grossRentMonth: number
+  subsidyBy: string | null
+  subsidyStatus: string
+  subsidyStatusValue: number
 
   // Monthly expenses
   insurance: number

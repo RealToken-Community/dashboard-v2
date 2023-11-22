@@ -1,38 +1,53 @@
-import { FC, forwardRef } from 'react'
+import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { Badge, Box, Button, ButtonProps, Flex, Menu } from '@mantine/core'
+import {
+  ActionIcon,
+  Badge,
+  Box,
+  Button,
+  Flex,
+  Menu,
+  createStyles,
+} from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useModals } from '@mantine/modals'
-import { IconChevronDown, IconChevronUp } from '@tabler/icons'
+import { IconWallet } from '@tabler/icons'
+import { useWeb3React } from '@web3-react/core'
 
-import { selectAddressList } from 'src/store/features/settings/settingsSelector'
-import { FRC } from 'src/types'
+import { utils as EthersUtils } from 'ethers'
 
-const WalletButton: FRC<
-  ButtonProps & { addressList: string[] },
-  HTMLButtonElement
-> = forwardRef(({ addressList, ...props }, ref) => {
-  const { t } = useTranslation('common', { keyPrefix: 'wallets' })
-  const count = addressList.filter((item) => item).length
+import { useAppDispatch } from 'src/hooks/react-hooks'
+import {
+  selectIsInitialized,
+  selectUser,
+} from 'src/store/features/settings/settingsSelector'
+import { setUserAddress } from 'src/store/features/settings/settingsSlice'
 
-  return (
-    <Button {...props} ref={ref} aria-label={t('value', { count })}>
-      {t('value', { count })}
-    </Button>
-  )
-})
-WalletButton.displayName = 'WalletButton'
+import { IntegerField, StringField } from '../commons'
 
 interface WalletItemProps {
   address: string
 }
 
+const useStyles = createStyles({
+  address: {
+    span: { fontFamily: 'monospace', fontSize: '12px' },
+  },
+})
+
 const WalletItem: FC<WalletItemProps> = (props) => {
+  const { classes } = useStyles()
   return (
-    <Badge size={'md'} variant={'dot'} fullWidth={true}>
-      {props.address}
+    <Badge
+      size={'md'}
+      variant={'dot'}
+      fullWidth={true}
+      className={classes.address}
+      style={{ textTransform: 'none', justifyContent: 'space-between' }}
+    >
+      {EthersUtils.getAddress(props.address)}
     </Badge>
   )
 }
@@ -51,32 +66,50 @@ const WalletItemList: FC<{ addressList: string[] }> = (props) => {
 }
 WalletItemList.displayName = 'WalletItemList'
 
-const ManageWalletButton: FC<{ onClick: () => void }> = (props) => {
-  const { t } = useTranslation('common', { keyPrefix: 'wallets' })
+const ConnectWalletButton: FC<{ onClick?: () => void }> = (props) => {
+  const { t } = useTranslation('common', { keyPrefix: 'walletButton' })
   const modals = useModals()
+  const dispatch = useAppDispatch()
+  const { account, connector } = useWeb3React()
 
-  const openManageWalletModal = () =>
-    modals.openContextModal('manageWallets', { innerProps: {} })
+  const onDisconnect = useCallback(async () => {
+    props.onClick?.()
+    if (connector.deactivate) {
+      await connector.deactivate()
+    } else {
+      await connector.resetState()
+    }
+    dispatch(setUserAddress(''))
+  }, [connector])
 
-  return (
-    <Box ta={'center'} mb={'xs'} mt={'sm'}>
-      <Button
-        onClick={() => {
-          props.onClick()
-          openManageWalletModal()
-        }}
-      >
-        {t('manage')}
-      </Button>
-    </Box>
+  const openWalletModal = () => {
+    props.onClick?.()
+    modals.openContextModal('web3Wallets', { innerProps: {} })
+  }
+
+  return account ? (
+    <Button onClick={onDisconnect}>{t('disconnectWallet')}</Button>
+  ) : (
+    <Button onClick={openWalletModal}>{t('connectWallet')}</Button>
   )
 }
-ManageWalletButton.displayName = 'ManageWalletButton'
+ConnectWalletButton.displayName = 'ConnectWalletButton'
 
 export const WalletMenu: FC = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'walletMenu' })
   const [isOpen, handlers] = useDisclosure(false)
-  const addressList = useSelector(selectAddressList)
-  const cleanedAddressList = addressList.filter((item) => item)
+  const user = useSelector(selectUser)
+  const isInitialized = useSelector(selectIsInitialized)
+
+  if (!user) {
+    return isInitialized ? (
+      <ConnectWalletButton />
+    ) : (
+      <ActionIcon size={36} color={'brand'}>
+        <IconWallet size={20} aria-label={'Wallet'} />
+      </ActionIcon>
+    )
+  }
 
   return (
     <Menu
@@ -86,21 +119,36 @@ export const WalletMenu: FC = () => {
       onClose={handlers.close}
     >
       <Menu.Target>
-        <WalletButton
-          addressList={addressList}
-          rightIcon={
-            isOpen ? (
-              <IconChevronUp size={16} stroke={3} />
-            ) : (
-              <IconChevronDown size={16} stroke={3} />
-            )
-          }
-        />
+        <ActionIcon size={36} color={'brand'}>
+          <IconWallet size={20} aria-label={'Wallet'} />
+        </ActionIcon>
       </Menu.Target>
       <Menu.Dropdown>
-        <WalletItemList addressList={addressList} />
-        {cleanedAddressList.length ? <Menu.Divider mt={'xs'} /> : ''}
-        <ManageWalletButton onClick={handlers.close} />
+        {user ? (
+          <>
+            <Box mx={'sm'} mt={'xs'}>
+              <StringField label={t('userId')} value={user.id} />
+              <IntegerField
+                label={t('addresses')}
+                value={user.addressList.length}
+              />
+              <IntegerField
+                label={t('whitelists')}
+                value={user.whitelistAttributeKeys.length}
+              />
+            </Box>
+
+            <Menu.Divider my={'xs'} />
+
+            <WalletItemList addressList={user.addressList} />
+
+            <Menu.Divider mt={'xs'} />
+          </>
+        ) : undefined}
+
+        <Box ta={'center'} mb={'xs'} mt={'sm'}>
+          <ConnectWalletButton onClick={handlers.close} />
+        </Box>
       </Menu.Dropdown>
     </Menu>
   )

@@ -6,16 +6,25 @@
     "title": "Language",
     "french": "French",
     "english": "English",
+    "currencyTitle": "Currency",
+    "usd": "USD ($)",
+    "eur": "Euro (€)",
+    "chf": "Swiss franc (CHF)",
     "light": "Light",
-    "dark": "Dark"
+    "dark": "Dark",
+    "refreshDataButton": "Refresh data"
   },
-  "walletModal": {
-    "address": "Address {{value}}",
-    "close": "Close",
-    "submit": "Submit"
+  "walletButton": {
+    "connectWallet": "Connect wallet",
+    "disconnectWallet": "Disconnect wallet"
+  },
+  "walletMenu": {
+    "userId": "Identifier",
+    "addresses": "Addresses",
+    "whitelists": "Whitelists"
   },
   "numbers": {
-    "currency": "${{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}}",
+    "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} {{symbol}}",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",
     "percentInteger": "{{value, number(maximumFractionDigits: 0)}} %",
     "decimal": "{{value, number(maximumFractionDigits: 2)}}",
@@ -33,7 +42,8 @@
     "total": "Total",
     "ethereum": "Ethereum",
     "gnosis": "Gnosis",
-    "rmm": "RMM"
+    "rmm": "RMM",
+    "levinSwap": "LevinSwap"
   },
   "rentsCard": {
     "title": "Rents",
@@ -68,10 +78,69 @@
       "occupancy": "Occupancy rate",
       "initialLaunch": "Initial launch"
     },
-    "sortReverse": "Reverse" ,
+    "sortReverse": "Reverse",
     "viewOptions": {
       "table": "Table",
       "grid": "Grid"
+    }
+  },
+  "assetsViewFilterButton": {
+    "filter": "Advanced filters"
+  },
+  "assetsViewFilterModal": {
+    "submit": "Submit",
+    "close": "Close",
+    "resetFilter": "Reset"
+  },
+  "assetSubsidy": {
+    "label": "All",
+    "options": {
+      "all": "No filtered",
+      "subsidized": "Subsidized",
+      "fullySubsidized": "Fully subsidized",
+      "partiallySubsidized": "Partially subsidized",
+      "section8": "Section 8",
+      "section42": "Section 42",
+      "otherSubsidy": "Other subsidy types",
+      "notSubsidized": "Not subsidized"
+    }
+  },
+  "assetUserStatus": {
+    "label": "Properties",
+    "options": {
+      "all": "All",
+      "owned": "Owned",
+      "whitelisted": "Whitelisted",
+      "whitelistedNotOwned": "Whitelisted not owned",
+      "notOwned": "Not owned",
+      "notWhitelisted": "Not whitelisted"
+    }
+  },
+  "assetRentStatus": {
+    "label": "Rent",
+    "options": {
+      "all": "All",
+      "rented": "Rented",
+      "notRented": "Not rented",
+      "partiallyRented": "Partially rented"
+    }
+  },
+  "assetRmmStatus": {
+    "label": "Available on RMM",
+    "options": {
+      "all": "All",
+      "available": "Yes",
+      "notAvailable": "No"
+    }
+  },
+  "assetUserProtocol": {
+    "label": "Owned on",
+    "options": {
+      "all": "All",
+      "ethereum": "Ethereum",
+      "gnosis": "Gnosis",
+      "rmm": "RMM",
+      "levinSwap": "LevinSwap"
     }
   },
   "assetCard": {
@@ -81,13 +150,17 @@
     "yearly": "Yearly rents",
     "rentedUnits": "Rented units",
     "propertyValue": "Property value",
-    "viewOnRealt": "View on RealT",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Rented",
       "partial": "Partially rented",
       "none": "Not rented"
-    }
+    },
+    "subsidyStatus": {
+      "full": "Subsidized",
+      "partial": "Partially subsidized"
+    },
+    "subsidy": "Subsidy"
   },
   "assetTable": {
     "property": "Property",
@@ -99,10 +172,72 @@
     "rentedUnits": "Rented units",
     "propertyValue": "Property value"
   },
-  "wallets": {
-    "value_zero": "No wallet",
-    "value_one": "1 wallet",
-    "value_other": "{{count}} wallets",
-    "manage": "Manage wallets"
+  "assetPage": {
+    "home": "Home",
+    "viewOnRealt": "View on RealT",
+    "tabs": {
+      "main": "Main informations",
+      "property": "Property details",
+      "transfers": "My transactions",
+      "yamStatistics": "Secondary market statistics (Yam)"
+    },
+    "main": {
+      "ownedValue": "My investment",
+      "ownedEthereumValue": "Ethereum",
+      "ownedGnosisValue": "Gnosis",
+      "ownedRmmValue": "RMM",
+      "ownedLevinSwapValue": "LevinSwap",
+      "annualYield": "Annual yield",
+      "nbToken": "Tokens owned",
+      "tokenPrice": "Token price",
+      "rentWeek": "Weekly rent",
+      "rentMonth": "Monthly rent",
+      "rentYear": "Yearly rent",
+      "rentedUnits":"Rented units"
+    },
+    "property": {
+      "initialLaunchDate": "Launch date",
+      "totalValue": "Investment value",
+      "assetPrice": "Asset value",
+      "initialMaintenanceReserve": "Maintenance reserve",
+      "rentalType": "Rental type",
+      "rentalTypeValue": {
+        "shortTerm": "Short term",
+        "longTerm": "Long term"
+      },
+      "rentStartDate": "First rent",
+      "rentedUnits": "Rented units",
+      "grossRentMonth": "Gross monthly rent",
+      "netRentMonth": "Net monthly rent",
+      "annualYield": "Annual yield",
+      "constructionYear": "Construction year",
+      "propertyStories": "Number of stories",
+      "propertyUnits": "Number of units",
+      "lotSize": "Lot size",
+      "interiorSize": "Interior size",
+      "subsidyBy": "Subsidy",
+      "subsidyShare": "Rent Subsidized"
+    },
+    "transfers": {
+      "swapcatIn": "Purchase on Swapcat",
+      "swapcatOut": "Sale on Swapcat",
+      "yamIn": "Purchase on YAM",
+      "yamOut": "Sale on YAM",
+      "primaryIn": "Purchase from RealT",
+      "primaryOut": "Sale to RealT",
+      "rmmIn": "Withdrawal from RMM",
+      "rmmOut": "Deposit on RMM",
+      "levinSwapIn": "Purchase/Withdrawal on LevinSwap",
+      "levinSwapOut": "Sale/Deposit on LevinSwap",
+      "reinvest": "Rent reinvest",
+      "internal": "Internal transaction",
+      "unknown": "Other"
+    },
+    "yamStatistics": {
+      "tokenPrice": "RealT price",
+      "yamPrice": "Yam price (30 days)",
+      "yamDifference": "Difference",
+      "yamVolume": "Volume (30 days)"
+    }
   }
 }
