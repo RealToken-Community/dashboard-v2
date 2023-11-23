@@ -39,10 +39,12 @@ const LevinSwapQuery = gql`
           token0 {
             id
             name
+            decimals
           }
           token1 {
             id
             name
+            decimals
           }
           reserve0
           reserve1
@@ -59,8 +61,8 @@ interface LevinSwapResult {
       liquidityTokenBalance: string
       pair: {
         totalSupply: string
-        token0: { id: string; name: string }
-        token1: { id: string; name: string }
+        token0: { id: string; name: string; decimals: string }
+        token1: { id: string; name: string; decimals: string }
         reserve0: string
         reserve1: string
       }
@@ -73,33 +75,47 @@ function formatBalances(
   realtokens: Realtoken[]
 ) {
   return users.map((user) => {
-    const balances: Record<string, number> = {}
+    const balances: Record<string, { amount: number; decimals: number }> = {}
     user.liquidityPositions.forEach((position) => {
       const share =
         parseFloat(position.liquidityTokenBalance) /
         parseFloat(position.pair.totalSupply)
-      const token0 = position.pair.token0.id
-      const token1 = position.pair.token1.id
-      balances[token0] =
-        (balances[token0] ?? 0) + parseFloat(position.pair.reserve0) * share
-      balances[token1] =
-        (balances[token1] ?? 0) + parseFloat(position.pair.reserve1) * share
+      const token0 = position.pair.token0
+      const token1 = position.pair.token1
+      balances[token0.id] = {
+        amount:
+          (balances[token0.id]?.amount ?? 0) +
+          parseFloat(position.pair.reserve0) * share,
+        decimals: parseInt(token0.decimals),
+      }
+      balances[token1.id] = {
+        amount:
+          (balances[token1.id]?.amount ?? 0) +
+          parseFloat(position.pair.reserve1) * share,
+        decimals: parseInt(token0.decimals),
+      }
     })
 
-    const isRealtoken = (address: string) =>
-      realtokens.find((item) =>
+    const getCorrectDecimals = (address: string, decimals: number) => {
+      const isRealtoken = realtokens.find((item) =>
         [
           item.gnosisContract?.toLowerCase(),
           item.ethereumContract?.toLowerCase(),
         ].includes(address.toLowerCase())
       )
 
+      // Some pools are not correctly configured, and return 0 decimals instead of 18
+      return isRealtoken && !decimals ? 18 : 0
+    }
+
     return {
       address: user.id,
-      balances: Object.entries(balances).map(([address, amount]) => ({
-        token: address,
-        amount: amount / 10 ** (isRealtoken(address) ? 18 : 0),
-      })),
+      balances: Object.entries(balances).map(
+        ([address, { amount, decimals }]) => ({
+          token: address,
+          amount: amount / 10 ** getCorrectDecimals(address, decimals),
+        })
+      ),
     }
   })
 }
