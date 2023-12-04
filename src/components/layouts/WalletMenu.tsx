@@ -29,6 +29,7 @@ import { IntegerField, StringField } from '../commons'
 
 interface WalletItemProps {
   address: string
+  isVisible?: boolean
 }
 
 const useStyles = createStyles({
@@ -45,7 +46,11 @@ const WalletItem: FC<WalletItemProps> = (props) => {
       variant={'dot'}
       fullWidth={true}
       className={classes.address}
-      style={{ textTransform: 'none', justifyContent: 'space-between' }}
+      style={{
+        textTransform: 'none',
+        justifyContent: 'space-between',
+        opacity: props.isVisible ? 0.5 : 1,
+      }}
     >
       {EthersUtils.getAddress(props.address)}
     </Badge>
@@ -86,12 +91,19 @@ const WalletItemList: FC<{ user: User }> = (props) => {
     ...(props.user?.addressList ?? []),
     ...(props.user?.customAddressList ?? []),
   ]
+
+  const hiddenAddressList = props.user?.hiddenAddressList ?? []
+
   return (
     <Flex direction={'column'} gap={'xs'}>
       {addresses
         .filter((item) => item)
         .map((item) => (
-          <WalletItem key={item} address={item} />
+          <WalletItem
+            key={item}
+            address={item}
+            isVisible={hiddenAddressList.includes(item)}
+          />
         ))}
     </Flex>
   )
