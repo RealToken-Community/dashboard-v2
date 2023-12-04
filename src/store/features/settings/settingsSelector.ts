@@ -13,13 +13,21 @@ export const selectIsLoading = (state: RootState): boolean =>
   state.wallets.isLoading ||
   state.currencies.isLoading
 
-export const selectAddressList = (state: RootState): string[] =>
-  state.settings.user?.addressList ?? []
+export const selectAllUserAddressList = (state: RootState) => {
+  const addressList = state.settings.user?.addressList ?? []
+  const customAddressList = state.settings.user?.customAddressList ?? []
+  return Array.from(
+    new Set(
+      [...addressList, ...customAddressList].map((item) => item.toLowerCase())
+    )
+  )
+}
 
-export const selectCleanedAddressList = createSelector(
-  selectAddressList,
-  (addressList) =>
-    Array.from(new Set(addressList.map((item) => item.toLowerCase())))
+export const selectUserAddressList = createSelector(
+  (state: RootState) => state.settings.user,
+  selectAllUserAddressList,
+  (user, addressList) =>
+    addressList.filter((item) => !user?.hiddenAddressList?.includes(item))
 )
 
 export const selectUserCurrency = (state: RootState): string =>
