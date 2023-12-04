@@ -109,8 +109,8 @@ export const selectOwnedRealtokensRents = createSelector(
     const oneMonthLater = now.clone().add(1, 'M')
     const oneYearLater = now.clone().add(1, 'y')
     const oneWeekLater = now.clone().add(1, 'w')
-    const nbMondaysInMonth = numberOfDaysIn(now, oneMonthLater, now, rentDay)
-    const nbMondaysInYear = numberOfDaysIn(now, oneYearLater, now, rentDay)
+    const nbRentDayInMonth = numberOfDaysIn(now, oneMonthLater, now, rentDay)
+    const nbRentDayInYear = numberOfDaysIn(now, oneYearLater, now, rentDay)
 
     for (const item of realtokens) {
       const rentStartDate = moment(item.rentStartDate.date)
@@ -118,33 +118,37 @@ export const selectOwnedRealtokensRents = createSelector(
       const rentPerWeek = item.netRentDayPerToken * 7 * item.amount
 
       if (daysDiff > 0) {
-        const nbDayLeftInWeek = numberOfDaysIn(
+        const nbRentDayLeftInWeek = numberOfDaysIn(
           now,
           oneWeekLater,
           rentStartDate,
           rentDay
         )
-        const nbDayLeftInMonth = numberOfDaysIn(
+        const nbRentDayLeftInMonth = numberOfDaysIn(
           now,
           oneMonthLater,
           rentStartDate,
           rentDay
         )
-        const nbDayLeftInYear = numberOfDaysIn(
+        const nbRentDayLeftInYear = numberOfDaysIn(
           now,
           oneYearLater,
           rentStartDate,
           rentDay
         )
 
-        rents.weekly += !nbDayLeftInWeek ? 0 : rentPerWeek
-        rents.monthly += !nbDayLeftInMonth ? 0 : rentPerWeek * nbDayLeftInMonth
-        rents.yearly += !nbDayLeftInYear ? 0 : rentPerWeek * nbDayLeftInYear
+        rents.weekly += !nbRentDayLeftInWeek ? 0 : rentPerWeek
+        rents.monthly += !nbRentDayLeftInMonth
+          ? 0
+          : rentPerWeek * nbRentDayLeftInMonth
+        rents.yearly += !nbRentDayLeftInYear
+          ? 0
+          : rentPerWeek * nbRentDayLeftInYear
       } else {
         rents.daily += item.netRentDayPerToken * item.amount
         rents.weekly += rentPerWeek
-        rents.monthly += rentPerWeek * nbMondaysInMonth
-        rents.yearly += rentPerWeek * nbMondaysInYear
+        rents.monthly += rentPerWeek * nbRentDayInMonth
+        rents.yearly += rentPerWeek * nbRentDayInYear
       }
     }
     return rents
