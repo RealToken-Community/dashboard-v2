@@ -30,9 +30,10 @@ export interface RealTokenTransfer {
 
 export async function GetRealTokenTransfers(params: {
   addressList: string[]
+  allAddressList: string[]
   realtokenList: APIRealToken[]
 }) {
-  const addressList = params.addressList.map((item) => item.toLowerCase())
+  const allAddressList = params.allAddressList.map((item) => item.toLowerCase())
 
   const transferEvents = await getRealTokenTransfers(
     params.addressList,
@@ -42,12 +43,12 @@ export async function GetRealTokenTransfers(params: {
   return transferEvents.map<RealTokenTransfer>((transfer) => ({
     timestamp: Number(transfer.timestamp),
     amount: Number(transfer.amount),
-    direction: addressList.includes(transfer.source)
+    direction: allAddressList.includes(transfer.source)
       ? TransferDirection.out
       : TransferDirection.in,
     origin: getTransferOrigin(
       transfer,
-      addressList,
+      allAddressList,
       params.realtokenList.find(
         (item) =>
           item.blockchainAddresses.xDai.contract.toLowerCase() ===

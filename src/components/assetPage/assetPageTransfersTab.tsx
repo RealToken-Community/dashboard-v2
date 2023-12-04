@@ -7,7 +7,10 @@ import {
   RealTokenTransfer,
   TransferOrigin,
 } from 'src/repositories/transferts.repository'
-import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
+import {
+  selectAllUserAddressList,
+  selectUserAddressList,
+} from 'src/store/features/settings/settingsSelector'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 function getTransferTitle(item: RealTokenTransfer) {
@@ -81,14 +84,16 @@ export const AssetPageTransfersTab: FC<{ data: UserRealtoken }> = ({
   data,
 }) => {
   const addressList = useSelector(selectUserAddressList)
+  const allAddressList = useSelector(selectAllUserAddressList)
   const [transfers, setTransfers] = useState<RealTokenTransfer[]>([])
 
   useEffect(() => {
     GetRealTokenTransfers({
       addressList: addressList,
+      allAddressList: allAddressList,
       realtokenList: [data],
     }).then((item) => setTransfers(item))
-  }, [data, addressList])
+  }, [data, addressList, allAddressList])
 
   return (
     <table style={{ width: '100%' }}>
