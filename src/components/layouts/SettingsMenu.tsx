@@ -16,6 +16,8 @@ import {
 import { useDisclosure } from '@mantine/hooks'
 import {
   IconCash,
+  IconClock,
+  IconClockOff,
   IconLanguage,
   IconMoon,
   IconSettings,
@@ -26,10 +28,15 @@ import { setCookie } from 'cookies-next'
 
 import {
   selectUserCurrency,
+  selectUserRentCalculation,
   selectVersion,
 } from 'src/store/features/settings/settingsSelector'
-import { userCurrencyChanged } from 'src/store/features/settings/settingsSlice'
+import {
+  userCurrencyChanged,
+  userRentCalculationChanged,
+} from 'src/store/features/settings/settingsSlice'
 import { Currency } from 'src/types/Currencies'
+import { RentCalculation } from 'src/types/RentCalculation'
 import { expiresLocalStorageCaches } from 'src/utils/useCache'
 
 const ColorSchemeMenuItem: FC = () => {
@@ -60,6 +67,48 @@ const ColorSchemeMenuItem: FC = () => {
               <Center>
                 <IconMoon size={16} />
                 <Box ml={'xs'}>{t('dark')}</Box>
+              </Center>
+            ),
+          },
+        ]}
+      />
+    </Box>
+  )
+}
+
+const RealtimeRentMenuItem: FC = () => {
+  const dispatch = useDispatch()
+  const rentCalculation = useSelector(selectUserRentCalculation)
+
+  function setUserRentCalculation(rentCalculation: RentCalculation) {
+    dispatch(userRentCalculationChanged(rentCalculation))
+  }
+
+  const { t } = useTranslation('common', { keyPrefix: 'settings' })
+
+  return (
+    <Box px={5}>
+      <SegmentedControl
+        color={'brand'}
+        fullWidth={true}
+        value={rentCalculation}
+        onChange={(value) => setUserRentCalculation(value as RentCalculation)}
+        data={[
+          {
+            value: 'realtime',
+            label: (
+              <Center>
+                <IconClock size={16} />
+                <Box ml={'xs'}>{t('realtime')}</Box>
+              </Center>
+            ),
+          },
+          {
+            value: 'global',
+            label: (
+              <Center>
+                <IconClockOff size={16} />
+                <Box ml={'xs'}>{t('global')}</Box>
               </Center>
             ),
           },
@@ -162,6 +211,8 @@ export const SettingsMenu: FC = () => {
         <LanguageSelect />
         <Menu.Divider />
         <CurrencySelect />
+        <Menu.Divider />
+        <RealtimeRentMenuItem />
         <Menu.Divider />
         <ColorSchemeMenuItem />
         <Menu.Divider />

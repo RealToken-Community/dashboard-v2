@@ -7,9 +7,11 @@ import { t } from 'i18next'
 import { UserRepository } from 'src/repositories/user.repository'
 import { AppDispatch } from 'src/store/store'
 import { Currency } from 'src/types/Currencies'
+import { RentCalculation } from 'src/types/RentCalculation'
 
 const USER_LS_KEY = 'store:settings/user'
 const USER_CURRENCY_LS_KEY = 'store:settings/userCurrency'
+const USER_RENT_CALCULATION_LS_KEY = 'store:settings/userRentCalculation'
 
 export interface User {
   id: string
@@ -22,12 +24,14 @@ interface SettingsInitialStateType {
   user?: User
   userCurrency: Currency
   isInitialized: boolean
+  rentCalculation: RentCalculation
   version?: string
 }
 
 const settingsInitialState: SettingsInitialStateType = {
   user: undefined,
   userCurrency: Currency.USD,
+  rentCalculation: RentCalculation.Global,
   isInitialized: false,
 }
 
@@ -35,12 +39,17 @@ const settingsInitialState: SettingsInitialStateType = {
 export const initializeSettingsDispatchType = 'settings/initialize'
 export const userChangedDispatchType = 'settings/userChanged'
 export const userCurrencyChangedDispatchType = 'settings/userCurrencyChanged'
+export const userRentCalculationChangedDispatchType =
+  'settings/userRentCalculationChanged'
 
 // ACTIONS
 export const initializeSettings = createAction(initializeSettingsDispatchType)
 export const userChanged = createAction<User>(userChangedDispatchType)
 export const userCurrencyChanged = createAction<Currency>(
   userCurrencyChangedDispatchType
+)
+export const userRentCalculationChanged = createAction<RentCalculation>(
+  userRentCalculationChangedDispatchType
 )
 
 // THUNKS
@@ -86,14 +95,23 @@ export const settingsReducers = createReducer(
         state.userCurrency = action.payload
         localStorage.setItem(USER_CURRENCY_LS_KEY, action.payload)
       })
+      .addCase(userRentCalculationChanged, (state, action) => {
+        ;(state.rentCalculation = action.payload),
+          localStorage.setItem(USER_RENT_CALCULATION_LS_KEY, action.payload)
+      })
       .addCase(initializeSettings, (state) => {
         const user = localStorage.getItem(USER_LS_KEY)
         const userCurrency = localStorage.getItem(USER_CURRENCY_LS_KEY)
+        const userRentCalculation = localStorage.getItem(
+          USER_RENT_CALCULATION_LS_KEY
+        )
         state.user = user ? JSON.parse(user) : undefined
         state.userCurrency = userCurrency
           ? (userCurrency as Currency)
           : Currency.USD
-
+        state.rentCalculation = userRentCalculation
+          ? (userRentCalculation as RentCalculation)
+          : RentCalculation.Global
         const { publicRuntimeConfig } = getConfig() as {
           publicRuntimeConfig?: { version: string }
         }
