@@ -1,5 +1,9 @@
 import moment from 'moment'
 
+/*
+ get the number of day ( "Monday", "Tuesday",...) inside a date range
+ after or at a certain date
+*/
 export const numberOfDaysIn = (
   startDate: moment.Moment,
   endDate: moment.Moment,
