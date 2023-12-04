@@ -96,8 +96,8 @@ export const settingsReducers = createReducer(
         localStorage.setItem(USER_CURRENCY_LS_KEY, action.payload)
       })
       .addCase(userRentCalculationChanged, (state, action) => {
-        ;(state.rentCalculation = action.payload),
-          localStorage.setItem(USER_RENT_CALCULATION_LS_KEY, action.payload)
+        state.rentCalculation = action.payload
+        localStorage.setItem(USER_RENT_CALCULATION_LS_KEY, action.payload)
       })
       .addCase(initializeSettings, (state) => {
         const user = localStorage.getItem(USER_LS_KEY)
