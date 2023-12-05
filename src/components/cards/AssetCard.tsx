@@ -1,12 +1,17 @@
 import { FC, memo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import Image from 'next/image'
 
 import { Badge, Card, Group, createStyles } from '@mantine/core'
 
+import moment from 'moment'
+
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
+import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { RentCalculation } from 'src/types/RentCalculation'
 
 import {
   Divider,
@@ -16,6 +21,9 @@ import {
 } from '../commons'
 
 const useStyles = createStyles({
+  disabled: {
+    opacity: 0.5,
+  },
   imageContainer: {
     height: '150px',
     position: 'relative',
@@ -65,6 +73,17 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
+  const rentCalculation = useSelector(selectUserRentCalculation)
+
+  let disabled = false
+
+  if (rentCalculation === RentCalculation.Realtime) {
+    const now = moment(new Date().toUTCString())
+    const rentStartDate = moment(props.value.rentStartDate.date)
+    const diff = now.diff(rentStartDate, 'day')
+    disabled = diff < 0
+  }
+
   const { classes } = useStyles()
   const isSubsidized =
     props.value.subsidyStatus !== 'no' && props.value.subsidyStatusValue
@@ -81,7 +100,11 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
       radius={'md'}
       withBorder={true}
       style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-      className={props.onClick ? classes.clickable : undefined}
+      className={
+        (props.onClick ? classes.clickable : '') +
+        ' ' +
+        (disabled ? classes.disabled : '')
+      }
       onClick={() => props.onClick?.(props.value.id)}
     >
       <Card.Section>
