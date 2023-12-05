@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { Box, Card, Title, createStyles } from '@mantine/core'
+import { Box, Card, Title } from '@mantine/core'
 
 import _sumBy from 'lodash/sumBy'
 

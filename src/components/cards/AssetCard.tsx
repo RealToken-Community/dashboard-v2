@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import Image from 'next/image'
 
-import { Badge, Card, Group, MantineTheme, createStyles } from '@mantine/core'
+import { Badge, Card, Group, createStyles } from '@mantine/core'
 
 import moment from 'moment'
 
@@ -30,6 +30,7 @@ const useStyles = createStyles({
       width: '100%',
       height: '100%',
       color: 'white',
+      textAlign: 'center',
       fontWeight: 500,
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       zIndex: 2,
