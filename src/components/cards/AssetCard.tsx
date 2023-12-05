@@ -22,7 +22,29 @@ import {
 
 const useStyles = createStyles({
   disabled: {
-    opacity: 0.5,
+    '&:before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      color: 'white',
+      fontWeight: 500,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      zIndex: 2,
+    },
+
+    '&:after': {
+      content: '"Rent not started yet"',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      color: 'white',
+      fontWeight: 500,
+      zIndex: 3,
+    },
   },
   imageContainer: {
     height: '150px',
@@ -101,15 +123,15 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
       radius={'md'}
       withBorder={true}
       style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-      className={
-        (props.onClick ? classes.clickable : '') +
-        ' ' +
-        (disabled ? classes.disabled : '')
-      }
+      className={props.onClick ? classes.clickable : undefined}
       onClick={() => props.onClick?.(props.value.id)}
     >
       <Card.Section>
-        <div className={classes.imageContainer}>
+        <div
+          className={
+            classes.imageContainer + ' ' + (disabled ? classes.disabled : '')
+          }
+        >
           <Image
             src={props.value.imageLink[0]}
             width={400}
