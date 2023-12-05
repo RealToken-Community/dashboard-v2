@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import Image from 'next/image'
 
-import { Badge, Card, Group, createStyles } from '@mantine/core'
+import { Badge, Card, Group, MantineTheme, createStyles } from '@mantine/core'
 
 import moment from 'moment'
 
@@ -20,71 +20,73 @@ import {
   SubsidyStatusTag,
 } from '../commons'
 
-const useStyles = createStyles({
-  disabled: {
-    '&:before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      color: 'white',
-      fontWeight: 500,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      zIndex: 2,
-    },
+const useStyles = createStyles(
+  (theme: MantineTheme, { rentNotStarted }: { rentNotStarted: string }) => ({
+    disabled: {
+      '&:before': {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        color: 'white',
+        fontWeight: 500,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 2,
+      },
 
-    '&:after': {
-      content: '"Rent not started yet"',
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      color: 'white',
-      fontWeight: 500,
-      zIndex: 3,
+      '&:after': {
+        content: `"${rentNotStarted}"`,
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        color: 'white',
+        fontWeight: 500,
+        zIndex: 3,
+      },
     },
-  },
-  imageContainer: {
-    height: '150px',
-    position: 'relative',
+    imageContainer: {
+      height: '150px',
+      position: 'relative',
 
-    '& > span': {
-      height: '100% !important',
-      width: '100% !important',
+      '& > span': {
+        height: '100% !important',
+        width: '100% !important',
+      },
     },
-  },
-  textBold: {
-    fontWeight: 500,
-  },
-  textSm: {
-    fontSize: '14px',
-  },
-  textLocation: {
-    fontSize: '12px',
-    textAlign: 'center',
-  },
-  groupApart: {
-    boxSizing: 'border-box',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    '& > *': {
+    textBold: {
+      fontWeight: 500,
+    },
+    textSm: {
+      fontSize: '14px',
+    },
+    textLocation: {
+      fontSize: '12px',
+      textAlign: 'center',
+    },
+    groupApart: {
       boxSizing: 'border-box',
-      flexGrow: 0,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+      '& > *': {
+        boxSizing: 'border-box',
+        flexGrow: 0,
+      },
     },
-  },
-  clickable: {
-    cursor: 'pointer',
-    transition: 'transform 0.1s ease-in-out',
-    '&:hover': {
-      transform: 'scale(1.03)',
+    clickable: {
+      cursor: 'pointer',
+      transition: 'transform 0.1s ease-in-out',
+      '&:hover': {
+        transform: 'scale(1.03)',
+      },
     },
-  },
-})
+  })
+)
 
 interface AssetCardProps {
   value: UserRealtoken
@@ -106,8 +108,8 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
     const diff = now.diff(rentStartDate, 'day')
     disabled = diff < 0
   }
-
-  const { classes } = useStyles()
+  const rentNotStarted = t('rentNotStarted')
+  const { classes } = useStyles({ rentNotStarted })
   const isSubsidized =
     props.value.subsidyStatus !== 'no' && props.value.subsidyStatusValue
 

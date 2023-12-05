@@ -153,6 +153,7 @@
     "rentedUnits": "Rented units",
     "propertyValue": "Property value",
     "rentStartDate": "Rent Start",
+    "rentNotStarted":"Rent not started yet",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Rented",

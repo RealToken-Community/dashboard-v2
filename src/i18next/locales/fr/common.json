@@ -153,6 +153,7 @@
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
     "rentStartDate": "Début de la rente",
+    "rentNotStarted":"La rente n'a pas débuté",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Louée",
