@@ -152,6 +152,7 @@
     "yearly": "Loyers annuels",
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
+    "rentStartDate": "Début de la rente",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Louée",

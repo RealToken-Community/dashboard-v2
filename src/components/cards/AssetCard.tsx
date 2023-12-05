@@ -77,9 +77,10 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 
   let disabled = false
 
+  const rentStartDate = moment(props.value.rentStartDate.date)
+
   if (rentCalculation === RentCalculation.Realtime) {
     const now = moment(new Date().toUTCString())
-    const rentStartDate = moment(props.value.rentStartDate.date)
     const diff = now.diff(rentStartDate, 'day')
     disabled = diff < 0
   }
@@ -187,6 +188,13 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
         <div className={classes.textSm}>{t('propertyValue')}</div>
         <div className={classes.textSm}>
           {useCurrencyValue(totalInvestment)}
+        </div>
+      </div>
+
+      <div className={classes.groupApart}>
+        <div className={classes.textSm}>{t('rentStartDate')}</div>
+        <div className={classes.textSm}>
+          {rentStartDate.format('DD/MM/YYYY')}
         </div>
       </div>
 
