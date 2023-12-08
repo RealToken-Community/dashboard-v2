@@ -5,5 +5,5 @@
 export const getAverageTokenMult = (diff: number | undefined) => {
   if (diff === undefined) return 1
   const absDiff = Math.abs(diff)
-  return absDiff > 7 ? 1 : !absDiff ? 1 : (1 / 7) * absDiff
+  return absDiff > 7 ? 1 : (1 / 7) * absDiff
 }
