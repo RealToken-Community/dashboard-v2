@@ -1,6 +1,10 @@
 {
   "header": {
-    "title": "Realtoken Dashboard"
+    "title": "Realtoken Dashboard",
+    "home": "Accueil",
+    "realt": "RealT",
+    "RMM": "RMM",
+    "YAM": "YAM"
   },
   "settings": {
     "title": "Langue",
