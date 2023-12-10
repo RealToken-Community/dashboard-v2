@@ -25,6 +25,24 @@
     "addresses": "Addresses",
     "whitelists": "Whitelists"
   },
+  "manageWalletModal": {
+    "open": "Manage my wallets",
+    "close": "Close",
+    "submit": "Submit",
+    "item": {
+      "hide": "Hide",
+      "show": "Show",
+      "remove": "Remove"
+    }
+  },
+  "addCustomAddress": {
+    "open": "Add an address",
+    "title": "Add an address",
+    "close": "Close",
+    "submit": "Submit",
+    "invalidAddress": "Invalid address",
+    "addressAlreadyAdded": "Address already added"
+  },
   "numbers": {
     "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} {{symbol}}",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",

@@ -23,17 +23,18 @@ import {
   selectIsInitialized,
   selectUser,
 } from 'src/store/features/settings/settingsSelector'
-import { setUserAddress } from 'src/store/features/settings/settingsSlice'
+import { User, setUserAddress } from 'src/store/features/settings/settingsSlice'
 
 import { IntegerField, StringField } from '../commons'
 
 interface WalletItemProps {
   address: string
+  isVisible?: boolean
 }
 
 const useStyles = createStyles({
   address: {
-    span: { fontFamily: 'monospace', fontSize: '12px' },
+    span: { fontFamily: 'monospace', fontSize: '11px' },
   },
 })
 
@@ -45,7 +46,11 @@ const WalletItem: FC<WalletItemProps> = (props) => {
       variant={'dot'}
       fullWidth={true}
       className={classes.address}
-      style={{ textTransform: 'none', justifyContent: 'space-between' }}
+      style={{
+        textTransform: 'none',
+        justifyContent: 'space-between',
+        opacity: props.isVisible ? 0.5 : 1,
+      }}
     >
       {EthersUtils.getAddress(props.address)}
     </Badge>
@@ -53,13 +58,52 @@ const WalletItem: FC<WalletItemProps> = (props) => {
 }
 WalletItem.displayName = 'WalletItem'
 
-const WalletItemList: FC<{ addressList: string[] }> = (props) => {
+const AddWalletButton: FC<{ onClick?: () => void }> = (props) => {
+  const modals = useModals()
+  const { t } = useTranslation('common', { keyPrefix: 'manageWalletModal' })
+
+  function openModal() {
+    props.onClick?.()
+    modals.openContextModal('manageWalletModal', {
+      innerProps: {},
+      closeOnClickOutside: false,
+      closeOnEscape: false,
+    })
+  }
+
+  return (
+    <>
+      <Button
+        onClick={openModal}
+        size={'xs'}
+        compact={true}
+        variant={'outline'}
+      >
+        {t('open')}
+      </Button>
+    </>
+  )
+}
+AddWalletButton.displayName = 'AddWalletButton'
+
+const WalletItemList: FC<{ user: User }> = (props) => {
+  const addresses = [
+    ...(props.user?.addressList ?? []),
+    ...(props.user?.customAddressList ?? []),
+  ]
+
+  const hiddenAddressList = props.user?.hiddenAddressList ?? []
+
   return (
     <Flex direction={'column'} gap={'xs'}>
-      {props.addressList
+      {addresses
         .filter((item) => item)
-        .map((address) => (
-          <WalletItem key={address} address={address} />
+        .map((item) => (
+          <WalletItem
+            key={item}
+            address={item}
+            isVisible={hiddenAddressList.includes(item)}
+          />
         ))}
     </Flex>
   )
@@ -140,7 +184,11 @@ export const WalletMenu: FC = () => {
 
             <Menu.Divider my={'xs'} />
 
-            <WalletItemList addressList={user.addressList} />
+            <WalletItemList user={user} />
+
+            <Box ta={'center'} mb={'xs'} mt={'sm'}>
+              <AddWalletButton onClick={handlers.close} />
+            </Box>
 
             <Menu.Divider mt={'xs'} />
           </>
