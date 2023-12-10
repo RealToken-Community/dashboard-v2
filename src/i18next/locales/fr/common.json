@@ -23,6 +23,24 @@
     "addresses": "Adresses",
     "whitelists": "Whitelists"
   },
+  "manageWalletModal": {
+    "open": "Gérer mes adresses",
+    "close": "Fermer",
+    "submit": "Valider",
+    "item": {
+      "hide": "Masquer",
+      "show": "Afficher",
+      "remove": "Supprimer"
+    }
+  },
+  "addCustomAddress": {
+    "open": "Ajouter une adresse",
+    "title": "Ajouter une adresse",
+    "close": "Fermer",
+    "submit": "Valider",
+    "invalidAddress": "Adresse invalide",
+    "addressAlreadyAdded": "Cette adresse est déjà ajoutée"
+  },
   "numbers": {
     "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} {{symbol}}",
     "percent": "{{value, number(maximumFractionDigits: 2)}} %",
