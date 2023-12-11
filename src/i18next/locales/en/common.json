@@ -12,7 +12,9 @@
     "chf": "Swiss franc (CHF)",
     "light": "Light",
     "dark": "Dark",
-    "refreshDataButton": "Refresh data"
+    "refreshDataButton": "Refresh data",
+    "realtime":"Realtime",
+    "global":"Global"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
@@ -168,6 +170,8 @@
     "yearly": "Yearly rents",
     "rentedUnits": "Rented units",
     "propertyValue": "Property value",
+    "rentStartDate": "Rent Start",
+    "rentNotStarted":"Rent not started yet",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Rented",

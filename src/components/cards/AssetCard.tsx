@@ -1,12 +1,15 @@
 import { FC, memo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import Image from 'next/image'
 
 import { Badge, Card, Group, createStyles } from '@mantine/core'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
+import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { RentCalculation } from 'src/types/RentCalculation'
 
 import {
   Divider,
@@ -16,6 +19,32 @@ import {
 } from '../commons'
 
 const useStyles = createStyles({
+  disabled: {
+    '&:before': {
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      color: 'white',
+      textAlign: 'center',
+      fontWeight: 500,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      zIndex: 2,
+    },
+
+    '&:after': {
+      content: 'attr(data-value)',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      color: 'white',
+      fontWeight: 500,
+      zIndex: 3,
+    },
+  },
   imageContainer: {
     height: '150px',
     position: 'relative',
@@ -65,7 +94,14 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
+  const rentCalculation = useSelector(selectUserRentCalculation)
+
+  const rentStartDate = new Date(props.value.rentStartDate.date)
+  const isDisabled =
+    rentCalculation === RentCalculation.Realtime && rentStartDate > new Date()
+
   const { classes } = useStyles()
+  const rentNotStarted = t('rentNotStarted')
   const isSubsidized =
     props.value.subsidyStatus !== 'no' && props.value.subsidyStatusValue
 
@@ -85,7 +121,12 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
       onClick={() => props.onClick?.(props.value.id)}
     >
       <Card.Section>
-        <div className={classes.imageContainer}>
+        <div
+          className={
+            classes.imageContainer + ' ' + (isDisabled ? classes.disabled : '')
+          }
+          data-value={rentNotStarted}
+        >
           <Image
             src={props.value.imageLink[0]}
             width={400}
@@ -164,6 +205,13 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
         <div className={classes.textSm}>{t('propertyValue')}</div>
         <div className={classes.textSm}>
           {useCurrencyValue(totalInvestment)}
+        </div>
+      </div>
+
+      <div className={classes.groupApart}>
+        <div className={classes.textSm}>{t('rentStartDate')}</div>
+        <div className={classes.textSm}>
+          {rentStartDate.toLocaleDateString()}
         </div>
       </div>
 

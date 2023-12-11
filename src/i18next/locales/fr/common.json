@@ -12,7 +12,9 @@
     "chf": "Franc suisse (CHF)",
     "light": "Clair",
     "dark": "Sombre",
-    "refreshDataButton": "Actualiser les données"
+    "refreshDataButton": "Actualiser les données",
+    "realtime":"Temps réel",
+    "global":"Global"
   },
   "walletButton": {
     "connectWallet": "Connecter mon portefeuille",
@@ -168,6 +170,8 @@
     "yearly": "Loyers annuels",
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
+    "rentStartDate": "Date du premier loyer",
+    "rentNotStarted":"Le loyer n'a pas débuté",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Louée",
