@@ -2,15 +2,12 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import moment from 'moment'
-
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import {
   UserRealtoken,
   calculateTokenRent,
 } from 'src/store/features/wallets/walletsSelector'
-import { RentCalculation } from 'src/types/RentCalculation'
 
 import { AssetPageTable } from './assetPageTable'
 
@@ -18,12 +15,7 @@ export const AssetPageMainTab: FC<{ data: UserRealtoken }> = ({ data }) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetPage.main' })
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const rentCalculation = useSelector(selectUserRentCalculation)
-  const now = moment()
-  const rent = calculateTokenRent(
-    data,
-    now,
-    rentCalculation || RentCalculation.Global
-  )
+  const rent = calculateTokenRent(data, rentCalculation)
   const lowValue = '< ' + useCurrencyValue(0.01)
   const ownedValue = useCurrencyValue(data.value)
   const ownedEthereumValue = useCurrencyValue(data.balance.ethereum.value)

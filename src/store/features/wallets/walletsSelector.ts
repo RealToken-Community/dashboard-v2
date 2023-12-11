@@ -91,9 +91,9 @@ export const selectOwnedRealtokensValue = createSelector(
 
 export const calculateTokenRent = (
   token: UserRealtoken,
-  now: moment.Moment,
-  rentCalculation: string
+  rentCalculation: string = RentCalculation.Global
 ) => {
+  const now = moment()
   const rent = {
     daily: token.netRentDayPerToken * token.amount,
     weekly: token.netRentDayPerToken * 7 * token.amount,
@@ -130,13 +130,8 @@ export const selectOwnedRealtokensRents = createSelector(
   selectOwnedRealtokens,
   (rentCalculation, realTokens) => {
     const rents = { daily: 0, weekly: 0, monthly: 0, yearly: 0 }
-    const now = moment()
     return realTokens.reduce((acc, realToken) => {
-      const rent = calculateTokenRent(
-        realToken,
-        now,
-        rentCalculation || RentCalculation.Global
-      )
+      const rent = calculateTokenRent(realToken, rentCalculation)
       return {
         daily: acc.daily + rent.daily,
         weekly: acc.weekly + rent.weekly,
