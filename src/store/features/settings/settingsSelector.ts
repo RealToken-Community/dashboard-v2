@@ -28,5 +28,9 @@ export const selectUserCurrency = (state: RootState): string =>
 export const selectUser = (state: RootState): User | undefined =>
   state.settings.user
 
+export const selectUserRentCalculation = (
+  state: RootState
+): string | undefined => state.settings.rentCalculation
+
 export const selectVersion = (state: RootState): string | undefined =>
   state.settings.version

@@ -2,11 +2,15 @@ import { createSelector } from '@reduxjs/toolkit'
 
 import _mapValues from 'lodash/mapValues'
 import _sumBy from 'lodash/sumBy'
+import moment from 'moment'
 
 import { WalletBalances, WalletType } from 'src/repositories'
 import { RootState } from 'src/store/store'
+import { RentCalculation } from 'src/types/RentCalculation'
+import { numberOfDaysIn } from 'src/utils/date'
 
 import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'
+import { selectUserRentCalculation } from '../settings/settingsSelector'
 
 export interface UserRealtoken extends Realtoken {
   id: string
@@ -83,17 +87,68 @@ export const selectOwnedRealtokensValue = createSelector(
 )
 
 export const selectOwnedRealtokensRents = createSelector(
+  selectUserRentCalculation,
   selectOwnedRealtokens,
-  (realtokens) =>
-    realtokens.reduce(
-      (acc, item) => ({
-        daily: acc.daily + item.netRentDayPerToken * item.amount,
-        weekly: acc.weekly + item.netRentDayPerToken * 7 * item.amount,
-        monthly: acc.monthly + item.netRentMonthPerToken * item.amount,
-        yearly: acc.yearly + item.netRentYearPerToken * item.amount,
-      }),
-      { daily: 0, weekly: 0, monthly: 0, yearly: 0 }
-    )
+  (rentCalculation, realtokens) => {
+    const rents = { daily: 0, weekly: 0, monthly: 0, yearly: 0 }
+
+    if (rentCalculation === RentCalculation.Global) {
+      return realtokens.reduce(
+        (acc, item) => ({
+          daily: acc.daily + item.netRentDayPerToken * item.amount,
+          weekly: acc.weekly + item.netRentDayPerToken * 7 * item.amount,
+          monthly: acc.monthly + item.netRentMonthPerToken * item.amount,
+          yearly: acc.yearly + item.netRentYearPerToken * item.amount,
+        }),
+        rents
+      )
+    }
+
+    const now = moment(new Date().toUTCString())
+    const rentDay = 'Monday'
+    const oneMonthLater = now.clone().add(1, 'M')
+    const oneYearLater = now.clone().add(1, 'y')
+    const oneWeekLater = now.clone().add(1, 'w')
+    const nbMondaysInMonth = numberOfDaysIn(now, oneMonthLater, now, rentDay)
+    const nbMondaysInYear = numberOfDaysIn(now, oneYearLater, now, rentDay)
+
+    for (const item of realtokens) {
+      const rentStartDate = moment(item.rentStartDate.date)
+      const daysDiff = rentStartDate.diff(now, 'days')
+      const rentPerWeek = item.netRentDayPerToken * 7 * item.amount
+
+      if (daysDiff > 0) {
+        const nbDayLeftInWeek = numberOfDaysIn(
+          now,
+          oneWeekLater,
+          rentStartDate,
+          rentDay
+        )
+        const nbDayLeftInMonth = numberOfDaysIn(
+          now,
+          oneMonthLater,
+          rentStartDate,
+          rentDay
+        )
+        const nbDayLeftInYear = numberOfDaysIn(
+          now,
+          oneYearLater,
+          rentStartDate,
+          rentDay
+        )
+
+        rents.weekly += !nbDayLeftInWeek ? 0 : rentPerWeek
+        rents.monthly += !nbDayLeftInMonth ? 0 : rentPerWeek * nbDayLeftInMonth
+        rents.yearly += !nbDayLeftInYear ? 0 : rentPerWeek * nbDayLeftInYear
+      } else {
+        rents.daily += item.netRentDayPerToken * item.amount
+        rents.weekly += rentPerWeek
+        rents.monthly += rentPerWeek * nbMondaysInMonth
+        rents.yearly += rentPerWeek * nbMondaysInYear
+      }
+    }
+    return rents
+  }
 )
 
 export const selectOwnedRealtokensAPY = createSelector(

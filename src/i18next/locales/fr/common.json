@@ -12,7 +12,9 @@
     "chf": "Franc suisse (CHF)",
     "light": "Clair",
     "dark": "Sombre",
-    "refreshDataButton": "Actualiser les données"
+    "refreshDataButton": "Actualiser les données",
+    "realtime":"Temps réel",
+    "global":"Global"
   },
   "walletButton": {
     "connectWallet": "Connecter mon portefeuille",

@@ -15,6 +15,7 @@ export const RentsCard: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'rentsCard' })
 
   const rents = useSelector(selectOwnedRealtokensRents)
+
   const apy = useSelector(selectOwnedRealtokensAPY)
 
   // In Dollars
