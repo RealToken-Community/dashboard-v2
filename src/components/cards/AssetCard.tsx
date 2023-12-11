@@ -98,18 +98,10 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 
   const rentCalculation = useSelector(selectUserRentCalculation)
 
-  let disabled = false
+  const rentStartDate = new Date(props.value.rentStartDate.date)
+  const isDisabled =
+    rentCalculation === RentCalculation.Realtime && rentStartDate > new Date()
 
-  const rentStartDate = moment(props.value.rentStartDate.date)
-  const rentStartLocale = new Date(
-    props.value.rentStartDate.date
-  ).toLocaleDateString()
-
-  if (rentCalculation === RentCalculation.Realtime) {
-    const now = moment(new Date().toUTCString())
-    const diff = now.diff(rentStartDate, 'day')
-    disabled = diff < 0
-  }
   const { classes } = useStyles()
   const rentNotStarted = t('rentNotStarted')
   const isSubsidized =
@@ -133,7 +125,7 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
       <Card.Section>
         <div
           className={
-            classes.imageContainer + ' ' + (disabled ? classes.disabled : '')
+            classes.imageContainer + ' ' + (isDisabled ? classes.disabled : '')
           }
           data-value={rentNotStarted}
         >
@@ -220,7 +212,9 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 
       <div className={classes.groupApart}>
         <div className={classes.textSm}>{t('rentStartDate')}</div>
-        <div className={classes.textSm}>{rentStartLocale}</div>
+        <div className={classes.textSm}>
+          {rentStartDate.toLocaleDateString()}
+        </div>
       </div>
 
       <div style={{ flex: '1 1 auto' }} />
