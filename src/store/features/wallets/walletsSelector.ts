@@ -1,3 +1,4 @@
+import { Global } from '@emotion/react'
 import { createSelector } from '@reduxjs/toolkit'
 
 import _mapValues from 'lodash/mapValues'
@@ -7,11 +8,12 @@ import moment from 'moment'
 import { WalletBalances, WalletType } from 'src/repositories'
 import { RootState } from 'src/store/store'
 import { RentCalculation } from 'src/types/RentCalculation'
-import { numberOfDaysIn } from 'src/utils/date'
-import { getAverageTokenMult } from 'src/utils/math'
 
 import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'
-import { selectUserRentCalculation } from '../settings/settingsSelector'
+import {
+  selectAddressList,
+  selectUserRentCalculation,
+} from '../settings/settingsSelector'
 
 export interface UserRealtoken extends Realtoken {
   id: string
@@ -26,6 +28,19 @@ export interface UserRealtoken extends Realtoken {
     }
   >
 }
+
+export interface RealTokenTransfers {
+  [id: string]: RealTokenTransfer[]
+}
+
+export interface RealTokenTransfer {
+  amount: number
+  timestamp: number
+}
+
+const DAYS_PER_YEAR = 365
+const MONTHES_PER_YEAR = 12
+const AVG_DAYS_PER_MONTH = DAYS_PER_YEAR / MONTHES_PER_YEAR
 
 function getRealtokenBalances(
   realtoken: Realtoken,
@@ -87,78 +102,61 @@ export const selectOwnedRealtokensValue = createSelector(
   })
 )
 
+export const calculateTokenRent = (
+  token: UserRealtoken,
+  now: moment.Moment,
+  rentCalculation: string
+) => {
+  const rent = {
+    daily: token.netRentDayPerToken * token.amount,
+    weekly: token.netRentDayPerToken * 7 * token.amount,
+    monthly: token.netRentMonthPerToken * token.amount,
+    yearly: token.netRentYearPerToken * token.amount,
+  }
+
+  if (rentCalculation === RentCalculation.Realtime) {
+    const rentStartDate = moment(token.rentStartDate.date)
+    const nbDaysBeforeRentStart = rentStartDate.diff(now, 'days')
+
+    if (nbDaysBeforeRentStart >= 0) {
+      rent.daily -= token.netRentDayPerToken * token.amount
+      rent.weekly -=
+        Math.min(7, nbDaysBeforeRentStart) *
+        token.netRentDayPerToken *
+        token.amount
+      rent.monthly -=
+        Math.min(AVG_DAYS_PER_MONTH, nbDaysBeforeRentStart) *
+        token.netRentDayPerToken *
+        token.amount
+      rent.yearly -=
+        Math.min(DAYS_PER_YEAR, nbDaysBeforeRentStart) *
+        token.netRentDayPerToken *
+        token.amount
+    }
+  }
+
+  return rent
+}
+
 export const selectOwnedRealtokensRents = createSelector(
   selectUserRentCalculation,
   selectOwnedRealtokens,
   (rentCalculation, realTokens) => {
     const rents = { daily: 0, weekly: 0, monthly: 0, yearly: 0 }
-    if (rentCalculation === RentCalculation.Global) {
-      return realTokens.reduce(
-        (acc, item) => ({
-          daily: acc.daily + item.netRentDayPerToken * item.amount,
-          weekly: acc.weekly + item.netRentDayPerToken * 7 * item.amount,
-          monthly: acc.monthly + item.netRentMonthPerToken * item.amount,
-          yearly: acc.yearly + item.netRentYearPerToken * item.amount,
-        }),
-        rents
-      )
-    }
-
-    const now = moment(new Date().toUTCString())
-    //here you can play with date to inspect different behaviors
-    //const now = moment(new Date().toUTCString()).add(125, 'day')
-    const rentDay = 'Monday'
-    const oneWeekLater = now.clone().add(1, 'w')
-    const oneMonthLater = now.clone().add(1, 'M')
-    const oneYearLater = now.clone().add(1, 'y')
-    const [, nbRentDayInMonth] = numberOfDaysIn(
-      now,
-      oneMonthLater,
-      now,
-      rentDay
-    )
-    const [, nbRentDayInYear] = numberOfDaysIn(now, oneYearLater, now, rentDay)
-
-    for (const item of realTokens) {
-      const rentStartDate = moment(item.rentStartDate.date)
-      const rentPerWeek = item.netRentDayPerToken * 7 * item.amount
-      const [weekDiff] = numberOfDaysIn(
+    const now = moment()
+    return realTokens.reduce((acc, realToken) => {
+      const rent = calculateTokenRent(
+        realToken,
         now,
-        oneWeekLater,
-        rentStartDate,
-        rentDay
+        rentCalculation || RentCalculation.Global
       )
-      if (weekDiff === undefined) {
-        const nbDaysMonthArr = numberOfDaysIn(
-          now,
-          oneMonthLater,
-          rentStartDate,
-          rentDay
-        )
-        const avgTokenDiffMonth = nbDaysMonthArr[0]
-        const nbDaysYearArr = numberOfDaysIn(
-          now,
-          oneYearLater,
-          rentStartDate,
-          rentDay
-        )
-        const avgTokenDiffYear = nbDaysYearArr[0]
-        const avgTokenMultMonth = getAverageTokenMult(avgTokenDiffMonth)
-        const avgTokenMultYear = getAverageTokenMult(avgTokenDiffYear)
-        const nbRentDayInMonth = nbDaysMonthArr[1] - 1 + avgTokenMultMonth
-        const nbRentDayInYear = nbDaysYearArr[1] - 1 + avgTokenMultYear
-        rents.monthly += rentPerWeek * nbRentDayInMonth
-        rents.yearly += rentPerWeek * nbRentDayInYear
-      } else if (weekDiff <= 0) {
-        const avgTokenMult = getAverageTokenMult(weekDiff)
-        rents.daily += item.netRentDayPerToken * item.amount * avgTokenMult
-        rents.weekly += rentPerWeek * avgTokenMult
-        rents.monthly += rentPerWeek * (nbRentDayInMonth - 1 + avgTokenMult)
-        rents.yearly += rentPerWeek * (nbRentDayInYear - 1 + avgTokenMult)
+      return {
+        daily: acc.daily + rent.daily,
+        weekly: acc.weekly + rent.weekly,
+        monthly: acc.monthly + rent.monthly,
+        yearly: acc.yearly + rent.yearly,
       }
-    }
-
-    return rents
+    }, rents)
   }
 )
 
