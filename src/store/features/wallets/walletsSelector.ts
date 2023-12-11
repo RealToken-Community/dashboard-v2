@@ -1,4 +1,3 @@
-import { Global } from '@emotion/react'
 import { createSelector } from '@reduxjs/toolkit'
 
 import _mapValues from 'lodash/mapValues'
@@ -10,10 +9,7 @@ import { RootState } from 'src/store/store'
 import { RentCalculation } from 'src/types/RentCalculation'
 
 import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'
-import {
-  selectAddressList,
-  selectUserRentCalculation,
-} from '../settings/settingsSelector'
+import { selectUserRentCalculation } from '../settings/settingsSelector'
 
 export interface UserRealtoken extends Realtoken {
   id: string
