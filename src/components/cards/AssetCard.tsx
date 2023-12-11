@@ -6,8 +6,6 @@ import Image from 'next/image'
 
 import { Badge, Card, Group, createStyles } from '@mantine/core'
 
-import moment from 'moment'
-
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
