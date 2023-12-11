@@ -8,6 +8,7 @@ export const modalStyles: ModalProps['styles'] = {
     padding: '10px !important',
     overflowY: 'unset !important' as 'unset',
   },
+  body: { padding: '0' },
 }
 
 export const theme: MantineThemeOverride = {
