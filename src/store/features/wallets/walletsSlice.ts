@@ -8,7 +8,7 @@ import {
 import { AppDispatch, RootState } from 'src/store/store'
 
 import { Realtoken } from '../realtokens/realtokensSelector'
-import { selectCleanedAddressList } from '../settings/settingsSelector'
+import { selectUserAddressList } from '../settings/settingsSelector'
 
 interface WalletsInitialStateType {
   balances: WalletBalances
@@ -46,7 +46,7 @@ export function fetchWallets(realtokens: Realtoken[]) {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState()
     const isLoading = state.wallets.isLoading
-    const addressList = selectCleanedAddressList(state)
+    const addressList = selectUserAddressList(state)
 
     if (isLoading) return
     dispatch({ type: isLoadingDispatchType, payload: true })

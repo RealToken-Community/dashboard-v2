@@ -1,6 +1,10 @@
 {
   "header": {
-    "title": "Realtoken Dashboard"
+    "title": "Realtoken Dashboard",
+    "home": "Accueil",
+    "realt": "RealT",
+    "RMM": "RMM",
+    "YAM": "YAM"
   },
   "settings": {
     "title": "Langue",
@@ -24,6 +28,24 @@
     "userId": "Identifiant",
     "addresses": "Adresses",
     "whitelists": "Whitelists"
+  },
+  "manageWalletModal": {
+    "open": "Gérer mes adresses",
+    "close": "Fermer",
+    "submit": "Valider",
+    "item": {
+      "hide": "Masquer",
+      "show": "Afficher",
+      "remove": "Supprimer"
+    }
+  },
+  "addCustomAddress": {
+    "open": "Ajouter une adresse",
+    "title": "Ajouter une adresse",
+    "close": "Fermer",
+    "submit": "Valider",
+    "invalidAddress": "Adresse invalide",
+    "addressAlreadyAdded": "Cette adresse est déjà ajoutée"
   },
   "numbers": {
     "currency": "{{value, number(maximumFractionDigits: 2; minimumFractionDigits: 2)}} {{symbol}}",
@@ -152,6 +174,8 @@
     "yearly": "Loyers annuels",
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
+    "rentStartDate": "Date du premier loyer",
+    "rentNotStarted":"Le loyer n'a pas débuté",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Louée",

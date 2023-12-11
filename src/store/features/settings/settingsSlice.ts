@@ -5,7 +5,7 @@ import { createAction, createReducer } from '@reduxjs/toolkit'
 import { t } from 'i18next'
 
 import { UserRepository } from 'src/repositories/user.repository'
-import { AppDispatch } from 'src/store/store'
+import { AppDispatch, RootState } from 'src/store/store'
 import { Currency } from 'src/types/Currencies'
 import { RentCalculation } from 'src/types/RentCalculation'
 
@@ -17,6 +17,8 @@ export interface User {
   id: string
   mainAddress: string
   addressList: string[]
+  customAddressList: string[]
+  hiddenAddressList: string[]
   whitelistAttributeKeys: string[]
 }
 
@@ -72,6 +74,8 @@ export function setUserAddress(address: string) {
         type: userChangedDispatchType,
         payload: {
           mainAddress: address.toLowerCase(),
+          customAddressList: [],
+          hiddenAddressList: [],
           ...user,
         },
       })
@@ -81,15 +85,69 @@ export function setUserAddress(address: string) {
   }
 }
 
+export function setCustomAddressList(addressList: string[]) {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    const user = getState().settings.user
+    dispatch({
+      type: userChangedDispatchType,
+      payload: {
+        ...user,
+        customAddressList: addressList.map((item) => item.toLowerCase()),
+      },
+    })
+  }
+}
+
+export function setHiddenAddressList(addressList: string[]) {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    const user = getState().settings.user
+    dispatch({
+      type: userChangedDispatchType,
+      payload: {
+        ...user,
+        hiddenAddressList: addressList.map((item) => item.toLowerCase()),
+      },
+    })
+  }
+}
+
 export const settingsReducers = createReducer(
   settingsInitialState,
   (builder) => {
     builder
       .addCase(userChanged, (state, action) => {
-        state.user = action.payload
-        action.payload
-          ? localStorage.setItem(USER_LS_KEY, JSON.stringify(action.payload))
-          : localStorage.removeItem(USER_LS_KEY)
+        const user = action.payload
+        if (!user) {
+          state.user = undefined
+          localStorage.removeItem(USER_LS_KEY)
+          return
+        }
+        const mainAddress = user.mainAddress.toLowerCase()
+        const addressList =
+          user.addressList?.map((item) => item.toLowerCase()) ?? []
+
+        const customAddressList =
+          user.customAddressList?.map((item) => item.toLowerCase()) ?? []
+
+        const hiddenAddressList =
+          user.hiddenAddressList?.map((item) => item.toLowerCase()) ?? []
+
+        if (!addressList.includes(mainAddress)) {
+          addressList.unshift(mainAddress)
+        }
+
+        const addresses = [...addressList, ...customAddressList]
+
+        state.user = {
+          ...user,
+          mainAddress,
+          addressList,
+          customAddressList,
+          hiddenAddressList: hiddenAddressList.filter((item) =>
+            addresses.includes(item)
+          ),
+        }
+        localStorage.setItem(USER_LS_KEY, JSON.stringify(action.payload))
       })
       .addCase(userCurrencyChanged, (state, action) => {
         state.userCurrency = action.payload

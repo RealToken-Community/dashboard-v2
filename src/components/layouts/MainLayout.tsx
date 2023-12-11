@@ -5,8 +5,8 @@ import { MediaQuery, createStyles } from '@mantine/core'
 import { useModals } from '@mantine/modals'
 
 import {
-  selectCleanedAddressList,
   selectIsInitialized,
+  selectUserAddressList,
 } from 'src/store/features/settings/settingsSelector'
 
 import { Footer } from './Footer'
@@ -43,7 +43,7 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const { classes } = useStyles()
 
   const isInitialized = useSelector(selectIsInitialized)
-  const addressList = useSelector(selectCleanedAddressList)
+  const addressList = useSelector(selectUserAddressList)
   const modals = useModals()
 
   useEffect(() => {

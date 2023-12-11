@@ -6,7 +6,10 @@ import { useWeb3React } from '@web3-react/core'
 import { fetchCurrenciesRates } from 'src/store/features/currencies/currenciesSlice'
 import { selectRealtokens } from 'src/store/features/realtokens/realtokensSelector'
 import { fetchRealtokens } from 'src/store/features/realtokens/realtokensSlice'
-import { selectCleanedAddressList } from 'src/store/features/settings/settingsSelector'
+import {
+  selectAllUserAddressList,
+  selectUserAddressList,
+} from 'src/store/features/settings/settingsSelector'
 import {
   initializeSettings,
   setUserAddress,
@@ -21,16 +24,17 @@ import { useAppDispatch } from './react-hooks'
 export default function useInitStore() {
   const dispatch = useAppDispatch()
 
-  const addressList = useSelector(selectCleanedAddressList)
+  const allAddressList = useSelector(selectAllUserAddressList)
+  const addressList = useSelector(selectUserAddressList)
   const realtokens = useSelector(selectRealtokens)
   const { account } = useWeb3React()
 
   useEffect(() => {
     const accountAddress = account?.toLowerCase()
-    if (accountAddress && !addressList.includes(accountAddress)) {
+    if (accountAddress && !allAddressList.includes(accountAddress)) {
       dispatch(setUserAddress(accountAddress))
     }
-  }, [account, addressList])
+  }, [account, allAddressList])
 
   useEffect(() => {
     dispatch(initializeSettings())
