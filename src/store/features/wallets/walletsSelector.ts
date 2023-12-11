@@ -25,18 +25,9 @@ export interface UserRealtoken extends Realtoken {
   >
 }
 
-export interface RealTokenTransfers {
-  [id: string]: RealTokenTransfer[]
-}
-
-export interface RealTokenTransfer {
-  amount: number
-  timestamp: number
-}
-
 const DAYS_PER_YEAR = 365
-const MONTHES_PER_YEAR = 12
-const AVG_DAYS_PER_MONTH = DAYS_PER_YEAR / MONTHES_PER_YEAR
+const MONTHS_PER_YEAR = 12
+const AVG_DAYS_PER_MONTH = DAYS_PER_YEAR / MONTHS_PER_YEAR
 
 function getRealtokenBalances(
   realtoken: Realtoken,

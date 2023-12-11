@@ -101,6 +101,9 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   let disabled = false
 
   const rentStartDate = moment(props.value.rentStartDate.date)
+  const rentStartLocale = new Date(
+    props.value.rentStartDate.date
+  ).toLocaleDateString()
 
   if (rentCalculation === RentCalculation.Realtime) {
     const now = moment(new Date().toUTCString())
@@ -217,9 +220,7 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 
       <div className={classes.groupApart}>
         <div className={classes.textSm}>{t('rentStartDate')}</div>
-        <div className={classes.textSm}>
-          {rentStartDate.format('DD/MM/YYYY')}
-        </div>
+        <div className={classes.textSm}>{rentStartLocale}</div>
       </div>
 
       <div style={{ flex: '1 1 auto' }} />
