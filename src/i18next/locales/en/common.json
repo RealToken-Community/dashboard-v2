@@ -17,8 +17,8 @@
     "light": "Light",
     "dark": "Dark",
     "refreshDataButton": "Refresh data",
-    "realtime":"Realtime",
-    "global":"Global"
+    "realtime": "Realtime",
+    "global": "Global"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
@@ -82,7 +82,7 @@
     "tokens": "Tokens",
     "properties": "Properties",
     "averageValue": "Average value",
-    "averageRent": "Average rent",
+    "averageYearlyRent": "Average yearly rent",
     "rentedUnits": "Rented units"
   },
   "assetView": {
@@ -175,7 +175,7 @@
     "rentedUnits": "Rented units",
     "propertyValue": "Property value",
     "rentStartDate": "Rent Start",
-    "rentNotStarted":"Rent not started yet",
+    "rentNotStarted": "Rent not started yet",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Rented",
@@ -219,7 +219,7 @@
       "rentWeek": "Weekly rent",
       "rentMonth": "Monthly rent",
       "rentYear": "Yearly rent",
-      "rentedUnits":"Rented units"
+      "rentedUnits": "Rented units"
     },
     "property": {
       "initialLaunchDate": "Launch date",
