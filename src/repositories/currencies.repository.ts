@@ -2,14 +2,13 @@ import { ethers } from 'ethers'
 
 import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
+import { RpcProvider } from './RpcProvider'
+
 export interface CurrencyRates {
   XdaiUsd: number
   EurUsd: number
   ChfUsd: number
 }
-
-const RPC_URL = 'https://rpc.ankr.com/gnosis'
-const RpcProvider = new ethers.providers.JsonRpcBatchProvider(RPC_URL)
 
 function getChainlinkHandler(options: {
   priceFeedContract: string
