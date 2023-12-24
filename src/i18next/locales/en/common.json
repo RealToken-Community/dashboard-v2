@@ -206,6 +206,7 @@
     "tabs": {
       "main": "Main informations",
       "property": "Property details",
+      "history": "Property changes",
       "transfers": "My transactions",
       "yamStatistics": "Secondary market statistics (Yam)"
     },
@@ -245,6 +246,18 @@
       "interiorSize": "Interior size",
       "subsidyBy": "Subsidy",
       "subsidyShare": "Rent Subsidized"
+    },
+    "history": {
+      "date": "Date",
+      "canal": "Canal",
+      "tokenPrice": "Token price",
+      "underlyingAssetPrice": "Asset price",
+      "initialMaintenanceReserve": "Maintenance reserve",
+      "renovationReserve": "Renovation reserve",
+      "totalInvestment": "Total investment",
+      "grossRentMonth": "Gross monthly rent",
+      "netRentMonth": "Net monthly rent",
+      "rentedUnits": "Rented units"
     },
     "transfers": {
       "swapcatIn": "Purchase on Swapcat",

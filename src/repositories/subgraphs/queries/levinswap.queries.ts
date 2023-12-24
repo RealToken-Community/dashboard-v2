@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client'
 
-import { Realtoken } from 'src/store/features/realtokens/realtokensSelector'
+import { RealToken } from 'src/types/RealToken'
 import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
 import { LevinSwapClient } from '../clients'
 
 export async function getLevinSwapBalances(
   addressList: string[],
-  realtokens: Realtoken[]
+  realtokens: RealToken[]
 ) {
   const result = await executeQuery(
     addressList.map((item) => item.toLowerCase())
@@ -72,7 +72,7 @@ interface LevinSwapResult {
 
 function formatBalances(
   users: LevinSwapResult['users'],
-  realtokens: Realtoken[]
+  realtokens: RealToken[]
 ) {
   return users.map((user) => {
     const balances: Record<string, { amount: number; decimals: number }> = {}

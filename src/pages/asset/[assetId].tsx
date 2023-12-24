@@ -9,8 +9,9 @@ import { useRouter } from 'next/router'
 import { Anchor, Breadcrumbs, Button, Flex, createStyles } from '@mantine/core'
 import { IconExternalLink } from '@tabler/icons'
 
+import { AssetPageHistoryTab } from 'src/components/assetPage/assetPageHistoryTab'
 import { AssetPageMainTab } from 'src/components/assetPage/assetPageMainTab'
-import { AssetPagePropertyTab } from 'src/components/assetPage/assetPagePropertyPage'
+import { AssetPagePropertyTab } from 'src/components/assetPage/assetPagePropertyTab'
 import { AssetPageTransfersTab } from 'src/components/assetPage/assetPageTransfersTab'
 import { AssetPageYamStatisticsTab } from 'src/components/assetPage/assetPageYamStatisticsTab'
 import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
@@ -27,6 +28,7 @@ enum Tabs {
   Main = 'main',
   Property = 'property',
   Transfers = 'transfers',
+  History = 'history',
   YamStatistics = 'yamStatistics',
 }
 
@@ -105,6 +107,17 @@ const AssetPage: NextPage = () => {
           {activeTab === Tabs.Property ? (
             <div style={{ margin: '5px 10px' }}>
               <AssetPagePropertyTab data={data} />
+            </div>
+          ) : null}
+
+          <TabButton
+            label={t('tabs.history')}
+            active={activeTab === Tabs.History}
+            onClick={() => setActiveTab(Tabs.History)}
+          />
+          {activeTab === Tabs.History ? (
+            <div style={{ margin: '5px 10px' }}>
+              <AssetPageHistoryTab data={data} />
             </div>
           ) : null}
 

@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { createStyles } from '@mantine/core'
+import { Divider, createStyles } from '@mantine/core'
 
 const useStyles = createStyles({
   table: {
@@ -11,12 +11,13 @@ const useStyles = createStyles({
   },
 })
 
-interface AssetPageTableProps {
+export interface AssetPageTableProps {
   data: {
     label: string
     value: string
     isHidden?: boolean
     isIndented?: boolean
+    separator?: boolean
   }[]
 }
 
@@ -28,13 +29,24 @@ export const AssetPageTable: FC<AssetPageTableProps> = ({ data }) => {
         {data
           .filter((item) => !item.isHidden)
           .map((item, index) => (
-            <tr key={index}>
-              <td style={item.isIndented ? { paddingLeft: '10px' } : undefined}>
-                {item.isIndented && <span>{'- '}</span>}
-                {item.label}
-              </td>
-              <td>{item.value}</td>
-            </tr>
+            <>
+              {item.separator && (
+                <tr key={index}>
+                  <td colSpan={2}>
+                    <Divider my={'xs'} />
+                  </td>
+                </tr>
+              )}
+              <tr key={index}>
+                <td
+                  style={item.isIndented ? { paddingLeft: '10px' } : undefined}
+                >
+                  {item.isIndented && <span>{'- '}</span>}
+                  {item.label}
+                </td>
+                <td>{item.value}</td>
+              </tr>
+            </>
           ))}
       </tbody>
     </table>

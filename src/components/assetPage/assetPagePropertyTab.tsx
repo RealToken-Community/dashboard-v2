@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
-import { APIRealTokenRentalType } from 'src/types/APIRealToken'
+import { RealTokenRentalType } from 'src/types/RealToken'
 
 import { Divider } from '../commons'
 import { AssetPageTable } from './assetPageTable'
@@ -15,8 +15,8 @@ export const AssetPagePropertyTab: FC<{ data: UserRealtoken }> = ({ data }) => {
   const totalValue = useCurrencyValue(data.totalInvestment)
   const assetPrice = useCurrencyValue(data.underlyingAssetPrice)
   const rentalType = {
-    [APIRealTokenRentalType.ShortTerm]: t('rentalTypeValue.shortTerm'),
-    [APIRealTokenRentalType.LongTerm]: t('rentalTypeValue.longTerm'),
+    [RealTokenRentalType.ShortTerm]: t('rentalTypeValue.shortTerm'),
+    [RealTokenRentalType.LongTerm]: t('rentalTypeValue.longTerm'),
   }
   const subsidyBy = data.subsidyBy
   const subsidyShare = tNumbers('percent', {

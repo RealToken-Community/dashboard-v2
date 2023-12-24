@@ -6,15 +6,16 @@ import moment from 'moment'
 
 import { WalletBalances, WalletType } from 'src/repositories'
 import { RootState } from 'src/store/store'
+import { RealToken } from 'src/types/RealToken'
 import {
   RentCalculation,
   RentCalculationState,
 } from 'src/types/RentCalculation'
 
-import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'
+import { selectRealtokens } from '../realtokens/realtokensSelector'
 import { selectUserRentCalculation } from '../settings/settingsSelector'
 
-export interface UserRealtoken extends Realtoken {
+export interface UserRealtoken extends RealToken {
   id: string
   isWhitelisted: boolean
   amount: number
@@ -33,7 +34,7 @@ const MONTHS_PER_YEAR = 12
 const AVG_DAYS_PER_MONTH = DAYS_PER_YEAR / MONTHS_PER_YEAR
 
 function getRealtokenBalances(
-  realtoken: Realtoken,
+  realtoken: RealToken,
   walletBalances: WalletBalances
 ) {
   const ethereumContract = realtoken.ethereumContract?.toLowerCase() ?? ''
