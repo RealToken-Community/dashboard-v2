@@ -6,7 +6,10 @@ import moment from 'moment'
 
 import { WalletBalances, WalletType } from 'src/repositories'
 import { RootState } from 'src/store/store'
-import { RentCalculation } from 'src/types/RentCalculation'
+import {
+  RentCalculation,
+  RentCalculationState,
+} from 'src/types/RentCalculation'
 
 import { Realtoken, selectRealtokens } from '../realtokens/realtokensSelector'
 import { selectUserRentCalculation } from '../settings/settingsSelector'
@@ -92,7 +95,7 @@ export const selectOwnedRealtokensValue = createSelector(
 export const calculateTokenRent = (
   token: UserRealtoken,
   rentCalculation: RentCalculation = {
-    state: 'global',
+    state: RentCalculationState.Global,
     date: new Date().getTime(),
   }
 ) => {
@@ -104,7 +107,7 @@ export const calculateTokenRent = (
     yearly: token.netRentYearPerToken * token.amount,
   }
 
-  if (rentCalculation.state === 'realtime') {
+  if (rentCalculation.state === RentCalculationState.Realtime) {
     const rentStartDate = moment(token.rentStartDate.date)
     const nbDaysBeforeRentStart = rentStartDate.diff(realtimeDate, 'days')
 

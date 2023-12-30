@@ -104,7 +104,7 @@ const RealtimeRentMenuItem: FC = () => {
         }
         data={[
           {
-            value: 'realtime',
+            value: RentCalculationState.Realtime,
             label: (
               <Center>
                 <IconClock size={16} />
@@ -113,7 +113,7 @@ const RealtimeRentMenuItem: FC = () => {
             ),
           },
           {
-            value: 'global',
+            value: RentCalculationState.Global,
             label: (
               <Center>
                 <IconClockOff size={16} />
@@ -131,7 +131,7 @@ const RealtimeRentMenuSelectDate: FC = () => {
   const dispatch = useDispatch()
   const rentCalculation = useSelector(selectUserRentCalculation)
 
-  if (rentCalculation.state !== 'realtime') return null
+  if (rentCalculation.state !== RentCalculationState.Realtime) return null
 
   const handleDateChange = (date: Date) => {
     dispatch(

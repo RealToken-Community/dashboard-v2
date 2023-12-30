@@ -11,7 +11,7 @@ import moment from 'moment'
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
-import { RentCalculation } from 'src/types/RentCalculation'
+import { RentCalculationState } from 'src/types/RentCalculation'
 
 import {
   Divider,
@@ -101,7 +101,7 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   const realtimeDate = moment(new Date(rentCalculation.date))
   const rentStartDate = new Date(props.value.rentStartDate.date)
   const isDisabled =
-    rentCalculation.state === 'realtime' &&
+    rentCalculation.state === RentCalculationState.Global &&
     rentStartDate > realtimeDate.toDate()
 
   const { classes } = useStyles()

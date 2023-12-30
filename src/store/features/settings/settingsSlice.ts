@@ -7,7 +7,10 @@ import { t } from 'i18next'
 import { UserRepository } from 'src/repositories/user.repository'
 import { AppDispatch, RootState } from 'src/store/store'
 import { Currency } from 'src/types/Currencies'
-import { RentCalculation } from 'src/types/RentCalculation'
+import {
+  RentCalculation,
+  RentCalculationState,
+} from 'src/types/RentCalculation'
 
 const USER_LS_KEY = 'store:settings/user'
 const USER_CURRENCY_LS_KEY = 'store:settings/userCurrency'
@@ -34,7 +37,7 @@ const settingsInitialState: SettingsInitialStateType = {
   user: undefined,
   userCurrency: Currency.USD,
   rentCalculation: {
-    state: 'global',
+    state: RentCalculationState.Global,
     date: new Date().getTime(),
   },
   isInitialized: false,
@@ -182,7 +185,7 @@ export const settingsReducers = createReducer(
               date: new Date().getTime(),
             }
           : {
-              state: 'global',
+              state: RentCalculationState.Global,
               date: new Date().getTime(),
             }
         const { publicRuntimeConfig } = getConfig() as {
