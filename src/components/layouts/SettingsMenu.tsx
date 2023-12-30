@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
@@ -23,6 +23,8 @@ import {
   IconSettings,
   IconSun,
 } from '@tabler/icons'
+
+import { DatePicker } from '@mantine/dates';
 
 import { setCookie } from 'cookies-next'
 
@@ -118,6 +120,16 @@ const RealtimeRentMenuItem: FC = () => {
   )
 }
 
+const RealtimeRentMenuSelectDate: FC = () => {
+  const [value, setValue] = useState<Date | null>(null);
+
+  return (<DatePicker 
+    value={value}
+    onChange={setValue}
+    defaultDate={new Date()}
+  />)
+}
+
 const LanguageSelect: FC = () => {
   const { i18n, t } = useTranslation('common', { keyPrefix: 'settings' })
 
@@ -195,6 +207,8 @@ export const SettingsMenu: FC = () => {
   const [isOpen, handlers] = useDisclosure(false)
   const version = useSelector(selectVersion)
 
+  const [value, setValue] = useState<Date | null>(null);
+
   return (
     <Menu
       closeOnItemClick={false}
@@ -213,6 +227,8 @@ export const SettingsMenu: FC = () => {
         <CurrencySelect />
         <Menu.Divider />
         <RealtimeRentMenuItem />
+        <Menu.Divider />
+        <RealtimeRentMenuSelectDate/>
         <Menu.Divider />
         <ColorSchemeMenuItem />
         <Menu.Divider />
