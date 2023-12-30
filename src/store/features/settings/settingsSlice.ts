@@ -33,7 +33,10 @@ interface SettingsInitialStateType {
 const settingsInitialState: SettingsInitialStateType = {
   user: undefined,
   userCurrency: Currency.USD,
-  rentCalculation: RentCalculation.Global,
+  rentCalculation: {
+    state: 'global',
+    date: new Date(),
+  },
   isInitialized: false,
 }
 
@@ -155,7 +158,7 @@ export const settingsReducers = createReducer(
       })
       .addCase(userRentCalculationChanged, (state, action) => {
         state.rentCalculation = action.payload
-        localStorage.setItem(USER_RENT_CALCULATION_LS_KEY, action.payload)
+        localStorage.setItem(USER_RENT_CALCULATION_LS_KEY, action.payload.state)
       })
       .addCase(initializeSettings, (state) => {
         const user = localStorage.getItem(USER_LS_KEY)
@@ -168,8 +171,15 @@ export const settingsReducers = createReducer(
           ? (userCurrency as Currency)
           : Currency.USD
         state.rentCalculation = userRentCalculation
-          ? (userRentCalculation as RentCalculation)
-          : RentCalculation.Global
+          ? {
+              state: userRentCalculation as RentCalculation['state'],
+              date: new Date(),
+          }
+          :
+          {
+            state: 'global',
+            date: new Date(),
+          }
         const { publicRuntimeConfig } = getConfig() as {
           publicRuntimeConfig?: { version: string }
         }

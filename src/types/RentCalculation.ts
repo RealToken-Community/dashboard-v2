@@ -1,4 +1,6 @@
-export enum RentCalculation {
-  Realtime = 'realtime',
-  Global = 'global',
+export type RentCalculationState = 'realtime' | 'global';
+
+export interface RentCalculation {
+  state: RentCalculationState;
+  date: Date;
 }

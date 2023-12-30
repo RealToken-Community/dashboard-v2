@@ -94,7 +94,7 @@ const RealtimeRentMenuItem: FC = () => {
         color={'brand'}
         fullWidth={true}
         value={rentCalculation}
-        onChange={(value) => setUserRentCalculation(value as RentCalculation)}
+        onChange={(value) => setUserRentCalculation({ state: value, date: new Date() }) }
         data={[
           {
             value: 'realtime',

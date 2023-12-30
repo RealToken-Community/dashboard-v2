@@ -91,7 +91,7 @@ export const selectOwnedRealtokensValue = createSelector(
 
 export const calculateTokenRent = (
   token: UserRealtoken,
-  rentCalculation: string = RentCalculation.Global
+  rentCalculation: RentCalculation = { state: 'global', date: new Date() }
 ) => {
   const realtimeDate = moment("2024_01_01", "YYYY_MM_DD");
   const rent = {
@@ -101,7 +101,7 @@ export const calculateTokenRent = (
     yearly: token.netRentYearPerToken * token.amount,
   }
 
-  if (rentCalculation === RentCalculation.Realtime) {
+  if (rentCalculation.state === 'realtime') {
     const rentStartDate = moment(token.rentStartDate.date)
     const nbDaysBeforeRentStart = rentStartDate.diff(realtimeDate, 'days')
 
