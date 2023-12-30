@@ -121,7 +121,6 @@ const RealtimeRentMenuItem: FC = () => {
 }
 
 const RealtimeRentMenuSelectDate: FC = () => {
-  const [value, setValue] = useState<Date | null>(null);
 
   const dispatch = useDispatch()
   const rentCalculation = useSelector(selectUserRentCalculation)
