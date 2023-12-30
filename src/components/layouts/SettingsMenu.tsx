@@ -38,7 +38,7 @@ import {
   userRentCalculationChanged,
 } from 'src/store/features/settings/settingsSlice'
 import { Currency } from 'src/types/Currencies'
-import { RentCalculation } from 'src/types/RentCalculation'
+import { RentCalculation, RentCalculationState } from 'src/types/RentCalculation'
 import { expiresLocalStorageCaches } from 'src/utils/useCache'
 
 const ColorSchemeMenuItem: FC = () => {
@@ -93,8 +93,8 @@ const RealtimeRentMenuItem: FC = () => {
       <SegmentedControl
         color={'brand'}
         fullWidth={true}
-        value={rentCalculation}
-        onChange={(value) => setUserRentCalculation({ state: value, date: new Date() }) }
+        value={rentCalculation.state}
+        onChange={(value) => setUserRentCalculation({ state: value as RentCalculationState, date: new Date() }) }
         data={[
           {
             value: 'realtime',
@@ -123,9 +123,16 @@ const RealtimeRentMenuItem: FC = () => {
 const RealtimeRentMenuSelectDate: FC = () => {
   const [value, setValue] = useState<Date | null>(null);
 
+  const dispatch = useDispatch()
+  const rentCalculation = useSelector(selectUserRentCalculation)
+
+  const handleDateChange = (date: Date) => {
+    dispatch(userRentCalculationChanged({ state: rentCalculation.state, date: date }))
+  };
+
   return (<DatePicker 
     value={value}
-    onChange={setValue}
+    onChange={handleDateChange}
     defaultDate={new Date()}
   />)
 }
