@@ -97,7 +97,7 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 
   const rentCalculation = useSelector(selectUserRentCalculation)
 
-  const realtimeDate = moment("2024_01_01", "YYYY_MM_DD");
+  const realtimeDate = moment(new Date(rentCalculation.date))
   const rentStartDate = new Date(props.value.rentStartDate.date)
   const isDisabled =
     rentCalculation.state === 'realtime' && rentStartDate > realtimeDate.toDate()

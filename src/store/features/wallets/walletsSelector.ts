@@ -93,7 +93,7 @@ export const calculateTokenRent = (
   token: UserRealtoken,
   rentCalculation: RentCalculation = { state: 'global', date: new Date().getTime() }
 ) => {
-  const realtimeDate = moment("2024_01_01", "YYYY_MM_DD");
+  const realtimeDate = moment(new Date(rentCalculation.date))
   const rent = {
     daily: token.netRentDayPerToken * token.amount,
     weekly: token.netRentDayPerToken * 7 * token.amount,
