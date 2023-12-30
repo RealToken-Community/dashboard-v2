@@ -125,15 +125,22 @@ const RealtimeRentMenuSelectDate: FC = () => {
   const dispatch = useDispatch()
   const rentCalculation = useSelector(selectUserRentCalculation)
 
+  if(rentCalculation.state !== 'realtime') return null
+
   const handleDateChange = (date: Date) => {
     dispatch(userRentCalculationChanged({ state: rentCalculation.state, date: new Date(date).getTime() }))
   };
 
-  return (<DatePicker 
-    value={new Date(rentCalculation.date)}
-    onChange={handleDateChange}
-    defaultDate={new Date()}
-  />)
+  return (
+    <>
+      <DatePicker 
+        value={new Date(rentCalculation.date)}
+        onChange={handleDateChange}
+        defaultDate={new Date()}
+      />
+      <Menu.Divider />
+    </>
+  )
 }
 
 const LanguageSelect: FC = () => {
@@ -213,8 +220,6 @@ export const SettingsMenu: FC = () => {
   const [isOpen, handlers] = useDisclosure(false)
   const version = useSelector(selectVersion)
 
-  const [value, setValue] = useState<Date | null>(null);
-
   return (
     <Menu
       closeOnItemClick={false}
@@ -235,7 +240,6 @@ export const SettingsMenu: FC = () => {
         <RealtimeRentMenuItem />
         <Menu.Divider />
         <RealtimeRentMenuSelectDate/>
-        <Menu.Divider />
         <ColorSchemeMenuItem />
         <Menu.Divider />
         <RefreshDataButton />
