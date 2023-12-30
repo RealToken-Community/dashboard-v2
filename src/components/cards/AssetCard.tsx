@@ -17,6 +17,7 @@ import {
   RmmStatusTag,
   SubsidyStatusTag,
 } from '../commons'
+import moment from 'moment'
 
 const useStyles = createStyles({
   disabled: {
@@ -96,9 +97,10 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 
   const rentCalculation = useSelector(selectUserRentCalculation)
 
+  const realtimeDate = moment("2024_01_01", "YYYY_MM_DD");
   const rentStartDate = new Date(props.value.rentStartDate.date)
   const isDisabled =
-    rentCalculation === RentCalculation.Realtime && rentStartDate > new Date()
+    rentCalculation === RentCalculation.Realtime && rentStartDate > realtimeDate.toDate()
 
   const { classes } = useStyles()
   const rentNotStarted = t('rentNotStarted')

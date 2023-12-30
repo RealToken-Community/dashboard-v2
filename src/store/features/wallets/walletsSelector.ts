@@ -93,7 +93,7 @@ export const calculateTokenRent = (
   token: UserRealtoken,
   rentCalculation: string = RentCalculation.Global
 ) => {
-  const now = moment()
+  const realtimeDate = moment("2024_01_01", "YYYY_MM_DD");
   const rent = {
     daily: token.netRentDayPerToken * token.amount,
     weekly: token.netRentDayPerToken * 7 * token.amount,
@@ -103,7 +103,7 @@ export const calculateTokenRent = (
 
   if (rentCalculation === RentCalculation.Realtime) {
     const rentStartDate = moment(token.rentStartDate.date)
-    const nbDaysBeforeRentStart = rentStartDate.diff(now, 'days')
+    const nbDaysBeforeRentStart = rentStartDate.diff(realtimeDate, 'days')
 
     if (nbDaysBeforeRentStart >= 0) {
       rent.daily -= token.netRentDayPerToken * token.amount
