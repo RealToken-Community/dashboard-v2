@@ -91,7 +91,7 @@ export const selectOwnedRealtokensValue = createSelector(
 
 export const calculateTokenRent = (
   token: UserRealtoken,
-  rentCalculation: RentCalculation = { state: 'global', date: new Date() }
+  rentCalculation: RentCalculation = { state: 'global', date: new Date().getTime() }
 ) => {
   const realtimeDate = moment("2024_01_01", "YYYY_MM_DD");
   const rent = {

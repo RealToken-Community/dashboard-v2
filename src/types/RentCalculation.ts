@@ -2,5 +2,5 @@ export type RentCalculationState = 'realtime' | 'global';
 
 export interface RentCalculation {
   state: RentCalculationState;
-  date: Date;
+  date: number; // timestamp
 }

@@ -94,7 +94,7 @@ const RealtimeRentMenuItem: FC = () => {
         color={'brand'}
         fullWidth={true}
         value={rentCalculation.state}
-        onChange={(value) => setUserRentCalculation({ state: value as RentCalculationState, date: new Date() }) }
+        onChange={(value) => setUserRentCalculation({ state: value as RentCalculationState, date: new Date().getTime() }) }
         data={[
           {
             value: 'realtime',
@@ -127,11 +127,11 @@ const RealtimeRentMenuSelectDate: FC = () => {
   const rentCalculation = useSelector(selectUserRentCalculation)
 
   const handleDateChange = (date: Date) => {
-    dispatch(userRentCalculationChanged({ state: rentCalculation.state, date: date }))
+    dispatch(userRentCalculationChanged({ state: rentCalculation.state, date: new Date(date).getTime() }))
   };
 
   return (<DatePicker 
-    value={value}
+    value={new Date(rentCalculation.date)}
     onChange={handleDateChange}
     defaultDate={new Date()}
   />)
