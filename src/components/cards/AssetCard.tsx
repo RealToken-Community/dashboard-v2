@@ -6,6 +6,8 @@ import Image from 'next/image'
 
 import { Badge, Card, Group, createStyles } from '@mantine/core'
 
+import moment from 'moment'
+
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
@@ -17,7 +19,6 @@ import {
   RmmStatusTag,
   SubsidyStatusTag,
 } from '../commons'
-import moment from 'moment'
 
 const useStyles = createStyles({
   disabled: {
@@ -100,7 +101,8 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   const realtimeDate = moment(new Date(rentCalculation.date))
   const rentStartDate = new Date(props.value.rentStartDate.date)
   const isDisabled =
-    rentCalculation.state === 'realtime' && rentStartDate > realtimeDate.toDate()
+    rentCalculation.state === 'realtime' &&
+    rentStartDate > realtimeDate.toDate()
 
   const { classes } = useStyles()
   const rentNotStarted = t('rentNotStarted')

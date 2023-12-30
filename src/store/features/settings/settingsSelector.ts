@@ -1,9 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit'
 
 import { RootState } from 'src/store/store'
+import { RentCalculation } from 'src/types/RentCalculation'
 
 import { User } from './settingsSlice'
-import { RentCalculation } from 'src/types/RentCalculation'
 
 export const selectIsInitialized = (state: RootState): boolean =>
   state.settings.isInitialized
@@ -37,9 +37,8 @@ export const selectUserCurrency = (state: RootState): string =>
 export const selectUser = (state: RootState): User | undefined =>
   state.settings.user
 
-export const selectUserRentCalculation = (
-  state: RootState
-): RentCalculation => state.settings.rentCalculation
+export const selectUserRentCalculation = (state: RootState): RentCalculation =>
+  state.settings.rentCalculation
 
 export const selectVersion = (state: RootState): string | undefined =>
   state.settings.version

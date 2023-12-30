@@ -13,6 +13,7 @@ import {
   Select,
   useMantineColorScheme,
 } from '@mantine/core'
+import { DatePicker } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import {
   IconCash,
@@ -23,8 +24,6 @@ import {
   IconSettings,
   IconSun,
 } from '@tabler/icons'
-
-import { DatePicker } from '@mantine/dates';
 
 import { setCookie } from 'cookies-next'
 
@@ -38,7 +37,10 @@ import {
   userRentCalculationChanged,
 } from 'src/store/features/settings/settingsSlice'
 import { Currency } from 'src/types/Currencies'
-import { RentCalculation, RentCalculationState } from 'src/types/RentCalculation'
+import {
+  RentCalculation,
+  RentCalculationState,
+} from 'src/types/RentCalculation'
 import { expiresLocalStorageCaches } from 'src/utils/useCache'
 
 const ColorSchemeMenuItem: FC = () => {
@@ -94,7 +96,12 @@ const RealtimeRentMenuItem: FC = () => {
         color={'brand'}
         fullWidth={true}
         value={rentCalculation.state}
-        onChange={(value) => setUserRentCalculation({ state: value as RentCalculationState, date: new Date().getTime() }) }
+        onChange={(value) =>
+          setUserRentCalculation({
+            state: value as RentCalculationState,
+            date: new Date().getTime(),
+          })
+        }
         data={[
           {
             value: 'realtime',
@@ -121,19 +128,23 @@ const RealtimeRentMenuItem: FC = () => {
 }
 
 const RealtimeRentMenuSelectDate: FC = () => {
-
   const dispatch = useDispatch()
   const rentCalculation = useSelector(selectUserRentCalculation)
 
-  if(rentCalculation.state !== 'realtime') return null
+  if (rentCalculation.state !== 'realtime') return null
 
   const handleDateChange = (date: Date) => {
-    dispatch(userRentCalculationChanged({ state: rentCalculation.state, date: new Date(date).getTime() }))
-  };
+    dispatch(
+      userRentCalculationChanged({
+        state: rentCalculation.state,
+        date: new Date(date).getTime(),
+      })
+    )
+  }
 
   return (
     <>
-      <DatePicker 
+      <DatePicker
         value={new Date(rentCalculation.date)}
         onChange={handleDateChange}
         defaultDate={new Date()}
@@ -239,7 +250,7 @@ export const SettingsMenu: FC = () => {
         <Menu.Divider />
         <RealtimeRentMenuItem />
         <Menu.Divider />
-        <RealtimeRentMenuSelectDate/>
+        <RealtimeRentMenuSelectDate />
         <ColorSchemeMenuItem />
         <Menu.Divider />
         <RefreshDataButton />

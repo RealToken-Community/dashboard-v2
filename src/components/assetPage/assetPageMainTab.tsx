@@ -15,7 +15,10 @@ export const AssetPageMainTab: FC<{ data: UserRealtoken }> = ({ data }) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetPage.main' })
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const rentCalculation = useSelector(selectUserRentCalculation)
-  const rent = calculateTokenRent(data, { state: rentCalculation.state, date: new Date().getTime() })
+  const rent = calculateTokenRent(data, {
+    state: rentCalculation.state,
+    date: new Date().getTime(),
+  })
   const lowValue = '< ' + useCurrencyValue(0.01)
   const ownedValue = useCurrencyValue(data.value)
   const ownedEthereumValue = useCurrencyValue(data.balance.ethereum.value)

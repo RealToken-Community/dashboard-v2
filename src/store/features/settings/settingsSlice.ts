@@ -35,7 +35,7 @@ const settingsInitialState: SettingsInitialStateType = {
   userCurrency: Currency.USD,
   rentCalculation: {
     state: 'global',
-    date: new Date().getTime()
+    date: new Date().getTime(),
   },
   isInitialized: false,
 }
@@ -59,9 +59,9 @@ export const userRentCalculationChanged = createAction(
     payload: {
       state: rentCalculation.state,
       date: rentCalculation.date,
-    }
+    },
   })
-);
+)
 
 // THUNKS
 export function setUserAddress(address: string) {
@@ -180,12 +180,11 @@ export const settingsReducers = createReducer(
           ? {
               state: userRentCalculation as RentCalculation['state'],
               date: new Date().getTime(),
-          }
-          :
-          {
-            state: 'global',
-            date: new Date().getTime()
-          }
+            }
+          : {
+              state: 'global',
+              date: new Date().getTime(),
+            }
         const { publicRuntimeConfig } = getConfig() as {
           publicRuntimeConfig?: { version: string }
         }
