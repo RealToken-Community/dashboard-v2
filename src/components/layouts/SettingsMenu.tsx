@@ -159,6 +159,18 @@ const RealtimeRentMenuSelectDate: FC = () => {
   )
 }
 
+const RealtimeRentMenu = () => {
+
+  return (
+    <>
+      <RealtimeRentMenuItem />
+      <RealtimeRentMenuSelectDate />
+      <Menu.Divider />
+    </>
+  )
+
+}
+
 const LanguageSelect: FC = () => {
   const { i18n, t } = useTranslation('common', { keyPrefix: 'settings' })
 
@@ -253,9 +265,7 @@ export const SettingsMenu: FC = () => {
         <Menu.Divider />
         <CurrencySelect />
         <Menu.Divider />
-        <RealtimeRentMenuItem />
-        <Menu.Divider />
-        <RealtimeRentMenuSelectDate />
+        <RealtimeRentMenu />
         <ColorSchemeMenuItem />
         <Menu.Divider />
         <RefreshDataButton />
