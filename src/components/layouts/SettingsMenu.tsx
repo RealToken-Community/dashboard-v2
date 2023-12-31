@@ -26,6 +26,7 @@ import {
 } from '@tabler/icons'
 
 import { setCookie } from 'cookies-next'
+import 'dayjs/locale/fr'
 
 import {
   selectUserCurrency,
@@ -131,6 +132,8 @@ const RealtimeRentMenuSelectDate: FC = () => {
   const dispatch = useDispatch()
   const rentCalculation = useSelector(selectUserRentCalculation)
 
+  const { i18n } = useTranslation('common', { keyPrefix: 'settings' })
+
   if (rentCalculation.state !== RentCalculationState.Realtime) return null
 
   const handleDateChange = (date: Date) => {
@@ -145,6 +148,7 @@ const RealtimeRentMenuSelectDate: FC = () => {
   return (
     <>
       <DatePicker
+        locale={i18n.language}
         value={new Date(rentCalculation.date)}
         onChange={handleDateChange}
         defaultDate={new Date()}
