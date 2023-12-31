@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react'
+import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
@@ -160,7 +160,6 @@ const RealtimeRentMenuSelectDate: FC = () => {
 }
 
 const RealtimeRentMenu = () => {
-
   return (
     <>
       <RealtimeRentMenuItem />
@@ -168,7 +167,6 @@ const RealtimeRentMenu = () => {
       <Menu.Divider />
     </>
   )
-
 }
 
 const LanguageSelect: FC = () => {
