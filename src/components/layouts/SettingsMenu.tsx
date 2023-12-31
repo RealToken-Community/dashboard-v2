@@ -13,7 +13,7 @@ import {
   Select,
   useMantineColorScheme,
 } from '@mantine/core'
-import { DatePicker } from '@mantine/dates'
+import { DatePickerInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import {
   IconCash,
@@ -147,7 +147,8 @@ const RealtimeRentMenuSelectDate: FC = () => {
 
   return (
     <>
-      <DatePicker
+      <DatePickerInput
+        label={'Date'}
         locale={i18n.language}
         value={new Date(rentCalculation.date)}
         onChange={handleDateChange}
