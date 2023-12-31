@@ -148,8 +148,9 @@ const RealtimeRentMenuSelectDate: FC = () => {
   return (
     <>
       <DatePickerInput
-        label={'Date'}
+        label={'Date:'}
         locale={i18n.language}
+        valueFormat={i18n.language === 'fr' ? 'DD MMMM YYYY' : 'MMMM DD, YYYY'}
         value={new Date(rentCalculation.date)}
         onChange={handleDateChange}
         defaultDate={new Date()}
