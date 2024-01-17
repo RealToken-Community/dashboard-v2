@@ -18,7 +18,9 @@
     "dark": "Sombre",
     "refreshDataButton": "Actualiser les données",
     "realtime": "Temps réel",
-    "global": "Global"
+    "global": "Global",
+    "date": "Date",
+    "dateFormat": "DD MMMM YYYY"
   },
   "walletButton": {
     "connectWallet": "Connecter mon portefeuille",

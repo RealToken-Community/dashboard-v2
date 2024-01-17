@@ -6,10 +6,12 @@ import Image from 'next/image'
 
 import { Badge, Card, Group, createStyles } from '@mantine/core'
 
+import moment from 'moment'
+
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
-import { RentCalculation } from 'src/types/RentCalculation'
+import { RentCalculationState } from 'src/types/RentCalculation'
 
 import {
   Divider,
@@ -96,9 +98,11 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 
   const rentCalculation = useSelector(selectUserRentCalculation)
 
+  const realtimeDate = moment(new Date(rentCalculation.date))
   const rentStartDate = new Date(props.value.rentStartDate.date)
   const isDisabled =
-    rentCalculation === RentCalculation.Realtime && rentStartDate > new Date()
+    rentCalculation.state === RentCalculationState.Realtime &&
+    rentStartDate > realtimeDate.toDate()
 
   const { classes } = useStyles()
   const rentNotStarted = t('rentNotStarted')

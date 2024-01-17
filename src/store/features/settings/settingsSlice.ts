@@ -7,7 +7,10 @@ import { t } from 'i18next'
 import { UserRepository } from 'src/repositories/user.repository'
 import { AppDispatch, RootState } from 'src/store/store'
 import { Currency } from 'src/types/Currencies'
-import { RentCalculation } from 'src/types/RentCalculation'
+import {
+  RentCalculation,
+  RentCalculationState,
+} from 'src/types/RentCalculation'
 
 const USER_LS_KEY = 'store:settings/user'
 const USER_CURRENCY_LS_KEY = 'store:settings/userCurrency'
@@ -33,7 +36,10 @@ interface SettingsInitialStateType {
 const settingsInitialState: SettingsInitialStateType = {
   user: undefined,
   userCurrency: Currency.USD,
-  rentCalculation: RentCalculation.Global,
+  rentCalculation: {
+    state: RentCalculationState.Global,
+    date: new Date().getTime(),
+  },
   isInitialized: false,
 }
 
@@ -50,8 +56,14 @@ export const userChanged = createAction<User>(userChangedDispatchType)
 export const userCurrencyChanged = createAction<Currency>(
   userCurrencyChangedDispatchType
 )
-export const userRentCalculationChanged = createAction<RentCalculation>(
-  userRentCalculationChangedDispatchType
+export const userRentCalculationChanged = createAction(
+  userRentCalculationChangedDispatchType,
+  (rentCalculation: RentCalculation) => ({
+    payload: {
+      state: rentCalculation.state,
+      date: rentCalculation.date,
+    },
+  })
 )
 
 // THUNKS
@@ -155,7 +167,7 @@ export const settingsReducers = createReducer(
       })
       .addCase(userRentCalculationChanged, (state, action) => {
         state.rentCalculation = action.payload
-        localStorage.setItem(USER_RENT_CALCULATION_LS_KEY, action.payload)
+        localStorage.setItem(USER_RENT_CALCULATION_LS_KEY, action.payload.state)
       })
       .addCase(initializeSettings, (state) => {
         const user = localStorage.getItem(USER_LS_KEY)
@@ -168,8 +180,14 @@ export const settingsReducers = createReducer(
           ? (userCurrency as Currency)
           : Currency.USD
         state.rentCalculation = userRentCalculation
-          ? (userRentCalculation as RentCalculation)
-          : RentCalculation.Global
+          ? {
+              state: userRentCalculation as RentCalculation['state'],
+              date: new Date().getTime(),
+            }
+          : {
+              state: RentCalculationState.Global,
+              date: new Date().getTime(),
+            }
         const { publicRuntimeConfig } = getConfig() as {
           publicRuntimeConfig?: { version: string }
         }

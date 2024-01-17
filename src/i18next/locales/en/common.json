@@ -18,7 +18,9 @@
     "dark": "Dark",
     "refreshDataButton": "Refresh data",
     "realtime": "Realtime",
-    "global": "Global"
+    "global": "Global",
+    "date": "Date",
+    "dateFormat": "MMMM DD, YYYY"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
