@@ -4,6 +4,9 @@ import i18next from 'i18next'
 
 import { resources } from './locales'
 
+import 'dayjs/locale/en'
+import 'dayjs/locale/fr'
+
 export const DEFAULT_NS = 'common'
 export const FALLBACK_LNG = 'en'
 
