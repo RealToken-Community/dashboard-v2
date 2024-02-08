@@ -79,6 +79,13 @@ export const Header: FC = () => {
         <div style={{ marginTop: '20px' }} />
         <NavLink
           component={'a'}
+          href={'https://community-realt.gitbook.io/tuto-community/'}
+          target={'_blank'}
+          label={t('documentation')}
+          icon={<IconExternalLink size={'1rem'} stroke={1.5} />}
+        />
+        <NavLink
+          component={'a'}
           href={'https://realt.co/'}
           target={'_blank'}
           label={t('realt')}
