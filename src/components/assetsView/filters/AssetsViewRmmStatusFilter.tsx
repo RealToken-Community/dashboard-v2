@@ -51,7 +51,7 @@ export const AssetsViewRmmStatusFilter: FC<AssetsViewRmmStatusFilterProps> = ({
 AssetsViewRmmStatusFilter.displayName = 'AssetsViewRmmStatusFilter'
 
 export function useAssetsViewRmmStatusFilter(
-  filter: AssetsViewRmmStatusFilterModel
+  filter: AssetsViewRmmStatusFilterModel,
 ) {
   function assetRmmStatusFilterFunction(asset: UserRealtoken) {
     switch (filter.rmmStatus) {

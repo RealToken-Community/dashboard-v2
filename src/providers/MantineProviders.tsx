@@ -27,7 +27,7 @@ export const MantineProviders: FC<MantineProvidersProps> = ({
     useState<ColorScheme>(initialColorScheme)
 
   const toggleColorScheme = (
-    nextColorScheme: ColorScheme = colorScheme === 'dark' ? 'light' : 'dark'
+    nextColorScheme: ColorScheme = colorScheme === 'dark' ? 'light' : 'dark',
   ) => {
     setColorScheme(nextColorScheme)
     setCookies('mantine-color-scheme', nextColorScheme)

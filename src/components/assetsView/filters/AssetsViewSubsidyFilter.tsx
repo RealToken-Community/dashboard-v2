@@ -71,7 +71,7 @@ export const AssetsViewSubsidyFilter: FC<AssetsViewSubsidyFilterProps> = ({
 AssetsViewSubsidyFilter.displayName = 'AssetsViewSubsidyFilter'
 
 export function useAssetsViewSubsidyFilter(
-  filter: AssetsViewSubsidyFilterModel
+  filter: AssetsViewSubsidyFilterModel,
 ) {
   function assetSubsidyFilterFunction(asset: UserRealtoken) {
     switch (filter.subsidy) {

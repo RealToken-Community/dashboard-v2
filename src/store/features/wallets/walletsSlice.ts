@@ -34,10 +34,10 @@ const isLoadingDispatchType = 'wallets/isLoading'
 
 // ACTIONS
 const balancesChanged = createAction<WalletBalances>(
-  balancesChangedDispatchType
+  balancesChangedDispatchType,
 )
 const rmmPositionsChanged = createAction<WalletRmmPosition[]>(
-  rmmPositionsChangedDispatchType
+  rmmPositionsChangedDispatchType,
 )
 const balancesIsLoading = createAction<boolean>(isLoadingDispatchType)
 

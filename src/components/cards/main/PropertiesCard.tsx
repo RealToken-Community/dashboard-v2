@@ -21,7 +21,7 @@ import {
 } from '../../commons'
 
 const RentedUnitsField: FC<{ label: string; realtokens: UserRealtoken[] }> = (
-  props
+  props,
 ) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
 

@@ -6,7 +6,7 @@ import { EthereumClient, GnosisClient } from '../clients'
 
 export async function getRealtokenBalances(addressList: string[]) {
   const [gnosisResult, ethereumResult] = await executeQuery(
-    addressList.map((item) => item.toLowerCase())
+    addressList.map((item) => item.toLowerCase()),
   )
 
   return {
@@ -31,7 +31,7 @@ const executeQuery = useCacheWithLocalStorage(
     duration: 1000 * 60 * 10, // 10 minutes
     usePreviousValueOnError: true,
     key: 'RealtokenQuery',
-  }
+  },
 )
 
 const RealtokenQuery = gql`

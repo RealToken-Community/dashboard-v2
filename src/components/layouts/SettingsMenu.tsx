@@ -140,7 +140,7 @@ const RealtimeRentMenuSelectDate: FC = () => {
       userRentCalculationChanged({
         state: rentCalculation.state,
         date: new Date(date).getTime(),
-      })
+      }),
     )
   }
 
@@ -180,7 +180,7 @@ const LanguageSelect: FC = () => {
         i18n.changeLanguage(updatedLocale)
       }
     },
-    [i18n]
+    [i18n],
   )
 
   return (

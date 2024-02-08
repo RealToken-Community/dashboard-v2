@@ -6,14 +6,14 @@ import { RMMClient } from '../clients'
 
 export async function getRmmBalances(addressList: string[]) {
   const result = await executeQuery(
-    addressList.map((item) => item.toLowerCase())
+    addressList.map((item) => item.toLowerCase()),
   )
   return formatBalances(result.data.users)
 }
 
 export async function getRmmPositions(addressList: string[]) {
   const result = await executeQuery(
-    addressList.map((item) => item.toLowerCase())
+    addressList.map((item) => item.toLowerCase()),
   )
   return formatPositions(result.data.users)
 }
@@ -39,7 +39,7 @@ const executeQuery = useCacheWithLocalStorage(
     duration: 1000 * 60 * 10, // 10 minutes
     usePreviousValueOnError: true,
     key: 'RmmQuery',
-  }
+  },
 )
 
 const RmmQuery = gql`

@@ -54,7 +54,7 @@ export const userRentCalculationChangedDispatchType =
 export const initializeSettings = createAction(initializeSettingsDispatchType)
 export const userChanged = createAction<User>(userChangedDispatchType)
 export const userCurrencyChanged = createAction<Currency>(
-  userCurrencyChangedDispatchType
+  userCurrencyChangedDispatchType,
 )
 export const userRentCalculationChanged = createAction(
   userRentCalculationChangedDispatchType,
@@ -63,7 +63,7 @@ export const userRentCalculationChanged = createAction(
       state: rentCalculation.state,
       date: rentCalculation.date,
     },
-  })
+  }),
 )
 
 // THUNKS
@@ -156,7 +156,7 @@ export const settingsReducers = createReducer(
           addressList,
           customAddressList,
           hiddenAddressList: hiddenAddressList.filter((item) =>
-            addresses.includes(item)
+            addresses.includes(item),
           ),
         }
         localStorage.setItem(USER_LS_KEY, JSON.stringify(action.payload))
@@ -173,7 +173,7 @@ export const settingsReducers = createReducer(
         const user = localStorage.getItem(USER_LS_KEY)
         const userCurrency = localStorage.getItem(USER_CURRENCY_LS_KEY)
         const userRentCalculation = localStorage.getItem(
-          USER_RENT_CALCULATION_LS_KEY
+          USER_RENT_CALCULATION_LS_KEY,
         )
         state.user = user ? JSON.parse(user) : undefined
         state.userCurrency = userCurrency
@@ -197,5 +197,5 @@ export const settingsReducers = createReducer(
 
         state.isInitialized = true
       })
-  }
+  },
 )

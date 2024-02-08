@@ -52,7 +52,7 @@ const walletConnect = getWalletConnectV2(
   dashbordChains,
   env,
   walletConnectKey,
-  false
+  false,
 )
 
 const libraryConnectors = getConnectors({

@@ -19,8 +19,8 @@ export const selectAllUserAddressList = (state: RootState) => {
   const customAddressList = state.settings.user?.customAddressList ?? []
   return Array.from(
     new Set(
-      [...addressList, ...customAddressList].map((item) => item.toLowerCase())
-    )
+      [...addressList, ...customAddressList].map((item) => item.toLowerCase()),
+    ),
   )
 }
 
@@ -28,7 +28,7 @@ export const selectUserAddressList = createSelector(
   (state: RootState) => state.settings.user,
   selectAllUserAddressList,
   (user, addressList) =>
-    addressList.filter((item) => !user?.hiddenAddressList?.includes(item))
+    addressList.filter((item) => !user?.hiddenAddressList?.includes(item)),
 )
 
 export const selectUserCurrency = (state: RootState): string =>

@@ -60,7 +60,7 @@ export const AssetsViewUserProtocolFilter: FC<
 AssetsViewUserProtocolFilter.displayName = 'AssetsViewUserProtocolFilter'
 
 export function useAssetsViewUserProtocolFilter(
-  filter: AssetsViewUserProtocolFilterModel
+  filter: AssetsViewUserProtocolFilterModel,
 ) {
   function assetUserProtocolFilterFunction(asset: UserRealtoken) {
     switch (filter.userProtocol) {

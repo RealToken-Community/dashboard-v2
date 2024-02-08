@@ -54,7 +54,7 @@ export const AssetsViewRentStatusFilter: FC<
 AssetsViewRentStatusFilter.displayName = 'AssetsViewRentStatusFilter'
 
 export function useAssetsViewRentStatusFilter(
-  filter: AssetsViewRentStatusFilterModel
+  filter: AssetsViewRentStatusFilterModel,
 ) {
   function assetRentStatusFilterFunction(asset: UserRealtoken) {
     switch (filter.rentStatus) {

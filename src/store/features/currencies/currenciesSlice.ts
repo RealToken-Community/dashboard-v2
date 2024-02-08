@@ -25,10 +25,10 @@ export const currenciesIsLoadingDispatchType = 'currencies/currenciesIsLoading'
 
 // ACTIONS
 export const currenciesChanged = createAction<Record<Currency, number>>(
-  currenciesChangedDispatchType
+  currenciesChangedDispatchType,
 )
 export const currenciesIsLoading = createAction<boolean>(
-  currenciesIsLoadingDispatchType
+  currenciesIsLoadingDispatchType,
 )
 
 // THUNKS
@@ -70,5 +70,5 @@ export const currenciesReducers = createReducer(
       .addCase(currenciesIsLoading, (state, action) => {
         state.isLoading = action.payload
       })
-  }
+  },
 )

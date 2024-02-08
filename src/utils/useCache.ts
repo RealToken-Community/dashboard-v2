@@ -2,7 +2,7 @@ import { WaitingQueue } from './waitingQueue'
 
 export function useCache<T>(
   handler: () => Promise<T>,
-  options: { duration: number }
+  options: { duration: number },
 ) {
   const cache = {
     data: null as T | null,
@@ -80,7 +80,7 @@ export function useCacheWithLocalStorage<T extends unknown[], R>(
     duration: number
     key: string
     usePreviousValueOnError?: boolean
-  }
+  },
 ) {
   const waitingQueues: Record<string, WaitingQueue<R>> = {}
 
@@ -115,7 +115,7 @@ export function useCacheWithLocalStorage<T extends unknown[], R>(
         JSON.stringify({
           expires: now + options.duration,
           value: result,
-        })
+        }),
       )
       waitingQueues[storageKey].resolve(result)
       return result

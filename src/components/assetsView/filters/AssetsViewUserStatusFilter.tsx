@@ -62,7 +62,7 @@ export const AssetsViewUserStatusFilter: FC<
 AssetsViewUserStatusFilter.displayName = 'AssetsViewUserStatusFilter'
 
 export function useAssetsViewUserStatusFilter(
-  filter: AssetsViewUserStatusFilterModel
+  filter: AssetsViewUserStatusFilterModel,
 ) {
   function assetUserStatusFilterFunction(asset: UserRealtoken) {
     switch (filter.userStatus) {

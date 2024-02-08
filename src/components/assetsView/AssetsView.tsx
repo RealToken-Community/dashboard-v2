@@ -21,7 +21,7 @@ export const AssetsView: FC = () => {
 
   const data = useMemo(
     () => assetsViewFilterFunction(realtokens.filter(assetSearchFunction)),
-    [realtokens, assetSearchFunction, assetsViewFilterFunction]
+    [realtokens, assetSearchFunction, assetsViewFilterFunction],
   )
 
   return (

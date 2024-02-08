@@ -20,7 +20,7 @@ const getRealTokenList = useCache(
 
     return response.json()
   },
-  { duration: 1000 * 60 * 60 }
+  { duration: 1000 * 60 * 60 },
 )
 
 const handler: NextApiHandler = async (req, res) => {

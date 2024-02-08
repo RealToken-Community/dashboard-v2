@@ -29,7 +29,7 @@ const executeQuery = useCacheWithLocalStorage(
     duration: 1000 * 60 * 60, // 1 hour
     usePreviousValueOnError: true,
     key: 'YamStatisticsQuery',
-  }
+  },
 )
 
 const YamStatisticsQuery = gql`

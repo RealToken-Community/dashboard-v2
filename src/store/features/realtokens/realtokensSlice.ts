@@ -20,10 +20,10 @@ export const realtokensIsLoadingDispatchType = 'realtokens/realtokensIsLoading'
 
 // ACTIONS
 export const realtokensChanged = createAction<RealToken[]>(
-  realtokensChangedDispatchType
+  realtokensChangedDispatchType,
 )
 export const realtokensIsLoading = createAction<boolean>(
-  realtokensIsLoadingDispatchType
+  realtokensIsLoadingDispatchType,
 )
 
 // THUNKS
@@ -52,5 +52,5 @@ export const realtokensReducers = createReducer(
     builder.addCase(realtokensIsLoading, (state, action) => {
       state.isLoading = action.payload
     })
-  }
+  },
 )

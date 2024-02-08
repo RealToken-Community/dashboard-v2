@@ -30,7 +30,7 @@ export async function GetYamStatistics(params: {
         quantity: volumeDay.quantity,
         volume: volumeDay.volume,
         average: volumeDay.volume / volumeDay.quantity,
-      }))
+      })),
     )
     .flat()
 
@@ -39,7 +39,7 @@ export async function GetYamStatistics(params: {
       date: item[0].date,
       quantity: _sumBy(item, 'quantity'),
       volume: _sumBy(item, 'volume'),
-    })
+    }),
   )
 
   return {

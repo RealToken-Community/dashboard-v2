@@ -18,7 +18,7 @@ type DividerStylesParams = {
 const useStyles = createStyles(
   (
     theme,
-    { vertical, height, width, inverted, gradient }: DividerStylesParams
+    { vertical, height, width, inverted, gradient }: DividerStylesParams,
   ) => ({
     divider: {
       height: vertical ? width : height,
@@ -28,7 +28,7 @@ const useStyles = createStyles(
         deg: vertical ? (inverted ? 180 : 360) : inverted ? 270 : 90,
       }),
     },
-  })
+  }),
 )
 
 type DividerStylesNames = Selectors<typeof useStyles>
@@ -55,7 +55,7 @@ export const Divider = ({
       classNames: classNames,
       styles: styles as Record<string, CSSObject>,
       unstyled: unstyled,
-    }
+    },
   )
 
   return <Box className={cx(classes.divider, className)} {...others} />

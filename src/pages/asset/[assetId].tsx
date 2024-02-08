@@ -53,6 +53,7 @@ const TabButton: FC<TabButtonProps> = ({ label, active, onClick }) => {
 const AssetPage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'assetPage' })
   const realtokens = useSelector(selectUserRealtokens)
+
   const isLoading = useSelector(selectIsLoading)
   const { classes } = useStyles()
   const router = useRouter()
@@ -61,7 +62,7 @@ const AssetPage: NextPage = () => {
 
   const data = useMemo(
     () => realtokens.find((asset) => asset.id === assetId),
-    [realtokens, assetId]
+    [realtokens, assetId],
   )
 
   if (!data) {

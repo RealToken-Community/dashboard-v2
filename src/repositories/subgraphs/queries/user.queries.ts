@@ -29,7 +29,7 @@ function formatUserDetails(result: GetUserDetailsResult) {
         }
         return acc
       },
-      []
+      [],
     ),
   }
 }
@@ -44,7 +44,7 @@ const executeGetUserIdQuery = useCacheWithLocalStorage(
     duration: 1000 * 60 * 60 * 24, // 1 day
     key: 'GetUserIdQuery',
     usePreviousValueOnError: true,
-  }
+  },
 )
 
 const executeGetTrustedIntermediaryQuery = useCacheWithLocalStorage(
@@ -56,7 +56,7 @@ const executeGetTrustedIntermediaryQuery = useCacheWithLocalStorage(
     duration: 1000 * 60 * 60 * 24, // 1 day
     key: 'GetTrustedIntermediaryQuery',
     usePreviousValueOnError: true,
-  }
+  },
 )
 
 const executeGetUserDetailsQuery = useCacheWithLocalStorage(
@@ -69,7 +69,7 @@ const executeGetUserDetailsQuery = useCacheWithLocalStorage(
     duration: 1000 * 60 * 60 * 24, // 1 day
     key: 'GetUserDetailsQuery',
     usePreviousValueOnError: true,
-  }
+  },
 )
 
 const GetUserIdQuery = gql`

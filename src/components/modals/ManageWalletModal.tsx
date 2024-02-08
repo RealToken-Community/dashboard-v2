@@ -40,8 +40,8 @@ const AddAddressButton: FC<{
   const currentError = isInvalidAddress
     ? t('invalidAddress')
     : isAddressAlreadyAdded
-    ? t('addressAlreadyAdded')
-    : undefined
+      ? t('addressAlreadyAdded')
+      : undefined
 
   function resetAndClose() {
     setAddress('')
@@ -169,10 +169,10 @@ export const ManageWalletModal: FC<ContextModalProps> = ({ context, id }) => {
 
   const user = useSelector(selectUser)
   const [customAddresses, setCustomAddresses] = useState(
-    user?.customAddressList ?? []
+    user?.customAddressList ?? [],
   )
   const [hiddenAddresses, setHiddenAddresses] = useState(
-    user?.hiddenAddressList ?? []
+    user?.hiddenAddressList ?? [],
   )
 
   const addresses = [...(user?.addressList ?? []), ...(customAddresses ?? [])]
