@@ -58,6 +58,10 @@ export function clearExpiredLocalStorageCache() {
   })
 }
 
+if (typeof window !== 'undefined') {
+  clearExpiredLocalStorageCache()
+}
+
 export function expiresLocalStorageCaches() {
   const keys = getLocalStorageKeys()
   keys.forEach(expiresLocalStorageCache)
