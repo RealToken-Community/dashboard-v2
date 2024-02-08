@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 
 import { Divider, createStyles } from '@mantine/core'
 
@@ -29,15 +29,15 @@ export const AssetPageTable: FC<AssetPageTableProps> = ({ data }) => {
         {data
           .filter((item) => !item.isHidden)
           .map((item, index) => (
-            <>
+            <React.Fragment key={index}>
               {item.separator && (
-                <tr key={index}>
+                <tr>
                   <td colSpan={2}>
                     <Divider my={'xs'} />
                   </td>
                 </tr>
               )}
-              <tr key={index}>
+              <tr>
                 <td
                   style={item.isIndented ? { paddingLeft: '10px' } : undefined}
                 >
@@ -46,7 +46,7 @@ export const AssetPageTable: FC<AssetPageTableProps> = ({ data }) => {
                 </td>
                 <td>{item.value}</td>
               </tr>
-            </>
+            </React.Fragment>
           ))}
       </tbody>
     </table>
