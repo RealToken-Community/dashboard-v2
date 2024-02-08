@@ -15,7 +15,7 @@ import {
   createStyles,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconExternalLink, IconHome2, IconFilePencil } from '@tabler/icons'
+import { IconExternalLink, IconHome2, IconReceipt, IconFilePencil } from '@tabler/icons'
 
 import { Logo } from 'src/assets'
 
@@ -76,6 +76,11 @@ export const Header: FC = () => {
           onClick={() => router.push('/').then(() => close())}
         />
 
+        <NavLink
+          label={t('transactions')}
+          icon={<IconReceipt size={'1rem'} stroke={1.5} />}
+          onClick={() => router.push('/transactions').then(() => close())}
+        />
         <NavLink
           label={t('histories')}
           icon={<IconFilePencil size={'1rem'} stroke={1.5} />}

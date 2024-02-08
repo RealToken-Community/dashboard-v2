@@ -1,6 +1,7 @@
 {
   "header": {
     "title": "Realtoken Dashboard",
+    "transactions": "Mes transactions",
     "histories": "Historique des changements",
     "documentation": "Wiki communautaire",
     "home": "Accueil",
@@ -218,7 +219,7 @@
       "main": "Informations générales",
       "property": "Détail du bien",
       "history": "Changements du bien",
-      "transfers": "Mes mouvements",
+      "transfers": "Mes transactions",
       "yamStatistics": "Statistiques marché secondaire (Yam)"
     },
     "main": {
@@ -280,7 +281,32 @@
       "yamVolume": "Volume (30 jours)"
     }
   },
+  "transactionPage": {
+    "home": "Accueil",
+    "title": "Mes transactions",
+    "item": {
+      "value": "Valeur",
+      "price": "Prix"
+    },
+    "filter": {
+      "field": "Filtre",
+      "all": "Tous",
+      "internal": "Transferts internes",
+      "other": "Autres",
+      "swapcat": "Swapcat",
+      "yam": "YAM",
+      "primary": "RealT",
+      "reinvest": "Réinvestissement",
+      "rmm": "RMM",
+      "levinSwap": "LevinSwap",
+      "levinSwapPool": "LevinSwap Pool"
+    }
+  },
   "transfers": {
+    "informationWarning": {
+      "title": "Informations",
+      "text": "Uniquement les transactions réalisées sur Gnosis sont prises en compte ! De plus, certaines transactions pevent être incomplètes si le RPC est surchargé."
+    },
     "titleValues": {
       "swapcatIn": "Achat sur Swapcat",
       "swapcatOut": "Vente sur Swapcat",

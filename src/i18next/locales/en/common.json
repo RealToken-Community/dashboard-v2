@@ -1,6 +1,7 @@
 {
   "header": {
     "title": "Realtoken Dashboard",
+    "transactions": "My transactions",
     "histories": "Changes history",
     "documentation": "Community Wiki",
     "home": "Home",
@@ -280,7 +281,32 @@
       "yamVolume": "Volume (30 days)"
     }
   },
+  "transactionPage": {
+    "home": "Home",
+    "title": "My transactions",
+    "item": {
+      "value": "Value",
+      "price": "Price"
+    },
+    "filter": {
+      "field": "Filter",
+      "all": "All",
+      "internal": "Internal transfers",
+      "other": "Others",
+      "swapcat": "Swapcat",
+      "yam": "YAM",
+      "primary": "RealT",
+      "reinvest": "Reinvest",
+      "rmm": "RMM",
+      "levinSwap": "LevinSwap",
+      "levinSwapPool": "LevinSwap Pool"
+    }
+  },
   "transfers": {
+    "informationWarning": {
+      "title": "Informations",
+      "text": "Only transactions made on Gnosis are taken into account! Additionally, some transactions may be incomplete if the RPC is overloaded."
+    },
     "titleValues": {
       "swapcatIn": "Purchase on Swapcat",
       "swapcatOut": "Sale on Swapcat",
