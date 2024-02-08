@@ -1,6 +1,7 @@
 {
   "header": {
     "title": "Realtoken Dashboard",
+    "histories": "Historique des changements",
     "documentation": "Wiki communautaire",
     "home": "Accueil",
     "realt": "RealT",
@@ -298,6 +299,32 @@
       "reinvest": "Réinvestissement",
       "internal": "Transfert interne",
       "unknown": "Autre"
+    }
+  },
+  "historiesPage": {
+    "home": "Accueil",
+    "title": "Historique des changements",
+    "valueItem": {
+      "title": "Réévaluation",
+      "token": "Token",
+      "property": "Propriété",
+      "yield": "Rendement"
+    },
+    "rentItem": {
+      "title": "Loyers",
+      "netRentMonth": "Net mensuel",
+      "grossRentMonth": "Brut mensuel",
+      "yield": "Rendement",
+      "rentedUnits": "Logements loués"
+    },
+    "filter": {
+      "field": "Filtre",
+      "all": "Toutes les propriétés",
+      "allValue": "Toutes les réévaluations",
+      "allRent": "Tous les changement de loyers",
+      "owned": "Mes propriétés",
+      "ownedValue": "Mes réévaluations",
+      "ownedRent": "Mes changements de loyers"
     }
   }
 }

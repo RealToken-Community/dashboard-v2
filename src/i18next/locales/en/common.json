@@ -1,6 +1,7 @@
 {
   "header": {
     "title": "Realtoken Dashboard",
+    "histories": "Changes history",
     "documentation": "Community Wiki",
     "home": "Home",
     "realt": "RealT",
@@ -298,6 +299,32 @@
       "reinvest": "Reinvest",
       "internal": "Internal transaction",
       "unknown": "Other"
+    }
+  },
+  "historiesPage": {
+    "home": "Home",
+    "title": "Changes",
+    "valueItem": {
+      "title": "Revaluation",
+      "token": "Token",
+      "property": "Property",
+      "yield": "Yield"
+    },
+    "rentItem": {
+      "title": "Rents",
+      "netRentMonth": "Net monthly",
+      "grossRentMonth": "Gross monthly",
+      "yield": "Yield",
+      "rentedUnits": "Rented units"
+    },
+    "filter": {
+      "field": "Filter",
+      "all": "All properties",
+      "allValue": "All revaluation",
+      "allRent": "All rents",
+      "owned": "My properties",
+      "ownedValue": "My revaluation",
+      "ownedRent": "My rents"
     }
   }
 }
