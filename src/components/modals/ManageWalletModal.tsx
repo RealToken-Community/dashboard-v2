@@ -13,7 +13,7 @@ import {
 import { useDisclosure } from '@mantine/hooks'
 import { ContextModalProps } from '@mantine/modals'
 
-import { utils as EthersUtils } from 'ethers'
+import { ethers } from 'ethers'
 
 import { useAppDispatch } from 'src/hooks/react-hooks'
 import { selectUser } from 'src/store/features/settings/settingsSelector'
@@ -32,7 +32,7 @@ const AddAddressButton: FC<{
   const [address, setAddress] = useState('')
   const [isDirty, setIsDirty] = useState(false)
 
-  const isInvalidAddress = !EthersUtils.isAddress(address)
+  const isInvalidAddress = !ethers.isAddress(address)
   const isAddressAlreadyAdded = props.addresses
     .map((address) => address.toLowerCase())
     .includes(address.toLowerCase())
@@ -116,7 +116,7 @@ const WalletItem: FC<{
     keyPrefix: 'manageWalletModal.item',
   })
 
-  const address = EthersUtils.getAddress(props.address)
+  const address = ethers.getAddress(props.address)
 
   return (
     <div

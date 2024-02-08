@@ -16,7 +16,7 @@ import { useModals } from '@mantine/modals'
 import { IconWallet } from '@tabler/icons'
 import { useWeb3React } from '@web3-react/core'
 
-import { utils as EthersUtils } from 'ethers'
+import { ethers } from 'ethers'
 
 import { useAppDispatch } from 'src/hooks/react-hooks'
 import {
@@ -52,7 +52,7 @@ const WalletItem: FC<WalletItemProps> = (props) => {
         opacity: props.isVisible ? 0.5 : 1,
       }}
     >
-      {EthersUtils.getAddress(props.address)}
+      {ethers.getAddress(props.address)}
     </Badge>
   )
 }
