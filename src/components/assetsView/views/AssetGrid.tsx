@@ -44,7 +44,7 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
         position={'center'}
         align={'center'}
         spacing={8}
-        p={'sm'}
+        p={'xs'}
         style={{ width: '100%' }}
       >
         <Pagination
@@ -52,6 +52,7 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
           total={Math.ceil(props.realtokens.length / pageSize)}
           boundaries={1}
           siblings={1}
+          size={'sm'}
           onChange={onPageChange}
         />
       </Group>
