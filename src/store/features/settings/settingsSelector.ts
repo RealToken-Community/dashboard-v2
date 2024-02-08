@@ -12,7 +12,8 @@ export const selectIsLoading = (state: RootState): boolean =>
   !state.settings.isInitialized ||
   state.realtokens.isLoading ||
   state.wallets.isLoading ||
-  state.currencies.isLoading
+  state.currencies.isLoading ||
+  state.transfers.isLoading
 
 export const selectAllUserAddressList = (state: RootState) => {
   const addressList = state.settings.user?.addressList ?? []

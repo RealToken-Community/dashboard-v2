@@ -2,6 +2,7 @@ import { createSelector } from '@reduxjs/toolkit'
 
 import _mapValues from 'lodash/mapValues'
 import _sumBy from 'lodash/sumBy'
+import _max from 'lodash/max'
 import moment from 'moment'
 
 import { WalletBalances, WalletType } from 'src/repositories'
@@ -14,12 +15,19 @@ import {
 
 import { selectRealtokens } from '../realtokens/realtokensSelector'
 import { selectUserRentCalculation } from '../settings/settingsSelector'
+import { UserRealTokenTransfer } from 'src/repositories/transfers/transfers.type'
+import { computeUCP } from 'src/utils/transfer/computeUCP'
 
 export interface UserRealtoken extends RealToken {
   id: string
   isWhitelisted: boolean
   amount: number
   value: number
+  transfers: UserRealTokenTransfer[]
+  unitPriceCost?: number
+  priceCost?: number
+  unrealizedCapitalGain?: number
+  lastChanges: string
   balance: Record<
     WalletType,
     {
@@ -35,7 +43,7 @@ const AVG_DAYS_PER_MONTH = DAYS_PER_YEAR / MONTHS_PER_YEAR
 
 function getRealtokenBalances(
   realtoken: RealToken,
-  walletBalances: WalletBalances
+  walletBalances: WalletBalances,
 ) {
   const ethereumContract = realtoken.ethereumContract?.toLowerCase() ?? ''
   const gnosisContract = realtoken.gnosisContract?.toLowerCase() ?? ''
@@ -61,36 +69,55 @@ export const selectUserRealtokens = createSelector(
   (state: RootState) => state.settings.user,
   selectRealtokens,
   (state: RootState) => state.wallets.balances,
-  (user, realtokens, walletBalances) =>
+  (state: RootState) => state.transfers.transfers,
+  (user, realtokens, walletBalances, allTransfers) =>
     realtokens.map<UserRealtoken>((realtoken) => {
-      const balances = getRealtokenBalances(realtoken, walletBalances)
+      const balance = getRealtokenBalances(realtoken, walletBalances)
+      const transfers = allTransfers.filter(
+        (item) => item.realtoken === realtoken.uuid,
+      )
+      const amount = _sumBy(Object.values(balance), 'amount')
+      const value = _sumBy(Object.values(balance), 'value')
+      const unitPriceCost = computeUCP(transfers)
+      const priceCost = unitPriceCost * amount
+      const unrealizedCapitalGain = value - priceCost
+      const lastChanges = _max(realtoken.history.map((item) => item.date))!
+
       return {
         ...realtoken,
         isWhitelisted: (user?.whitelistAttributeKeys ?? []).includes(
-          realtoken.tokenIdRules.toString()
+          realtoken.tokenIdRules.toString(),
         ),
         id: realtoken.uuid,
-        balance: balances,
-        amount: _sumBy(Object.values(balances), 'amount'),
-        value: _sumBy(Object.values(balances), 'value'),
+        balance,
+        amount,
+        value,
+        transfers,
+        unitPriceCost: transfers.length ? unitPriceCost : undefined,
+        priceCost: transfers.length ? priceCost : undefined,
+        unrealizedCapitalGain: transfers.length
+          ? unrealizedCapitalGain
+          : undefined,
+        lastChanges,
       }
-    })
+    }),
 )
 
 export const selectOwnedRealtokens = createSelector(
   selectUserRealtokens,
-  (realtokens) => realtokens.filter((item) => item.amount > 0)
+  (realtokens) => realtokens.filter((item) => item.amount > 0),
 )
 
 export const selectOwnedRealtokensValue = createSelector(
   selectOwnedRealtokens,
   (realtokens) => ({
     total: _sumBy(realtokens, 'value'),
+    totalPriceCost: _sumBy(realtokens, 'priceCost'),
     ethereum: _sumBy(realtokens, (item) => item.balance.ethereum.value),
     gnosis: _sumBy(realtokens, (item) => item.balance.gnosis.value),
     rmm: _sumBy(realtokens, (item) => item.balance.rmm.value),
     levinSwap: _sumBy(realtokens, (item) => item.balance.levinSwap.value),
-  })
+  }),
 )
 
 export const calculateTokenRent = (
@@ -98,7 +125,7 @@ export const calculateTokenRent = (
   rentCalculation: RentCalculation = {
     state: RentCalculationState.Global,
     date: new Date().getTime(),
-  }
+  },
 ) => {
   const realtimeDate = moment(new Date(rentCalculation.date))
   const rent = {
@@ -146,13 +173,13 @@ export const selectOwnedRealtokensRents = createSelector(
         yearly: acc.yearly + rent.yearly,
       }
     }, rents)
-  }
+  },
 )
 
 export const selectOwnedRealtokensAPY = createSelector(
   selectOwnedRealtokensRents,
   selectOwnedRealtokensValue,
-  (rents, value) => (value.total > 0 ? rents.yearly / value.total : 0)
+  (rents, value) => (value.total > 0 ? rents.yearly / value.total : 0),
 )
 
 export const selectRmmDetails = createSelector(
@@ -163,7 +190,7 @@ export const selectRmmDetails = createSelector(
     const rmmDetails = rmmProtocol.reduce(
       (acc, item) => {
         const realtoken = realtokens.find(
-          (realtoken) => item.token === realtoken.gnosisContract?.toLowerCase()
+          (realtoken) => item.token === realtoken.gnosisContract?.toLowerCase(),
         )
 
         if (realtoken) {
@@ -175,9 +202,9 @@ export const selectRmmDetails = createSelector(
         }
         return acc
       },
-      { stableDeposit: 0, totalDeposit: 0, stableDebt: 0 }
+      { stableDeposit: 0, totalDeposit: 0, stableDebt: 0 },
     )
 
     return _mapValues(rmmDetails, (value) => value / rates.XDAI)
-  }
+  },
 )

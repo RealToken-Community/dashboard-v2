@@ -61,6 +61,7 @@
     "title": "Summary",
     "netValue": "Net value",
     "realtokenValue": "RealTokens",
+    "totalPriceCost": "Estimated price cost",
     "stableDeposit": "RMM deposit",
     "stableBorrow": "RMM borrow"
   },
@@ -103,7 +104,10 @@
       "totalUnit": "Units",
       "rentedUnit": "Rented units",
       "occupancy": "Occupancy rate",
-      "initialLaunch": "Initial launch"
+      "initialLaunch": "Initial launch",
+      "unitPriceCost": "Unit price cost",
+      "unrealizedCapitalGain": "Capital gain",
+      "lastChange": "Last change"
     },
     "sortReverse": "Reverse",
     "viewOptions": {
@@ -193,13 +197,18 @@
   },
   "assetTable": {
     "property": "Property",
-    "apr": "Yield",
-    "ownedTokens": "Tokens",
     "ownedValue": "Value",
+    "priceCost": "Price cost",
+    "ownedTokens": "Tokens",
+    "tokenPrice": "Token price",
+    "unitPriceCost": "Unit price cost",
+    "unrealizedCapitalGain": "Capital gain",
+    "apr": "Yield",
     "weeklyRents": "Weekly rents",
     "yearlyRents": "Yearly rents",
     "rentedUnits": "Rented units",
-    "propertyValue": "Property value"
+    "propertyValue": "Property value",
+    "lastChange": "Last change"
   },
   "assetPage": {
     "home": "Home",
@@ -217,9 +226,12 @@
       "ownedGnosisValue": "Gnosis",
       "ownedRmmValue": "RMM",
       "ownedLevinSwapValue": "LevinSwap",
-      "annualYield": "Annual yield",
-      "nbToken": "Tokens owned",
+      "priceCost": "Price cost",
+      "unrealizedCapitalGain": "Unrealized capital gain",
       "tokenPrice": "Token price",
+      "unitPriceCost": "Unit price cost",
+      "nbToken": "Tokens owned",
+      "annualYield": "Annual yield",
       "rentWeek": "Weekly rent",
       "rentMonth": "Monthly rent",
       "rentYear": "Yearly rent",
@@ -260,7 +272,15 @@
       "netRentMonth": "Net monthly rent",
       "rentedUnits": "Rented units"
     },
-    "transfers": {
+    "yamStatistics": {
+      "tokenPrice": "RealT price",
+      "yamPrice": "Yam price (30 days)",
+      "yamDifference": "Difference",
+      "yamVolume": "Volume (30 days)"
+    }
+  },
+  "transfers": {
+    "titleValues": {
       "swapcatIn": "Purchase on Swapcat",
       "swapcatOut": "Sale on Swapcat",
       "yamIn": "Purchase on YAM",
@@ -269,17 +289,15 @@
       "primaryOut": "Sale to RealT",
       "rmmIn": "Withdrawal from RMM",
       "rmmOut": "Deposit on RMM",
-      "levinSwapIn": "Purchase/Withdrawal on LevinSwap",
-      "levinSwapOut": "Sale/Deposit on LevinSwap",
-      "reinvest": "Rent reinvest",
+      "levinSwapIn": "Purchase on LevinSwap",
+      "levinSwapOut": "Sale on LevinSwap",
+      "levinSwapPoolIn": "Withdrawal on LevinSwap",
+      "levinSwapPoolOut": "Deposit on LevinSwap",
+      "levinSwapUnknownIn": "Purchase/Withdrawal on LevinSwap",
+      "levinSwapUnknownOut": "Sale/Deposit on LevinSwap",
+      "reinvest": "Reinvest",
       "internal": "Internal transaction",
       "unknown": "Other"
-    },
-    "yamStatistics": {
-      "tokenPrice": "RealT price",
-      "yamPrice": "Yam price (30 days)",
-      "yamDifference": "Difference",
-      "yamVolume": "Volume (30 days)"
     }
   }
 }

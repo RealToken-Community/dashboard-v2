@@ -39,6 +39,18 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
     { value: AssetSortType.TOTAL_UNIT, label: t('sortOptions.totalUnit') },
     { value: AssetSortType.RENTED_UNIT, label: t('sortOptions.rentedUnit') },
     { value: AssetSortType.SUPPLY, label: t('sortOptions.supply') },
+    {
+      value: AssetSortType.UNIT_PRICE_COST,
+      label: t('sortOptions.unitPriceCost'),
+    },
+    {
+      value: AssetSortType.UNREALIZED_CAPITAL_GAIN,
+      label: t('sortOptions.unrealizedCapitalGain'),
+    },
+    {
+      value: AssetSortType.LAST_CHANGE,
+      label: t('sortOptions.lastChange'),
+    },
   ]
 
   const { classes: inputClasses } = useInputStyles()
@@ -99,6 +111,12 @@ export function useAssetsViewSort(filter: AssetsViewSortFilter) {
         return b.rentedUnits / b.totalUnits - a.rentedUnits / a.totalUnits
       case AssetSortType.INITIAL_LAUNCH:
         return b.initialLaunchDate.date.localeCompare(a.initialLaunchDate.date)
+      case AssetSortType.UNIT_PRICE_COST:
+        return (b.unitPriceCost ?? 0) - (a.unitPriceCost ?? 0)
+      case AssetSortType.UNREALIZED_CAPITAL_GAIN:
+        return (b.unrealizedCapitalGain ?? 0) - (a.unrealizedCapitalGain ?? 0)
+      case AssetSortType.LAST_CHANGE:
+        return b.lastChanges.localeCompare(a.lastChanges) ?? 0
     }
   }
 

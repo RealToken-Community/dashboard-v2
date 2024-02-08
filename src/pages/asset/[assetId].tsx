@@ -60,12 +60,12 @@ const AssetPage: NextPage = () => {
   const { assetId } = router.query
   const [activeTab, setActiveTab] = useState<Tabs>(Tabs.Main)
 
-  const data = useMemo(
+  const realtoken = useMemo(
     () => realtokens.find((asset) => asset.id === assetId),
     [realtokens, assetId],
   )
 
-  if (!data) {
+  if (!realtoken) {
     return <div>{isLoading ? 'Loading...' : 'Asset not found'}</div>
   }
 
@@ -74,18 +74,18 @@ const AssetPage: NextPage = () => {
       <div style={{ maxWidth: '450px', marginBottom: '300px' }}>
         <Breadcrumbs>
           <Anchor onClick={() => router.push('/')}>{t('home')}</Anchor>
-          {data.shortName}
+          {realtoken.shortName}
         </Breadcrumbs>
 
-        <h2 style={{ textAlign: 'center' }}>{data.fullName}</h2>
+        <h2 style={{ textAlign: 'center' }}>{realtoken.fullName}</h2>
 
         <Image
-          src={data.imageLink[0]}
+          src={realtoken.imageLink[0]}
           className={classes.imageContainer}
           width={500}
           height={300}
           objectFit={'cover'}
-          alt={data.fullName}
+          alt={realtoken.fullName}
         />
 
         <div style={{ width: '100%' }}>
@@ -96,7 +96,7 @@ const AssetPage: NextPage = () => {
           />
           {activeTab === Tabs.Main ? (
             <div style={{ margin: '5px 10px' }}>
-              <AssetPageMainTab data={data} />
+              <AssetPageMainTab realtoken={realtoken} />
             </div>
           ) : null}
 
@@ -107,7 +107,7 @@ const AssetPage: NextPage = () => {
           />
           {activeTab === Tabs.Property ? (
             <div style={{ margin: '5px 10px' }}>
-              <AssetPagePropertyTab data={data} />
+              <AssetPagePropertyTab realtoken={realtoken} />
             </div>
           ) : null}
 
@@ -118,7 +118,7 @@ const AssetPage: NextPage = () => {
           />
           {activeTab === Tabs.History ? (
             <div style={{ margin: '5px 10px' }}>
-              <AssetPageHistoryTab data={data} />
+              <AssetPageHistoryTab realtoken={realtoken} />
             </div>
           ) : null}
 
@@ -129,7 +129,7 @@ const AssetPage: NextPage = () => {
           />
           {activeTab === Tabs.Transfers ? (
             <div style={{ margin: '5px 10px' }}>
-              <AssetPageTransfersTab data={data} />
+              <AssetPageTransfersTab realtoken={realtoken} />
             </div>
           ) : null}
 
@@ -140,7 +140,7 @@ const AssetPage: NextPage = () => {
           />
           {activeTab === Tabs.YamStatistics ? (
             <div style={{ margin: '5px 10px' }}>
-              <AssetPageYamStatisticsTab data={data} />
+              <AssetPageYamStatisticsTab realtoken={realtoken} />
             </div>
           ) : null}
 
@@ -149,7 +149,7 @@ const AssetPage: NextPage = () => {
             fullWidth={true}
             variant={'outline'}
             size={'xs'}
-            href={data.marketplaceLink}
+            href={realtoken.marketplaceLink}
             target={'_blank'}
             style={{ marginTop: '20px' }}
           >

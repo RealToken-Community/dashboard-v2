@@ -1,4 +1,36 @@
 import { ethers } from 'ethers'
 
+declare module 'ethers' {
+  interface Interface {
+    parseLog(log: {
+      topics: ReadonlyArray<string>
+      data: string
+    }): null | ethers.LogDescription
+  }
+}
+
 const RPC_URL = 'https://rpc.ankr.com/gnosis'
 export const RpcProvider = new ethers.JsonRpcProvider(RPC_URL)
+
+/**
+ * Get transaction receipt
+ * Retry 3 times if the receipt is null, with a 100ms delay between each attempt
+ * @param transactionId Transaction hash
+ * @returns Transaction receipt
+ */
+export async function getTransactionReceipt(
+  transactionId: string,
+): Promise<ethers.TransactionReceipt | null> {
+  let attempt = 0
+  let receipt: ethers.TransactionReceipt | null = null
+
+  do {
+    receipt = await RpcProvider.getTransactionReceipt(transactionId)
+    if (receipt === null) {
+      attempt++
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+    }
+  } while (receipt === null && attempt < 3)
+
+  return receipt
+}

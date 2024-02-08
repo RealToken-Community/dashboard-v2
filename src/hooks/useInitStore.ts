@@ -20,6 +20,10 @@ import {
 } from 'src/store/features/wallets/walletsSlice'
 
 import { useAppDispatch } from './react-hooks'
+import {
+  fetchTransfers,
+  resetTransfers,
+} from 'src/store/features/transfers/transfersSlice'
 
 export default function useInitStore() {
   const dispatch = useAppDispatch()
@@ -48,9 +52,11 @@ export default function useInitStore() {
     if (addressList.length) {
       if (realtokens.length) {
         dispatch(fetchWallets(realtokens))
+        dispatch(fetchTransfers(realtokens))
       }
     } else {
       dispatch(resetWallets())
+      dispatch(resetTransfers())
     }
   }, [realtokens, addresses, dispatch])
 }

@@ -33,6 +33,10 @@ export const SummaryCard: FC = () => {
           label={t('realtokenValue')}
           value={realtokensValue.total}
         />
+        <CurrencyField
+          label={t('totalPriceCost')}
+          value={realtokensValue.totalPriceCost}
+        />
         <CurrencyField label={t('stableDeposit')} value={stableDepositValue} />
         <CurrencyField label={t('stableBorrow')} value={stableDebtValue} />
       </Box>

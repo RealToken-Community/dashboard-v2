@@ -61,6 +61,7 @@
     "title": "Résumé",
     "netValue": "Valeur nette",
     "realtokenValue": "RealTokens",
+    "totalPriceCost": "Prix d'achat estimé",
     "stableDeposit": "Dépôt RMM",
     "stableBorrow": "Emprunt RMM"
   },
@@ -103,7 +104,10 @@
       "totalUnit": "Logements totaux",
       "rentedUnit": "Logements loués",
       "occupancy": "Taux d'occupation",
-      "initialLaunch": "Mise en vente"
+      "initialLaunch": "Mise en vente",
+      "unitPriceCost": "Prix de revient unitaire",
+      "unrealizedCapitalGain": "Plus-value latente",
+      "lastChange": "Changement récent"
     },
     "sortReverse": "Inverser",
     "viewOptions": {
@@ -193,13 +197,18 @@
   },
   "assetTable": {
     "property": "Propriété",
-    "apr": "Rendement annuel",
-    "ownedTokens": "Tokens",
     "ownedValue": "Valeur",
-    "weeklyRents": "Loyer hebdomadaire",
+    "priceCost": "Prix d'achat",
+    "unrealizedCapitalGain": "Plus-value",
+    "ownedTokens": "Tokens",
+    "tokenPrice": "Prix du token",
+    "unitPriceCost": "Prix de revient",
+    "apr": "Rendement annuel",
+    "weeklyRents": "Loyer hebdo",
     "yearlyRents": "Loyer annuel",
     "rentedUnits": "Logements loués",
-    "propertyValue": "Valeur de la propriété"
+    "propertyValue": "Valeur de la propriété",
+    "lastChange": "Dernier changement"
   },
   "assetPage": {
     "home": "Accueil",
@@ -208,18 +217,21 @@
       "main": "Informations générales",
       "property": "Détail du bien",
       "history": "Changements du bien",
-      "transfers": "Mes transactions",
+      "transfers": "Mes mouvements",
       "yamStatistics": "Statistiques marché secondaire (Yam)"
     },
     "main": {
-      "ownedValue": "Mon investissement",
+      "ownedValue": "Valeur actuelle",
       "ownedEthereumValue": "Ethereum",
       "ownedGnosisValue": "Gnosis",
       "ownedRmmValue": "RMM",
       "ownedLevinSwapValue": "LevinSwap",
-      "annualYield": "Rendement annuel",
-      "nbToken": "Nombre de tokens",
+      "priceCost": "Prix d'achat",
+      "unrealizedCapitalGain": "Plus-value latente",
       "tokenPrice": "Prix d'un token",
+      "unitPriceCost": "Prix de revient unitaire",
+      "nbToken": "Nombre de tokens",
+      "annualYield": "Rendement annuel",
       "rentWeek": "Loyer hebdomadaire",
       "rentMonth": "Loyer mensuel",
       "rentYear": "Loyer annuel",
@@ -260,7 +272,15 @@
       "netRentMonth": "Loyer net mensuel",
       "rentedUnits": "Logements loués"
     },
-    "transfers": {
+    "yamStatistics": {
+      "tokenPrice": "Prix RealT",
+      "yamPrice": "Prix Yam (30 jours)",
+      "yamDifference": "Différence",
+      "yamVolume": "Volume (30 jours)"
+    }
+  },
+  "transfers": {
+    "titleValues": {
       "swapcatIn": "Achat sur Swapcat",
       "swapcatOut": "Vente sur Swapcat",
       "yamIn": "Achat sur Yam",
@@ -269,17 +289,15 @@
       "primaryOut": "Vente à RealT",
       "rmmIn": "Retrait du RMM",
       "rmmOut": "Dépôt sur le RMM",
-      "levinSwapIn": "Achat/Retrait sur LevinSwap",
-      "levinSwapOut": "Vente/Dépôt sur LevinSwap",
-      "reinvest": "Réinvestissement des loyers",
+      "levinSwapIn": "Achat sur LevinSwap",
+      "levinSwapOut": "Vente sur LevinSwap",
+      "levinSwapPoolIn": "Retrait sur LevinSwap",
+      "levinSwapPoolOut": "Dépôt sur LevinSwap",
+      "levinSwapUnknownIn": "Achat/Retrait sur LevinSwap",
+      "levinSwapUnknownOut": "Vente/Dépôt sur LevinSwap",
+      "reinvest": "Réinvestissement",
       "internal": "Transfert interne",
       "unknown": "Autre"
-    },
-    "yamStatistics": {
-      "tokenPrice": "Prix RealT",
-      "yamPrice": "Prix Yam (30 jours)",
-      "yamDifference": "Différence",
-      "yamVolume": "Volume (30 jours)"
     }
   }
 }

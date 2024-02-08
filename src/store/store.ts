@@ -4,12 +4,14 @@ import { currenciesReducers } from './features/currencies/currenciesSlice'
 import { realtokensReducers } from './features/realtokens/realtokensSlice'
 import { settingsReducers } from './features/settings/settingsSlice'
 import { walletsReducers } from './features/wallets/walletsSlice'
+import { transfersReducers } from './features/transfers/transfersSlice'
 
 const rootReducer = combineReducers({
   settings: settingsReducers,
   realtokens: realtokensReducers,
   wallets: walletsReducers,
   currencies: currenciesReducers,
+  transfers: transfersReducers,
 })
 
 const store = configureStore({

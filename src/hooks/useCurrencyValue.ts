@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux'
 
 import { selectUserCurrency } from 'src/store/features/currencies/currenciesSelector'
 
-export const useCurrencyValue = (value: number) => {
+export const useCurrencyValue = (value: number | undefined, fallback = '-') => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
   const { rate, symbol } = useSelector(selectUserCurrency)
 
-  return t('currency', { value: value / rate, symbol })
+  return value ? t('currency', { value: value / rate, symbol }) : fallback
 }
