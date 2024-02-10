@@ -20,7 +20,6 @@ import { useInputStyles } from 'src/components/inputs/useInputStyles'
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { useTransferValues } from 'src/hooks/useTransferValues'
 import {
-  TransferOrigin,
   UserRealTokenTransfer,
   UserTransferDirection,
 } from 'src/repositories/transfers/transfers.type'
@@ -166,13 +165,13 @@ enum TransferFilter {
   all = 'all',
   internal = 'internal',
   other = 'other',
-  swapcat = TransferOrigin.swapcat,
-  yam = TransferOrigin.yam,
-  primary = TransferOrigin.primary,
-  reinvest = TransferOrigin.reinvest,
-  rmm = TransferOrigin.rmm,
-  levinSwap = TransferOrigin.levinSwap,
-  levinSwapPool = TransferOrigin.levinSwapPool,
+  swapcat = 'swapcat',
+  yam = 'yam',
+  primary = 'primary',
+  reinvest = 'reinvest',
+  rmm = 'rmm',
+  levinSwap = 'levinSwap',
+  levinSwapPool = 'levinSwapPool',
 }
 
 const TransferFilterField: FC<{
@@ -240,22 +239,20 @@ const TransferWarning: FC = () => {
     localStorage && localStorage.getItem('hideTransferAlertWarning') !== 'true',
   )
 
-  return (
-    isVisible && (
-      <Alert
-        title={t('title')}
-        color={'orange'}
-        withCloseButton={true}
-        my={'lg'}
-        onClick={() => {
-          setIsVisible(false)
-          localStorage.setItem('hideTransferAlertWarning', 'true')
-        }}
-      >
-        {t('text')}
-      </Alert>
-    )
-  )
+  return isVisible ? (
+    <Alert
+      title={t('title')}
+      color={'orange'}
+      withCloseButton={true}
+      my={'lg'}
+      onClick={() => {
+        setIsVisible(false)
+        localStorage.setItem('hideTransferAlertWarning', 'true')
+      }}
+    >
+      {t('text')}
+    </Alert>
+  ) : null
 }
 
 const TransactionPage: NextPage = () => {
