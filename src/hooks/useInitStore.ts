@@ -15,15 +15,15 @@ import {
   setUserAddress,
 } from 'src/store/features/settings/settingsSlice'
 import {
+  fetchTransfers,
+  resetTransfers,
+} from 'src/store/features/transfers/transfersSlice'
+import {
   fetchWallets,
   resetWallets,
 } from 'src/store/features/wallets/walletsSlice'
 
 import { useAppDispatch } from './react-hooks'
-import {
-  fetchTransfers,
-  resetTransfers,
-} from 'src/store/features/transfers/transfersSlice'
 
 export default function useInitStore() {
   const dispatch = useAppDispatch()

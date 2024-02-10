@@ -1,11 +1,15 @@
 import { TransferEvent } from 'src/repositories/subgraphs/queries/transfers.queries'
 import { RealToken } from 'src/types/RealToken'
+import { findRealToken } from 'src/utils/realtoken/findRealToken'
+import { findRealTokenPrice } from 'src/utils/realtoken/findRealTokenPrice'
+
+import { TransferDatabaseService } from './TransferDatabase'
 import {
-  SwapcatTransferParser,
-  LevinswapTransferParser,
   GenericTransferParser,
-  YamTransferParser,
+  LevinswapTransferParser,
+  SwapcatTransferParser,
   TransferParser,
+  YamTransferParser,
 } from './parsers'
 import {
   RealTokenTransfer,
@@ -13,9 +17,6 @@ import {
   UserRealTokenTransfer,
   UserTransferDirection,
 } from './transfers.type'
-import { findRealTokenPrice } from 'src/utils/realtoken/findRealTokenPrice'
-import { findRealToken } from 'src/utils/realtoken/findRealToken'
-import { TransferDatabaseService } from './TransferDatabase'
 
 export class UserTransferParser {
   private readonly parserList: TransferParser[] = []

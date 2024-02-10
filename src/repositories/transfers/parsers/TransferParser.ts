@@ -1,9 +1,11 @@
-import { TransferEvent } from 'src/repositories/subgraphs/queries/transfers.queries'
 import _compact from 'lodash/compact'
+
+import { TransferEvent } from 'src/repositories/subgraphs/queries/transfers.queries'
 import { RealToken } from 'src/types/RealToken'
-import { RealTokenTransfer, TransferOrigin } from '../transfers.type'
 import { findRealToken } from 'src/utils/realtoken/findRealToken'
 import { findRealTokenPrice } from 'src/utils/realtoken/findRealTokenPrice'
+
+import { RealTokenTransfer, TransferOrigin } from '../transfers.type'
 
 export class TransferParser {
   protected defaultOrigin = TransferOrigin.other

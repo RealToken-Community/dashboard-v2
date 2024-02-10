@@ -1,13 +1,15 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
+
+import { TransferDatabaseService } from 'src/repositories/transfers/TransferDatabase'
 import { UserRealTokenTransfer } from 'src/repositories/transfers/transfers.type'
 import { TransferRepository } from 'src/repositories/transferts.repository'
 import { AppDispatch, RootState } from 'src/store/store'
+import { RealToken } from 'src/types/RealToken'
+
 import {
   selectAllUserAddressList,
   selectUserAddressList,
 } from '../settings/settingsSelector'
-import { RealToken } from 'src/types/RealToken'
-import { TransferDatabaseService } from 'src/repositories/transfers/TransferDatabase'
 
 interface TransfersInitialStateType {
   transfers: UserRealTokenTransfer[]

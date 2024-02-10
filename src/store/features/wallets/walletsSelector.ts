@@ -1,22 +1,22 @@
 import { createSelector } from '@reduxjs/toolkit'
 
 import _mapValues from 'lodash/mapValues'
-import _sumBy from 'lodash/sumBy'
 import _max from 'lodash/max'
+import _sumBy from 'lodash/sumBy'
 import moment from 'moment'
 
 import { WalletBalances, WalletType } from 'src/repositories'
+import { UserRealTokenTransfer } from 'src/repositories/transfers/transfers.type'
 import { RootState } from 'src/store/store'
 import { RealToken } from 'src/types/RealToken'
 import {
   RentCalculation,
   RentCalculationState,
 } from 'src/types/RentCalculation'
+import { computeUCP } from 'src/utils/transfer/computeUCP'
 
 import { selectRealtokens } from '../realtokens/realtokensSelector'
 import { selectUserRentCalculation } from '../settings/settingsSelector'
-import { UserRealTokenTransfer } from 'src/repositories/transfers/transfers.type'
-import { computeUCP } from 'src/utils/transfer/computeUCP'
 
 export interface UserRealtoken extends RealToken {
   id: string

@@ -9,8 +9,8 @@ import {
   calculateTokenRent,
 } from 'src/store/features/wallets/walletsSelector'
 
-import { AssetPageTable } from './assetPageTable'
 import { Divider } from '../commons'
+import { AssetPageTable } from './assetPageTable'
 
 export const AssetPageMainTab: FC<{
   realtoken: UserRealtoken

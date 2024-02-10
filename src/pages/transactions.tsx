@@ -1,4 +1,9 @@
+import { FC, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
+
 import { NextPage } from 'next'
+import { useRouter } from 'next/router'
 
 import {
   Alert,
@@ -10,27 +15,24 @@ import {
   Select,
   createStyles,
 } from '@mantine/core'
-import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-import {
-  UserRealtoken,
-  selectUserRealtokens,
-} from 'src/store/features/wallets/walletsSelector'
-import {
-  selectTransfers,
-  selectTransfersIsLoading,
-} from 'src/store/features/transfers/transfersSelector'
-import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
-import { FC, useEffect, useMemo, useState } from 'react'
+
+import { useInputStyles } from 'src/components/inputs/useInputStyles'
+import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
+import { useTransferValues } from 'src/hooks/useTransferValues'
 import {
   TransferOrigin,
   UserRealTokenTransfer,
   UserTransferDirection,
 } from 'src/repositories/transfers/transfers.type'
-import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
-import { useTransferValues } from 'src/hooks/useTransferValues'
-import { useRouter } from 'next/router'
-import { useInputStyles } from 'src/components/inputs/useInputStyles'
+import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
+import {
+  selectTransfers,
+  selectTransfersIsLoading,
+} from 'src/store/features/transfers/transfersSelector'
+import {
+  UserRealtoken,
+  selectUserRealtokens,
+} from 'src/store/features/wallets/walletsSelector'
 
 const useTransferItemStyles = createStyles({
   textBold: {

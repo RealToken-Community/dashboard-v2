@@ -6,9 +6,10 @@ export function findRealTokenPrice(
   realtoken: RealToken,
   timestampOrDate: number | string,
 ): number {
-  const date = typeof timestampOrDate === 'string'
-    ? timestampOrDate
-    : moment(timestampOrDate * 1000).format('YYYMMDD')
+  const date =
+    typeof timestampOrDate === 'string'
+      ? timestampOrDate
+      : moment(timestampOrDate * 1000).format('YYYMMDD')
 
   const lastHistoryWithTokenPrice = realtoken.history
     .filter((item) => item.date <= date)
@@ -21,9 +22,10 @@ export function findRealTokenRent(
   realtoken: RealToken,
   timestampOrDate: number | string,
 ): number {
-  const date = typeof timestampOrDate === 'string'
-    ? timestampOrDate
-    : moment(timestampOrDate * 1000).format('YYYMMDD')
+  const date =
+    typeof timestampOrDate === 'string'
+      ? timestampOrDate
+      : moment(timestampOrDate * 1000).format('YYYMMDD')
 
   const lastHistoryWithRent = realtoken.history
     .filter((item) => item.date <= date)

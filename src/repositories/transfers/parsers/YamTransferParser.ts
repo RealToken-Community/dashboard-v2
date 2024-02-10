@@ -1,14 +1,16 @@
-import { TransferEvent } from 'src/repositories/subgraphs/queries/transfers.queries'
-import { TransferParser } from './TransferParser'
-import { Yam } from 'src/utils/blockchain/Yam'
-import _uniqBy from 'lodash/uniqBy'
-import _compact from 'lodash/compact'
-import { RealTokenTransfer, TransferOrigin } from '../transfers.type'
-import { Stablecoin } from 'src/utils/blockchain/Stablecoin'
 import { ethers } from 'ethers'
+import _compact from 'lodash/compact'
+import _uniqBy from 'lodash/uniqBy'
+
 import { getTransactionReceipt } from 'src/repositories/RpcProvider'
+import { TransferEvent } from 'src/repositories/subgraphs/queries/transfers.queries'
 import { ERC20, ERC20TransferEvent } from 'src/utils/blockchain/ERC20'
+import { Stablecoin } from 'src/utils/blockchain/Stablecoin'
+import { Yam } from 'src/utils/blockchain/Yam'
 import { findRealToken } from 'src/utils/realtoken/findRealToken'
+
+import { RealTokenTransfer, TransferOrigin } from '../transfers.type'
+import { TransferParser } from './TransferParser'
 
 export class YamTransferParser extends TransferParser {
   protected defaultOrigin = TransferOrigin.yam

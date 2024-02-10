@@ -1,8 +1,9 @@
 import { TransferEvent } from 'src/repositories/subgraphs/queries/transfers.queries'
-import { TransferParser } from './TransferParser'
-import { RealTokenTransfer, TransferOrigin } from '../transfers.type'
-import { findRealToken } from 'src/utils/realtoken/findRealToken'
 import { RealToken } from 'src/types/RealToken'
+import { findRealToken } from 'src/utils/realtoken/findRealToken'
+
+import { RealTokenTransfer, TransferOrigin } from '../transfers.type'
+import { TransferParser } from './TransferParser'
 
 export class GenericTransferParser extends TransferParser {
   canHandleTransferEvent(): boolean {

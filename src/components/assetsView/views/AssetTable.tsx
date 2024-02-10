@@ -5,9 +5,10 @@ import { useRouter } from 'next/router'
 
 import { Anchor, ScrollArea, Table } from '@mantine/core'
 
+import moment from 'moment'
+
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
-import moment from 'moment'
 
 export const AssetTable: FC<{ realtokens: UserRealtoken[] }> = (props) => {
   return (

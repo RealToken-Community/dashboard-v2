@@ -1,14 +1,16 @@
-import { TransferEvent } from 'src/repositories/subgraphs/queries/transfers.queries'
-import { RealTokenTransfer, TransferOrigin } from '../transfers.type'
-import { TransferParser } from './TransferParser'
-import { Levinswap } from 'src/utils/blockchain/Levinswap'
-import { findRealToken } from 'src/utils/realtoken/findRealToken'
 import { ethers } from 'ethers'
-import { Stablecoin } from 'src/utils/blockchain/Stablecoin'
-import { ERC20, ERC20TransferEvent } from 'src/utils/blockchain/ERC20'
-import { getTransactionReceipt } from 'src/repositories/RpcProvider'
 import _compact from 'lodash/compact'
 import _uniqBy from 'lodash/uniqBy'
+
+import { getTransactionReceipt } from 'src/repositories/RpcProvider'
+import { TransferEvent } from 'src/repositories/subgraphs/queries/transfers.queries'
+import { ERC20, ERC20TransferEvent } from 'src/utils/blockchain/ERC20'
+import { Levinswap } from 'src/utils/blockchain/Levinswap'
+import { Stablecoin } from 'src/utils/blockchain/Stablecoin'
+import { findRealToken } from 'src/utils/realtoken/findRealToken'
+
+import { RealTokenTransfer, TransferOrigin } from '../transfers.type'
+import { TransferParser } from './TransferParser'
 
 export class LevinswapTransferParser extends TransferParser {
   protected defaultOrigin = TransferOrigin.levinSwapUnknown

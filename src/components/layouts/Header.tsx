@@ -15,7 +15,12 @@ import {
   createStyles,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconExternalLink, IconHome2, IconReceipt, IconFilePencil } from '@tabler/icons'
+import {
+  IconExternalLink,
+  IconFilePencil,
+  IconHome2,
+  IconReceipt,
+} from '@tabler/icons'
 
 import { Logo } from 'src/assets'
 

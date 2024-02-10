@@ -47,7 +47,7 @@ const executeRMM2Query = useCacheWithLocalStorage(
     duration: 1000 * 60 * 10, // 10 minutes
     usePreviousValueOnError: true,
     key: 'Rmm2Query',
-  }
+  },
 )
 
 const executeRMM3Query = useCacheWithLocalStorage(
@@ -99,7 +99,7 @@ const executeRMM3Query = useCacheWithLocalStorage(
     duration: 1000 * 60 * 10, // 10 minutes
     usePreviousValueOnError: true,
     key: 'Rmm3Query',
-  }
+  },
 )
 
 const RmmQuery = gql`

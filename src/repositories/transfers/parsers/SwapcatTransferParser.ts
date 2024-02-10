@@ -1,12 +1,14 @@
-import { TransferEvent } from 'src/repositories/subgraphs/queries/transfers.queries'
-import { Swapcat } from 'src/utils/blockchain/Swapcat'
-import { TransferParser } from './TransferParser'
-import { getTransactionReceipt } from 'src/repositories/RpcProvider'
-import { ERC20, ERC20TransferEvent } from 'src/utils/blockchain/ERC20'
-import { RealTokenTransfer, TransferOrigin } from '../transfers.type'
 import { ethers } from 'ethers'
+
+import { getTransactionReceipt } from 'src/repositories/RpcProvider'
+import { TransferEvent } from 'src/repositories/subgraphs/queries/transfers.queries'
+import { ERC20, ERC20TransferEvent } from 'src/utils/blockchain/ERC20'
 import { Stablecoin } from 'src/utils/blockchain/Stablecoin'
+import { Swapcat } from 'src/utils/blockchain/Swapcat'
 import { findRealToken } from 'src/utils/realtoken/findRealToken'
+
+import { RealTokenTransfer, TransferOrigin } from '../transfers.type'
+import { TransferParser } from './TransferParser'
 
 export class SwapcatTransferParser extends TransferParser {
   protected defaultOrigin = TransferOrigin.swapcat

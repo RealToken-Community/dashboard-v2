@@ -1,8 +1,8 @@
 import Dexie, { Table } from 'dexie'
+import _maxBy from 'lodash/maxBy'
+import _minBy from 'lodash/minBy'
 
 import { RealTokenTransfer } from './transfers.type'
-import _minBy from 'lodash/minBy'
-import _maxBy from 'lodash/maxBy'
 
 class TransferDatabase extends Dexie {
   transfersGnosis: Table<RealTokenTransfer, string>

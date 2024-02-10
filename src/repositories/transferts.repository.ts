@@ -1,7 +1,8 @@
 import { RealToken } from 'src/types/RealToken'
-import { UserRealTokenTransfer } from './transfers/transfers.type'
+
 import { getRealTokenTransfers } from './subgraphs/queries/transfers.queries'
 import { UserTransferParser } from './transfers/UserTransferParser'
+import { UserRealTokenTransfer } from './transfers/transfers.type'
 
 export const TransferRepository = {
   async getTransfers(params: {
