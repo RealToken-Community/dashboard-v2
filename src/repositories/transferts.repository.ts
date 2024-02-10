@@ -102,5 +102,10 @@ function getTransferOrigin(
     return TransferOrigin.rmm
   }
 
+  const rmmWrapperPool = '0x10497611ee6524d75fc45e3739f472f83e282ad5'
+  if (addresses.includes(rmmWrapperPool)) {
+    return TransferOrigin.rmm
+  }
+
   return TransferOrigin.other
 }
