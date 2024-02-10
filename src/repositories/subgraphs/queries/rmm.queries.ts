@@ -1,7 +1,8 @@
 import { gql } from '@apollo/client'
 
-import { useCacheWithLocalStorage } from 'src/utils/useCache'
 import _keyBy from 'lodash/keyBy'
+
+import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
 import { RMM2Client, RMM3Client, RMM3WrapperClient } from '../clients'
 
@@ -13,10 +14,7 @@ export async function getRmmBalances(addressList: string[]) {
     executeRMM2Query(addresses),
     executeRMM3Query(addresses),
   ])
-  return formatBalances([
-    ...resultRMM2.data.users,
-    ...resultRMM3.data.users,
-  ])
+  return formatBalances([...resultRMM2.data.users, ...resultRMM3.data.users])
 }
 
 export async function getRmmPositions(addressList: string[]) {
@@ -25,10 +23,7 @@ export async function getRmmPositions(addressList: string[]) {
     executeRMM2Query(addresses),
     executeRMM3Query(addresses),
   ])
-  return formatPositions([
-    ...resultRMM2.data.users,
-    ...resultRMM3.data.users,
-  ])
+  return formatPositions([...resultRMM2.data.users, ...resultRMM3.data.users])
 }
 
 export interface RmmPosition {
@@ -67,31 +62,37 @@ const executeRMM3Query = useCacheWithLocalStorage(
       variables: { addressList },
     })
 
-    const [mainResult, wrapperResult] = await Promise.all([mainQuery, wrapperQuery])
+    const [mainResult, wrapperResult] = await Promise.all([
+      mainQuery,
+      wrapperQuery,
+    ])
     const wrappedUsers = _keyBy(wrapperResult.data.users, 'id')
     return {
       ...mainResult,
       data: {
         users: mainResult.data.users.map((user) => ({
           ...user,
-          reserves: user.reserves.map((item) => {
-            if (item.reserve.underlyingAsset === WRAPPER_ADDRESS) {
-              const { balances } = wrappedUsers[user.id] ?? { balances: [] }
-              return balances.map((balance) => ({
-                reserve: {
-                  underlyingAsset: balance.token.address,
-                  name: balance.token.name,
-                  decimals: balance.token.decimals,
-                  usageAsCollateralEnabled: item.reserve.usageAsCollateralEnabled,
-                },
-                currentATokenBalance: balance.amount,
-                currentTotalDebt: '0', // RealToken cannot be borrowed
-              }))
-            }
-            return item
-          }).flat(),
-        }))
-      }
+          reserves: user.reserves
+            .map((item) => {
+              if (item.reserve.underlyingAsset === WRAPPER_ADDRESS) {
+                const { balances } = wrappedUsers[user.id] ?? { balances: [] }
+                return balances.map((balance) => ({
+                  reserve: {
+                    underlyingAsset: balance.token.address,
+                    name: balance.token.name,
+                    decimals: balance.token.decimals,
+                    usageAsCollateralEnabled:
+                      item.reserve.usageAsCollateralEnabled,
+                  },
+                  currentATokenBalance: balance.amount,
+                  currentTotalDebt: '0', // RealToken cannot be borrowed
+                }))
+              }
+              return item
+            })
+            .flat(),
+        })),
+      },
     }
   },
   {
@@ -144,9 +145,13 @@ const RmmWrapperQuery = gql`
     users(where: { id_in: $addressList }) {
       id
       balances {
-      token { name address decimals }
-      amount
-    }
+        token {
+          name
+          address
+          decimals
+        }
+        amount
+      }
     }
   }
 `
