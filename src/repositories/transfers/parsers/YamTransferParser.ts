@@ -61,8 +61,8 @@ export class YamTransferParser extends TransferParser {
   }) {
     const acceptedEvents = await this.getOfferAcceptedFromTx(tx.id)
 
-    const realtokenContractList = this.realtokenList.map(
-      (item) => item.xDaiContract?.toLowerCase(),
+    const realtokenContractList = this.realtokenList.map((item) =>
+      item.xDaiContract?.toLowerCase(),
     )
 
     const transactionList = acceptedEvents.map(({ transfers }) => {

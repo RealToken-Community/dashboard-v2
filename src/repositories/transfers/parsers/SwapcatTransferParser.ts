@@ -39,8 +39,8 @@ export class SwapcatTransferParser extends TransferParser {
   ): Promise<RealTokenTransfer[]> {
     const transfers = await this.getTransfersFromTx(txId)
 
-    const realtokenContractList = this.realtokenList.map(
-      (item) => item.xDaiContract?.toLowerCase(),
+    const realtokenContractList = this.realtokenList.map((item) =>
+      item.xDaiContract?.toLowerCase(),
     )
     const realtokenTransfers = transfers.filter((item) =>
       realtokenContractList.includes(item.address),
