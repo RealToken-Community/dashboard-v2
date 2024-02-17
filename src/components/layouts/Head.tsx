@@ -2,6 +2,8 @@ import { FC } from 'react'
 
 import { default as NextHead } from 'next/head'
 
+import { ColorSchemeScript } from '@mantine/core'
+
 type HeadProps = {
   title: string
   description: string
@@ -17,6 +19,7 @@ export const Head: FC<HeadProps> = ({ title, description }) => {
           content={'width=device-width, initial-scale=1.0'}
         />
         <meta name={'Description'} content={description} />
+        <ColorSchemeScript />
       </NextHead>
     </div>
   )

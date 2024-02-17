@@ -32,7 +32,7 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
     <>
       <Grid className={'asset-grid'}>
         {paginationOffers.map((item) => (
-          <Grid.Col key={item.id} span={12} sm={6} lg={4} xl={3}>
+          <Grid.Col key={item.id} span={{ base: 12, sm: 6, lg: 4, xl: 3 }}>
             <AssetCard
               value={item}
               onClick={(id) => router.push(`/asset/${id}`)}
@@ -41,9 +41,9 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
         ))}
       </Grid>
       <Group
-        position={'center'}
+        justify={'center'}
         align={'center'}
-        spacing={8}
+        gap={8}
         p={'xs'}
         style={{ width: '100%' }}
       >

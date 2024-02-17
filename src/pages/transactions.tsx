@@ -13,7 +13,6 @@ import {
   Group,
   Pagination,
   Select,
-  createStyles,
 } from '@mantine/core'
 
 import { useInputStyles } from 'src/components/inputs/useInputStyles'
@@ -33,30 +32,7 @@ import {
   selectUserRealtokens,
 } from 'src/store/features/wallets/walletsSelector'
 
-const useTransferItemStyles = createStyles({
-  textBold: {
-    fontWeight: 500,
-  },
-  textSm: {
-    fontSize: '14px',
-  },
-  textLocation: {
-    fontSize: '12px',
-    textAlign: 'center',
-  },
-  groupApart: {
-    boxSizing: 'border-box',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    '& > *': {
-      boxSizing: 'border-box',
-      flexGrow: 0,
-    },
-  },
-})
+import styles from './TransactionsPage.module.sass'
 
 const TransferItem: FC<{
   transfer: UserRealTokenTransfer
@@ -65,7 +41,6 @@ const TransferItem: FC<{
   const { t } = useTranslation('common', { keyPrefix: 'transactionPage.item' })
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
 
-  const { classes } = useTransferItemStyles()
   const realtoken = realtokens.find((item) => item.id === transfer.realtoken)
   if (!realtoken) {
     return null
@@ -81,8 +56,8 @@ const TransferItem: FC<{
         fontWeight: values.isInternal ? 'lighter' : 'initial',
       }}
     >
-      <div className={classes.groupApart}>
-        <div className={classes.textBold}>{realtoken.shortName}</div>
+      <div className={styles.groupApart}>
+        <div className={styles.textBold}>{realtoken.shortName}</div>
         <div
           style={{
             textAlign: 'right',
@@ -107,7 +82,7 @@ const TransferItem: FC<{
       </div>
 
       <div
-        className={classes.groupApart}
+        className={styles.groupApart}
         style={{ fontSize: '12px', fontStyle: 'italic' }}
       >
         <div>{values.date}</div>
@@ -115,7 +90,7 @@ const TransferItem: FC<{
       </div>
 
       {!values.isInternal && (
-        <div className={classes.textSm}>
+        <div className={styles.textSm}>
           {t('price')} {' : '} {useCurrencyValue(values.price)}
           {values.exchange && (
             <span
@@ -137,7 +112,7 @@ const TransferItem: FC<{
       )}
 
       {!values.isInternal && values.exchange && (
-        <div className={classes.textSm}>
+        <div className={styles.textSm}>
           {t('value')} {' : '} {useCurrencyValue(values.value)}
           {values.exchange && (
             <span
@@ -219,9 +194,9 @@ const TransferFilterField: FC<{
       label={t('field')}
       data={filterOptions}
       value={filter}
-      onChange={(value: TransferFilter) => {
-        setFilter(value)
-        onChange(transfers.filter(filterFunction(value)))
+      onChange={(value) => {
+        setFilter(value as TransferFilter)
+        onChange(transfers.filter(filterFunction(value as TransferFilter)))
       }}
       classNames={inputClasses}
     />
@@ -293,7 +268,7 @@ const TransactionPage: NextPage = () => {
   }
 
   return (
-    <Flex my={'xl'} mx={'md'} direction={'column'} align={'center'}>
+    <Flex my={'lg'} mx={'md'} direction={'column'} align={'center'}>
       <div
         style={{ maxWidth: '450px', width: '100%' }}
         className={'transaction-list'}
@@ -321,9 +296,9 @@ const TransactionPage: NextPage = () => {
       </div>
 
       <Group
-        position={'center'}
+        justify={'center'}
         align={'center'}
-        spacing={8}
+        gap={8}
         py={'xs'}
         style={{ width: '100%' }}
       >

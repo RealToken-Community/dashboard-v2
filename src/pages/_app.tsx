@@ -5,7 +5,10 @@ import { GetServerSidePropsContext } from 'next'
 import type { AppProps as NextAppProps } from 'next/app'
 import { Router } from 'next/router'
 
-import { ColorScheme } from '@mantine/core'
+import { MantineColorScheme } from '@mantine/core'
+import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
+import '@mantine/notifications/styles.css'
 import {
   CHAINS,
   ChainSelectConfig,
@@ -35,7 +38,10 @@ import store from 'src/store/store'
 
 const i18n = initLanguage(resources)
 
-type AppProps = NextAppProps & { colorScheme: ColorScheme; locale: string }
+type AppProps = NextAppProps & {
+  colorScheme: MantineColorScheme
+  locale: string
+}
 
 const queryClient = new QueryClient({})
 

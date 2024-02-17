@@ -1,13 +1,6 @@
 import { FC } from 'react'
 
-import {
-  ActionIcon,
-  Box,
-  Group,
-  Image,
-  Title,
-  createStyles,
-} from '@mantine/core'
+import { ActionIcon, Box, Group, Image, Title } from '@mantine/core'
 import {
   IconBrandDiscord,
   IconBrandMedium,
@@ -17,23 +10,12 @@ import {
 import { Logo } from 'src/assets'
 
 import { Divider } from '../commons'
-
-const useStyles = createStyles((theme) => ({
-  container: {
-    [theme.fn.smallerThan('xs')]: {
-      padding: theme.spacing.xs,
-    },
-
-    [theme.fn.largerThan('xs')]: {
-      padding: theme.spacing.md,
-    },
-  },
-}))
+import styles from './Footer.module.sass'
 
 const LogoWithName: FC = () => {
   return (
-    <Group align={'center'} spacing={'xs'}>
-      <Image src={Logo.src} alt={'RealT Logo'} width={30} />
+    <Group align={'center'} gap={'xs'}>
+      <Image src={Logo.src} alt={'RealT Logo'} style={{ width: '36px' }} />
       <Title order={3}>{'RealToken Community'}</Title>
     </Group>
   )
@@ -75,13 +57,11 @@ export const Footer: FC = () => {
     )
   }
 
-  const { classes } = useStyles()
-
   return (
     <div>
       <Divider />
-      <Box className={classes.container}>
-        <Group position={'apart'} align={'center'}>
+      <Box className={styles.container}>
+        <Group justify={'space-between'} align={'center'}>
           <LogoWithName />
           <FooterButtons />
         </Group>

@@ -26,7 +26,7 @@ export const RentsCard: FC = () => {
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
       <Title order={4}>{t('title')}</Title>
-      <Box mx={'sm'} mt={'xs'}>
+      <Box mx={'sm'}>
         <PercentField label={t('apr')} value={apy} />
         <CurrencyField label={t('daily')} value={dailyRents} />
         <CurrencyField label={t('weekly')} value={weeklyRents} />

@@ -32,7 +32,7 @@ export const AssetsViewSelect: FC = () => {
       label={t('view')}
       data={viewOptions}
       value={choosenAssetView}
-      onChange={(value: AssetViewType) => value && setChoosenAssetView(value)}
+      onChange={(value) => value && setChoosenAssetView(value as AssetViewType)}
       classNames={inputClasses}
     />
   )

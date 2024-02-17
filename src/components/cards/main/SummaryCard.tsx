@@ -25,8 +25,8 @@ export const SummaryCard: FC = () => {
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
       <Title order={4}>{t('title')}</Title>
-      <Box mx={'sm'} mt={'xs'}>
-        <Text fz={'lg'} fw={500}>
+      <Box mx={'sm'}>
+        <Text fz={'lg'} fw={500} component={'div'}>
           <CurrencyField label={t('netValue')} value={totalNetValue} />
         </Text>
         <CurrencyField

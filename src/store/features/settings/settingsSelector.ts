@@ -15,15 +15,20 @@ export const selectIsLoading = (state: RootState): boolean =>
   state.currencies.isLoading ||
   state.transfers.isLoading
 
-export const selectAllUserAddressList = (state: RootState) => {
-  const addressList = state.settings.user?.addressList ?? []
-  const customAddressList = state.settings.user?.customAddressList ?? []
-  return Array.from(
-    new Set(
-      [...addressList, ...customAddressList].map((item) => item.toLowerCase()),
-    ),
-  )
-}
+export const selectAllUserAddressList = createSelector(
+  (state: RootState) => state.settings.user,
+  (user) => {
+    const addressList = user?.addressList ?? []
+    const customAddressList = user?.customAddressList ?? []
+    return Array.from(
+      new Set(
+        [...addressList, ...customAddressList].map((item) =>
+          item.toLowerCase(),
+        ),
+      ),
+    )
+  },
+)
 
 export const selectUserAddressList = createSelector(
   (state: RootState) => state.settings.user,

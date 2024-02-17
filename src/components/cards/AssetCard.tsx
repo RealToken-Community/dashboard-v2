@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import Image from 'next/image'
 
-import { Badge, Card, Group, createStyles } from '@mantine/core'
+import { Badge, Card, Group } from '@mantine/core'
 
 import moment from 'moment'
 
@@ -19,73 +19,7 @@ import {
   RmmStatusTag,
   SubsidyStatusTag,
 } from '../commons'
-
-const useStyles = createStyles({
-  disabled: {
-    '&:before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      color: 'white',
-      textAlign: 'center',
-      fontWeight: 500,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      zIndex: 2,
-    },
-
-    '&:after': {
-      content: 'attr(data-value)',
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      color: 'white',
-      fontWeight: 500,
-      zIndex: 3,
-    },
-  },
-  imageContainer: {
-    height: '150px',
-    position: 'relative',
-
-    '& > span': {
-      height: '100% !important',
-      width: '100% !important',
-    },
-  },
-  textBold: {
-    fontWeight: 500,
-  },
-  textSm: {
-    fontSize: '14px',
-  },
-  textLocation: {
-    fontSize: '12px',
-    textAlign: 'center',
-  },
-  groupApart: {
-    boxSizing: 'border-box',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    '& > *': {
-      boxSizing: 'border-box',
-      flexGrow: 0,
-    },
-  },
-  clickable: {
-    cursor: 'pointer',
-    transition: 'transform 0.1s ease-in-out',
-    '&:hover': {
-      transform: 'scale(1.03)',
-    },
-  },
-})
+import styles from './AssetCard.module.sass'
 
 interface AssetCardProps {
   value: UserRealtoken
@@ -104,7 +38,6 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
     rentCalculation.state === RentCalculationState.Realtime &&
     rentStartDate > realtimeDate.toDate()
 
-  const { classes } = useStyles()
   const rentNotStarted = t('rentNotStarted')
   const isSubsidized =
     props.value.subsidyStatus !== 'no' && props.value.subsidyStatusValue
@@ -121,13 +54,13 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
       radius={'md'}
       withBorder={true}
       style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-      className={props.onClick ? classes.clickable : undefined}
+      className={props.onClick ? styles.clickable : undefined}
       onClick={() => props.onClick?.(props.value.id)}
     >
       <Card.Section>
         <div
           className={
-            classes.imageContainer + ' ' + (isDisabled ? classes.disabled : '')
+            styles.imageContainer + ' ' + (isDisabled ? styles.disabled : '')
           }
           data-value={rentNotStarted}
         >
@@ -141,12 +74,12 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
         </div>
       </Card.Section>
 
-      <Group position={'apart'} mt={'md'}>
-        <div className={classes.textBold}>{props.value.shortName}</div>
+      <Group justify={'space-between'} mt={'md'}>
+        <div className={styles.textBold}>{props.value.shortName}</div>
         <Badge variant={'light'}>{useCurrencyValue(value)}</Badge>
       </Group>
 
-      <Group position={'left'} mt={'xs'}>
+      <Group justify={'left'} mt={'xs'}>
         <RentStatusTag value={props.value} />
         <SubsidyStatusTag value={props.value} />
         {props.value.isRmmAvailable ? <RmmStatusTag /> : null}
@@ -154,35 +87,35 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 
       <Divider height={1} my={'xs'} />
 
-      <div className={classes.groupApart}>
-        <div className={classes.textSm}>{t('tokens')}</div>
-        <div className={classes.textSm}>
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('tokens')}</div>
+        <div className={styles.textSm}>
           {tNumbers('decimal', { value: props.value.amount })}
           {' / '}
           {tNumbers('integer', { value: props.value.totalTokens })}
         </div>
       </div>
 
-      <div className={classes.groupApart}>
-        <div className={classes.textSm}>{t('apr')}</div>
-        <div className={classes.textSm}>
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('apr')}</div>
+        <div className={styles.textSm}>
           {tNumbers('percent', { value: props.value.annualPercentageYield })}
         </div>
       </div>
 
-      <div className={classes.groupApart}>
-        <div className={classes.textSm}>{t('weekly')}</div>
-        <div className={classes.textSm}>{useCurrencyValue(weeklyAmount)}</div>
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('weekly')}</div>
+        <div className={styles.textSm}>{useCurrencyValue(weeklyAmount)}</div>
       </div>
 
-      <div className={classes.groupApart}>
-        <div className={classes.textSm}>{t('yearly')}</div>
-        <div className={classes.textSm}>{useCurrencyValue(yearlyAmount)}</div>
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('yearly')}</div>
+        <div className={styles.textSm}>{useCurrencyValue(yearlyAmount)}</div>
       </div>
 
-      <div className={classes.groupApart}>
-        <div className={classes.textSm}>{t('rentedUnits')}</div>
-        <div className={classes.textSm}>
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('rentedUnits')}</div>
+        <div className={styles.textSm}>
           {tNumbers('integer', { value: props.value.rentedUnits })}
           {' / '}
           {tNumbers('integer', { value: props.value.totalUnits })}
@@ -193,9 +126,9 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
       </div>
 
       {isSubsidized && (
-        <div className={classes.groupApart}>
-          <div className={classes.textSm}>{t('subsidy')}</div>
-          <div className={classes.textSm}>
+        <div className={styles.groupApart}>
+          <div className={styles.textSm}>{t('subsidy')}</div>
+          <div className={styles.textSm}>
             {tNumbers('percentInteger', {
               value:
                 (props.value.subsidyStatusValue / props.value.grossRentMonth) *
@@ -205,16 +138,14 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
         </div>
       )}
 
-      <div className={classes.groupApart}>
-        <div className={classes.textSm}>{t('propertyValue')}</div>
-        <div className={classes.textSm}>
-          {useCurrencyValue(totalInvestment)}
-        </div>
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('propertyValue')}</div>
+        <div className={styles.textSm}>{useCurrencyValue(totalInvestment)}</div>
       </div>
 
-      <div className={classes.groupApart}>
-        <div className={classes.textSm}>{t('rentStartDate')}</div>
-        <div className={classes.textSm}>
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('rentStartDate')}</div>
+        <div className={styles.textSm}>
           {rentStartDate.toLocaleDateString()}
         </div>
       </div>
@@ -222,7 +153,7 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
       <div style={{ flex: '1 1 auto' }} />
       <Divider height={1} my={'xs'} />
 
-      <div className={classes.textLocation}>{props.value.fullName}</div>
+      <div className={styles.textLocation}>{props.value.fullName}</div>
     </Card>
   )
 }

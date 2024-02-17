@@ -27,7 +27,7 @@ export const AssetsViewFilterButton: FC = () => {
   return (
     <div>
       <Indicator inline={true} color={'red'} disabled={!hasActiveFilter}>
-        <Button variant={'subtle'} onClick={openModal} compact={true}>
+        <Button variant={'subtle'} onClick={openModal} size={'compact-md'}>
           {t('filter')}
         </Button>
       </Indicator>

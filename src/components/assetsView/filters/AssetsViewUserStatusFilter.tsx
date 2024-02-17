@@ -54,7 +54,9 @@ export const AssetsViewUserStatusFilter: FC<
       label={t('label')}
       data={viewOptions}
       value={filter.userStatus}
-      onChange={(value: AssetUserStatusType) => onChange({ userStatus: value })}
+      onChange={(value) =>
+        onChange({ userStatus: value as AssetUserStatusType })
+      }
       classNames={inputClasses}
     />
   )

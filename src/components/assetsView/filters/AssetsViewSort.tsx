@@ -62,8 +62,8 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
           label={t('sort')}
           data={sortOptions}
           value={filter.sortBy}
-          onChange={(value: AssetSortType) =>
-            onChange({ ...filter, sortBy: value })
+          onChange={(value) =>
+            onChange({ ...filter, sortBy: value as AssetSortType })
           }
           classNames={inputClasses}
         />

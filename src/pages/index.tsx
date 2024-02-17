@@ -12,18 +12,18 @@ import {
 
 const HomePage: NextPage = () => {
   return (
-    <Flex my={'xl'} direction={'column'}>
+    <Flex my={'lg'} direction={'column'}>
       <Grid>
-        <Grid.Col lg={3} sm={6} span={12}>
+        <Grid.Col span={{ base: 12, sm: 6, lg: 3 }}>
           <SummaryCard />
         </Grid.Col>
-        <Grid.Col lg={3} sm={6} span={12}>
+        <Grid.Col span={{ base: 12, sm: 6, lg: 3 }}>
           <WorthCard />
         </Grid.Col>
-        <Grid.Col lg={3} sm={6} span={12}>
+        <Grid.Col span={{ base: 12, sm: 6, lg: 3 }}>
           <RentsCard />
         </Grid.Col>
-        <Grid.Col lg={3} sm={6} span={12}>
+        <Grid.Col span={{ base: 12, sm: 6, lg: 3 }}>
           <PropertiesCard />
         </Grid.Col>
       </Grid>

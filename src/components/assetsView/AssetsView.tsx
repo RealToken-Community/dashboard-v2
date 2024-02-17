@@ -24,24 +24,22 @@ export const AssetsView: FC = () => {
     [realtokens, assetSearchFunction, assetsViewFilterFunction],
   )
 
-  return (
+  return data.length ? (
     <>
       <Grid align={'center'}>
         <Grid.Col
-          span={'auto'}
-          sm={'content'}
+          span={{ base: 'auto', sm: 'content' }}
           style={{ width: '300px', maxWidth: '100%' }}
         >
           <AssetsViewSearch {...assetSearchProps} />
         </Grid.Col>
-        <Grid.Col span={'content'} sm={'auto'} pl={'0px'}>
+        <Grid.Col span={{ base: 'content', sm: 'auto' }} pl={'0px'}>
           <AssetsViewFilterButton />
         </Grid.Col>
-        <Grid.Col span={12} sm={'content'}>
+        <Grid.Col span={{ base: 12, sm: 'content' }}>
           <AssetsViewSelect />
         </Grid.Col>
       </Grid>
-
       {choosenAssetView == AssetViewType.TABLE && (
         <AssetTable key={'table'} realtokens={data} />
       )}
@@ -49,6 +47,6 @@ export const AssetsView: FC = () => {
         <AssetGrid key={'grid'} realtokens={data} />
       )}
     </>
-  )
+  ) : null
 }
 AssetsView.displayName = 'AssetsView'

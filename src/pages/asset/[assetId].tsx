@@ -6,7 +6,7 @@ import { NextPage } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
-import { Anchor, Breadcrumbs, Button, Flex, createStyles } from '@mantine/core'
+import { Anchor, Breadcrumbs, Button, Flex } from '@mantine/core'
 import { IconExternalLink } from '@tabler/icons'
 
 import { AssetPageHistoryTab } from 'src/components/assetPage/assetPageHistoryTab'
@@ -17,12 +17,7 @@ import { AssetPageYamStatisticsTab } from 'src/components/assetPage/assetPageYam
 import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
 import { selectUserRealtokens } from 'src/store/features/wallets/walletsSelector'
 
-const useStyles = createStyles({
-  imageContainer: {
-    borderRadius: '10px',
-    overflow: 'hidden',
-  },
-})
+import styles from './AssetPage.module.sass'
 
 enum Tabs {
   Main = 'main',
@@ -55,7 +50,6 @@ const AssetPage: NextPage = () => {
   const realtokens = useSelector(selectUserRealtokens)
 
   const isLoading = useSelector(selectIsLoading)
-  const { classes } = useStyles()
   const router = useRouter()
   const { assetId } = router.query
   const [activeTab, setActiveTab] = useState<Tabs>(Tabs.Main)
@@ -70,7 +64,7 @@ const AssetPage: NextPage = () => {
   }
 
   return (
-    <Flex my={'xl'} direction={'column'} align={'center'}>
+    <Flex my={'lg'} direction={'column'} align={'center'}>
       <div style={{ maxWidth: '450px', marginBottom: '300px' }}>
         <Breadcrumbs>
           <Anchor onClick={() => router.push('/')}>{t('home')}</Anchor>
@@ -81,7 +75,7 @@ const AssetPage: NextPage = () => {
 
         <Image
           src={realtoken.imageLink[0]}
-          className={classes.imageContainer}
+          className={styles.imageContainer}
           width={500}
           height={300}
           objectFit={'cover'}

@@ -152,7 +152,7 @@ const RealtimeRentMenuSelectDate: FC = () => {
         locale={i18n.language}
         valueFormat={t('dateFormat')}
         value={new Date(rentCalculation.date)}
-        onChange={handleDateChange}
+        onChange={(value) => handleDateChange(value as Date)}
         defaultDate={new Date()}
       />
       <Menu.Divider />
@@ -189,12 +189,12 @@ const LanguageSelect: FC = () => {
       <Select
         p={5}
         value={i18n.language}
-        onChange={updateLocale}
+        onChange={(value) => updateLocale(value!)}
         data={[
           { value: 'fr', label: t('french') },
           { value: 'en', label: t('english') },
         ]}
-        icon={<IconLanguage size={16} />}
+        leftSection={<IconLanguage size={16} />}
       />
     </>
   )
@@ -221,7 +221,7 @@ const CurrencySelect: FC = () => {
           { value: Currency.EUR, label: t('eur') },
           { value: Currency.CHF, label: t('chf') },
         ]}
-        icon={<IconCash size={16} />}
+        leftSection={<IconCash size={16} />}
       />
     </>
   )
@@ -236,7 +236,7 @@ const RefreshDataButton: FC = () => {
   }
   return (
     <Box ta={'center'}>
-      <Button onClick={refresh} size={'sm'} compact={true} variant={'subtle'}>
+      <Button onClick={refresh} size={'compact-sm'} variant={'subtle'}>
         {t('refreshDataButton')}
       </Button>
     </Box>

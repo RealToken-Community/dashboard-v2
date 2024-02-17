@@ -1,15 +1,8 @@
 import React, { FC } from 'react'
 
-import { Divider, createStyles } from '@mantine/core'
+import { Divider } from '@mantine/core'
 
-const useStyles = createStyles({
-  table: {
-    width: '100%',
-    '& td:nth-of-type(2)': {
-      textAlign: 'right',
-    },
-  },
-})
+import styles from './assetPageTable.module.sass'
 
 export interface AssetPageTableProps {
   data: {
@@ -22,9 +15,8 @@ export interface AssetPageTableProps {
 }
 
 export const AssetPageTable: FC<AssetPageTableProps> = ({ data }) => {
-  const { classes } = useStyles()
   return (
-    <table className={classes.table}>
+    <table className={styles.table}>
       <tbody>
         {data
           .filter((item) => !item.isHidden)

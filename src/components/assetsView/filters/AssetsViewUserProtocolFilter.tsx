@@ -50,8 +50,8 @@ export const AssetsViewUserProtocolFilter: FC<
       label={t('label')}
       data={viewOptions}
       value={filter.userProtocol}
-      onChange={(value: AssetUserProtocolType) =>
-        onChange({ userProtocol: value })
+      onChange={(value) =>
+        onChange({ userProtocol: value as AssetUserProtocolType })
       }
       classNames={inputClasses}
     />

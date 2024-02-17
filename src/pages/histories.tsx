@@ -262,9 +262,9 @@ const HistoryFilterField: FC<{
       label={t('field')}
       data={filterOptions}
       value={filter}
-      onChange={(value: HistoryFilter) => {
-        setFilter(value)
-        onChange(histories.filter(filterFunction(value)))
+      onChange={(value) => {
+        setFilter(value as HistoryFilter)
+        onChange(histories.filter(filterFunction(value as HistoryFilter)))
       }}
       classNames={inputClasses}
     />
@@ -326,7 +326,7 @@ const HistoriesPage: NextPage = () => {
   }
 
   return (
-    <Flex my={'xl'} mx={'md'} direction={'column'} align={'center'}>
+    <Flex my={'lg'} mx={'md'} direction={'column'} align={'center'}>
       <div
         style={{ maxWidth: '450px', width: '100%' }}
         className={'history-list'}
@@ -351,9 +351,9 @@ const HistoriesPage: NextPage = () => {
         </div>
       </div>
       <Group
-        position={'center'}
+        justify={'center'}
         align={'center'}
-        spacing={8}
+        gap={8}
         py={'xs'}
         style={{ width: '100%' }}
       >
