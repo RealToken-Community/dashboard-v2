@@ -13,9 +13,12 @@ import {
   Select,
   useMantineColorScheme,
 } from '@mantine/core'
+import { DatePickerInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import {
   IconCash,
+  IconClock,
+  IconClockOff,
   IconLanguage,
   IconMoon,
   IconSettings,
@@ -26,10 +29,18 @@ import { setCookie } from 'cookies-next'
 
 import {
   selectUserCurrency,
+  selectUserRentCalculation,
   selectVersion,
 } from 'src/store/features/settings/settingsSelector'
-import { userCurrencyChanged } from 'src/store/features/settings/settingsSlice'
+import {
+  userCurrencyChanged,
+  userRentCalculationChanged,
+} from 'src/store/features/settings/settingsSlice'
 import { Currency } from 'src/types/Currencies'
+import {
+  RentCalculation,
+  RentCalculationState,
+} from 'src/types/RentCalculation'
 import { expiresLocalStorageCaches } from 'src/utils/useCache'
 
 const ColorSchemeMenuItem: FC = () => {
@@ -66,6 +77,96 @@ const ColorSchemeMenuItem: FC = () => {
         ]}
       />
     </Box>
+  )
+}
+
+const RealtimeRentMenuItem: FC = () => {
+  const dispatch = useDispatch()
+  const rentCalculation = useSelector(selectUserRentCalculation)
+
+  function setUserRentCalculation(rentCalculation: RentCalculation) {
+    dispatch(userRentCalculationChanged(rentCalculation))
+  }
+
+  const { t } = useTranslation('common', { keyPrefix: 'settings' })
+
+  return (
+    <Box px={5}>
+      <SegmentedControl
+        color={'brand'}
+        fullWidth={true}
+        value={rentCalculation.state}
+        onChange={(value) =>
+          setUserRentCalculation({
+            state: value as RentCalculationState,
+            date: new Date().getTime(),
+          })
+        }
+        data={[
+          {
+            value: RentCalculationState.Realtime,
+            label: (
+              <Center>
+                <IconClock size={16} />
+                <Box ml={'xs'}>{t('realtime')}</Box>
+              </Center>
+            ),
+          },
+          {
+            value: RentCalculationState.Global,
+            label: (
+              <Center>
+                <IconClockOff size={16} />
+                <Box ml={'xs'}>{t('global')}</Box>
+              </Center>
+            ),
+          },
+        ]}
+      />
+    </Box>
+  )
+}
+
+const RealtimeRentMenuSelectDate: FC = () => {
+  const dispatch = useDispatch()
+  const rentCalculation = useSelector(selectUserRentCalculation)
+
+  const { i18n, t } = useTranslation('common', { keyPrefix: 'settings' })
+
+  if (rentCalculation.state !== RentCalculationState.Realtime) return null
+
+  const handleDateChange = (date: Date) => {
+    dispatch(
+      userRentCalculationChanged({
+        state: rentCalculation.state,
+        date: new Date(date).getTime(),
+      })
+    )
+  }
+
+  return (
+    <>
+      <Menu.Label pb={0}>{t('date')}</Menu.Label>
+      <DatePickerInput
+        p={5}
+        locale={i18n.language}
+        valueFormat={t('dateFormat')}
+        value={new Date(rentCalculation.date)}
+        onChange={handleDateChange}
+        defaultDate={new Date()}
+      />
+      <Menu.Divider />
+    </>
+  )
+}
+
+const RealtimeRentMenu = () => {
+  return (
+    <>
+      <RealtimeRentMenuItem />
+      <RealtimeRentMenuSelectDate />
+      <Menu.Divider />
+    </>
   )
 }
 
@@ -163,6 +264,7 @@ export const SettingsMenu: FC = () => {
         <Menu.Divider />
         <CurrencySelect />
         <Menu.Divider />
+        <RealtimeRentMenu />
         <ColorSchemeMenuItem />
         <Menu.Divider />
         <RefreshDataButton />

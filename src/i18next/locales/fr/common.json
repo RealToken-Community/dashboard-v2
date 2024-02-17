@@ -1,6 +1,10 @@
 {
   "header": {
-    "title": "Realtoken Dashboard"
+    "title": "Realtoken Dashboard",
+    "home": "Accueil",
+    "realt": "RealT",
+    "RMM": "RMM",
+    "YAM": "YAM"
   },
   "settings": {
     "title": "Langue",
@@ -12,7 +16,11 @@
     "chf": "Franc suisse (CHF)",
     "light": "Clair",
     "dark": "Sombre",
-    "refreshDataButton": "Actualiser les données"
+    "refreshDataButton": "Actualiser les données",
+    "realtime": "Temps réel",
+    "global": "Global",
+    "date": "Date",
+    "dateFormat": "DD MMMM YYYY"
   },
   "walletButton": {
     "connectWallet": "Connecter mon portefeuille",
@@ -76,7 +84,7 @@
     "tokens": "Tokens",
     "properties": "Propriétés",
     "averageValue": "Valeur moyenne",
-    "averageRent": "Loyer moyen",
+    "averageYearlyRent": "Loyer annuel moyen",
     "rentedUnits": "Logements loués"
   },
   "assetView": {
@@ -168,6 +176,8 @@
     "yearly": "Loyers annuels",
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
+    "rentStartDate": "Date du premier loyer",
+    "rentNotStarted": "Le loyer n'a pas débuté",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Louée",
@@ -211,7 +221,7 @@
       "rentWeek": "Loyer hebdomadaire",
       "rentMonth": "Loyer mensuel",
       "rentYear": "Loyer annuel",
-      "rentedUnits":"Logements loués"
+      "rentedUnits": "Logements loués"
     },
     "property": {
       "initialLaunchDate": "Mise en vente",

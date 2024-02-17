@@ -1,6 +1,10 @@
 {
   "header": {
-    "title": "Realtoken Dashboard"
+    "title": "Realtoken Dashboard",
+    "home": "Home",
+    "realt": "RealT",
+    "RMM": "RMM",
+    "YAM": "YAM"
   },
   "settings": {
     "title": "Language",
@@ -12,7 +16,11 @@
     "chf": "Swiss franc (CHF)",
     "light": "Light",
     "dark": "Dark",
-    "refreshDataButton": "Refresh data"
+    "refreshDataButton": "Refresh data",
+    "realtime": "Realtime",
+    "global": "Global",
+    "date": "Date",
+    "dateFormat": "MMMM DD, YYYY"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
@@ -76,7 +84,7 @@
     "tokens": "Tokens",
     "properties": "Properties",
     "averageValue": "Average value",
-    "averageRent": "Average rent",
+    "averageYearlyRent": "Average yearly rent",
     "rentedUnits": "Rented units"
   },
   "assetView": {
@@ -168,6 +176,8 @@
     "yearly": "Yearly rents",
     "rentedUnits": "Rented units",
     "propertyValue": "Property value",
+    "rentStartDate": "Rent Start",
+    "rentNotStarted": "Rent not started yet",
     "isRmmAvailable": "RMM",
     "rentStatus": {
       "full": "Rented",
@@ -211,7 +221,7 @@
       "rentWeek": "Weekly rent",
       "rentMonth": "Monthly rent",
       "rentYear": "Yearly rent",
-      "rentedUnits":"Rented units"
+      "rentedUnits": "Rented units"
     },
     "property": {
       "initialLaunchDate": "Launch date",

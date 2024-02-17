@@ -1,6 +1,6 @@
 {
   "name": "realtoken-dashboard-v2",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -23,6 +23,7 @@
     "@ethersproject/providers": "^5.6.8",
     "@gnosis.pm/safe-apps-sdk": "^7.8.0",
     "@mantine/core": "^6.0.2",
+    "@mantine/dates": "^6.0.2",
     "@mantine/form": "^6.0.2",
     "@mantine/hooks": "^6.0.2",
     "@mantine/modals": "^6.0.2",
@@ -44,6 +45,7 @@
     "bignumber.js": "^9.0.2",
     "clsx": "^1.2.1",
     "cookies-next": "^2.0.5",
+    "date-fns": "^3.0.6",
     "dotenv": "^16.0.3",
     "graphql": "^16.6.0",
     "i18next": "^22.4.13",

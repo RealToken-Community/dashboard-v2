@@ -65,7 +65,7 @@ export const PropertiesCard: FC = () => {
         <DecimalField label={t('tokens')} value={sumRealtokens} />
         <IntegerField label={t('properties')} value={sumProperties} />
         <CurrencyField label={t('averageValue')} value={meanValue} />
-        <CurrencyField label={t('averageRent')} value={meanRents} />
+        <CurrencyField label={t('averageYearlyRent')} value={meanRents} />
         <RentedUnitsField label={t('rentedUnits')} realtokens={realtokens} />
       </Box>
     </Card>

@@ -10,8 +10,18 @@ export const EthereumClient = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
-export const RMMClient = new ApolloClient({
+export const RMM2Client = new ApolloClient({
   uri: 'https://api.thegraph.com/subgraphs/name/realtoken-thegraph/rmm-realt',
+  cache: new InMemoryCache(),
+})
+
+export const RMM3Client = new ApolloClient({
+  uri: 'https://api.thegraph.com/subgraphs/name/realtoken-thegraph/rmm-v3-gnosis',
+  cache: new InMemoryCache(),
+})
+
+export const RMM3WrapperClient = new ApolloClient({
+  uri: 'https://api.thegraph.com/subgraphs/name/realtoken-thegraph/rmm-v3-wrapper-gnosis',
   cache: new InMemoryCache(),
 })
 
