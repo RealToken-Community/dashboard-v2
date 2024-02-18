@@ -335,7 +335,9 @@ const HistoriesPage: NextPage = () => {
           <Anchor onClick={() => router.push('/')}>{t('home')}</Anchor>
           {t('title')}
         </Breadcrumbs>
-        <h2 style={{ textAlign: 'center' }}>{t('title')}</h2>
+        <h2 style={{ textAlign: 'center' }}>
+          {`${t('title')} (${histories.length})`}
+        </h2>
 
         <HistoryFilterField filter={filter} onChange={setFilter} />
 
