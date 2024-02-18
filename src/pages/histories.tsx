@@ -53,7 +53,8 @@ function getHistoricalValue<Key extends keyof RealTokenHistoryItem['values']>(
 }
 
 function getRateChange(current: number, previous: number) {
-  return ((current - previous) / previous) * 100
+  const change = ((current - previous) / previous) * 100
+  return `${change > 0 ? '+' : ''}${change.toFixed(1)}`
 }
 
 function getRate(value: number, total: number) {
@@ -73,8 +74,8 @@ const ValueHistoryItem: FC<{ history: History }> = ({ history }) => {
   const assetPrice = getHistoryValue(history, 'underlyingAssetPrice')
   const lastTokenPrice = getHistoricalValue(history, 'tokenPrice')
   const lastAssetPrice = getHistoricalValue(history, 'underlyingAssetPrice')
-  const tokenPricePercent = getRateChange(tokenPrice, lastTokenPrice).toFixed(1)
-  const assetPricePercent = getRateChange(assetPrice, lastAssetPrice).toFixed(1)
+  const tokenPricePercent = getRateChange(tokenPrice, lastTokenPrice)
+  const assetPricePercent = getRateChange(assetPrice, lastAssetPrice)
 
   const netRentYear = getHistoryValue(history, 'netRentYear')
   const totalTokens = history.realtoken.totalTokens
@@ -126,15 +127,11 @@ const RentHistoryItem: FC<{ history: History }> = ({ history }) => {
   const grossRentMonth = (grossRentYear / 12).toFixed(2)
   const lastNetRentMonth = (lastNetRentYear / 12).toFixed(2)
   const lastGrossRentMonth = (lastGrossRentYear / 12).toFixed(2)
-  const netRentPercent = getRateChange(netRentYear, lastNetRentYear).toFixed(1)
-  const grossRentPercent = getRateChange(
-    grossRentYear,
-    lastGrossRentYear,
-  ).toFixed(1)
 
   const totalInvestment = getHistoricalValue(history, 'totalInvestment')
   const lastReturnRate = getRate(lastNetRentYear, totalInvestment).toFixed(2)
   const returnRate = getRate(netRentYear, totalInvestment).toFixed(2)
+  const returnPercent = getRateChange(netRentYear, lastNetRentYear)
 
   const totalUnits = history.realtoken.totalUnits
   const rentedUnits = getHistoryValue(history, 'rentedUnits')
@@ -151,20 +148,20 @@ const RentHistoryItem: FC<{ history: History }> = ({ history }) => {
       </Title>
       <div style={{ lineHeight: 1 }}>
         <StringField
+          label={`${t('yield')} : `}
+          value={`${lastReturnRate} % -> ${returnRate} % (${returnPercent} %)`}
+        />
+        <StringField
           label={`${t('netRentMonth')} : `}
           value={`${useCurrencyValue(+lastNetRentMonth)} -> ${useCurrencyValue(
             +netRentMonth,
-          )} (${netRentPercent} %)`}
+          )}`}
         />
         <StringField
           label={`${t('grossRentMonth')} : `}
           value={`${useCurrencyValue(
             +lastGrossRentMonth,
-          )} -> ${useCurrencyValue(+grossRentMonth)} (${grossRentPercent} %)`}
-        />
-        <StringField
-          label={`${t('yield')} : `}
-          value={`${lastReturnRate} % -> ${returnRate} %`}
+          )} -> ${useCurrencyValue(+grossRentMonth)}`}
         />
         {isRentedUnitsChange && (
           <StringField
