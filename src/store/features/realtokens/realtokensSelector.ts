@@ -1,8 +1,18 @@
+import { createSelector } from '@reduxjs/toolkit'
+
 import { RootState } from 'src/store/store'
-import { RealToken } from 'src/types/RealToken'
+import { RealTokenCanal } from 'src/types/RealToken'
 
 export const selectRealtokensIsLoading = (state: RootState): boolean =>
   state.realtokens.isLoading
 
-export const selectRealtokens = (state: RootState): RealToken[] =>
-  state.realtokens.realtokens
+const hiddenRealtokenCanals = [
+  RealTokenCanal.OfferingClosed,
+  RealTokenCanal.TokensMigrated,
+]
+
+export const selectRealtokens = createSelector(
+  (state: RootState) => state.realtokens.realtokens,
+  (realtokens) =>
+    realtokens.filter((item) => !hiddenRealtokenCanals.includes(item.canal)),
+)

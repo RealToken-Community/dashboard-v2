@@ -2,8 +2,10 @@ import { APIRealToken } from './APIRealToken'
 import { RealTokenHistoryItem } from './APIRealTokenHistory'
 
 export enum RealTokenCanal {
-  Release = 'release',
-  ExitComplete = 'exit_complete',
+  Release = 'release', // Active token
+  ExitComplete = 'exit_complete', // Property sold
+  TokensMigrated = 'tokens_migrated', // Token migrated to new contract (ex: OLD)
+  OfferingClosed = 'offering_closed', // Offering closed (ex: REG D)
 }
 
 export enum RealTokenCurrency {
