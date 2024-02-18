@@ -96,5 +96,9 @@ export const AssetPageHistoryTab: FC<{
     )
   }
 
-  return <AssetPageTable data={tableData} />
+  return tableData.length ? (
+    <AssetPageTable data={tableData} />
+  ) : (
+    <div style={{ textAlign: 'center' }}>{t('noHistory')}</div>
+  )
 }

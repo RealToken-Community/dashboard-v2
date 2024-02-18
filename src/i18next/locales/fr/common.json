@@ -263,6 +263,7 @@
       "subsidyShare": "Loyer subventionné"
     },
     "history": {
+      "noHistory": "Aucun changement n'a été enregistré pour cette propriété",
       "date": "Date",
       "canal": "Canal",
       "tokenPrice": "Prix du token",
@@ -275,12 +276,14 @@
       "rentedUnits": "Logements loués"
     },
     "yamStatistics": {
+      "noVolume": "Aucun volume sur les 30 derniers jours",
       "tokenPrice": "Prix RealT",
       "yamPrice": "Prix Yam (30 jours)",
       "yamDifference": "Différence",
       "yamVolume": "Volume (30 jours)"
     },
     "transfers": {
+      "noTransfers": "Vous n'avez pas de transactions pour cette propriété",
       "gnosisScan": "voir sur GnosisScan"
     }
   },

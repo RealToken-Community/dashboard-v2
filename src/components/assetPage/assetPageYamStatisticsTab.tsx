@@ -46,6 +46,9 @@ const YamStatisticsTable: FC<{
 export const AssetPageYamStatisticsTab: FC<{
   realtoken: UserRealtoken
 }> = ({ realtoken }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'assetPage.yamStatistics',
+  })
   const [statistics, setStatistics] = useState<YamStatistics | null>(null)
 
   useEffect(() => {
@@ -54,9 +57,15 @@ export const AssetPageYamStatisticsTab: FC<{
     }).then((item) => setStatistics(item))
   }, [realtoken])
 
-  return statistics ? (
+  if (!statistics) {
+    return null
+  }
+
+  return statistics.volume ? (
     <YamStatisticsTable realtoken={realtoken} statistics={statistics} />
-  ) : null
+  ) : (
+    <div style={{ textAlign: 'center' }}>{t('noVolume')}</div>
+  )
 }
 
 AssetPageYamStatisticsTab.displayName = 'AssetPageYamStatisticsTab'

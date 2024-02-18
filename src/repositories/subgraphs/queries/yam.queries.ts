@@ -12,7 +12,7 @@ const STABLE_TOKENS = [
 
 export async function getRealtokenYamStatistics(address: string) {
   const result = await executeQuery(address)
-  return formatStatistics(result.data.token)
+  return result.data.token ? formatStatistics(result.data.token) : []
 }
 
 const executeQuery = useCacheWithLocalStorage(

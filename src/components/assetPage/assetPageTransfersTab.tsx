@@ -88,7 +88,10 @@ const TransferRow: FC<{ item: UserRealTokenTransfer }> = ({ item }) => {
 export const AssetPageTransfersTab: FC<{
   realtoken: UserRealtoken
 }> = ({ realtoken }) => {
-  return (
+  const { t } = useTranslation('common', {
+    keyPrefix: 'assetPage.transfers',
+  })
+  return realtoken.transfers.length ? (
     <table style={{ width: '100%' }}>
       <tbody>
         {realtoken.transfers.map((item, index) => (
@@ -96,6 +99,8 @@ export const AssetPageTransfersTab: FC<{
         ))}
       </tbody>
     </table>
+  ) : (
+    <div style={{ textAlign: 'center' }}>{t('noTransfers')}</div>
   )
 }
 

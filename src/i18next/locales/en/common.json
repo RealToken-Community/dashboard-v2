@@ -263,6 +263,7 @@
       "subsidyShare": "Rent Subsidized"
     },
     "history": {
+      "noHistory": "No history found for this property",
       "date": "Date",
       "canal": "Canal",
       "tokenPrice": "Token price",
@@ -275,12 +276,14 @@
       "rentedUnits": "Rented units"
     },
     "yamStatistics": {
+      "noVolume": "No volume on the last 30 days",
       "tokenPrice": "RealT price",
       "yamPrice": "Yam price (30 days)",
       "yamDifference": "Difference",
       "yamVolume": "Volume (30 days)"
     },
     "transfers": {
+      "noTransfers": "You have no transactions for this property",
       "gnosisScan": "view on GnosisScan"
     }
   },
