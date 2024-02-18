@@ -206,44 +206,46 @@ enum HistoryFilter {
   ownedRent = 'ownedRent',
 }
 
+function getHistoryFilterFunction(
+  realtokens: UserRealtoken[],
+  currentFilter: HistoryFilter,
+) {
+  return (history: History) => {
+    const isValueChange =
+      Object.hasOwn(history.values, 'tokenPrice') &&
+      Object.hasOwn(history.values, 'underlyingAssetPrice')
+
+    const isRentChange =
+      Object.hasOwn(history.values, 'netRentYear') &&
+      Object.hasOwn(history.values, 'grossRentYear')
+
+    const isOwned = realtokens.some(
+      (item) => item.uuid === history.realtoken.uuid,
+    )
+
+    switch (currentFilter) {
+      case HistoryFilter.allValue:
+        return isValueChange
+      case HistoryFilter.allRent:
+        return isRentChange
+      case HistoryFilter.owned:
+        return isOwned
+      case HistoryFilter.ownedValue:
+        return isValueChange && isOwned
+      case HistoryFilter.ownedRent:
+        return isRentChange && isOwned
+      default:
+        return true
+    }
+  }
+}
+
 const HistoryFilterField: FC<{
-  histories: History[]
-  onChange: (values: History[]) => void
-}> = ({ histories, onChange }) => {
+  filter: HistoryFilter
+  onChange: (filter: HistoryFilter) => void
+}> = ({ filter, onChange }) => {
   const { t } = useTranslation('common', { keyPrefix: 'historiesPage.filter' })
   const { classes: inputClasses } = useInputStyles()
-  const [filter, setFilter] = useState<HistoryFilter>(HistoryFilter.all)
-  const ownedRealtokens = useSelector(selectOwnedRealtokens)
-
-  const filterFunction =
-    (currentFilter: HistoryFilter) => (history: History) => {
-      const isValueChange =
-        Object.hasOwn(history.values, 'tokenPrice') &&
-        Object.hasOwn(history.values, 'underlyingAssetPrice')
-
-      const isRentChange =
-        Object.hasOwn(history.values, 'netRentYear') &&
-        Object.hasOwn(history.values, 'grossRentYear')
-
-      const isOwned = ownedRealtokens.some(
-        (item) => item.uuid === history.realtoken.uuid,
-      )
-
-      switch (currentFilter) {
-        case HistoryFilter.allValue:
-          return isValueChange
-        case HistoryFilter.allRent:
-          return isRentChange
-        case HistoryFilter.owned:
-          return isOwned
-        case HistoryFilter.ownedValue:
-          return isValueChange && isOwned
-        case HistoryFilter.ownedRent:
-          return isRentChange && isOwned
-        default:
-          return true
-      }
-    }
 
   const filterOptions = [
     { value: HistoryFilter.all, label: t('all') },
@@ -259,10 +261,7 @@ const HistoryFilterField: FC<{
       label={t('field')}
       data={filterOptions}
       value={filter}
-      onChange={(value) => {
-        setFilter(value as HistoryFilter)
-        onChange(histories.filter(filterFunction(value as HistoryFilter)))
-      }}
+      onChange={(value) => onChange(value as HistoryFilter)}
       classNames={inputClasses}
     />
   )
@@ -295,16 +294,20 @@ function getUsefullHistories(realtokens: UserRealtoken[]): History[] {
 
 const HistoriesPage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'historiesPage' })
+  const router = useRouter()
   const [page, setPage] = useState<number>(1)
   const pageSize = 25
 
-  const realtokens = useSelector(selectUserRealtokens)
-  const allHistories = getUsefullHistories(realtokens)
-  const [histories, setHistories] = useState(allHistories)
-
-  const router = useRouter()
-
   const isLoading = useSelector(selectIsLoading)
+  const realtokens = useSelector(selectUserRealtokens)
+  const ownedRealtokens = useSelector(selectOwnedRealtokens)
+  const allHistories = getUsefullHistories(realtokens)
+  const [filter, setFilter] = useState<HistoryFilter>(HistoryFilter.owned)
+
+  const histories = useMemo(() => {
+    const filterFunction = getHistoryFilterFunction(ownedRealtokens, filter)
+    return allHistories.filter(filterFunction)
+  }, [allHistories, filter])
 
   function onPageChange(page: number) {
     setPage(page)
@@ -334,10 +337,7 @@ const HistoriesPage: NextPage = () => {
         </Breadcrumbs>
         <h2 style={{ textAlign: 'center' }}>{t('title')}</h2>
 
-        <HistoryFilterField
-          histories={allHistories}
-          onChange={(values) => setHistories(values)}
-        />
+        <HistoryFilterField filter={filter} onChange={setFilter} />
 
         <div style={{ width: '100%', marginTop: '20px' }}>
           {paginationHistories.map((history) => (
