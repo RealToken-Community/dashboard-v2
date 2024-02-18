@@ -21,9 +21,13 @@ import { AssetsViewUserStatusFilter } from './AssetsViewUserStatusFilter'
 
 const ResetFilterButton: FC<{ onClick?: () => void }> = ({ onClick }) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetsViewFilterModal' })
-  const [, applyFilter] = useAtom(assetsViewFilterAtom)
+  const [currentFilter, applyFilter] = useAtom(assetsViewFilterAtom)
   function reset() {
-    applyFilter(assetsViewDefaultFilter)
+    applyFilter({
+      ...assetsViewDefaultFilter,
+      sortBy: currentFilter.sortBy,
+      sortReverse: currentFilter.sortReverse,
+    })
     onClick?.()
   }
 
