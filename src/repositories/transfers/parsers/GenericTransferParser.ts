@@ -41,6 +41,11 @@ export class GenericTransferParser extends TransferParser {
       return TransferOrigin.rmm
     }
 
+    const RMMV3 = '0x10497611ee6524d75fc45e3739f472f83e282ad5'
+    if (addresses.includes(RMMV3)) {
+      return TransferOrigin.rmm
+    }
+
     return TransferOrigin.other
   }
 }
