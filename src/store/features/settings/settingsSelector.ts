@@ -1,19 +1,25 @@
 import { createSelector } from '@reduxjs/toolkit'
 
 import { RootState } from 'src/store/store'
-import { RentCalculation } from 'src/types/RentCalculation'
 
-import { User } from './settingsSlice'
+export const selectIsInitialized = createSelector(
+  (state: RootState) => state.settings,
+  (state) => state.isInitialized,
+)
 
-export const selectIsInitialized = (state: RootState): boolean =>
-  state.settings.isInitialized
-
-export const selectIsLoading = (state: RootState): boolean =>
-  !state.settings.isInitialized ||
-  state.realtokens.isLoading ||
-  state.wallets.isLoading ||
-  state.currencies.isLoading ||
-  state.transfers.isLoading
+export const selectIsLoading = createSelector(
+  (state: RootState) => state.settings,
+  (state: RootState) => state.realtokens,
+  (state: RootState) => state.wallets,
+  (state: RootState) => state.currencies,
+  (state: RootState) => state.transfers,
+  (state, realtokens, wallets, currencies, transfers) =>
+    !state.isInitialized ||
+    realtokens.isLoading ||
+    wallets.isLoading ||
+    currencies.isLoading ||
+    transfers.isLoading,
+)
 
 export const selectAllUserAddressList = createSelector(
   (state: RootState) => state.settings.user,
@@ -37,14 +43,22 @@ export const selectUserAddressList = createSelector(
     addressList.filter((item) => !user?.hiddenAddressList?.includes(item)),
 )
 
-export const selectUserCurrency = (state: RootState): string =>
-  state.settings.userCurrency
+export const selectUserCurrency = createSelector(
+  (state: RootState) => state.settings,
+  (state) => state.userCurrency,
+)
 
-export const selectUser = (state: RootState): User | undefined =>
-  state.settings.user
+export const selectUser = createSelector(
+  (state: RootState) => state.settings,
+  (state) => state.user,
+)
 
-export const selectUserRentCalculation = (state: RootState): RentCalculation =>
-  state.settings.rentCalculation
+export const selectUserRentCalculation = createSelector(
+  (state: RootState) => state.settings,
+  (state) => state.rentCalculation,
+)
 
-export const selectVersion = (state: RootState): string | undefined =>
-  state.settings.version
+export const selectVersion = createSelector(
+  (state: RootState) => state.settings,
+  (state) => state.version,
+)

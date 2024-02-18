@@ -3,8 +3,10 @@ import { createSelector } from '@reduxjs/toolkit'
 import { RootState } from 'src/store/store'
 import { RealTokenCanal } from 'src/types/RealToken'
 
-export const selectRealtokensIsLoading = (state: RootState): boolean =>
-  state.realtokens.isLoading
+export const selectRealtokensIsLoading = createSelector(
+  (state: RootState) => state.realtokens,
+  (state) => state.isLoading,
+)
 
 const hiddenRealtokenCanals = [
   RealTokenCanal.OfferingClosed,
