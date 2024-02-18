@@ -279,6 +279,9 @@
       "yamPrice": "Prix Yam (30 jours)",
       "yamDifference": "Différence",
       "yamVolume": "Volume (30 jours)"
+    },
+    "transfers": {
+      "gnosisScan": "voir sur GnosisScan"
     }
   },
   "transactionPage": {
@@ -286,7 +289,8 @@
     "title": "Mes transactions",
     "item": {
       "value": "Valeur",
-      "price": "Prix"
+      "price": "Prix",
+      "gnosisScan": "voir sur GnosisScan"
     },
     "filter": {
       "field": "Filtre",

@@ -11,9 +11,11 @@ import {
   Breadcrumbs,
   Flex,
   Group,
+  NavLink,
   Pagination,
   Select,
 } from '@mantine/core'
+import { IconExternalLink } from '@tabler/icons'
 
 import { useInputStyles } from 'src/components/inputs/useInputStyles'
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
@@ -49,6 +51,8 @@ const TransferItem: FC<{
 
   const { formatTransferValues } = useTransferValues()
   const values = formatTransferValues(transfer)
+  const txId = transfer.id.replace(/-.*/, '')
+  const gnosisScanLink = `https://gnosisscan.io/tx/${txId}`
 
   return (
     <div
@@ -88,7 +92,20 @@ const TransferItem: FC<{
         className={styles.groupApart}
         style={{ fontSize: '12px', fontStyle: 'italic' }}
       >
-        <div>{values.date}</div>
+        <div>
+          {values.date}
+          <Anchor
+            href={gnosisScanLink}
+            target={'_blank'}
+            style={{
+              fontSize: '12px',
+              fontStyle: 'italic',
+              color: 'gray',
+            }}
+          >
+            {` (${t('gnosisScan')})`}
+          </Anchor>
+        </div>
         <div>{values.title}</div>
       </div>
 

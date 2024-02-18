@@ -1,16 +1,24 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { Anchor } from '@mantine/core'
+
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { useTransferValues } from 'src/hooks/useTransferValues'
 import { UserRealTokenTransfer } from 'src/repositories/transfers/transfers.type'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 const TransferRow: FC<{ item: UserRealTokenTransfer }> = ({ item }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'assetPage.transfers',
+  })
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
 
   const { formatTransferValues } = useTransferValues()
   const values = formatTransferValues(item)
+
+  const txId = item.id.replace(/-.*/, '')
+  const gnosisScanLink = `https://gnosisscan.io/tx/${txId}`
 
   return (
     <tr
@@ -23,6 +31,17 @@ const TransferRow: FC<{ item: UserRealTokenTransfer }> = ({ item }) => {
         <div>{values.title}</div>
         <div style={{ fontSize: '12px', fontStyle: 'italic' }}>
           {values.date}
+          <Anchor
+            href={gnosisScanLink}
+            target={'_blank'}
+            style={{
+              fontSize: '12px',
+              fontStyle: 'italic',
+              color: 'gray',
+            }}
+          >
+            {` (${t('gnosisScan')})`}
+          </Anchor>
         </div>
       </td>
       <td style={{ verticalAlign: 'top' }}>
