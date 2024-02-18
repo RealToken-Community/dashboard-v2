@@ -149,32 +149,32 @@ enum TransferFilter {
   levinSwapPool = 'levinSwapPool',
 }
 
+function getTransactionFilterFunction(currentFilter: TransferFilter) {
+  return (transfer: UserRealTokenTransfer) => {
+    if (currentFilter === TransferFilter.all) {
+      return true
+    }
+    if (currentFilter === TransferFilter.internal) {
+      return transfer.direction === UserTransferDirection.internal
+    }
+    if (currentFilter !== TransferFilter.other) {
+      return (currentFilter as string) === transfer.origin
+    }
+    return (
+      (currentFilter as string) === transfer.origin &&
+      transfer.direction !== UserTransferDirection.internal
+    )
+  }
+}
+
 const TransferFilterField: FC<{
-  transfers: UserRealTokenTransfer[]
-  onChange: (values: UserRealTokenTransfer[]) => void
-}> = ({ transfers, onChange }) => {
+  filter: TransferFilter
+  onChange: (filter: TransferFilter) => void
+}> = ({ filter, onChange }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'transactionPage.filter',
   })
   const { classes: inputClasses } = useInputStyles()
-  const [filter, setFilter] = useState<TransferFilter>(TransferFilter.all)
-
-  const filterFunction =
-    (currentFilter: TransferFilter) => (transfer: UserRealTokenTransfer) => {
-      if (currentFilter === TransferFilter.all) {
-        return true
-      }
-      if (currentFilter === TransferFilter.internal) {
-        return transfer.direction === UserTransferDirection.internal
-      }
-      if (currentFilter !== TransferFilter.other) {
-        return (currentFilter as string) === transfer.origin
-      }
-      return (
-        (currentFilter as string) === transfer.origin &&
-        transfer.direction !== UserTransferDirection.internal
-      )
-    }
 
   const filterOptions = [
     { value: TransferFilter.all, label: t('all') },
@@ -194,10 +194,7 @@ const TransferFilterField: FC<{
       label={t('field')}
       data={filterOptions}
       value={filter}
-      onChange={(value) => {
-        setFilter(value as TransferFilter)
-        onChange(transfers.filter(filterFunction(value as TransferFilter)))
-      }}
+      onChange={(value) => onChange(value as TransferFilter)}
       classNames={inputClasses}
     />
   )
@@ -232,16 +229,20 @@ const TransferWarning: FC = () => {
 
 const TransactionPage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'transactionPage' })
+  const router = useRouter()
   const [page, setPage] = useState<number>(1)
   const pageSize = 50
 
-  const realtokens = useSelector(selectUserRealtokens)
-  const allTransfers = useSelector(selectTransfers)
-  const [transfers, setTransfers] = useState(allTransfers)
-  const router = useRouter()
-
   const isLoading = useSelector(selectIsLoading)
   const isLoadingTransfers = useSelector(selectTransfersIsLoading)
+  const realtokens = useSelector(selectUserRealtokens)
+  const allTransfers = useSelector(selectTransfers)
+  const [filter, setFilter] = useState(TransferFilter.all)
+
+  const transfers = useMemo(() => {
+    const filterFunction = getTransactionFilterFunction(filter)
+    return allTransfers.filter(filterFunction)
+  }, [allTransfers, filter])
 
   function onPageChange(page: number) {
     setPage(page)
@@ -279,14 +280,11 @@ const TransactionPage: NextPage = () => {
         </Breadcrumbs>
         <h2 style={{ textAlign: 'center' }}>{t('title')}</h2>
 
-        <TransferFilterField
-          transfers={allTransfers}
-          onChange={(values) => setTransfers(values)}
-        />
+        <TransferFilterField filter={filter} onChange={setFilter} />
 
         <TransferWarning />
 
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '100%', marginTop: '1rem' }}>
           {paginationTransfers.map((transfer) => (
             <div key={transfer.id} style={{ marginBottom: '20px' }}>
               <TransferItem transfer={transfer} realtokens={realtokens} />
