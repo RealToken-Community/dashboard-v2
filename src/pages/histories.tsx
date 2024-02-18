@@ -69,6 +69,7 @@ const ValueHistoryItem: FC<{ history: History }> = ({ history }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'historiesPage.valueItem',
   })
+  const router = useRouter()
   const date = getDate(history.date)
   const tokenPrice = getHistoryValue(history, 'tokenPrice')
   const assetPrice = getHistoryValue(history, 'underlyingAssetPrice')
@@ -87,7 +88,13 @@ const ValueHistoryItem: FC<{ history: History }> = ({ history }) => {
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
       <Title order={4} mb={'xs'} style={{ textAlign: 'center' }}>
-        <div>{`${history.realtoken.shortName}`}</div>
+        <Anchor
+          onClick={() => router.push(`/asset/${history.realtoken.id}`)}
+          size={'lg'}
+          style={{ fontWeight: 600 }}
+        >
+          {history.realtoken.shortName}
+        </Anchor>
         <div>{`${t('title')} : ${date}`}</div>
       </Title>
       <div style={{ lineHeight: 1 }}>
@@ -118,6 +125,7 @@ const RentHistoryItem: FC<{ history: History }> = ({ history }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'historiesPage.rentItem',
   })
+  const router = useRouter()
   const date = getDate(history.date)
   const netRentYear = getHistoryValue(history, 'netRentYear')
   const grossRentYear = getHistoryValue(history, 'grossRentYear')
@@ -143,7 +151,13 @@ const RentHistoryItem: FC<{ history: History }> = ({ history }) => {
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
       <Title order={4} mb={'xs'} style={{ textAlign: 'center' }}>
-        <div>{history.realtoken.shortName}</div>
+        <Anchor
+          onClick={() => router.push(`/asset/${history.realtoken.id}`)}
+          size={'lg'}
+          style={{ fontWeight: 600 }}
+        >
+          {history.realtoken.shortName}
+        </Anchor>
         <div>{`${t('title')} : ${date}`}</div>
       </Title>
       <div style={{ lineHeight: 1 }}>

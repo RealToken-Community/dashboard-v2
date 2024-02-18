@@ -40,6 +40,7 @@ const TransferItem: FC<{
 }> = ({ transfer, realtokens }) => {
   const { t } = useTranslation('common', { keyPrefix: 'transactionPage.item' })
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
+  const router = useRouter()
 
   const realtoken = realtokens.find((item) => item.id === transfer.realtoken)
   if (!realtoken) {
@@ -57,7 +58,9 @@ const TransferItem: FC<{
       }}
     >
       <div className={styles.groupApart}>
-        <div className={styles.textBold}>{realtoken.shortName}</div>
+        <Anchor onClick={() => router.push(`/asset/${realtoken.id}`)}>
+          <div className={styles.textBold}>{realtoken.shortName}</div>
+        </Anchor>
         <div
           style={{
             textAlign: 'right',
