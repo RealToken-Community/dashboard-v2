@@ -24,7 +24,7 @@ export const AssetsView: FC = () => {
     [realtokens, assetSearchFunction, assetsViewFilterFunction],
   )
 
-  return data.length ? (
+  return realtokens.length ? (
     <>
       <Grid align={'center'}>
         <Grid.Col
