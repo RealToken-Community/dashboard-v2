@@ -78,11 +78,9 @@ export const selectUserRealtokens = createSelector(
       )
       const amount = _sumBy(Object.values(balance), 'amount')
       const value = _sumBy(Object.values(balance), 'value')
-      const unitPriceCost = computeUCP(transfers)
-      const priceCost =
-        unitPriceCost !== undefined ? unitPriceCost * amount : undefined
-      const unrealizedCapitalGain =
-        priceCost !== undefined ? value - priceCost : undefined
+      const unitPriceCost = computeUCP(transfers) ?? realtoken.tokenPrice
+      const priceCost = unitPriceCost * amount
+      const unrealizedCapitalGain = value - priceCost
       const lastChanges = _max(realtoken.history.map((item) => item.date))!
 
       return {
