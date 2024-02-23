@@ -74,6 +74,11 @@ async function saveLastSyncTimestamp(
   }
 }
 
+async function dropDatabase() {
+  await db.transfersGnosis.clear()
+  await db.transferSync.clear()
+}
+
 export const TransferDatabaseService = {
   getTransfersGnosis,
   putTransfersGnosis,
@@ -81,4 +86,5 @@ export const TransferDatabaseService = {
   putTransferSync,
   getLastSyncTimestamp,
   saveLastSyncTimestamp,
+  dropDatabase,
 }

@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
@@ -27,6 +27,7 @@ import {
 
 import { setCookie } from 'cookies-next'
 
+import { TransferDatabaseService } from 'src/repositories/transfers/TransferDatabase'
 import {
   selectUserCurrency,
   selectUserRentCalculation,
@@ -229,14 +230,27 @@ const CurrencySelect: FC = () => {
 
 const RefreshDataButton: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'settings' })
+  const [loading, setLoading] = useState(false)
 
-  function refresh() {
-    expiresLocalStorageCaches()
-    window.location.reload()
+  async function refresh() {
+    setLoading(true)
+    try {
+      expiresLocalStorageCaches()
+      await TransferDatabaseService.dropDatabase()
+      window.location.reload()
+    } catch (error) {
+      setLoading(false)
+    }
   }
+
   return (
     <Box ta={'center'}>
-      <Button onClick={refresh} size={'compact-sm'} variant={'subtle'}>
+      <Button
+        onClick={refresh}
+        size={'compact-sm'}
+        variant={'subtle'}
+        loading={loading}
+      >
         {t('refreshDataButton')}
       </Button>
     </Box>
