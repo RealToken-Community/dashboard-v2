@@ -13,7 +13,6 @@ import {
 } from './parsers'
 import {
   RealTokenTransfer,
-  TransferOrigin,
   UserRealTokenTransfer,
   UserTransferDirection,
 } from './transfers.type'

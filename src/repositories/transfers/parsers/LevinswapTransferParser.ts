@@ -141,6 +141,11 @@ export class LevinswapTransferParser extends TransferParser {
             realtokenContractList.includes(event.address.toLowerCase()),
         )
 
+        const shareTransfer = transferEvents.find(
+          (event) =>
+            event.address === mintEvent.address && event.to === transfer?.from,
+        )
+
         const realtoken =
           transfer && findRealToken(transfer.address, this.realtokenList)
 
@@ -154,6 +159,9 @@ export class LevinswapTransferParser extends TransferParser {
             timestamp,
             origin: TransferOrigin.levinSwapPool,
             amount: Number(ethers.formatEther(transfer.value)),
+            exchangedPoolShare: Number(
+              ethers.formatEther(shareTransfer?.value ?? 0),
+            ),
           }
         }
       }),
@@ -178,6 +186,10 @@ export class LevinswapTransferParser extends TransferParser {
             realtokenContractList.includes(event.address),
         )
 
+        const shareTransfer = transferEvents.find(
+          (event) => event.to === burnEvent.address,
+        )
+
         const realtoken =
           transfer && findRealToken(transfer.address, this.realtokenList)
 
@@ -190,7 +202,10 @@ export class LevinswapTransferParser extends TransferParser {
             to: transfer.to,
             timestamp,
             origin: TransferOrigin.levinSwapPool,
-            amount: Number(ethers.formatEther(transfer?.value)),
+            amount: Number(ethers.formatEther(transfer.value)),
+            exchangedPoolShare: Number(
+              ethers.formatEther(shareTransfer?.value ?? 0),
+            ),
           }
         }
       }),

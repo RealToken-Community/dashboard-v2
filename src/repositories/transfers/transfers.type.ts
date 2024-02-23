@@ -26,6 +26,7 @@ export interface UserRealTokenTransfer {
   origin: TransferOrigin
   price: number
   exchangedPrice?: number
+  exchangedPoolShare?: number // For liquidity pools
   isPartial?: boolean // Error when fetching all data related to this tx
 }
 
@@ -39,5 +40,6 @@ export interface RealTokenTransfer {
   amount: number
   origin: TransferOrigin
   exchangedPrice?: number // Real exchanged price on secondary markets
+  exchangedPoolShare?: number // For liquidity pools
   isPartial?: boolean // Error when fetching all data related to this tx
 }
