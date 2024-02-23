@@ -56,9 +56,14 @@ export class TransferParser {
   protected async parseTransferEvent(
     transfer: TransferEvent,
   ): Promise<RealTokenTransfer | RealTokenTransfer[]> {
-    const realtoken = findRealToken(transfer.token.id, this.realtokenList)!
+    const realtoken = findRealToken(
+      transfer.token.id,
+      this.realtokenList,
+      transfer.chainId,
+    )!
     return {
       id: transfer.id,
+      chainId: transfer.chainId,
       realtoken: realtoken.uuid,
       from: transfer.source,
       to: transfer.destination,
@@ -94,9 +99,14 @@ export class TransferParser {
     )
 
     return unparsedTransfers.map((item) => {
-      const realtoken = findRealToken(item.token.id, this.realtokenList)!
+      const realtoken = findRealToken(
+        item.token.id,
+        this.realtokenList,
+        item.chainId,
+      )!
       return {
         id: item.id,
+        chainId: item.chainId,
         realtoken: realtoken.uuid,
         from: item.source,
         to: item.destination,

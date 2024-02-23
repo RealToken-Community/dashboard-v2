@@ -18,6 +18,7 @@ export enum UserTransferDirection {
 
 export interface UserRealTokenTransfer {
   id: string
+  chainId: number
   realtoken: string
   timestamp: number
   amount: number
@@ -30,6 +31,7 @@ export interface UserRealTokenTransfer {
 
 export interface RealTokenTransfer {
   id: string
+  chainId: number
   realtoken: string
   from: string
   to: string

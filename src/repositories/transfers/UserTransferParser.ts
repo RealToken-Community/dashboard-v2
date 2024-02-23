@@ -54,7 +54,7 @@ export class UserTransferParser {
 
     // Save parsed RealTokenTransfers only (in background)
     if (realtokenTransfers.length > 0) {
-      void TransferDatabaseService.putTransfersGnosis(realtokenTransfers).catch(
+      void TransferDatabaseService.putTransfers(realtokenTransfers).catch(
         console.error,
       )
     }
@@ -72,12 +72,10 @@ export class UserTransferParser {
     userAddressList: string[]
     realtokenList?: RealToken[]
   }) {
-    const allCachedTransfers = await TransferDatabaseService.getTransfersGnosis(
-      {
-        userAddressList: options.userAddressList,
-        realtokenList: options.realtokenList?.map((item) => item.uuid),
-      },
-    )
+    const allCachedTransfers = await TransferDatabaseService.getTransfers({
+      userAddressList: options.userAddressList,
+      realtokenList: options.realtokenList?.map((item) => item.uuid),
+    })
 
     const allCachedTransfersIds = allCachedTransfers.map((item) => item.id)
     const cachedTransfers = allCachedTransfers.filter((item) => !item.isPartial)
@@ -160,7 +158,11 @@ export class UserTransferParser {
       .map((item) => ({
         ...item,
         direction: this.getTransferDirection(item),
-        price: this.getRealTokenPrice(item.realtoken, item.timestamp),
+        price: this.getRealTokenPrice(
+          item.realtoken,
+          item.timestamp,
+          item.chainId,
+        ),
       }))
   }
 
@@ -177,7 +179,10 @@ export class UserTransferParser {
         : UserTransferDirection.in
   }
 
-  private getRealTokenPrice(id: string, timestamp: number) {
-    return findRealTokenPrice(findRealToken(id, this.realtokenList)!, timestamp)
+  private getRealTokenPrice(id: string, timestamp: number, chainId: number) {
+    return findRealTokenPrice(
+      findRealToken(id, this.realtokenList, chainId)!,
+      timestamp,
+    )
   }
 }

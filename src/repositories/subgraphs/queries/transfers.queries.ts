@@ -1,26 +1,38 @@
 import { gql } from '@apollo/client'
 
-import { GnosisClient } from '../clients'
+import { EthereumClient, GnosisClient } from '../clients'
 
 export async function getRealTokenTransfers(options: {
   addressList: string[]
   timestamp?: number
 }) {
-  const results = await executeQuery(
-    options.addressList.map((item) => item.toLowerCase()),
-    options.timestamp,
+  const addressList = options.addressList.map((item) => item.toLowerCase())
+  const timestamp = options.timestamp
+  const [ethereumResults, gnosisResults] = await Promise.all([
+    executeQuery(addressList, 1, timestamp),
+    executeQuery(addressList, 100, timestamp),
+  ])
+  return [...ethereumResults, ...gnosisResults].sort(
+    (a, b) => parseInt(a.timestamp) - parseInt(b.timestamp),
   )
-  return results
-    .map((item) => item.data.transferEvents)
-    .flat()
-    .sort((a, b) => parseInt(a.timestamp) - parseInt(b.timestamp))
 }
 
-async function executeQuery(addressList: string[], timestamp?: number) {
+async function executeQuery(
+  addressList: string[],
+  chainId: number,
+  timestamp?: number,
+) {
   const limit = 1000
 
+  const client = {
+    [1]: EthereumClient,
+    [100]: GnosisClient,
+  }[chainId]
+
+  if (!client) throw new Error(`Chain ID ${chainId} is not supported`)
+
   const execute = async (lastId: string) =>
-    GnosisClient.query<RealTokenTransferResult>({
+    client.query<RealTokenTransferResult>({
       query: RealTokenTransferQuery,
       variables: { addressList, limit, lastId, timestamp },
     })
@@ -30,11 +42,13 @@ async function executeQuery(addressList: string[], timestamp?: number) {
   let lastId = ''
   while (true) {
     const result = await execute(lastId)
-    results.push(result)
+    results.push(
+      result.data.transferEvents.map((item) => ({ ...item, chainId })),
+    )
     if (result.data.transferEvents.length < limit) break
     lastId = result.data.transferEvents[limit - 1].id
   }
-  return results
+  return results.flat()
 }
 
 const RealTokenTransferQuery = gql`
@@ -77,6 +91,7 @@ const RealTokenTransferQuery = gql`
 
 export interface TransferEvent {
   id: string
+  chainId: number
   amount: string
   source: string
   destination: string

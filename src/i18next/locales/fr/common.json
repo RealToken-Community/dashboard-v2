@@ -284,6 +284,7 @@
     },
     "transfers": {
       "noTransfers": "Vous n'avez pas de transactions pour cette propriété",
+      "etherScan": "voir sur EtherScan",
       "gnosisScan": "voir sur GnosisScan"
     }
   },
@@ -293,6 +294,7 @@
     "item": {
       "value": "Valeur",
       "price": "Prix",
+      "etherScan": "voir sur EtherScan",
       "gnosisScan": "voir sur GnosisScan"
     },
     "filter": {
@@ -312,7 +314,7 @@
   "transfers": {
     "informationWarning": {
       "title": "Informations",
-      "text": "Uniquement les transactions réalisées sur Gnosis sont prises en compte ! De plus, certaines transactions pevent être incomplètes si le RPC est surchargé."
+      "text": "Certaines transactions peuvent être incomplètes si le RPC est surchargé. De plus certains type de transactions peu communes ne sont pour le moment pas ou partiellement prisent en charges (liquidations RMM, migration OLD, ...)"
     },
     "titleValues": {
       "swapcatIn": "Achat sur Swapcat",

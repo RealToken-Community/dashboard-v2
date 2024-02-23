@@ -13,10 +13,15 @@ export class GenericTransferParser extends TransferParser {
   protected parseTransferEvent(
     transfer: TransferEvent,
   ): Promise<RealTokenTransfer> {
-    const realtoken = findRealToken(transfer.token.id, this.realtokenList)!
+    const realtoken = findRealToken(
+      transfer.token.id,
+      this.realtokenList,
+      transfer.chainId,
+    )!
 
     return Promise.resolve({
       id: transfer.id,
+      chainId: transfer.chainId,
       realtoken: realtoken.uuid,
       from: transfer.source,
       to: transfer.destination,
@@ -28,10 +33,18 @@ export class GenericTransferParser extends TransferParser {
 
   private getTransferOrigin(item: TransferEvent, realtoken: RealToken) {
     const addresses = [item.source, item.destination]
-    const { distributor, rmmPoolAddress } =
+    const { distributor: ethereumDistributor } =
+      realtoken.blockchainAddresses.ethereum ?? {}
+    const { distributor: gnosisDistributor, rmmPoolAddress } =
       realtoken.blockchainAddresses.xDai ?? {}
+    const distributors = [
+      (ethereumDistributor || '').toLowerCase(),
+      (gnosisDistributor || '').toLowerCase(),
+    ]
 
-    if (addresses.includes((distributor || '').toLowerCase())) {
+    if (
+      addresses.some((address) => distributors.includes(address.toLowerCase()))
+    ) {
       return Number(item.amount) % 1 === 0
         ? TransferOrigin.primary
         : TransferOrigin.reinvest

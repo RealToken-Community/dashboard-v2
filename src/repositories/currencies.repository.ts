@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 
 import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
-import { RpcProvider } from './RpcProvider'
+import { GnosisRpcProvider } from './RpcProvider'
 
 export interface CurrencyRates {
   XdaiUsd: number
@@ -16,7 +16,11 @@ function getChainlinkHandler(options: {
 }) {
   const { priceFeedContract, decimals } = options
   const ABI = ['function latestAnswer() view returns (int256)']
-  const contract = new ethers.Contract(priceFeedContract, ABI, RpcProvider)
+  const contract = new ethers.Contract(
+    priceFeedContract,
+    ABI,
+    GnosisRpcProvider,
+  )
 
   return useCacheWithLocalStorage(
     async () =>

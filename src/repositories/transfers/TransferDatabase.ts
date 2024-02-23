@@ -5,29 +5,29 @@ import _minBy from 'lodash/minBy'
 import { RealTokenTransfer } from './transfers.type'
 
 class TransferDatabase extends Dexie {
-  transfersGnosis: Table<RealTokenTransfer, string>
+  transfers: Table<RealTokenTransfer, string>
   transferSync: Table<{ id: string; timestamp: number }, string>
 
   constructor() {
     super('TransferDatabase')
     this.version(1).stores({
-      transfersGnosis: 'id, realtoken, from, to',
+      transfers: 'id, realtoken, from, to',
       transferSync: 'id',
     })
-    this.transfersGnosis = this.table('transfersGnosis')
+    this.transfers = this.table('transfers')
     this.transferSync = this.table('transferSync')
   }
 }
 
 const db = new TransferDatabase()
 
-async function getTransfersGnosis(filters: {
+async function getTransfers(filters: {
   userAddressList: string[]
   realtokenList?: string[]
 }) {
   const { userAddressList, realtokenList } = filters
 
-  const transfers = await db.transfersGnosis
+  const transfers = await db.transfers
     .where('from')
     .anyOf(userAddressList)
     .or('to')
@@ -39,8 +39,8 @@ async function getTransfersGnosis(filters: {
     : transfers
 }
 
-async function putTransfersGnosis(transfers: RealTokenTransfer[]) {
-  await db.transfersGnosis.bulkPut(transfers)
+async function putTransfers(transfers: RealTokenTransfer[]) {
+  await db.transfers.bulkPut(transfers)
 }
 
 async function getTransferSync(addressList: string[]) {
@@ -75,13 +75,13 @@ async function saveLastSyncTimestamp(
 }
 
 async function dropDatabase() {
-  await db.transfersGnosis.clear()
+  await db.transfers.clear()
   await db.transferSync.clear()
 }
 
 export const TransferDatabaseService = {
-  getTransfersGnosis,
-  putTransfersGnosis,
+  getTransfers,
+  putTransfers,
   getTransferSync,
   putTransferSync,
   getLastSyncTimestamp,

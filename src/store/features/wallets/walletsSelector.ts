@@ -8,7 +8,7 @@ import moment from 'moment'
 import { WalletBalances, WalletType } from 'src/repositories'
 import { UserRealTokenTransfer } from 'src/repositories/transfers/transfers.type'
 import { RootState } from 'src/store/store'
-import { RealToken } from 'src/types/RealToken'
+import { RealToken, RealTokenCanal } from 'src/types/RealToken'
 import {
   RentCalculation,
   RentCalculationState,
@@ -65,7 +65,7 @@ function getRealtokenBalances(
   })
 }
 
-export const selectUserRealtokens = createSelector(
+export const selectAllUserRealtokens = createSelector(
   (state: RootState) => state.settings.user,
   selectRealtokens,
   (state: RootState) => state.wallets.balances,
@@ -99,6 +99,19 @@ export const selectUserRealtokens = createSelector(
         lastChanges,
       }
     }),
+)
+
+export const selectUserRealtokens = createSelector(
+  selectAllUserRealtokens,
+  (realtokens) => {
+    const hiddenRealtokenCanals = [
+      RealTokenCanal.OfferingClosed,
+      RealTokenCanal.TokensMigrated,
+    ]
+    return realtokens.filter(
+      (item) => !hiddenRealtokenCanals.includes(item.canal),
+    )
+  },
 )
 
 export const selectOwnedRealtokens = createSelector(

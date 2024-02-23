@@ -95,7 +95,7 @@ export class LevinswapTransferParser extends TransferParser {
 
   async getLevinswapEventsFromTx(transactionId: string) {
     try {
-      const receipt = await getTransactionReceipt(transactionId)
+      const receipt = await getTransactionReceipt(transactionId, 100)
       const logs = receipt?.logs ?? []
 
       return {
@@ -147,6 +147,7 @@ export class LevinswapTransferParser extends TransferParser {
         if (realtoken) {
           return {
             id: `${transfer.txHash}-${transfer.index}`,
+            chainId: 100,
             realtoken: realtoken.uuid,
             from: transfer.from,
             to: transfer.to,
@@ -183,6 +184,7 @@ export class LevinswapTransferParser extends TransferParser {
         if (realtoken) {
           return {
             id: `${transfer.txHash}-${transfer.index}`,
+            chainId: 100,
             realtoken: realtoken.uuid,
             from: transfer.from,
             to: transfer.to,
@@ -232,6 +234,7 @@ export class LevinswapTransferParser extends TransferParser {
 
           return {
             id: `${realtokenTransfer.txHash}-${realtokenTransfer.index}`,
+            chainId: 100,
             realtoken: realtoken.uuid,
             from: realtokenTransfer.from,
             to: realtokenTransfer.to,

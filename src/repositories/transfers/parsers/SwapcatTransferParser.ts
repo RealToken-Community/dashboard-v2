@@ -24,20 +24,29 @@ export class SwapcatTransferParser extends TransferParser {
   protected parseTransferEvent(
     transfer: TransferEvent,
   ): Promise<RealTokenTransfer | RealTokenTransfer[]> {
-    return this.parse(transfer.transaction.id, parseInt(transfer.timestamp))
+    return this.parse(
+      transfer.transaction.id,
+      transfer.chainId,
+      parseInt(transfer.timestamp),
+    )
   }
 
   protected parseRealtokenTransfer(
     transfer: RealTokenTransfer,
   ): Promise<RealTokenTransfer[]> {
-    return this.parse(transfer.id.split('-')[0], transfer.timestamp)
+    return this.parse(
+      transfer.id.split('-')[0],
+      transfer.chainId,
+      transfer.timestamp,
+    )
   }
 
   private async parse(
     txId: string,
+    chainId: number,
     timestamp: number,
   ): Promise<RealTokenTransfer[]> {
-    const transfers = await this.getTransfersFromTx(txId)
+    const transfers = await this.getTransfersFromTx(txId, chainId)
 
     const realtokenContractList = this.realtokenList.map((item) =>
       item.xDaiContract?.toLowerCase(),
@@ -52,6 +61,7 @@ export class SwapcatTransferParser extends TransferParser {
     // Exchange between a realtoken and a stablecoin
     if (realtokenTransfers.length === 1 && stablecoinTransfer) {
       return this.getTransferFromStablecoin({
+        chainId,
         timestamp,
         stablecoinTransfer,
         realtokenTransfer: realtokenTransfers[0],
@@ -61,6 +71,7 @@ export class SwapcatTransferParser extends TransferParser {
     // Exchange between two realtokens
     if (realtokenTransfers.length === 2) {
       return this.getTransfersFromRealtoken({
+        chainId,
         timestamp,
         realtokenTransfers,
       })
@@ -69,9 +80,9 @@ export class SwapcatTransferParser extends TransferParser {
     return []
   }
 
-  private async getTransfersFromTx(transactionId: string) {
+  private async getTransfersFromTx(transactionId: string, chainId: number) {
     try {
-      const receipt = await getTransactionReceipt(transactionId)
+      const receipt = await getTransactionReceipt(transactionId, chainId)
       const logs = receipt?.logs ?? []
 
       const rawTransferEvents = logs.filter(ERC20.isTransferEvent)
@@ -83,6 +94,7 @@ export class SwapcatTransferParser extends TransferParser {
   }
 
   private getTransferFromStablecoin(options: {
+    chainId: number
     timestamp: number
     stablecoinTransfer: ERC20TransferEvent
     realtokenTransfer: ERC20TransferEvent
@@ -93,6 +105,7 @@ export class SwapcatTransferParser extends TransferParser {
     return [
       {
         id: `${realtokenTransfer.txHash}-${realtokenTransfer.index}`,
+        chainId: options.chainId,
         realtoken:
           findRealToken(realtokenTransfer.address, this.realtokenList)?.uuid ??
           '',
@@ -111,6 +124,7 @@ export class SwapcatTransferParser extends TransferParser {
   }
 
   private getTransfersFromRealtoken(options: {
+    chainId: number
     timestamp: number
     realtokenTransfers: ERC20TransferEvent[]
   }) {
@@ -125,6 +139,7 @@ export class SwapcatTransferParser extends TransferParser {
 
       return {
         id: `${item.txHash}-${item.index}`,
+        chainId: options.chainId,
         realtoken: findRealToken(item.address, this.realtokenList)?.uuid ?? '',
         from: item.from,
         to: item.to,

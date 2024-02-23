@@ -312,7 +312,7 @@
   "transfers": {
     "informationWarning": {
       "title": "Informations",
-      "text": "Only transactions made on Gnosis are taken into account! Additionally, some transactions may be incomplete if the RPC is overloaded."
+      "text": "Some transactions may be incomplete if the RPC is overloaded. In addition, certain types of unusual transactions are currently not or partially covered (RMM liquidations, OLD migration, etc.)"
     },
     "titleValues": {
       "swapcatIn": "Purchase on Swapcat",

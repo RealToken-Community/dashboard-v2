@@ -29,6 +29,7 @@ export class YamTransferParser extends TransferParser {
     return this.parse(
       transfers.map((item) => ({
         id: item.transaction.id,
+        chainId: item.chainId,
         timestamp: parseInt(item.timestamp),
       })),
     )
@@ -40,15 +41,18 @@ export class YamTransferParser extends TransferParser {
     return this.parse(
       transfers.map((item) => ({
         id: item.id.split('-')[0],
+        chainId: item.chainId,
         timestamp: item.timestamp,
       })),
     )
   }
 
-  private async parse(txList: { id: string; timestamp: number }[]) {
+  private async parse(
+    txList: { id: string; chainId: number; timestamp: number }[],
+  ) {
     return (
       await Promise.all(
-        _uniqBy(txList, 'id').map((item) =>
+        _uniqBy(txList, (item) => `${item.chainId}_${item.id}`).map((item) =>
           this.getTransfersFromTransaction(item),
         ),
       )
@@ -57,9 +61,10 @@ export class YamTransferParser extends TransferParser {
 
   private async getTransfersFromTransaction(tx: {
     id: string
+    chainId: number
     timestamp: number
   }) {
-    const acceptedEvents = await this.getOfferAcceptedFromTx(tx.id)
+    const acceptedEvents = await this.getOfferAcceptedFromTx(tx.id, tx.chainId)
 
     const realtokenContractList = this.realtokenList.map((item) =>
       item.xDaiContract?.toLowerCase(),
@@ -94,9 +99,9 @@ export class YamTransferParser extends TransferParser {
     return _compact(transactionList.flat())
   }
 
-  private async getOfferAcceptedFromTx(txId: string) {
+  private async getOfferAcceptedFromTx(txId: string, chainId: number) {
     try {
-      const receipt = await getTransactionReceipt(txId)
+      const receipt = await getTransactionReceipt(txId, chainId)
       const logs = receipt?.logs ?? []
       const rawAcceptedEvents = logs.filter(Yam.isOfferAcceptedEvent)
       const rawTransferEvents = logs.filter(ERC20.isTransferEvent)
@@ -130,6 +135,7 @@ export class YamTransferParser extends TransferParser {
 
     return {
       id: `${realtokenTransfer.txHash}-${realtokenTransfer.index}`,
+      chainId: 100,
       realtoken:
         findRealToken(realtokenTransfer.address, this.realtokenList)?.uuid ??
         '',
@@ -162,6 +168,7 @@ export class YamTransferParser extends TransferParser {
 
       return {
         id: `${item.txHash}-${item.index}`,
+        chainId: 100,
         realtoken: findRealToken(item.address, this.realtokenList)?.uuid ?? '',
         from: item.from,
         to: item.to,

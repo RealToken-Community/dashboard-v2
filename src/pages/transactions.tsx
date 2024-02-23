@@ -31,7 +31,7 @@ import {
 } from 'src/store/features/transfers/transfersSelector'
 import {
   UserRealtoken,
-  selectUserRealtokens,
+  selectAllUserRealtokens,
 } from 'src/store/features/wallets/walletsSelector'
 
 import styles from './TransactionsPage.module.sass'
@@ -52,7 +52,10 @@ const TransferItem: FC<{
   const { formatTransferValues } = useTransferValues()
   const values = formatTransferValues(transfer)
   const txId = transfer.id.replace(/-.*/, '')
-  const gnosisScanLink = `https://gnosisscan.io/tx/${txId}`
+  const explorerLink =
+    transfer.chainId === 1
+      ? `https://etherscan.io/tx/${txId}`
+      : `https://gnosisscan.io/tx/${txId}`
 
   return (
     <div
@@ -95,7 +98,7 @@ const TransferItem: FC<{
         <div>
           {values.date}
           <Anchor
-            href={gnosisScanLink}
+            href={explorerLink}
             target={'_blank'}
             style={{
               fontSize: '12px',
@@ -103,7 +106,7 @@ const TransferItem: FC<{
               color: 'gray',
             }}
           >
-            {` (${t('gnosisScan')})`}
+            {` (${transfer.chainId === 1 ? t('etherScan') : t('gnosisScan')})`}
           </Anchor>
         </div>
         <div>{values.title}</div>
@@ -237,7 +240,7 @@ const TransferWarning: FC = () => {
       color={'orange'}
       withCloseButton={true}
       my={'lg'}
-      onClick={() => {
+      onClose={() => {
         setIsVisible(false)
         localStorage.setItem('hideTransferAlertWarning', 'true')
       }}
@@ -255,7 +258,7 @@ const TransactionPage: NextPage = () => {
 
   const isLoading = useSelector(selectIsLoading)
   const isLoadingTransfers = useSelector(selectTransfersIsLoading)
-  const realtokens = useSelector(selectUserRealtokens)
+  const realtokens = useSelector(selectAllUserRealtokens)
   const allTransfers = useSelector(selectTransfers)
   const [filter, setFilter] = useState(TransferFilter.all)
 

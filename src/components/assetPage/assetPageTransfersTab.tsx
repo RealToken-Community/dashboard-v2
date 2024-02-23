@@ -18,7 +18,10 @@ const TransferRow: FC<{ item: UserRealTokenTransfer }> = ({ item }) => {
   const values = formatTransferValues(item)
 
   const txId = item.id.replace(/-.*/, '')
-  const gnosisScanLink = `https://gnosisscan.io/tx/${txId}`
+  const explorerLink =
+    item.chainId === 1
+      ? `https://etherscan.io/tx/${txId}`
+      : `https://gnosisscan.io/tx/${txId}`
 
   return (
     <tr
@@ -32,7 +35,7 @@ const TransferRow: FC<{ item: UserRealTokenTransfer }> = ({ item }) => {
         <div style={{ fontSize: '12px', fontStyle: 'italic' }}>
           {values.date}
           <Anchor
-            href={gnosisScanLink}
+            href={explorerLink}
             target={'_blank'}
             style={{
               fontSize: '12px',
@@ -40,7 +43,7 @@ const TransferRow: FC<{ item: UserRealTokenTransfer }> = ({ item }) => {
               color: 'gray',
             }}
           >
-            {` (${t('gnosisScan')})`}
+            {` (${item.chainId === 1 ? t('etherScan') : t('gnosisScan')})`}
           </Anchor>
         </div>
       </td>
