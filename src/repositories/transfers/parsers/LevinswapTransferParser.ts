@@ -135,33 +135,48 @@ export class LevinswapTransferParser extends TransferParser {
 
     return _compact(
       mintEvents.map((mintEvent) => {
-        const transfer = transferEvents.find(
+        const userAddress = transferEvents.find(
+          (event) => event.to === mintEvent.address,
+        )?.from
+
+        const tokenTransfer = transferEvents.find(
           (event) =>
-            event.to === mintEvent.address &&
-            realtokenContractList.includes(event.address.toLowerCase()),
+            event.from === userAddress &&
+            realtokenContractList.includes(event.address),
         )
 
-        const shareTransfer = transferEvents.find(
+        const assetTransfer = transferEvents.find(
           (event) =>
-            event.address === mintEvent.address && event.to === transfer?.from,
+            event.from === userAddress &&
+            event.address !== tokenTransfer?.address,
+        )
+
+        const poolTransfer = transferEvents.find(
+          (event) => event.to === userAddress,
         )
 
         const realtoken =
-          transfer && findRealToken(transfer.address, this.realtokenList)
+          tokenTransfer &&
+          findRealToken(tokenTransfer.address, this.realtokenList)
 
-        if (realtoken) {
+        if (realtoken && assetTransfer && poolTransfer) {
           return {
-            id: `${transfer.txHash}-${transfer.index}`,
+            id: `${tokenTransfer.txHash}-${tokenTransfer.index}`,
             chainId: 100,
             realtoken: realtoken.uuid,
-            from: transfer.from,
-            to: transfer.to,
+            from: tokenTransfer.from,
+            to: tokenTransfer.to,
             timestamp,
             origin: TransferOrigin.levinSwapPool,
-            amount: Number(ethers.formatEther(transfer.value)),
-            exchangedPoolShare: Number(
-              ethers.formatEther(shareTransfer?.value ?? 0),
-            ),
+            amount: Number(ethers.formatEther(tokenTransfer.value)),
+            poolDetails: {
+              share: Number(ethers.formatEther(poolTransfer.value)),
+              token: assetTransfer.address,
+              quantity: Stablecoin.parseValue(
+                assetTransfer.address,
+                assetTransfer.value,
+              ),
+            },
           }
         }
       }),
@@ -180,32 +195,46 @@ export class LevinswapTransferParser extends TransferParser {
 
     return _compact(
       burnEvents.map((burnEvent) => {
-        const transfer = transferEvents.find(
+        const userAddress = burnEvent.to
+
+        const tokenTransfer = transferEvents.find(
           (event) =>
-            event.from === burnEvent.address &&
+            event.to === userAddress &&
             realtokenContractList.includes(event.address),
         )
 
-        const shareTransfer = transferEvents.find(
-          (event) => event.to === burnEvent.address,
+        const assetTransfer = transferEvents.find(
+          (event) =>
+            event.to === userAddress &&
+            event.address !== tokenTransfer?.address,
+        )
+
+        const poolTransfer = transferEvents.find(
+          (event) => event.from === userAddress,
         )
 
         const realtoken =
-          transfer && findRealToken(transfer.address, this.realtokenList)
+          tokenTransfer &&
+          findRealToken(tokenTransfer.address, this.realtokenList)
 
-        if (realtoken) {
+        if (realtoken && assetTransfer && poolTransfer) {
           return {
-            id: `${transfer.txHash}-${transfer.index}`,
+            id: `${tokenTransfer.txHash}-${tokenTransfer.index}`,
             chainId: 100,
             realtoken: realtoken.uuid,
-            from: transfer.from,
-            to: transfer.to,
+            from: tokenTransfer.from,
+            to: tokenTransfer.to,
             timestamp,
             origin: TransferOrigin.levinSwapPool,
-            amount: Number(ethers.formatEther(transfer.value)),
-            exchangedPoolShare: Number(
-              ethers.formatEther(shareTransfer?.value ?? 0),
-            ),
+            amount: Number(ethers.formatEther(tokenTransfer.value)),
+            poolDetails: {
+              share: Number(ethers.formatEther(poolTransfer.value)),
+              token: assetTransfer.address,
+              quantity: Stablecoin.parseValue(
+                assetTransfer.address,
+                assetTransfer.value,
+              ),
+            },
           }
         }
       }),
