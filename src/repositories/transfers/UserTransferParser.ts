@@ -196,12 +196,12 @@ export class UserTransferParser {
 
     sortedTransfers.forEach((transfer, index) => {
       if (transfer.origin === TransferOrigin.burn) {
-        console.log('burn', transfer)
         const currentRealtoken = findRealToken(
           transfer.realtoken,
           this.realtokenList,
           transfer.chainId,
         )!
+
         const relatedRealtokens = this.realtokenList.filter(
           (item) => item.seriesNumber === currentRealtoken.seriesNumber,
         )
@@ -229,6 +229,10 @@ export class UserTransferParser {
 
           transfer.origin = origin
           relatedTransfer.origin = origin
+        }
+        // If it's not a migration and the property is sold, the origin should be primary
+        else if (currentRealtoken.canal === RealTokenCanal.ExitComplete) {
+          transfer.origin = TransferOrigin.primary
         }
       }
     })

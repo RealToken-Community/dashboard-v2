@@ -189,8 +189,8 @@ export class LevinswapTransferParser extends TransferParser {
     transferEvents: ERC20TransferEvent[]
   }): RealTokenTransfer[] {
     const { timestamp, burnEvents, transferEvents } = options
-    const realtokenContractList = this.realtokenList.map(
-      (item) => item.xDaiContract,
+    const realtokenContractList = this.realtokenList.map((item) =>
+      item.xDaiContract?.toLowerCase(),
     )
 
     return _compact(

@@ -10,6 +10,8 @@ export const Armmv3WXDAI =
   '0x0ca4f5554dd9da6217d62d8df2816c82bba4157b'.toLowerCase()
 export const Armmv3USDC =
   '0xed56f76e9cbc6a64b821e9c016eafbd3db5436d1'.toLowerCase()
+export const USDCEthereumAddress =
+  '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'.toLowerCase()
 
 const STABLECOINS = [
   UsdcAddress,
@@ -17,13 +19,14 @@ const STABLECOINS = [
   ArmmWXDAI,
   Armmv3WXDAI,
   Armmv3USDC,
+  USDCEthereumAddress,
 ]
 
 function isStable(token: string) {
   return STABLECOINS.includes(token.toLowerCase())
 }
 
-const STABLE_6_DECIMALS = [UsdcAddress, Armmv3USDC]
+const STABLE_6_DECIMALS = [UsdcAddress, Armmv3USDC, USDCEthereumAddress]
 
 function parseValue(token: string, value: bigint) {
   return STABLE_6_DECIMALS.includes(token.toLowerCase())

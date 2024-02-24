@@ -118,7 +118,10 @@ export class TransferParser {
     })
   }
 
-  protected getRealTokenPrice(id: string, timestamp: number) {
-    return findRealTokenPrice(findRealToken(id, this.realtokenList)!, timestamp)
+  protected getRealTokenPrice(id: string, timestamp: number, chainId?: number) {
+    return findRealTokenPrice(
+      findRealToken(id, this.realtokenList, chainId)!,
+      timestamp,
+    )
   }
 }

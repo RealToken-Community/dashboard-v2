@@ -19,6 +19,7 @@ import { useInputStyles } from 'src/components/inputs/useInputStyles'
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { useTransferValues } from 'src/hooks/useTransferValues'
 import {
+  TransferOrigin,
   UserRealTokenTransfer,
   UserTransferDirection,
 } from 'src/repositories/transfers/transfers.type'
@@ -184,7 +185,12 @@ function getTransactionFilterFunction(currentFilter: TransferFilter) {
       return (currentFilter as string) === transfer.origin
     }
     return (
-      (currentFilter as string) === transfer.origin &&
+      [
+        TransferOrigin.other,
+        TransferOrigin.levinSwapUnknown,
+        TransferOrigin.burn,
+        TransferOrigin.mint,
+      ].includes(transfer.origin) &&
       transfer.direction !== UserTransferDirection.internal
     )
   }

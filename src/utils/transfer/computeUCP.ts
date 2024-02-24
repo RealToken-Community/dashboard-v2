@@ -13,7 +13,6 @@ export function computeUCP(transfers: UserRealTokenTransfer[]) {
           TransferOrigin.levinSwapPool,
           TransferOrigin.rmm,
           TransferOrigin.bridge,
-          TransferOrigin.migration,
         ]
 
         if (excludedOrigins.includes(item.origin)) {
