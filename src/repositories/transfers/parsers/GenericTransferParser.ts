@@ -59,6 +59,14 @@ export class GenericTransferParser extends TransferParser {
       return TransferOrigin.rmm
     }
 
+    if (parseInt(item.source, 16) === 0) {
+      return TransferOrigin.mint
+    }
+
+    if (parseInt(item.destination, 16) === 0) {
+      return TransferOrigin.burn
+    }
+
     return TransferOrigin.other
   }
 }

@@ -11,11 +11,9 @@ import {
   Breadcrumbs,
   Flex,
   Group,
-  NavLink,
   Pagination,
   Select,
 } from '@mantine/core'
-import { IconExternalLink } from '@tabler/icons'
 
 import { useInputStyles } from 'src/components/inputs/useInputStyles'
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'

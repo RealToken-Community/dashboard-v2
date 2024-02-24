@@ -7,6 +7,8 @@ export enum TransferOrigin {
   levinSwap = 'levinSwap',
   levinSwapPool = 'levinSwapPool',
   levinSwapUnknown = 'levinSwapUnknown',
+  mint = 'mint',
+  burn = 'burn',
   other = 'other',
 }
 
