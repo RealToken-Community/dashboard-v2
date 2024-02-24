@@ -1,5 +1,5 @@
 import { TransferEvent } from 'src/repositories/subgraphs/queries/transfers.queries'
-import { RealToken } from 'src/types/RealToken'
+import { RealToken, RealTokenCanal } from 'src/types/RealToken'
 import { findRealToken } from 'src/utils/realtoken/findRealToken'
 import { findRealTokenPrice } from 'src/utils/realtoken/findRealTokenPrice'
 
@@ -13,6 +13,7 @@ import {
 } from './parsers'
 import {
   RealTokenTransfer,
+  TransferOrigin,
   UserRealTokenTransfer,
   UserTransferDirection,
 } from './transfers.type'
@@ -151,9 +152,8 @@ export class UserTransferParser {
       userAddressList.includes(transfer.from.toLowerCase()) ||
       userAddressList.includes(transfer.to.toLowerCase())
 
-    return options.transfers
+    const userTransfers = options.transfers
       .filter(isUserRelated)
-      .sort((a, b) => b.timestamp - a.timestamp) // By most recent
       .map((item) => ({
         ...item,
         direction: this.getTransferDirection(item),
@@ -163,6 +163,10 @@ export class UserTransferParser {
           item.chainId,
         ),
       }))
+
+    this.aggregateTransfers(userTransfers)
+
+    return userTransfers.sort((a, b) => b.timestamp - a.timestamp) // By newest first
   }
 
   private getTransferDirection(transfer: RealTokenTransfer) {
@@ -183,5 +187,50 @@ export class UserTransferParser {
       findRealToken(id, this.realtokenList, chainId)!,
       timestamp,
     )
+  }
+
+  private aggregateTransfers(transfers: UserRealTokenTransfer[]) {
+    const sortedTransfers = transfers
+      .slice()
+      .sort((a, b) => a.timestamp - b.timestamp)
+
+    sortedTransfers.forEach((transfer, index) => {
+      if (transfer.origin === TransferOrigin.burn) {
+        console.log('burn', transfer)
+        const currentRealtoken = findRealToken(
+          transfer.realtoken,
+          this.realtokenList,
+          transfer.chainId,
+        )!
+        const relatedRealtokens = this.realtokenList.filter(
+          (item) => item.seriesNumber === currentRealtoken.seriesNumber,
+        )
+        const contracts = relatedRealtokens
+          .map((item) => [item.xDaiContract, item.ethereumContract])
+          .flat()
+          .filter<string>(
+            (item): item is string => !!item && item !== transfer.realtoken,
+          )
+          .map((item) => item.toLowerCase())
+
+        const relatedTransfer = sortedTransfers
+          .slice(index + 1)
+          .find(
+            (item) =>
+              contracts.includes(item.realtoken.toLowerCase()) &&
+              item.direction === UserTransferDirection.in,
+          )
+
+        if (relatedTransfer) {
+          const origin =
+            currentRealtoken.canal === RealTokenCanal.TokensMigrated
+              ? TransferOrigin.migration
+              : TransferOrigin.bridge
+
+          transfer.origin = origin
+          relatedTransfer.origin = origin
+        }
+      }
+    })
   }
 }

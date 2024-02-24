@@ -306,13 +306,15 @@
       "reinvest": "Reinvest",
       "rmm": "RMM",
       "levinSwap": "LevinSwap",
-      "levinSwapPool": "LevinSwap Pool"
+      "levinSwapPool": "LevinSwap Pool",
+      "migration": "Migration",
+      "bridge": "Bridge"
     }
   },
   "transfers": {
     "informationWarning": {
       "title": "Informations",
-      "text": "Some transactions may be incomplete if the RPC is overloaded. In addition, certain types of unusual transactions are currently not or partially covered (RMM liquidations, OLD migration, etc.)"
+      "text": "Some transactions may be incomplete if the RPC is overloaded. In addition, certain types of unusual transactions are currently not or partially covered (RMM liquidations, etc.)"
     },
     "titleValues": {
       "swapcatIn": "Purchase on Swapcat",
@@ -330,6 +332,8 @@
       "levinSwapUnknownIn": "Purchase/Withdrawal on LevinSwap",
       "levinSwapUnknownOut": "Sale/Deposit on LevinSwap",
       "reinvest": "Reinvest",
+      "bridge": "Bridge",
+      "migration": "Migration",
       "internal": "Internal transaction",
       "unknown": "Other"
     }

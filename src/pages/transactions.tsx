@@ -168,6 +168,8 @@ enum TransferFilter {
   rmm = 'rmm',
   levinSwap = 'levinSwap',
   levinSwapPool = 'levinSwapPool',
+  migration = 'migration',
+  bridge = 'bridge',
 }
 
 function getTransactionFilterFunction(currentFilter: TransferFilter) {
@@ -207,6 +209,8 @@ const TransferFilterField: FC<{
     { value: TransferFilter.levinSwap, label: t('levinSwap') },
     { value: TransferFilter.levinSwapPool, label: t('levinSwapPool') },
     { value: TransferFilter.internal, label: t('internal') },
+    { value: TransferFilter.migration, label: t('migration') },
+    { value: TransferFilter.bridge, label: t('bridge') },
     { value: TransferFilter.other, label: t('other') },
   ]
 

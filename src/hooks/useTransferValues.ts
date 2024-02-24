@@ -34,6 +34,10 @@ export function useTransferValues() {
           : t('levinSwapUnknownOut')
       case TransferOrigin.reinvest:
         return t('reinvest')
+      case TransferOrigin.bridge:
+        return t('bridge')
+      case TransferOrigin.migration:
+        return t('migration')
     }
 
     return transfer.direction === UserTransferDirection.internal
@@ -68,7 +72,9 @@ export function useTransferValues() {
     const isInternal =
       transfer.direction === UserTransferDirection.internal ||
       transfer.origin === TransferOrigin.levinSwapPool ||
-      transfer.origin === TransferOrigin.rmm
+      transfer.origin === TransferOrigin.rmm ||
+      transfer.origin === TransferOrigin.bridge ||
+      transfer.origin === TransferOrigin.migration
     const isPositive = transfer.direction === 'in' && !isInternal
     const isNegative = transfer.direction === 'out' && !isInternal
 
