@@ -62,9 +62,11 @@ export class GenericTransferParser extends TransferParser {
     if (
       addresses.some((address) => distributors.includes(address.toLowerCase()))
     ) {
-      return Number(item.amount) % 1 === 0
+      return distributors.includes(item.destination.toLowerCase())
         ? TransferOrigin.primary
-        : TransferOrigin.reinvest
+        : Number(item.amount) % 1 === 0
+          ? TransferOrigin.primary
+          : TransferOrigin.reinvest
     }
 
     if (addresses.includes((rmmPoolAddress || '').toLowerCase())) {
