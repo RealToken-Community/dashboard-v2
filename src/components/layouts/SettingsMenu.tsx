@@ -177,7 +177,9 @@ const LanguageSelect: FC = () => {
   const updateLocale = useCallback(
     (updatedLocale: string) => {
       if (i18n.language !== updatedLocale) {
-        setCookie('react-i18next', updatedLocale)
+        setCookie('react-i18next', updatedLocale, {
+          maxAge: 60 * 60 * 24 * 365,
+        })
         i18n.changeLanguage(updatedLocale)
       }
     },
