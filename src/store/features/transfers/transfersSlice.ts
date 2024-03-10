@@ -96,5 +96,8 @@ export const transfersReducers = createReducer(
     builder.addCase(transfersIsLoading, (state, action) => {
       state.isLoading = action.payload
     })
+    builder.addCase(transfersIsInitialLoading, (state, action) => {
+      state.isInitialLoading = action.payload
+    })
   },
 )

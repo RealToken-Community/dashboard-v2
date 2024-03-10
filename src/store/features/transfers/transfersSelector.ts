@@ -7,6 +7,11 @@ export const selectTransfersIsLoading = createSelector(
   (state) => state.isLoading,
 )
 
+export const selectTransfersIsInitialLoading = createSelector(
+  (state: RootState) => state.transfers,
+  (state) => state.isInitialLoading,
+)
+
 export const selectTransfers = createSelector(
   (state: RootState) => state.transfers,
   (state) => state.transfers,

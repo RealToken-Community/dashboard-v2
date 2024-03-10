@@ -10,6 +10,7 @@ import {
 
 import { Footer } from './Footer'
 import { Header } from './Header'
+import { InitialTransfersLoader } from './InitialTransfersLoader'
 import styles from './MainLayout.module.sass'
 
 type MainLayoutProps = { children: ReactNode }
@@ -23,7 +24,7 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     if (isInitialized && addressList.length === 0) {
       modals.openContextModal('web3Wallets', { innerProps: {} })
     }
-  }, [isInitialized]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isInitialized])
 
   return (
     <div className={styles.container}>
@@ -31,6 +32,7 @@ export const MainLayout: FC<MainLayoutProps> = ({ children }) => {
         <Header />
       </div>
       <div id={'main-layout-container'} className={styles.main}>
+        <InitialTransfersLoader />
         {children}
       </div>
       <div className={styles.footer}>
