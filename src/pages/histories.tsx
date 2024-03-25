@@ -16,7 +16,10 @@ import {
   Title,
 } from '@mantine/core'
 
-import { parse as ParseDateFns } from 'date-fns'
+import {
+  formatDistanceToNowStrict as FormatDistanceToNowStrictDateFns,
+  parse as ParseDateFns,
+} from 'date-fns'
 
 import { StringField } from 'src/components/commons'
 import { useInputStyles } from 'src/components/inputs/useInputStyles'
@@ -62,7 +65,14 @@ function getRate(value: number, total: number) {
 }
 
 function getDate(date: string) {
-  return ParseDateFns(date, 'yyyyMMdd', new Date()).toLocaleDateString()
+  const formatedDate = ParseDateFns(date, 'yyyyMMdd', new Date())
+
+  const dateValue = formatedDate.toLocaleDateString()
+  const dateDistance =
+    formatedDate.toDateString() === new Date().toDateString()
+      ? 'Today'
+      : FormatDistanceToNowStrictDateFns(formatedDate, { unit: 'day' })
+  return `${dateValue} (${dateDistance})`
 }
 
 const ValueHistoryItem: FC<{ history: History }> = ({ history }) => {
@@ -340,7 +350,7 @@ const HistoriesPage: NextPage = () => {
   }
 
   return (
-    <Flex my={'lg'} mx={'md'} direction={'column'} align={'center'}>
+    <Flex my={'lg'} mx={0} direction={'column'} align={'center'}>
       <div
         style={{ maxWidth: '450px', width: '100%' }}
         className={'history-list'}
