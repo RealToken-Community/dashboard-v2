@@ -36,7 +36,10 @@ export function fetchRealtokens() {
       const data = await RealtokenRepository.getTokens()
       dispatch({
         type: realtokensChangedDispatchType,
-        payload: data.filter(item => item.productType === APIRealTokenProductType.RealEstateRental)
+        payload: data.filter(
+          (item) =>
+            item.productType === APIRealTokenProductType.RealEstateRental
+        ),
       })
     } catch (error) {
       console.log(error)
