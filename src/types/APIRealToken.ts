@@ -1,3 +1,8 @@
+export enum APIRealTokenProductType {
+  RealEstateRental = 'real_estate_rental',
+  EquityToken = 'equity_token',
+}
+
 export enum APIRealTokenCanal {
   Release = 'release',
   ExitComplete = 'exit_complete',
@@ -46,6 +51,7 @@ export interface APIRealToken {
   tokenIdRules: number
 
   // General
+  productType: APIRealTokenProductType
   fullName: string
   shortName: string
   symbol: string
