@@ -107,6 +107,7 @@ const RmmQuery = gql`
     users(where: { id_in: $addressList }) {
       id
       reserves(
+        first: 1000
         where: {
           or: [{ currentATokenBalance_gt: "0" }, { currentTotalDebt_gt: "0" }]
         }
@@ -144,7 +145,7 @@ const RmmWrapperQuery = gql`
   query RmmQuery($addressList: [String]!) {
     users(where: { id_in: $addressList }) {
       id
-      balances {
+      balances(first: 1000) {
         token {
           name
           address
