@@ -29,7 +29,7 @@ export const AssetPagePropertyTab: FC<{ data: UserRealtoken }> = ({ data }) => {
   )
   const annualYield = tNumbers('percent', { value: data.annualPercentageYield })
 
-  const initialLaunchDate = new Date(data.initialLaunchDate.date)
+  const initialLaunchDate = new Date(data.initialLaunchDate?.date ?? '')
   const rentStartDate = new Date(data.rentStartDate.date)
 
   const constructionYear = data.constructionYear.toString()
