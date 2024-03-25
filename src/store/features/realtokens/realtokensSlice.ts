@@ -2,7 +2,7 @@ import { createAction, createReducer } from '@reduxjs/toolkit'
 
 import { RealtokenRepository } from 'src/repositories'
 import { AppDispatch, RootState } from 'src/store/store'
-import { APIRealToken } from 'src/types/APIRealToken'
+import { APIRealToken, APIRealTokenProductType } from 'src/types/APIRealToken'
 
 interface RealtokenInitialStateType {
   realtokens: APIRealToken[]
@@ -34,7 +34,10 @@ export function fetchRealtokens() {
     dispatch({ type: realtokensIsLoadingDispatchType, payload: true })
     try {
       const data = await RealtokenRepository.getTokens()
-      dispatch({ type: realtokensChangedDispatchType, payload: data })
+      dispatch({
+        type: realtokensChangedDispatchType,
+        payload: data.filter(item => item.productType === APIRealTokenProductType.RealEstateRental)
+      })
     } catch (error) {
       console.log(error)
     } finally {
