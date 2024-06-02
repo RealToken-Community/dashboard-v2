@@ -71,6 +71,9 @@
     "rmm": "RMM",
     "levinSwap": "LevinSwap"
   },
+  "realtimeIndicator": {
+    "realtime": "Realtime"
+  },
   "rentsCard": {
     "title": "Rents",
     "apr": "APR",
