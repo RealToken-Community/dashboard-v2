@@ -25,12 +25,10 @@ export const AssetsViewFilterButton: FC = () => {
     modals.openContextModal('assetsViewFilterModal', { innerProps: {} })
   }
   return (
-    <div>
-      <Indicator inline={true} color={'red'} disabled={!hasActiveFilter}>
-        <Button variant={'subtle'} onClick={openModal} compact={true}>
-          {t('filter')}
-        </Button>
-      </Indicator>
-    </div>
+    <Indicator inline={true} color={'red'} disabled={!hasActiveFilter}>
+      <Button variant={'subtle'} onClick={openModal} compact={true}>
+        {t('filter')}
+      </Button>
+    </Indicator>
   )
 }
