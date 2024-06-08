@@ -52,7 +52,7 @@ export default function useInitStore() {
     if (addressList.length) {
       if (realtokens.length) {
         dispatch(fetchWallets(realtokens))
-        dispatch(fetchTransfers(realtokens))
+        // dispatch(fetchTransfers(realtokens))
       }
     } else {
       dispatch(resetWallets())

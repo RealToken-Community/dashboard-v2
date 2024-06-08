@@ -116,16 +116,16 @@ const AssetPage: NextPage = () => {
             </div>
           ) : null}
 
-          <TabButton
+          {/* <TabButton
             label={t('tabs.transfers')}
             active={activeTab === Tabs.Transfers}
             onClick={() => setActiveTab(Tabs.Transfers)}
-          />
-          {activeTab === Tabs.Transfers ? (
+          /> */}
+          {/* {activeTab === Tabs.Transfers ? (
             <div style={{ margin: '5px 10px' }}>
               <AssetPageTransfersTab realtoken={realtoken} />
             </div>
-          ) : null}
+          ) : null} */}
 
           <TabButton
             label={t('tabs.yamStatistics')}

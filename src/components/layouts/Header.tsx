@@ -62,11 +62,11 @@ export const Header: FC = () => {
           onClick={() => router.push('/').then(() => close())}
         />
 
-        <NavLink
+        {/* <NavLink
           label={t('transactions')}
           leftSection={<IconReceipt size={'1rem'} stroke={1.5} />}
           onClick={() => router.push('/transactions').then(() => close())}
-        />
+        /> */}
         <NavLink
           label={t('histories')}
           leftSection={<IconFilePencil size={'1rem'} stroke={1.5} />}

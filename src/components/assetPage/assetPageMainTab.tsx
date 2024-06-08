@@ -87,18 +87,18 @@ export const AssetPageMainTab: FC<{
             isHidden: !realtoken.balance.levinSwap.value,
             isIndented: true,
           },
-          {
-            label: t('priceCost'),
-            value: useCurrencyValue(realtoken.priceCost),
-          },
-          {
-            label: t('unrealizedCapitalGain'),
-            value: useCurrencyValue(
-              (realtoken.unrealizedCapitalGain ?? 0) > 0.01
-                ? realtoken.unrealizedCapitalGain
-                : undefined,
-            ),
-          },
+          // {
+          //   label: t('priceCost'),
+          //   value: useCurrencyValue(realtoken.priceCost),
+          // },
+          // {
+          //   label: t('unrealizedCapitalGain'),
+          //   value: useCurrencyValue(
+          //     (realtoken.unrealizedCapitalGain ?? 0) > 0.01
+          //       ? realtoken.unrealizedCapitalGain
+          //       : undefined,
+          //   ),
+          // },
         ]}
       />
 
@@ -110,10 +110,10 @@ export const AssetPageMainTab: FC<{
             label: t('tokenPrice'),
             value: tokenPrice,
           },
-          {
-            label: t('unitPriceCost'),
-            value: useCurrencyValue(realtoken.unitPriceCost),
-          },
+          // {
+          //   label: t('unitPriceCost'),
+          //   value: useCurrencyValue(realtoken.unitPriceCost),
+          // },
           {
             label: t('nbToken'),
             value: `${token} / ${totalToken}`,

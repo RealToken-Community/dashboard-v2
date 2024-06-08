@@ -39,14 +39,14 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
     { value: AssetSortType.TOTAL_UNIT, label: t('sortOptions.totalUnit') },
     { value: AssetSortType.RENTED_UNIT, label: t('sortOptions.rentedUnit') },
     { value: AssetSortType.SUPPLY, label: t('sortOptions.supply') },
-    {
-      value: AssetSortType.UNIT_PRICE_COST,
-      label: t('sortOptions.unitPriceCost'),
-    },
-    {
-      value: AssetSortType.UNREALIZED_CAPITAL_GAIN,
-      label: t('sortOptions.unrealizedCapitalGain'),
-    },
+    // {
+    //   value: AssetSortType.UNIT_PRICE_COST,
+    //   label: t('sortOptions.unitPriceCost'),
+    // },
+    // {
+    //   value: AssetSortType.UNREALIZED_CAPITAL_GAIN,
+    //   label: t('sortOptions.unrealizedCapitalGain'),
+    // },
     {
       value: AssetSortType.LAST_CHANGE,
       label: t('sortOptions.lastChange'),

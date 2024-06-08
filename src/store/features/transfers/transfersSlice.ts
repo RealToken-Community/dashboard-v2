@@ -14,18 +14,21 @@ import {
 interface TransfersInitialStateType {
   transfers: UserRealTokenTransfer[]
   isLoading: boolean
+  isLoaded: boolean
   isInitialLoading: boolean
 }
 
 const transfersInitialState: TransfersInitialStateType = {
   transfers: [],
   isLoading: false,
+  isLoaded: false,
   isInitialLoading: false,
 }
 
 // DISPATCH TYPE
 export const transfersChangedDispatchType = 'transfers/transfersChanged'
 export const transfersIsLoadingDispatchType = 'transfers/transfersIsLoading'
+export const transfersIsLoadedDispatchType = 'transfers/transfersIsLoaded'
 export const transfersIsInitialLoadingDispatchType =
   'transfers/transfersIsInitialLoading'
 
@@ -35,6 +38,9 @@ export const transfersChanged = createAction<UserRealTokenTransfer[]>(
 )
 export const transfersIsLoading = createAction<boolean>(
   transfersIsLoadingDispatchType,
+)
+export const transfersIsLoaded = createAction<boolean>(
+  transfersIsLoadedDispatchType,
 )
 export const transfersIsInitialLoading = createAction<boolean>(
   transfersIsInitialLoadingDispatchType,
@@ -72,7 +78,10 @@ export function fetchTransfers(allRealtokens: RealToken[]) {
       await TransferDatabaseService.saveLastSyncTimestamp(data, addressList)
 
       dispatch({ type: transfersChangedDispatchType, payload: data })
+      dispatch({ type: transfersIsLoadedDispatchType, payload: true })
     } catch (error) {
+      dispatch({ type: transfersChangedDispatchType, payload: [] })
+      dispatch({ type: transfersIsLoadedDispatchType, payload: false })
       console.log(error)
     } finally {
       dispatch({ type: transfersIsLoadingDispatchType, payload: false })
@@ -84,6 +93,7 @@ export function fetchTransfers(allRealtokens: RealToken[]) {
 export function resetTransfers() {
   return async (dispatch: AppDispatch) => {
     dispatch({ type: transfersChangedDispatchType, payload: [] })
+    dispatch({ type: transfersIsLoadedDispatchType, payload: false })
   }
 }
 
@@ -95,6 +105,9 @@ export const transfersReducers = createReducer(
     })
     builder.addCase(transfersIsLoading, (state, action) => {
       state.isLoading = action.payload
+    })
+    builder.addCase(transfersIsLoaded, (state, action) => {
+      state.isLoaded = action.payload
     })
     builder.addCase(transfersIsInitialLoading, (state, action) => {
       state.isInitialLoading = action.payload

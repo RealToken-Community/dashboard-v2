@@ -291,11 +291,13 @@ const TransactionPage: NextPage = () => {
 
   if (!realtokens.length || !allTransfers.length) {
     return (
-      <div>
-        {isLoading || isLoadingTransfers
-          ? 'Loading...'
-          : 'Transactions not found'}
-      </div>
+      <Flex my={'lg'} mx={'md'} direction={'column'} align={'center'}>
+        <div>
+          {isLoading || isLoadingTransfers
+            ? 'Loading...'
+            : 'No transactions found'}
+        </div>
+      </Flex>
     )
   }
 
