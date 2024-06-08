@@ -7,6 +7,12 @@ import {
   RealTokenSellPropertyTo,
 } from './RealToken'
 
+export enum APIRealTokenProductType {
+  RealEstateRental = 'real_estate_rental',
+  EquityToken = 'equity_token',
+  LoanIncome = 'loan_income',
+}
+
 interface APIRealTokenDate {
   date: string
   timezone_type: number
@@ -19,6 +25,7 @@ export interface APIRealToken {
   tokenIdRules: number
 
   // General
+  productType: APIRealTokenProductType
   fullName: string
   shortName: string
   symbol: string
