@@ -49,9 +49,12 @@ function getHistoricalValue<Key extends keyof RealTokenHistoryItem['values']>(
   key: Key,
 ) {
   return (
-    history.realtoken.history.find(
-      (item) => item.date < history.date && Object.hasOwn(item.values, key),
-    )?.values[key] ?? getHistoryValue(history, key)
+    history.realtoken.history
+      .slice()
+      .reverse()
+      .find(
+        (item) => item.date < history.date && Object.hasOwn(item.values, key),
+      )?.values[key] ?? getHistoryValue(history, key)
   )
 }
 

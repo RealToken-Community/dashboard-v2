@@ -1,3 +1,5 @@
+import _sortBy from 'lodash/sortBy'
+
 import { APIRealToken } from 'src/types/APIRealToken'
 import { APIRealTokenHistory } from 'src/types/APIRealTokenHistory'
 import { RealToken, RealTokenRentStatus } from 'src/types/RealToken'
@@ -13,7 +15,10 @@ export const RealtokenRepository = {
       isRmmAvailable: getRmmStatus(token),
       rentStatus: getRentStatus(token),
       subsidyBy: fixSubsidyBy(token),
-      history: history.find((h) => h.uuid === token.uuid)?.history ?? [],
+      history: _sortBy(
+        history.find((h) => h.uuid === token.uuid)?.history ?? [],
+        'date',
+      ),
     }))
   },
 }
