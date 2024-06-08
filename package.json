@@ -26,6 +26,7 @@
     "@web3-react/core": "^8.0.35-beta.0",
     "cookies-next": "^2.0.5",
     "date-fns": "^3.3.1",
+    "dayjs": "^1.11.11",
     "dexie": "^3.2.5",
     "ethers": "^6.11.1",
     "graphql": "^16.6.0",
