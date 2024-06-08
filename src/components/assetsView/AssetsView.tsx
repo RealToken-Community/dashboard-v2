@@ -9,6 +9,7 @@ import { AssetsViewSearch, useAssetsViewSearch } from './AssetsViewSearch'
 import { AssetsViewSelect, useAssetsViewSelect } from './assetsViewSelect'
 import { AssetsViewFilterButton } from './filters/AssetsViewFilterButton'
 import { useAssetsViewFilters } from './filters/useFilters'
+import { RealtimeIndicator } from './indicators/RealtimeIndicator'
 import { AssetViewType } from './types'
 import { AssetGrid, AssetTable } from './views'
 
@@ -35,6 +36,7 @@ export const AssetsView: FC = () => {
         </Grid.Col>
         <Grid.Col span={{ base: 'content', sm: 'auto' }} pl={'0px'}>
           <AssetsViewFilterButton />
+          <RealtimeIndicator />
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 'content' }}>
           <AssetsViewSelect />

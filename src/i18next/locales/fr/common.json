@@ -75,6 +75,9 @@
     "rmm": "RMM",
     "levinSwap": "LevinSwap"
   },
+  "realtimeIndicator": {
+    "realtime": "Temps réel"
+  },
   "rentsCard": {
     "title": "Loyers",
     "apr": "Rendement annuel",
