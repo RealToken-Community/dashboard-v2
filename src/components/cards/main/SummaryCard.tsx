@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { Box, Card, Text, Title } from '@mantine/core'
 
+import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
   selectOwnedRealtokensValue,
   selectRmmDetails,
@@ -16,6 +17,7 @@ export const SummaryCard: FC = () => {
 
   const realtokensValue = useSelector(selectOwnedRealtokensValue)
   const rmmDetails = useSelector(selectRmmDetails)
+  const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
 
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
@@ -33,10 +35,12 @@ export const SummaryCard: FC = () => {
           label={t('realtokenValue')}
           value={realtokensValue.total}
         />
-        {/* <CurrencyField
-          label={t('totalPriceCost')}
-          value={realtokensValue.totalPriceCost}
-        /> */}
+        {transfersIsLoaded ? (
+          <CurrencyField
+            label={t('totalPriceCost')}
+            value={realtokensValue.totalPriceCost}
+          />
+        ) : null}
         <CurrencyField label={t('stableDeposit')} value={stableDepositValue} />
         <CurrencyField label={t('stableBorrow')} value={stableDebtValue} />
       </Box>

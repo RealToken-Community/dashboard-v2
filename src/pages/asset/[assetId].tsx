@@ -15,6 +15,7 @@ import { AssetPagePropertyTab } from 'src/components/assetPage/assetPageProperty
 import { AssetPageTransfersTab } from 'src/components/assetPage/assetPageTransfersTab'
 import { AssetPageYamStatisticsTab } from 'src/components/assetPage/assetPageYamStatisticsTab'
 import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
+import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import { selectAllUserRealtokens } from 'src/store/features/wallets/walletsSelector'
 
 import styles from './AssetPage.module.sass'
@@ -48,6 +49,7 @@ const TabButton: FC<TabButtonProps> = ({ label, active, onClick }) => {
 const AssetPage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'assetPage' })
   const realtokens = useSelector(selectAllUserRealtokens)
+  const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
 
   const isLoading = useSelector(selectIsLoading)
   const router = useRouter()
@@ -116,16 +118,20 @@ const AssetPage: NextPage = () => {
             </div>
           ) : null}
 
-          {/* <TabButton
-            label={t('tabs.transfers')}
-            active={activeTab === Tabs.Transfers}
-            onClick={() => setActiveTab(Tabs.Transfers)}
-          /> */}
-          {/* {activeTab === Tabs.Transfers ? (
-            <div style={{ margin: '5px 10px' }}>
-              <AssetPageTransfersTab realtoken={realtoken} />
-            </div>
-          ) : null} */}
+          {transfersIsLoaded ? (
+            <>
+              <TabButton
+                label={t('tabs.transfers')}
+                active={activeTab === Tabs.Transfers}
+                onClick={() => setActiveTab(Tabs.Transfers)}
+              />
+              {activeTab === Tabs.Transfers ? (
+                <div style={{ margin: '5px 10px' }}>
+                  <AssetPageTransfersTab realtoken={realtoken} />
+                </div>
+              ) : null}
+            </>
+          ) : null}
 
           <TabButton
             label={t('tabs.yamStatistics')}

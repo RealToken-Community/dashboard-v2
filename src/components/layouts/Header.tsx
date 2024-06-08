@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
 
@@ -21,6 +22,7 @@ import {
 } from '@tabler/icons'
 
 import { Logo } from 'src/assets'
+import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 
 import { Divider } from '../commons'
 import styles from './Header.module.sass'
@@ -50,6 +52,7 @@ const HeaderButtons: FC = () => {
 export const Header: FC = () => {
   const router = useRouter()
   const { t } = useTranslation('common', { keyPrefix: 'header' })
+  const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
 
   const [opened, { open, close }] = useDisclosure(false)
 
@@ -62,11 +65,13 @@ export const Header: FC = () => {
           onClick={() => router.push('/').then(() => close())}
         />
 
-        {/* <NavLink
-          label={t('transactions')}
-          leftSection={<IconReceipt size={'1rem'} stroke={1.5} />}
-          onClick={() => router.push('/transactions').then(() => close())}
-        /> */}
+        {transfersIsLoaded ? (
+          <NavLink
+            label={t('transactions')}
+            leftSection={<IconReceipt size={'1rem'} stroke={1.5} />}
+            onClick={() => router.push('/transactions').then(() => close())}
+          />
+        ) : null}
         <NavLink
           label={t('histories')}
           leftSection={<IconFilePencil size={'1rem'} stroke={1.5} />}

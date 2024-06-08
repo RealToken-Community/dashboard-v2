@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
+import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
   UserRealtoken,
   calculateTokenRent,
@@ -18,6 +19,7 @@ export const AssetPageMainTab: FC<{
   const { t } = useTranslation('common', { keyPrefix: 'assetPage.main' })
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const rentCalculation = useSelector(selectUserRentCalculation)
+  const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
   const rent = calculateTokenRent(realtoken, {
     state: rentCalculation.state,
     date: new Date().getTime(),
@@ -87,18 +89,22 @@ export const AssetPageMainTab: FC<{
             isHidden: !realtoken.balance.levinSwap.value,
             isIndented: true,
           },
-          // {
-          //   label: t('priceCost'),
-          //   value: useCurrencyValue(realtoken.priceCost),
-          // },
-          // {
-          //   label: t('unrealizedCapitalGain'),
-          //   value: useCurrencyValue(
-          //     (realtoken.unrealizedCapitalGain ?? 0) > 0.01
-          //       ? realtoken.unrealizedCapitalGain
-          //       : undefined,
-          //   ),
-          // },
+          ...(transfersIsLoaded
+            ? [
+                {
+                  label: t('priceCost'),
+                  value: useCurrencyValue(realtoken.priceCost),
+                },
+                {
+                  label: t('unrealizedCapitalGain'),
+                  value: useCurrencyValue(
+                    (realtoken.unrealizedCapitalGain ?? 0) > 0.01
+                      ? realtoken.unrealizedCapitalGain
+                      : undefined,
+                  ),
+                },
+              ]
+            : []),
         ]}
       />
 
@@ -110,10 +116,14 @@ export const AssetPageMainTab: FC<{
             label: t('tokenPrice'),
             value: tokenPrice,
           },
-          // {
-          //   label: t('unitPriceCost'),
-          //   value: useCurrencyValue(realtoken.unitPriceCost),
-          // },
+          ...(transfersIsLoaded
+            ? [
+                {
+                  label: t('unitPriceCost'),
+                  value: useCurrencyValue(realtoken.unitPriceCost),
+                },
+              ]
+            : []),
           {
             label: t('nbToken'),
             value: `${token} / ${totalToken}`,

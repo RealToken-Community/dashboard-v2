@@ -1,8 +1,10 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { Grid, Select, Switch } from '@mantine/core'
 
+import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { useInputStyles } from '../../inputs/useInputStyles'
@@ -23,6 +25,7 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
   onChange,
 }) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetView' })
+  const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
 
   const sortOptions = [
     { value: AssetSortType.NAME, label: t('sortOptions.name') },
@@ -39,14 +42,18 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
     { value: AssetSortType.TOTAL_UNIT, label: t('sortOptions.totalUnit') },
     { value: AssetSortType.RENTED_UNIT, label: t('sortOptions.rentedUnit') },
     { value: AssetSortType.SUPPLY, label: t('sortOptions.supply') },
-    // {
-    //   value: AssetSortType.UNIT_PRICE_COST,
-    //   label: t('sortOptions.unitPriceCost'),
-    // },
-    // {
-    //   value: AssetSortType.UNREALIZED_CAPITAL_GAIN,
-    //   label: t('sortOptions.unrealizedCapitalGain'),
-    // },
+    ...(transfersIsLoaded
+      ? [
+          {
+            value: AssetSortType.UNIT_PRICE_COST,
+            label: t('sortOptions.unitPriceCost'),
+          },
+          {
+            value: AssetSortType.UNREALIZED_CAPITAL_GAIN,
+            label: t('sortOptions.unrealizedCapitalGain'),
+          },
+        ]
+      : []),
     {
       value: AssetSortType.LAST_CHANGE,
       label: t('sortOptions.lastChange'),

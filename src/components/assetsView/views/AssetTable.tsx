@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
 
@@ -8,6 +9,8 @@ import { Anchor, ScrollArea, Table } from '@mantine/core'
 import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
+import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
+import { transfersIsLoaded } from 'src/store/features/transfers/transfersSlice'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 export const AssetTable: FC<{ realtokens: UserRealtoken[] }> = (props) => {
@@ -31,17 +34,24 @@ AssetTable.displayName = 'AssetTable'
 
 const AssetTableHeader: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'assetTable' })
+  const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
 
   return (
     <Table.Tr>
       <Table.Th style={{ textAlign: 'left' }}>{t('property')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('ownedValue')}</Table.Th>
-      {/* <Table.Th style={{ textAlign: 'right' }}>{t('priceCost')}</Table.Th>
-      <Table.Th style={{ textAlign: 'right' }}>
-        {t('unrealizedCapitalGain')}
-      </Table.Th> */}
+      {transfersIsLoaded ? (
+        <>
+          <Table.Th style={{ textAlign: 'right' }}>{t('priceCost')}</Table.Th>
+          <Table.Th style={{ textAlign: 'right' }}>
+            {t('unrealizedCapitalGain')}
+          </Table.Th>
+        </>
+      ) : null}
       <Table.Th style={{ textAlign: 'right' }}>{t('tokenPrice')}</Table.Th>
-      {/* <Table.Th style={{ textAlign: 'right' }}>{t('unitPriceCost')}</Table.Th> */}
+      {transfersIsLoaded ? (
+        <Table.Th style={{ textAlign: 'right' }}>{t('unitPriceCost')}</Table.Th>
+      ) : null}
       <Table.Th style={{ textAlign: 'right' }}>{t('ownedTokens')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('apr')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('weeklyRents')}</Table.Th>
@@ -56,13 +66,14 @@ AssetTableHeader.displayName = 'AssetTableHeader'
 
 const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
+  const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
   const router = useRouter()
 
   const value = props.value.value
-  // const priceCost = props.value.priceCost
-  // const unrealizedCapitalGain = props.value.unrealizedCapitalGain
+  const priceCost = props.value.priceCost
+  const unrealizedCapitalGain = props.value.unrealizedCapitalGain
   const tokenPrice = props.value.tokenPrice
-  // const unitPriceCost = props.value.unitPriceCost
+  const unitPriceCost = props.value.unitPriceCost
   const weeklyAmount = props.value.amount * props.value.netRentDayPerToken * 7
   const yearlyAmount = props.value.amount * props.value.netRentYearPerToken
   const totalInvestment = props.value.totalInvestment
@@ -77,18 +88,25 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {useCurrencyValue(value)}
       </Table.Td>
-      {/* <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {useCurrencyValue(priceCost)}
-      </Table.Td> */}
-      {/* <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {useCurrencyValue(unrealizedCapitalGain)}
-      </Table.Td> */}
+      {transfersIsLoaded ? (
+        <>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            {useCurrencyValue(priceCost)}
+          </Table.Td>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            {useCurrencyValue(unrealizedCapitalGain)}
+          </Table.Td>
+        </>
+      ) : null}
+
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {useCurrencyValue(tokenPrice)}
       </Table.Td>
-      {/* <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {useCurrencyValue(unitPriceCost)}
-      </Table.Td> */}
+      {transfersIsLoaded ? (
+        <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+          {useCurrencyValue(unitPriceCost)}
+        </Table.Td>
+      ) : null}
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {t('decimal', { value: props.value.amount })}
       </Table.Td>
