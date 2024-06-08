@@ -33,7 +33,7 @@ export const AssetPagePropertyTab: FC<{
     value: realtoken.annualPercentageYield,
   })
 
-  const initialLaunchDate = new Date(realtoken.initialLaunchDate.date)
+  const initialLaunchDate = new Date(realtoken.initialLaunchDate?.date ?? '')
   const rentStartDate = new Date(realtoken.rentStartDate.date)
 
   const constructionYear = realtoken.constructionYear.toString()
