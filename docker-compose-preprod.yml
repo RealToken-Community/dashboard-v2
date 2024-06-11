@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
     environment:
-      NEXT_PUBLIC_THEGRAPH_API_KEY: ${NEXT_PUBLIC_THEGRAPH_API_KEY}
+      - NEXT_PUBLIC_THEGRAPH_API_KEY=$NEXT_PUBLIC_THEGRAPH_API_KEY
     ports:
       - '3012:3000'
     networks:
