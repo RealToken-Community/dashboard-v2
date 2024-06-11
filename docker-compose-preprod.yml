@@ -2,8 +2,8 @@ version: '3'
 
 services:
   app:
-    image: registry.realt.community/realtdashboard_preprod:latest
-    container_name: realtdashboard_preprod
+    image: ${DOCKER_REGISTRY}/dashboard:${DOCKER_BRANCH}
+    container_name: ${DOCKER_BRANCH}-dashboard
     env_file:
       - .env
     environment:
@@ -14,8 +14,8 @@ services:
       - traefik-realt
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.dashboard-preprod.rule=Host(`dashboard.preprod.realt.community`)'
-      - 'traefik.http.routers.dashboard-preprod.entrypoints=websecure'
+      - 'traefik.http.routers.dashboard-${DOCKER_BRANCH}.rule=Host(`dashboard.${DOCKER_BRANCH}.realt.community`)'
+      - 'traefik.http.routers.dashboard-${DOCKER_BRANCH}.entrypoints=websecure'
     restart: always
 
 networks:
