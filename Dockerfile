@@ -16,6 +16,7 @@ FROM node:16-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ENV NEXT_PUBLIC_THEGRAPH_API_KEY
 
 RUN yarn build
 
