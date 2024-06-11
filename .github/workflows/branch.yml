@@ -48,6 +48,8 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_REGISTRY }}/dashboard:${{ github.ref_name }}
+          build-args: |
+            'NEXT_PUBLIC_THEGRAPH_API_KEY=${{ secrets.NEXT_PUBLIC_THEGRAPH_API_KEY }}'
         env:
           NEXT_PUBLIC_THEGRAPH_API_KEY: ${{ secrets.NEXT_PUBLIC_THEGRAPH_API_KEY }}
 
