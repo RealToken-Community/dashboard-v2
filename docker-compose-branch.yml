@@ -6,14 +6,13 @@ services:
       - .env
     environment:
       - NEXT_PUBLIC_THEGRAPH_API_KEY=$NEXT_PUBLIC_THEGRAPH_API_KEY
-    ports:
-      - '3012:3000'
     networks:
       - traefik-realt
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.dashboard-${DOCKER_BRANCH}.rule=Host(`dashboard.${DOCKER_BRANCH}.realt.community`)'
       - 'traefik.http.routers.dashboard-${DOCKER_BRANCH}.entrypoints=websecure'
+      - 'traefik.http.services.dashboard-${DOCKER_BRANCH}.loadbalancer.server.port=3000'
     restart: always
 
 networks:
