@@ -72,6 +72,7 @@ jobs:
         run: |
           ssh staging 'cd /home/realt/docker/dashboard-v2/preprod
           git pull origin develop
+          export NEXT_PUBLIC_THEGRAPH_API_KEY = ${{ secrets.NEXT_PUBLIC_THEGRAPH_API_KEY }}
           docker compose --file docker-compose-preprod.yml pull
           docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWD }} ${{ secrets.DOCKER_REGISTRY }}
           docker compose --file docker-compose-preprod.yml up -d'
