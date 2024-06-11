@@ -75,7 +75,7 @@ jobs:
           git pull origin develop
           docker compose --file docker-compose-${DOCKER_BRANCH}.yml pull
           docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWD }} ${{ secrets.DOCKER_REGISTRY }}
-          NEXT_PUBLIC_THEGRAPH_API_KEY=${{ secrets.NEXT_PUBLIC_THEGRAPH_API_KEY }} COMMUNITY_API_KEY=${{ secrets.COMMUNITY_API_KEY }} docker compose -p  --file docker-compose-${DOCKER_BRANCH}.yml up -d'
+          NEXT_PUBLIC_THEGRAPH_API_KEY=${{ secrets.NEXT_PUBLIC_THEGRAPH_API_KEY }} COMMUNITY_API_KEY=${{ secrets.COMMUNITY_API_KEY }} docker compose --project-name ${{ github.ref_name }}-dashboard --file docker-compose-${DOCKER_BRANCH}.yml up -d'
         env:
           NEXT_PUBLIC_THEGRAPH_API_KEY: ${{ secrets.NEXT_PUBLIC_THEGRAPH_API_KEY }}
           COMMUNITY_API_KEY: ${{ secrets.COMMUNITY_API_KEY }}
