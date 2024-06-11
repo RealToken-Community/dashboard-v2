@@ -6,7 +6,7 @@ services:
     container_name: realtdashboard_preprod
     env_file:
       - .env
-    env:
+    environment:
       NEXT_PUBLIC_THEGRAPH_API_KEY: ${NEXT_PUBLIC_THEGRAPH_API_KEY}
     ports:
       - '3012:3000'
