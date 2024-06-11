@@ -3,7 +3,7 @@ name: Test and deploy to branch
 on:
   push:
     branches:
-      - preprod
+      # - preprod
       - develop
 
 jobs:
@@ -71,7 +71,7 @@ jobs:
       - name: Update branch environment
         run: |
           ssh staging 'export DOCKER_BRANCH=${{ github.ref_name }}
-          cd /home/realt/docker/dashboard-v2/${DOCKER_BRANCH}
+          cd /home/realt/docker/dashboard-v2/preprod
           git pull origin develop
           docker compose --file docker-compose-branch.yml pull
           docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWD }} ${{ secrets.DOCKER_REGISTRY }}
