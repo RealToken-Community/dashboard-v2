@@ -15,6 +15,7 @@ const nextConfig = {
   },
   publicRuntimeConfig: {
     version,
+    THEGRAPH_API_KEY: process.env.NEXT_PUBLIC_THEGRAPH_API_KEY,
   },
 };
 

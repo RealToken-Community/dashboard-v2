@@ -1,6 +1,9 @@
+import getConfig from 'next/config'
+
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 
-const API_KEY = process.env.NEXT_PUBLIC_THEGRAPH_API_KEY
+const { publicRuntimeConfig } = getConfig()
+const API_KEY = publicRuntimeConfig.THEGRAPH_API_KEY as string
 
 export const GnosisClient = new ApolloClient({
   uri: `https://gateway-arbitrum.network.thegraph.com/api/${API_KEY}/subgraphs/id/FPPoFB7S2dcCNrRyjM5QbaMwKqRZPdbTg8ysBrwXd4SP`,
