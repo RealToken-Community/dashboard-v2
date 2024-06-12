@@ -2,18 +2,18 @@ version: '3'
 
 services:
   app:
-    image: registry.realt.community/realtdashboard_prod:latest
-    container_name: realtdashboard_prod
-    env_file:
-    - .env
-    ports:
-      - '3013:3000'
+    image: ${DOCKER_REGISTRY}/dashboard:production
+    container_name: production-dashboard
+    environment:
+      - THEGRAPH_API_KEY=$THEGRAPH_API_KEY
+      - COMMUNITY_API_KEY=$COMMUNITY_API_KEY
     networks:
       - traefik-realt
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dashboard-prod.rule=Host(`dashboard.realt.community`)"
-      - "traefik.http.routers.dashboard-prod.entrypoints=websecure"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.dashboard-production.rule=Host(`dashboard.realt.community`)'
+      - 'traefik.http.routers.dashboard-production.entrypoints=websecure'
+      - 'traefik.http.services.dashboard-production.loadbalancer.server.port=3000'
     restart: always
 
 networks:
