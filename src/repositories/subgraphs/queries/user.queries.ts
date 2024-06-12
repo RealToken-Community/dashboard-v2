@@ -36,7 +36,7 @@ function formatUserDetails(result: GetUserDetailsResult) {
 
 const executeGetUserIdQuery = useCacheWithLocalStorage(
   async (address: string) =>
-    GnosisClient.query<GetUserIdResult>({
+    GnosisClient().query<GetUserIdResult>({
       query: GetUserIdQuery,
       variables: { address },
     }),
@@ -49,7 +49,7 @@ const executeGetUserIdQuery = useCacheWithLocalStorage(
 
 const executeGetTrustedIntermediaryQuery = useCacheWithLocalStorage(
   async () =>
-    GnosisClient.query<GetTrustedIntermediaryResult>({
+    GnosisClient().query<GetTrustedIntermediaryResult>({
       query: GetTrustedIntermediaryQuery,
     }),
   {
@@ -61,7 +61,7 @@ const executeGetTrustedIntermediaryQuery = useCacheWithLocalStorage(
 
 const executeGetUserDetailsQuery = useCacheWithLocalStorage(
   async (userId: string) =>
-    GnosisClient.query<GetUserDetailsResult>({
+    GnosisClient().query<GetUserDetailsResult>({
       query: GetUserDetailsQuery,
       variables: { userId },
     }),

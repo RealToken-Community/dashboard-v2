@@ -41,6 +41,9 @@ const i18n = initLanguage(resources)
 type AppProps = NextAppProps & {
   colorScheme: MantineColorScheme
   locale: string
+  env: {
+    THEGRAPH_API_KEY: string
+  }
 }
 
 const queryClient = new QueryClient({})
@@ -67,7 +70,17 @@ const libraryConnectors = getConnectors({
   walletConnectV2: walletConnect,
 } as unknown as ConnectorsAvailable)
 
-const App = ({ Component, pageProps, colorScheme }: AppProps) => {
+export const getServerSideProps = async () => ({
+  props: {
+    THEGRAPH_API_KEY:
+      process.env.THEGRAPH_API_KEY ?? process.env.NEXT_PUBLIC_THEGRAPH_API_KEY,
+  },
+})
+
+const App = ({ Component, pageProps, colorScheme, env }: AppProps) => {
+  if (typeof window !== 'undefined') {
+    process.env = { ...process.env, ...env }
+  }
   function scrollToTop() {
     document.getElementById('main-layout-container')?.scroll({
       top: 0,
@@ -104,9 +117,16 @@ const App = ({ Component, pageProps, colorScheme }: AppProps) => {
   )
 }
 
-App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  colorScheme: getCookie('mantine-color-scheme', ctx) || 'dark',
-  locale: getCookie('react-i18next', ctx) || 'fr',
-})
+App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => {
+  return {
+    env: {
+      THEGRAPH_API_KEY:
+        process.env.THEGRAPH_API_KEY ??
+        process.env.NEXT_PUBLIC_THEGRAPH_API_KEY,
+    },
+    colorScheme: getCookie('mantine-color-scheme', ctx) || 'dark',
+    locale: getCookie('react-i18next', ctx) || 'fr',
+  }
+}
 
 export default App

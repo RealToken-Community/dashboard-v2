@@ -18,11 +18,11 @@ export async function getRealtokenBalances(addressList: string[]) {
 const executeQuery = useCacheWithLocalStorage(
   async (addressList: string[]) =>
     Promise.all([
-      GnosisClient.query<RealtokenResult>({
+      GnosisClient().query<RealtokenResult>({
         query: RealtokenQuery,
         variables: { addressList },
       }),
-      EthereumClient.query<RealtokenResult>({
+      EthereumClient().query<RealtokenResult>({
         query: RealtokenQuery,
         variables: { addressList },
       }),

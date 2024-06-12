@@ -17,7 +17,7 @@ export async function getRealtokenYamStatistics(address: string) {
 
 const executeQuery = useCacheWithLocalStorage(
   async (address: string) =>
-    YamStatisticsClient.query<YamStatisticsResult>({
+    YamStatisticsClient().query<YamStatisticsResult>({
       query: YamStatisticsQuery,
       variables: {
         address,

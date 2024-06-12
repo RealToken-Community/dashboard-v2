@@ -17,7 +17,7 @@ export async function getLevinSwapBalances(
 
 const executeQuery = useCacheWithLocalStorage(
   async (addressList: string[]) =>
-    LevinSwapClient.query<LevinSwapResult>({
+    LevinSwapClient().query<LevinSwapResult>({
       query: LevinSwapQuery,
       variables: { addressList },
     }),

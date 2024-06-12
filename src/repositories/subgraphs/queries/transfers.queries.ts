@@ -32,7 +32,7 @@ async function executeQuery(
   if (!client) throw new Error(`Chain ID ${chainId} is not supported`)
 
   const execute = async (lastId: string) =>
-    client.query<RealTokenTransferResult>({
+    client().query<RealTokenTransferResult>({
       query: RealTokenTransferQuery,
       variables: { addressList, limit, lastId, timestamp },
     })

@@ -39,7 +39,7 @@ export interface RmmPosition {
 
 const executeRMM2Query = useCacheWithLocalStorage(
   async (addressList: string[]) =>
-    RMM2Client.query<RmmResult>({
+    RMM2Client().query<RmmResult>({
       query: RmmQuery,
       variables: { addressList },
     }),
@@ -52,12 +52,12 @@ const executeRMM2Query = useCacheWithLocalStorage(
 
 const executeRMM3Query = useCacheWithLocalStorage(
   async (addressList: string[]) => {
-    const mainQuery = RMM3Client.query<RmmResult>({
+    const mainQuery = RMM3Client().query<RmmResult>({
       query: RmmQuery,
       variables: { addressList },
     })
 
-    const wrapperQuery = RMM3WrapperClient.query<RmmWrapperResult>({
+    const wrapperQuery = RMM3WrapperClient().query<RmmWrapperResult>({
       query: RmmWrapperQuery,
       variables: { addressList },
     })
