@@ -10,10 +10,7 @@ export async function getUserId(address: string): Promise<string | null> {
 }
 
 export async function getUserDetails(id: string) {
-  const trustedIntermediaries = await executeGetTrustedIntermediaryQuery()
-  const trustedIntermediary =
-    trustedIntermediaries.data.trustedIntermediaries[0].id
-
+  const trustedIntermediary = '0x296033cb983747b68911244ec1a3f01d7708851b'
   const userId = `${trustedIntermediary}-${id}`
   const result = await executeGetUserDetailsQuery(userId)
   return { id, ...formatUserDetails(result.data) }
@@ -47,18 +44,6 @@ const executeGetUserIdQuery = useCacheWithLocalStorage(
   },
 )
 
-const executeGetTrustedIntermediaryQuery = useCacheWithLocalStorage(
-  async () =>
-    GnosisClient().query<GetTrustedIntermediaryResult>({
-      query: GetTrustedIntermediaryQuery,
-    }),
-  {
-    duration: 1000 * 60 * 60 * 24, // 1 day
-    key: 'GetTrustedIntermediaryQuery',
-    usePreviousValueOnError: true,
-  },
-)
-
 const executeGetUserDetailsQuery = useCacheWithLocalStorage(
   async (userId: string) =>
     GnosisClient().query<GetUserDetailsResult>({
@@ -88,20 +73,6 @@ interface GetUserIdResult {
       userId: string
     }[]
   }
-}
-
-const GetTrustedIntermediaryQuery = gql`
-  query GetTrustedIntermediaryQuery {
-    trustedIntermediaries(orderBy: weight, orderDirection: desc, first: 1) {
-      id
-    }
-  }
-`
-
-interface GetTrustedIntermediaryResult {
-  trustedIntermediaries: {
-    id: string
-  }[]
 }
 
 const GetUserDetailsQuery = gql`
