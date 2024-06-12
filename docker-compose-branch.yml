@@ -2,11 +2,9 @@ services:
   app:
     image: ${DOCKER_REGISTRY}/dashboard:${DOCKER_BRANCH}
     container_name: ${DOCKER_BRANCH}-dashboard
-    env_file:
-      - .env
     environment:
       - THEGRAPH_API_KEY=$THEGRAPH_API_KEY
-      # - COMMUNITY_API_KEY=$COMMUNITY_API_KEY
+      - COMMUNITY_API_KEY=$COMMUNITY_API_KEY
     networks:
       - traefik-realt
     labels:

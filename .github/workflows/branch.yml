@@ -76,6 +76,3 @@ jobs:
           docker compose --file docker-compose-branch.yml pull
           docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWD }} ${DOCKER_REGISTRY}
           THEGRAPH_API_KEY=${{ secrets.THEGRAPH_API_KEY }} COMMUNITY_API_KEY=${{ secrets.COMMUNITY_API_KEY }} docker compose --project-name ${{ github.ref_name }}-dashboard --file docker-compose-branch.yml up -d'
-        env:
-          THEGRAPH_API_KEY: ${{ secrets.THEGRAPH_API_KEY }}
-          COMMUNITY_API_KEY: ${{ secrets.COMMUNITY_API_KEY }}
