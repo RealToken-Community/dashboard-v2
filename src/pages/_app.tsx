@@ -72,8 +72,7 @@ const libraryConnectors = getConnectors({
 
 export const getServerSideProps = async () => ({
   props: {
-    THEGRAPH_API_KEY:
-      process.env.THEGRAPH_API_KEY ?? process.env.NEXT_PUBLIC_THEGRAPH_API_KEY,
+    THEGRAPH_API_KEY: process.env.THEGRAPH_API_KEY,
   },
 })
 
@@ -120,9 +119,7 @@ const App = ({ Component, pageProps, colorScheme, env }: AppProps) => {
 App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => {
   return {
     env: {
-      THEGRAPH_API_KEY:
-        process.env.THEGRAPH_API_KEY ??
-        process.env.NEXT_PUBLIC_THEGRAPH_API_KEY,
+      THEGRAPH_API_KEY: process.env.THEGRAPH_API_KEY,
     },
     colorScheme: getCookie('mantine-color-scheme', ctx) || 'dark',
     locale: getCookie('react-i18next', ctx) || 'fr',
