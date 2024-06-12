@@ -48,10 +48,6 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_REGISTRY }}/dashboard:${{ github.ref_name }}
-          build-args: |
-            'NEXT_PUBLIC_THEGRAPH_API_KEY=${{ secrets.NEXT_PUBLIC_THEGRAPH_API_KEY }}'
-        env:
-          NEXT_PUBLIC_THEGRAPH_API_KEY: ${{ secrets.NEXT_PUBLIC_THEGRAPH_API_KEY }}
 
       - name: Configure SSH
         run: |
@@ -79,7 +75,7 @@ jobs:
           git pull origin ${DOCKER_BRANCH}
           docker compose --file docker-compose-branch.yml pull
           docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWD }} ${DOCKER_REGISTRY}
-          NEXT_PUBLIC_THEGRAPH_API_KEY=${{ secrets.NEXT_PUBLIC_THEGRAPH_API_KEY }} COMMUNITY_API_KEY=${{ secrets.COMMUNITY_API_KEY }} docker compose --project-name ${{ github.ref_name }}-dashboard --file docker-compose-branch.yml up -d'
+          docker compose --project-name ${{ github.ref_name }}-dashboard --file docker-compose-branch.yml up -d'
         env:
           NEXT_PUBLIC_THEGRAPH_API_KEY: ${{ secrets.NEXT_PUBLIC_THEGRAPH_API_KEY }}
           COMMUNITY_API_KEY: ${{ secrets.COMMUNITY_API_KEY }}
