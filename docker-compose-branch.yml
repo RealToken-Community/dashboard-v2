@@ -2,10 +2,9 @@ services:
   app:
     image: ${DOCKER_REGISTRY}/dashboard:${DOCKER_BRANCH}
     container_name: ${DOCKER_BRANCH}-dashboard
-    env_file:
-      - .env
     environment:
       - NEXT_PUBLIC_THEGRAPH_API_KEY=$NEXT_PUBLIC_THEGRAPH_API_KEY
+      - COMMUNITY_API_KEY=$COMMUNITY_API_KEY
     networks:
       - traefik-realt
     labels:
@@ -13,8 +12,6 @@ services:
       - 'traefik.http.routers.dashboard-${DOCKER_BRANCH}.rule=Host(`dashboard.${DOCKER_BRANCH}.realt.community`)'
       - 'traefik.http.routers.dashboard-${DOCKER_BRANCH}.entrypoints=websecure'
       - 'traefik.http.services.dashboard-${DOCKER_BRANCH}.loadbalancer.server.port=3000'
-    volumes:
-      - /var/docker/dashboard-v2/${DOCKER_BRANCH}/.env:/app/.env
     restart: always
 
 networks:
