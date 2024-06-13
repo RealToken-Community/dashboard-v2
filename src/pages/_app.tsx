@@ -35,6 +35,7 @@ import { resources } from 'src/i18next'
 import { MantineProviders } from 'src/providers'
 import InitStoreProvider from 'src/providers/InitStoreProvider'
 import store from 'src/store/store'
+import { Favicon } from 'src/assets'
 
 const i18n = initLanguage(resources)
 
@@ -101,6 +102,7 @@ const App = ({ Component, pageProps, colorScheme, env }: AppProps) => {
                 description={
                   'A Realtoken Dashboard for follow assets related to RealT'
                 }
+                favicon={Favicon}
               />
               <MantineProviders initialColorScheme={colorScheme}>
                 <LanguageInit i={i18n} />
