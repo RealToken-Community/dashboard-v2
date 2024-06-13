@@ -14,8 +14,6 @@ type HeadProps = {
 
 export const Head: FC<HeadProps> = ({ title, description, favicon }) => {
 
-  const faviconUrl = typeof favicon === 'string' ? favicon : favicon?.src;
-
   return (
     <div>
       <NextHead>
@@ -25,7 +23,7 @@ export const Head: FC<HeadProps> = ({ title, description, favicon }) => {
           content={'width=device-width, initial-scale=1.0'}
         />
         <meta name={'Description'} content={description} />
-        <link rel="icon" href={faviconUrl} />
+        <link rel="icon" href={favicon.src} />
         <ColorSchemeScript />
       </NextHead>
     </div>
