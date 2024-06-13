@@ -29,13 +29,13 @@ import {
 import { getCookie } from 'cookies-next'
 import { Provider as JotaiProvider } from 'jotai'
 
+import { Favicon } from 'src/assets'
 import { Head, MainLayout } from 'src/components/layouts'
 import 'src/i18next'
 import { resources } from 'src/i18next'
 import { MantineProviders } from 'src/providers'
 import InitStoreProvider from 'src/providers/InitStoreProvider'
 import store from 'src/store/store'
-import { Favicon } from 'src/assets'
 
 const i18n = initLanguage(resources)
 
