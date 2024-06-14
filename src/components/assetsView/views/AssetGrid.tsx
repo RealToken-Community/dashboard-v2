@@ -2,7 +2,14 @@ import { FC, useEffect, useMemo, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
-import { Grid, Group, Pagination } from '@mantine/core'
+import {
+  Combobox,
+  Grid,
+  Group,
+  InputBase,
+  Pagination,
+  useCombobox,
+} from '@mantine/core'
 
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
@@ -27,6 +34,30 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
 
   // Go to first page when data changes (e.g. search, filter, order, ...)
   useEffect(() => setPage(1), [props.realtokens])
+
+  const combobox = useCombobox({
+    onDropdownClose: () => combobox.resetSelectedOption(),
+  })
+
+  const values = [24, 48, 96, 192, 384, 768, 1536]
+
+  const [search, setSearch] = useState('')
+  const [value, setValue] = useState<string | null>('24')
+  const [data, setData] = useState<string[]>(
+    values.map((item) => item.toString()),
+  )
+
+  const exactOptionMatch = data.some((item) => item === search)
+  const filteredOptions = exactOptionMatch
+    ? data
+    : data.filter((item) =>
+        item.toLowerCase().includes(search.toLowerCase().trim()),
+      )
+  const options = filteredOptions.map((item) => (
+    <Combobox.Option value={item} key={item}>
+      {item}
+    </Combobox.Option>
+  ))
 
   return (
     <>
@@ -55,6 +86,45 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
           size={'sm'}
           onChange={onPageChange}
         />
+        <Combobox
+          store={combobox}
+          withinPortal={false}
+          onOptionSubmit={(val) => {
+            if (val === '$create') {
+              setData((current) => [...current, search])
+              setValue(search)
+            } else {
+              setValue(val)
+              setSearch(val)
+            }
+
+            combobox.closeDropdown()
+          }}
+        >
+          <Combobox.Target>
+            <InputBase
+              rightSection={<Combobox.Chevron />}
+              value={search}
+              onChange={(event) => {
+                combobox.openDropdown()
+                combobox.updateSelectedOptionIndex()
+                setSearch(event.currentTarget.value)
+              }}
+              onClick={() => combobox.openDropdown()}
+              onFocus={() => combobox.openDropdown()}
+              onBlur={() => {
+                combobox.closeDropdown()
+                setSearch(value || '')
+              }}
+              placeholder={'Search value'}
+              rightSectionPointerEvents={'none'}
+            />
+          </Combobox.Target>
+
+          <Combobox.Dropdown>
+            <Combobox.Options>{options}</Combobox.Options>
+          </Combobox.Dropdown>
+        </Combobox>
       </Group>
     </>
   )
