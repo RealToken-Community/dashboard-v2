@@ -18,7 +18,7 @@ import { AssetCard } from '../../cards'
 export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
-  const pageSize = 24
+  const [pageSize, setPageSize] = useState<number>(20)
 
   function onPageChange(page: number) {
     setPage(page)
@@ -39,25 +39,18 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
     onDropdownClose: () => combobox.resetSelectedOption(),
   })
 
-  const values = [24, 48, 96, 192, 384, 768, 1536]
+  const values = [20, 40, 100, 200]
 
-  const [search, setSearch] = useState('')
-  const [value, setValue] = useState<string | null>('24')
-  const [data, setData] = useState<string[]>(
-    values.map((item) => item.toString()),
-  )
-
-  const exactOptionMatch = data.some((item) => item === search)
-  const filteredOptions = exactOptionMatch
-    ? data
-    : data.filter((item) =>
-        item.toLowerCase().includes(search.toLowerCase().trim()),
-      )
-  const options = filteredOptions.map((item) => (
-    <Combobox.Option value={item} key={item}>
-      {item}
-    </Combobox.Option>
-  ))
+  const options = [
+    <Combobox.Option value={'All'} key={'All'}>
+      {'All'}
+    </Combobox.Option>,
+    ...values.map((item) => (
+      <Combobox.Option value={item.toString()} key={item}>
+        {item}
+      </Combobox.Option>
+    )),
+  ]
 
   return (
     <>
@@ -90,13 +83,8 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
           store={combobox}
           withinPortal={false}
           onOptionSubmit={(val) => {
-            if (val === '$create') {
-              setData((current) => [...current, search])
-              setValue(search)
-            } else {
-              setValue(val)
-              setSearch(val)
-            }
+            if (val === 'All') return setPageSize(props.realtokens.length)
+            setPageSize(Number(val))
 
             combobox.closeDropdown()
           }}
@@ -104,17 +92,16 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
           <Combobox.Target>
             <InputBase
               rightSection={<Combobox.Chevron />}
-              value={search}
-              onChange={(event) => {
+              value={pageSize == props.realtokens.length ? 'All' : pageSize}
+              type={'button'}
+              onChange={() => {
                 combobox.openDropdown()
                 combobox.updateSelectedOptionIndex()
-                setSearch(event.currentTarget.value)
               }}
               onClick={() => combobox.openDropdown()}
               onFocus={() => combobox.openDropdown()}
               onBlur={() => {
                 combobox.closeDropdown()
-                setSearch(value || '')
               }}
               placeholder={'Search value'}
               rightSectionPointerEvents={'none'}
