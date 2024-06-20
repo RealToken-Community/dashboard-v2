@@ -3,7 +3,8 @@ name: Test and deploy to branch
 on:
   push:
     branches:
-      # - preprod
+      - master
+      - preprod
       - develop
 
 jobs:
@@ -75,4 +76,7 @@ jobs:
           git pull origin ${DOCKER_BRANCH}
           docker compose --file docker-compose-branch.yml pull
           docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWD }} ${DOCKER_REGISTRY}
-          THEGRAPH_API_KEY=${{ secrets.THEGRAPH_API_KEY }} COMMUNITY_API_KEY=${{ secrets.COMMUNITY_API_KEY }} docker compose --project-name ${{ github.ref_name }}-dashboard --file docker-compose-branch.yml up -d'
+          THEGRAPH_API_KEY=${{ secrets.THEGRAPH_API_KEY }} \
+          COMMUNITY_API_KEY=${{ secrets.COMMUNITY_API_KEY }} \
+          HOSTNAME=${{ github.ref_name == 'master' && 'dashboard.realt.community' || 'dashboard.${DOCKER_BRANCH}.realt.community' }} \
+          docker compose --project-name ${{ github.ref_name }}-dashboard --file docker-compose-branch.yml up -d'
