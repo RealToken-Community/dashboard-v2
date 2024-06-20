@@ -10,7 +10,6 @@ import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
-import { transfersIsLoaded } from 'src/store/features/transfers/transfersSlice'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 export const AssetTable: FC<{ realtokens: UserRealtoken[] }> = (props) => {
