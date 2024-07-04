@@ -2,21 +2,13 @@ import { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import {
-  ActionIcon,
-  Badge,
-  Box,
-  Button,
-  Flex,
-  Menu,
-  createStyles,
-} from '@mantine/core'
+import { ActionIcon, Badge, Box, Button, Flex, Menu } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useModals } from '@mantine/modals'
 import { IconWallet } from '@tabler/icons'
 import { useWeb3React } from '@web3-react/core'
 
-import { utils as EthersUtils } from 'ethers'
+import { ethers } from 'ethers'
 
 import { useAppDispatch } from 'src/hooks/react-hooks'
 import {
@@ -26,33 +18,27 @@ import {
 import { User, setUserAddress } from 'src/store/features/settings/settingsSlice'
 
 import { IntegerField, StringField } from '../commons'
+import styles from './WalletMenu.module.sass'
 
 interface WalletItemProps {
   address: string
   isVisible?: boolean
 }
 
-const useStyles = createStyles({
-  address: {
-    span: { fontFamily: 'monospace', fontSize: '11px' },
-  },
-})
-
 const WalletItem: FC<WalletItemProps> = (props) => {
-  const { classes } = useStyles()
   return (
     <Badge
       size={'md'}
       variant={'dot'}
       fullWidth={true}
-      className={classes.address}
+      className={styles.address}
       style={{
         textTransform: 'none',
         justifyContent: 'space-between',
         opacity: props.isVisible ? 0.5 : 1,
       }}
     >
-      {EthersUtils.getAddress(props.address)}
+      {ethers.getAddress(props.address)}
     </Badge>
   )
 }
@@ -73,12 +59,7 @@ const AddWalletButton: FC<{ onClick?: () => void }> = (props) => {
 
   return (
     <>
-      <Button
-        onClick={openModal}
-        size={'xs'}
-        compact={true}
-        variant={'outline'}
-      >
+      <Button onClick={openModal} size={'compact-xs'} variant={'outline'}>
         {t('open')}
       </Button>
     </>

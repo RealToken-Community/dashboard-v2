@@ -8,22 +8,22 @@ import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 import { AssetPageTable } from './assetPageTable'
 
 const YamStatisticsTable: FC<{
-  data: UserRealtoken
+  realtoken: UserRealtoken
   statistics: YamStatistics
-}> = ({ data, statistics }) => {
+}> = ({ realtoken, statistics }) => {
   const { t } = useTranslation('common', {
     keyPrefix: 'assetPage.yamStatistics',
   })
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const yamPrice = statistics.volume / statistics.quantity
-  const yamDifference = yamPrice - data.tokenPrice
-  const yamDifferencePercent = (yamDifference / data.tokenPrice) * 100
+  const yamDifference = yamPrice - realtoken.tokenPrice
+  const yamDifferencePercent = (yamDifference / realtoken.tokenPrice) * 100
   return (
     <AssetPageTable
       data={[
         {
           label: t('tokenPrice'),
-          value: useCurrencyValue(data.tokenPrice),
+          value: useCurrencyValue(realtoken.tokenPrice),
         },
         {
           label: t('yamPrice'),
@@ -43,20 +43,29 @@ const YamStatisticsTable: FC<{
     />
   )
 }
-export const AssetPageYamStatisticsTab: FC<{ data: UserRealtoken }> = ({
-  data,
-}) => {
+export const AssetPageYamStatisticsTab: FC<{
+  realtoken: UserRealtoken
+}> = ({ realtoken }) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'assetPage.yamStatistics',
+  })
   const [statistics, setStatistics] = useState<YamStatistics | null>(null)
 
   useEffect(() => {
     GetYamStatistics({
-      realtoken: data,
+      realtoken,
     }).then((item) => setStatistics(item))
-  }, [data])
+  }, [realtoken])
 
-  return statistics ? (
-    <YamStatisticsTable data={data} statistics={statistics} />
-  ) : null
+  if (!statistics) {
+    return null
+  }
+
+  return statistics.volume ? (
+    <YamStatisticsTable realtoken={realtoken} statistics={statistics} />
+  ) : (
+    <div style={{ textAlign: 'center' }}>{t('noVolume')}</div>
+  )
 }
 
 AssetPageYamStatisticsTab.displayName = 'AssetPageYamStatisticsTab'

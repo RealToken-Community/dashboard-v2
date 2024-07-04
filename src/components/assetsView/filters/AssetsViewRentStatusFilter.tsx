@@ -46,7 +46,9 @@ export const AssetsViewRentStatusFilter: FC<
       label={t('label')}
       data={viewOptions}
       value={filter.rentStatus}
-      onChange={(value: AssetRentStatusType) => onChange({ rentStatus: value })}
+      onChange={(value) =>
+        onChange({ rentStatus: value as AssetRentStatusType })
+      }
       classNames={inputClasses}
     />
   )
@@ -54,7 +56,7 @@ export const AssetsViewRentStatusFilter: FC<
 AssetsViewRentStatusFilter.displayName = 'AssetsViewRentStatusFilter'
 
 export function useAssetsViewRentStatusFilter(
-  filter: AssetsViewRentStatusFilterModel
+  filter: AssetsViewRentStatusFilterModel,
 ) {
   function assetRentStatusFilterFunction(asset: UserRealtoken) {
     switch (filter.rentStatus) {

@@ -63,7 +63,7 @@ export const AssetsViewSubsidyFilter: FC<AssetsViewSubsidyFilterProps> = ({
       label={t('label')}
       data={viewOptions}
       value={filter.subsidy}
-      onChange={(value: AssetSubsidyType) => onChange({ subsidy: value })}
+      onChange={(value) => onChange({ subsidy: value as AssetSubsidyType })}
       classNames={inputClasses}
     />
   )
@@ -71,7 +71,7 @@ export const AssetsViewSubsidyFilter: FC<AssetsViewSubsidyFilterProps> = ({
 AssetsViewSubsidyFilter.displayName = 'AssetsViewSubsidyFilter'
 
 export function useAssetsViewSubsidyFilter(
-  filter: AssetsViewSubsidyFilterModel
+  filter: AssetsViewSubsidyFilterModel,
 ) {
   function assetSubsidyFilterFunction(asset: UserRealtoken) {
     switch (filter.subsidy) {

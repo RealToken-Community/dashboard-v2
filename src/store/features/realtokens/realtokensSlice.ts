@@ -2,10 +2,11 @@ import { createAction, createReducer } from '@reduxjs/toolkit'
 
 import { RealtokenRepository } from 'src/repositories'
 import { AppDispatch, RootState } from 'src/store/store'
-import { APIRealToken, APIRealTokenProductType } from 'src/types/APIRealToken'
+import { APIRealTokenProductType } from 'src/types/APIRealToken'
+import { RealToken } from 'src/types/RealToken'
 
 interface RealtokenInitialStateType {
-  realtokens: APIRealToken[]
+  realtokens: RealToken[]
   isLoading: boolean
 }
 
@@ -19,11 +20,11 @@ export const realtokensChangedDispatchType = 'realtokens/realtokensChanged'
 export const realtokensIsLoadingDispatchType = 'realtokens/realtokensIsLoading'
 
 // ACTIONS
-export const realtokensChanged = createAction<APIRealToken[]>(
-  realtokensChangedDispatchType
+export const realtokensChanged = createAction<RealToken[]>(
+  realtokensChangedDispatchType,
 )
 export const realtokensIsLoading = createAction<boolean>(
-  realtokensIsLoadingDispatchType
+  realtokensIsLoadingDispatchType,
 )
 
 // THUNKS
@@ -36,9 +37,11 @@ export function fetchRealtokens() {
       const data = await RealtokenRepository.getTokens()
       dispatch({
         type: realtokensChangedDispatchType,
-        payload: data.filter(
-          (item) =>
-            item.productType === APIRealTokenProductType.RealEstateRental
+        payload: data.filter((item) =>
+          [
+            APIRealTokenProductType.RealEstateRental,
+            APIRealTokenProductType.LoanIncome,
+          ].includes(item.productType),
         ),
       })
     } catch (error) {
@@ -58,5 +61,5 @@ export const realtokensReducers = createReducer(
     builder.addCase(realtokensIsLoading, (state, action) => {
       state.isLoading = action.payload
     })
-  }
+  },
 )

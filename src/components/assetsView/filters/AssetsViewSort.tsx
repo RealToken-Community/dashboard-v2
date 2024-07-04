@@ -1,8 +1,10 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 import { Grid, Select, Switch } from '@mantine/core'
 
+import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { useInputStyles } from '../../inputs/useInputStyles'
@@ -23,6 +25,7 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
   onChange,
 }) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetView' })
+  const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
 
   const sortOptions = [
     { value: AssetSortType.NAME, label: t('sortOptions.name') },
@@ -39,6 +42,22 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
     { value: AssetSortType.TOTAL_UNIT, label: t('sortOptions.totalUnit') },
     { value: AssetSortType.RENTED_UNIT, label: t('sortOptions.rentedUnit') },
     { value: AssetSortType.SUPPLY, label: t('sortOptions.supply') },
+    ...(transfersIsLoaded
+      ? [
+          {
+            value: AssetSortType.UNIT_PRICE_COST,
+            label: t('sortOptions.unitPriceCost'),
+          },
+          {
+            value: AssetSortType.UNREALIZED_CAPITAL_GAIN,
+            label: t('sortOptions.unrealizedCapitalGain'),
+          },
+        ]
+      : []),
+    {
+      value: AssetSortType.LAST_CHANGE,
+      label: t('sortOptions.lastChange'),
+    },
   ]
 
   const { classes: inputClasses } = useInputStyles()
@@ -50,8 +69,8 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
           label={t('sort')}
           data={sortOptions}
           value={filter.sortBy}
-          onChange={(value: AssetSortType) =>
-            onChange({ ...filter, sortBy: value })
+          onChange={(value) =>
+            onChange({ ...filter, sortBy: value as AssetSortType })
           }
           classNames={inputClasses}
         />
@@ -99,8 +118,14 @@ export function useAssetsViewSort(filter: AssetsViewSortFilter) {
         return b.rentedUnits / b.totalUnits - a.rentedUnits / a.totalUnits
       case AssetSortType.INITIAL_LAUNCH:
         return b.initialLaunchDate?.date.localeCompare(
-          a.initialLaunchDate?.date
+          a.initialLaunchDate?.date,
         )
+      case AssetSortType.UNIT_PRICE_COST:
+        return (b.unitPriceCost ?? 0) - (a.unitPriceCost ?? 0)
+      case AssetSortType.UNREALIZED_CAPITAL_GAIN:
+        return (b.unrealizedCapitalGain ?? 0) - (a.unrealizedCapitalGain ?? 0)
+      case AssetSortType.LAST_CHANGE:
+        return b.lastChanges.localeCompare(a.lastChanges) ?? 0
     }
   }
 

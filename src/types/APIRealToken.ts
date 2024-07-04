@@ -1,42 +1,16 @@
+import {
+  RealTokenCanal,
+  RealTokenCurrency,
+  RealTokenPropertyType,
+  RealTokenRentCalculationType,
+  RealTokenRentalType,
+  RealTokenSellPropertyTo,
+} from './RealToken'
+
 export enum APIRealTokenProductType {
   RealEstateRental = 'real_estate_rental',
   EquityToken = 'equity_token',
-}
-
-export enum APIRealTokenCanal {
-  Release = 'release',
-  ExitComplete = 'exit_complete',
-}
-
-export enum APIRealTokenCurrency {
-  USD = 'USD',
-  EUR = 'EUR',
-}
-
-export enum APIRealTokenPropertyType {
-  SingleFamily = 1,
-  MultiFamily = 2,
-  Duplex = 3,
-  Condominium = 4,
-  MixedUse = 6,
-  Quadplex = 8,
-  Commercial = 9,
-  SFRPortfolio = 10,
-}
-
-export enum APIRealTokenSellPropertyTo {
-  UsInvestorsOnly = 'us_investors_only',
-  IntlInvestorsOnly = 'intl_investors_only',
-}
-
-export enum APIRealTokenRentCalculationType {
-  Constant = 'constant',
-  Average = 'average',
-}
-
-export enum APIRealTokenRentalType {
-  LongTerm = 'long_term',
-  ShortTerm = 'short_term',
+  LoanIncome = 'loan_income',
 }
 
 interface APIRealTokenDate {
@@ -56,12 +30,12 @@ export interface APIRealToken {
   shortName: string
   symbol: string
   marketplaceLink: string
-  canal: APIRealTokenCanal
-  sellPropertyTo: APIRealTokenSellPropertyTo
+  canal: RealTokenCanal
+  sellPropertyTo: RealTokenSellPropertyTo
   totalTokens: number
   totalTokensRegSummed: number
   tokenPrice: number
-  currency: APIRealTokenCurrency
+  currency: RealTokenCurrency
 
   // Dates
   rentStartDate: APIRealTokenDate
@@ -121,7 +95,7 @@ export interface APIRealToken {
   goerliContract: string | null
 
   // Property details
-  propertyType: APIRealTokenPropertyType
+  propertyType: RealTokenPropertyType
   coordinate: { lat: string; lng: string }
   imageLink: string[]
   squareFeet: number | null
@@ -141,8 +115,8 @@ export interface APIRealToken {
 
   // Rent related
   rentedUnits: number
-  rentalType: APIRealTokenRentalType
-  rentCalculationType: APIRealTokenRentCalculationType
+  rentalType: RealTokenRentalType
+  rentCalculationType: RealTokenRentCalculationType
   netRentDay: number
   netRentMonth: number
   netRentYear: number

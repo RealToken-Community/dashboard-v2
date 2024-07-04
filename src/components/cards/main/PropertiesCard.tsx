@@ -21,7 +21,7 @@ import {
 } from '../../commons'
 
 const RentedUnitsField: FC<{ label: string; realtokens: UserRealtoken[] }> = (
-  props
+  props,
 ) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
 
@@ -61,7 +61,7 @@ export const PropertiesCard: FC = () => {
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
       <Title order={4}>{t('title')}</Title>
-      <Box mx={'sm'} mt={'xs'}>
+      <Box mx={'sm'}>
         <DecimalField label={t('tokens')} value={sumRealtokens} />
         <IntegerField label={t('properties')} value={sumProperties} />
         <CurrencyField label={t('averageValue')} value={meanValue} />

@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
@@ -27,6 +27,7 @@ import {
 
 import { setCookie } from 'cookies-next'
 
+import { TransferDatabaseService } from 'src/repositories/transfers/TransferDatabase'
 import {
   selectUserCurrency,
   selectUserRentCalculation,
@@ -140,7 +141,7 @@ const RealtimeRentMenuSelectDate: FC = () => {
       userRentCalculationChanged({
         state: rentCalculation.state,
         date: new Date(date).getTime(),
-      })
+      }),
     )
   }
 
@@ -152,7 +153,7 @@ const RealtimeRentMenuSelectDate: FC = () => {
         locale={i18n.language}
         valueFormat={t('dateFormat')}
         value={new Date(rentCalculation.date)}
-        onChange={handleDateChange}
+        onChange={(value) => handleDateChange(value as Date)}
         defaultDate={new Date()}
       />
       <Menu.Divider />
@@ -182,7 +183,7 @@ const LanguageSelect: FC = () => {
         i18n.changeLanguage(updatedLocale)
       }
     },
-    [i18n]
+    [i18n],
   )
 
   return (
@@ -191,12 +192,12 @@ const LanguageSelect: FC = () => {
       <Select
         p={5}
         value={i18n.language}
-        onChange={updateLocale}
+        onChange={(value) => updateLocale(value!)}
         data={[
           { value: 'fr', label: t('french') },
           { value: 'en', label: t('english') },
         ]}
-        icon={<IconLanguage size={16} />}
+        leftSection={<IconLanguage size={16} />}
       />
     </>
   )
@@ -223,7 +224,7 @@ const CurrencySelect: FC = () => {
           { value: Currency.EUR, label: t('eur') },
           { value: Currency.CHF, label: t('chf') },
         ]}
-        icon={<IconCash size={16} />}
+        leftSection={<IconCash size={16} />}
       />
     </>
   )
@@ -231,14 +232,27 @@ const CurrencySelect: FC = () => {
 
 const RefreshDataButton: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'settings' })
+  const [loading, setLoading] = useState(false)
 
-  function refresh() {
-    expiresLocalStorageCaches()
-    window.location.reload()
+  async function refresh() {
+    setLoading(true)
+    try {
+      expiresLocalStorageCaches()
+      await TransferDatabaseService.dropDatabase()
+      window.location.reload()
+    } catch (error) {
+      setLoading(false)
+    }
   }
+
   return (
     <Box ta={'center'}>
-      <Button onClick={refresh} size={'sm'} compact={true} variant={'subtle'}>
+      <Button
+        onClick={refresh}
+        size={'compact-sm'}
+        variant={'subtle'}
+        loading={loading}
+      >
         {t('refreshDataButton')}
       </Button>
     </Box>

@@ -10,4 +10,7 @@ export enum AssetSortType {
   RENTED_UNIT = 'rentedUnit',
   OCCUPANCY = 'occupancy',
   INITIAL_LAUNCH = 'initialLaunch',
+  UNIT_PRICE_COST = 'unitPriceCost',
+  UNREALIZED_CAPITAL_GAIN = 'unrealizedCapitalGain',
+  LAST_CHANGE = 'lastChange',
 }

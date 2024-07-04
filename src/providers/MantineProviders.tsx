@@ -1,21 +1,14 @@
-import { FC, ReactNode, useState } from 'react'
+import { FC, ReactNode } from 'react'
 
-import {
-  ColorScheme,
-  ColorSchemeProvider,
-  MantineProvider,
-} from '@mantine/core'
-import { useHotkeys } from '@mantine/hooks'
+import { MantineColorScheme, MantineProvider } from '@mantine/core'
 import { ModalsProvider } from '@mantine/modals'
 import { Notifications } from '@mantine/notifications'
-
-import { setCookies } from 'cookies-next'
 
 import { modals } from 'src/components/modals'
 import { modalStyles, theme } from 'src/theme'
 
 type MantineProvidersProps = {
-  initialColorScheme: ColorScheme
+  initialColorScheme: MantineColorScheme
   children: ReactNode
 }
 
@@ -23,40 +16,29 @@ export const MantineProviders: FC<MantineProvidersProps> = ({
   children,
   initialColorScheme,
 }) => {
-  const [colorScheme, setColorScheme] =
-    useState<ColorScheme>(initialColorScheme)
-
-  const toggleColorScheme = (
-    nextColorScheme: ColorScheme = colorScheme === 'dark' ? 'light' : 'dark'
-  ) => {
-    setColorScheme(nextColorScheme)
-    setCookies('mantine-color-scheme', nextColorScheme)
-  }
-
-  useHotkeys([['mod+J', () => toggleColorScheme()]])
-
   return (
-    <ColorSchemeProvider
-      colorScheme={colorScheme}
-      toggleColorScheme={toggleColorScheme}
+    <MantineProvider
+      theme={theme}
+      defaultColorScheme={initialColorScheme}
+      cssVariablesResolver={() => ({
+        variables: {
+          '--indicator-z-index': '199',
+        },
+        dark: {},
+        light: {},
+      })}
     >
-      <MantineProvider
-        withGlobalStyles={true}
-        withNormalizeCSS={true}
-        theme={{ colorScheme, ...theme }}
+      <Notifications autoClose={6000} />
+      <ModalsProvider
+        modals={modals}
+        modalProps={{
+          centered: true,
+          withCloseButton: false,
+          styles: modalStyles,
+        }}
       >
-        <Notifications autoClose={6000} />
-        <ModalsProvider
-          modals={modals}
-          modalProps={{
-            centered: true,
-            withCloseButton: false,
-            styles: modalStyles,
-          }}
-        >
-          {children}
-        </ModalsProvider>
-      </MantineProvider>
-    </ColorSchemeProvider>
+        {children}
+      </ModalsProvider>
+    </MantineProvider>
   )
 }

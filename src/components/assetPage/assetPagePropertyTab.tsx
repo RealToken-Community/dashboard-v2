@@ -3,42 +3,46 @@ import { useTranslation } from 'react-i18next'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
-import { APIRealTokenRentalType } from 'src/types/APIRealToken'
+import { RealTokenRentalType } from 'src/types/RealToken'
 
 import { Divider } from '../commons'
 import { AssetPageTable } from './assetPageTable'
 
-export const AssetPagePropertyTab: FC<{ data: UserRealtoken }> = ({ data }) => {
+export const AssetPagePropertyTab: FC<{
+  realtoken: UserRealtoken
+}> = ({ realtoken }) => {
   const { t } = useTranslation('common', { keyPrefix: 'assetPage.property' })
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
 
-  const totalValue = useCurrencyValue(data.totalInvestment)
-  const assetPrice = useCurrencyValue(data.underlyingAssetPrice)
+  const totalValue = useCurrencyValue(realtoken.totalInvestment)
+  const assetPrice = useCurrencyValue(realtoken.underlyingAssetPrice)
   const rentalType = {
-    [APIRealTokenRentalType.ShortTerm]: t('rentalTypeValue.shortTerm'),
-    [APIRealTokenRentalType.LongTerm]: t('rentalTypeValue.longTerm'),
+    [RealTokenRentalType.ShortTerm]: t('rentalTypeValue.shortTerm'),
+    [RealTokenRentalType.LongTerm]: t('rentalTypeValue.longTerm'),
   }
-  const subsidyBy = data.subsidyBy
+  const subsidyBy = realtoken.subsidyBy
   const subsidyShare = tNumbers('percent', {
-    value: (data.subsidyStatusValue / data.grossRentMonth) * 100,
+    value: (realtoken.subsidyStatusValue / realtoken.grossRentMonth) * 100,
   })
-  const grossRentMonth = useCurrencyValue(data.grossRentMonth)
-  const netRentMonth = useCurrencyValue(data.netRentMonth)
+  const grossRentMonth = useCurrencyValue(realtoken.grossRentMonth)
+  const netRentMonth = useCurrencyValue(realtoken.netRentMonth)
   const initialMaintenanceReserve = useCurrencyValue(
-    data.initialMaintenanceReserve ?? 0
+    realtoken.initialMaintenanceReserve ?? 0,
   )
-  const annualYield = tNumbers('percent', { value: data.annualPercentageYield })
+  const annualYield = tNumbers('percent', {
+    value: realtoken.annualPercentageYield,
+  })
 
-  const initialLaunchDate = new Date(data.initialLaunchDate?.date ?? '')
-  const rentStartDate = new Date(data.rentStartDate.date)
+  const initialLaunchDate = new Date(realtoken.initialLaunchDate?.date ?? '')
+  const rentStartDate = new Date(realtoken.rentStartDate.date)
 
-  const constructionYear = data.constructionYear.toString()
-  const lotSize = tNumbers('integer', { value: data.lotSize })
-  const interiorSize = tNumbers('integer', { value: data.squareFeet })
-  const rentedUnits = tNumbers('integer', { value: data.rentedUnits })
-  const totalUnits = tNumbers('integer', { value: data.totalUnits })
-  const propertyStories = data.propertyStories
-    ? tNumbers('integer', { value: data.propertyStories })
+  const constructionYear = realtoken.constructionYear.toString()
+  const lotSize = tNumbers('integer', { value: realtoken.lotSize })
+  const interiorSize = tNumbers('integer', { value: realtoken.squareFeet })
+  const rentedUnits = tNumbers('integer', { value: realtoken.rentedUnits })
+  const totalUnits = tNumbers('integer', { value: realtoken.totalUnits })
+  const propertyStories = realtoken.propertyStories
+    ? tNumbers('integer', { value: realtoken.propertyStories })
     : '-'
 
   return (
@@ -70,7 +74,7 @@ export const AssetPagePropertyTab: FC<{ data: UserRealtoken }> = ({ data }) => {
         data={[
           {
             label: t('rentalType'),
-            value: rentalType[data.rentalType],
+            value: rentalType[realtoken.rentalType],
           },
           {
             label: t('subsidyBy'),

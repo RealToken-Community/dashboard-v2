@@ -9,6 +9,7 @@ import { AssetsViewSearch, useAssetsViewSearch } from './AssetsViewSearch'
 import { AssetsViewSelect, useAssetsViewSelect } from './assetsViewSelect'
 import { AssetsViewFilterButton } from './filters/AssetsViewFilterButton'
 import { useAssetsViewFilters } from './filters/useFilters'
+import { RealtimeIndicator } from './indicators/RealtimeIndicator'
 import { AssetViewType } from './types'
 import { AssetGrid, AssetTable } from './views'
 
@@ -21,27 +22,26 @@ export const AssetsView: FC = () => {
 
   const data = useMemo(
     () => assetsViewFilterFunction(realtokens.filter(assetSearchFunction)),
-    [realtokens, assetSearchFunction, assetsViewFilterFunction]
+    [realtokens, assetSearchFunction, assetsViewFilterFunction],
   )
 
-  return (
+  return realtokens.length ? (
     <>
       <Grid align={'center'}>
         <Grid.Col
-          span={'auto'}
-          sm={'content'}
+          span={{ base: 'auto', sm: 'content' }}
           style={{ width: '300px', maxWidth: '100%' }}
         >
           <AssetsViewSearch {...assetSearchProps} />
         </Grid.Col>
-        <Grid.Col span={'content'} sm={'auto'} pl={'0px'}>
+        <Grid.Col span={{ base: 'content', sm: 'auto' }} pl={'0px'}>
           <AssetsViewFilterButton />
+          <RealtimeIndicator />
         </Grid.Col>
-        <Grid.Col span={12} sm={'content'}>
+        <Grid.Col span={{ base: 12, sm: 'content' }}>
           <AssetsViewSelect />
         </Grid.Col>
       </Grid>
-
       {choosenAssetView == AssetViewType.TABLE && (
         <AssetTable key={'table'} realtokens={data} />
       )}
@@ -49,6 +49,6 @@ export const AssetsView: FC = () => {
         <AssetGrid key={'grid'} realtokens={data} />
       )}
     </>
-  )
+  ) : null
 }
 AssetsView.displayName = 'AssetsView'

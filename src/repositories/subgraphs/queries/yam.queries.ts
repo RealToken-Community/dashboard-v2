@@ -12,12 +12,12 @@ const STABLE_TOKENS = [
 
 export async function getRealtokenYamStatistics(address: string) {
   const result = await executeQuery(address)
-  return formatStatistics(result.data.token)
+  return result.data.token ? formatStatistics(result.data.token) : []
 }
 
 const executeQuery = useCacheWithLocalStorage(
   async (address: string) =>
-    YamStatisticsClient.query<YamStatisticsResult>({
+    YamStatisticsClient().query<YamStatisticsResult>({
       query: YamStatisticsQuery,
       variables: {
         address,
@@ -29,7 +29,7 @@ const executeQuery = useCacheWithLocalStorage(
     duration: 1000 * 60 * 60, // 1 hour
     usePreviousValueOnError: true,
     key: 'YamStatisticsQuery',
-  }
+  },
 )
 
 const YamStatisticsQuery = gql`

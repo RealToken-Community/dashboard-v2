@@ -6,27 +6,25 @@ import { NextPage } from 'next'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
-import { Anchor, Breadcrumbs, Button, Flex, createStyles } from '@mantine/core'
+import { Anchor, Breadcrumbs, Button, Flex } from '@mantine/core'
 import { IconExternalLink } from '@tabler/icons'
 
+import { AssetPageHistoryTab } from 'src/components/assetPage/assetPageHistoryTab'
 import { AssetPageMainTab } from 'src/components/assetPage/assetPageMainTab'
-import { AssetPagePropertyTab } from 'src/components/assetPage/assetPagePropertyPage'
+import { AssetPagePropertyTab } from 'src/components/assetPage/assetPagePropertyTab'
 import { AssetPageTransfersTab } from 'src/components/assetPage/assetPageTransfersTab'
 import { AssetPageYamStatisticsTab } from 'src/components/assetPage/assetPageYamStatisticsTab'
 import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
-import { selectUserRealtokens } from 'src/store/features/wallets/walletsSelector'
+import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
+import { selectAllUserRealtokens } from 'src/store/features/wallets/walletsSelector'
 
-const useStyles = createStyles({
-  imageContainer: {
-    borderRadius: '10px',
-    overflow: 'hidden',
-  },
-})
+import styles from './AssetPage.module.sass'
 
 enum Tabs {
   Main = 'main',
   Property = 'property',
   Transfers = 'transfers',
+  History = 'history',
   YamStatistics = 'yamStatistics',
 }
 
@@ -50,39 +48,40 @@ const TabButton: FC<TabButtonProps> = ({ label, active, onClick }) => {
 
 const AssetPage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'assetPage' })
-  const realtokens = useSelector(selectUserRealtokens)
+  const realtokens = useSelector(selectAllUserRealtokens)
+  const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
+
   const isLoading = useSelector(selectIsLoading)
-  const { classes } = useStyles()
   const router = useRouter()
   const { assetId } = router.query
   const [activeTab, setActiveTab] = useState<Tabs>(Tabs.Main)
 
-  const data = useMemo(
+  const realtoken = useMemo(
     () => realtokens.find((asset) => asset.id === assetId),
-    [realtokens, assetId]
+    [realtokens, assetId],
   )
 
-  if (!data) {
+  if (!realtoken) {
     return <div>{isLoading ? 'Loading...' : 'Asset not found'}</div>
   }
 
   return (
-    <Flex my={'xl'} direction={'column'} align={'center'}>
+    <Flex my={'lg'} direction={'column'} align={'center'}>
       <div style={{ maxWidth: '450px', marginBottom: '300px' }}>
         <Breadcrumbs>
           <Anchor onClick={() => router.push('/')}>{t('home')}</Anchor>
-          {data.shortName}
+          {realtoken.shortName}
         </Breadcrumbs>
 
-        <h2 style={{ textAlign: 'center' }}>{data.fullName}</h2>
+        <h2 style={{ textAlign: 'center' }}>{realtoken.fullName}</h2>
 
         <Image
-          src={data.imageLink[0]}
-          className={classes.imageContainer}
+          src={realtoken.imageLink[0]}
+          className={styles.imageContainer}
           width={500}
           height={300}
           objectFit={'cover'}
-          alt={data.fullName}
+          alt={realtoken.fullName}
         />
 
         <div style={{ width: '100%' }}>
@@ -93,7 +92,7 @@ const AssetPage: NextPage = () => {
           />
           {activeTab === Tabs.Main ? (
             <div style={{ margin: '5px 10px' }}>
-              <AssetPageMainTab data={data} />
+              <AssetPageMainTab realtoken={realtoken} />
             </div>
           ) : null}
 
@@ -104,19 +103,34 @@ const AssetPage: NextPage = () => {
           />
           {activeTab === Tabs.Property ? (
             <div style={{ margin: '5px 10px' }}>
-              <AssetPagePropertyTab data={data} />
+              <AssetPagePropertyTab realtoken={realtoken} />
             </div>
           ) : null}
 
           <TabButton
-            label={t('tabs.transfers')}
-            active={activeTab === Tabs.Transfers}
-            onClick={() => setActiveTab(Tabs.Transfers)}
+            label={t('tabs.history')}
+            active={activeTab === Tabs.History}
+            onClick={() => setActiveTab(Tabs.History)}
           />
-          {activeTab === Tabs.Transfers ? (
+          {activeTab === Tabs.History ? (
             <div style={{ margin: '5px 10px' }}>
-              <AssetPageTransfersTab data={data} />
+              <AssetPageHistoryTab realtoken={realtoken} />
             </div>
+          ) : null}
+
+          {transfersIsLoaded ? (
+            <>
+              <TabButton
+                label={t('tabs.transfers')}
+                active={activeTab === Tabs.Transfers}
+                onClick={() => setActiveTab(Tabs.Transfers)}
+              />
+              {activeTab === Tabs.Transfers ? (
+                <div style={{ margin: '5px 10px' }}>
+                  <AssetPageTransfersTab realtoken={realtoken} />
+                </div>
+              ) : null}
+            </>
           ) : null}
 
           <TabButton
@@ -126,7 +140,7 @@ const AssetPage: NextPage = () => {
           />
           {activeTab === Tabs.YamStatistics ? (
             <div style={{ margin: '5px 10px' }}>
-              <AssetPageYamStatisticsTab data={data} />
+              <AssetPageYamStatisticsTab realtoken={realtoken} />
             </div>
           ) : null}
 
@@ -135,7 +149,7 @@ const AssetPage: NextPage = () => {
             fullWidth={true}
             variant={'outline'}
             size={'xs'}
-            href={data.marketplaceLink}
+            href={realtoken.marketplaceLink}
             target={'_blank'}
             style={{ marginTop: '20px' }}
           >

@@ -1,23 +1,23 @@
 import { gql } from '@apollo/client'
 
-import { Realtoken } from 'src/store/features/realtokens/realtokensSelector'
+import { RealToken } from 'src/types/RealToken'
 import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
 import { LevinSwapClient } from '../clients'
 
 export async function getLevinSwapBalances(
   addressList: string[],
-  realtokens: Realtoken[]
+  realtokens: RealToken[],
 ) {
   const result = await executeQuery(
-    addressList.map((item) => item.toLowerCase())
+    addressList.map((item) => item.toLowerCase()),
   )
   return formatBalances(result.data.users, realtokens)
 }
 
 const executeQuery = useCacheWithLocalStorage(
   async (addressList: string[]) =>
-    LevinSwapClient.query<LevinSwapResult>({
+    LevinSwapClient().query<LevinSwapResult>({
       query: LevinSwapQuery,
       variables: { addressList },
     }),
@@ -25,7 +25,7 @@ const executeQuery = useCacheWithLocalStorage(
     duration: 1000 * 60 * 10, // 10 minutes
     usePreviousValueOnError: true,
     key: 'LevinSwapQuery',
-  }
+  },
 )
 
 const LevinSwapQuery = gql`
@@ -72,7 +72,7 @@ interface LevinSwapResult {
 
 function formatBalances(
   users: LevinSwapResult['users'],
-  realtokens: Realtoken[]
+  realtokens: RealToken[],
 ) {
   return users.map((user) => {
     const balances: Record<string, { amount: number; decimals: number }> = {}
@@ -101,7 +101,7 @@ function formatBalances(
         [
           item.gnosisContract?.toLowerCase(),
           item.ethereumContract?.toLowerCase(),
-        ].includes(address.toLowerCase())
+        ].includes(address.toLowerCase()),
       )
 
       // Some pools are not correctly configured, and return 0 decimals instead of 18
@@ -114,7 +114,7 @@ function formatBalances(
         ([address, { amount, decimals }]) => ({
           token: address,
           amount: amount / 10 ** getCorrectDecimals(address, decimals),
-        })
+        }),
       ),
     }
   })

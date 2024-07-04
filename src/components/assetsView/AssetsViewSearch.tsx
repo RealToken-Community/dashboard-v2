@@ -33,7 +33,7 @@ export function useAssetsViewSearch() {
 
   const cleanSearch = useMemo(
     () => assetSearch.trim().toLowerCase(),
-    [assetSearch]
+    [assetSearch],
   )
 
   function assetSearchFunction(realtoken: UserRealtoken) {

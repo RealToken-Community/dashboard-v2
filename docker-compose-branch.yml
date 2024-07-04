@@ -1,0 +1,19 @@
+services:
+  app:
+    image: ${DOCKER_REGISTRY}/dashboard:${DOCKER_BRANCH}
+    container_name: ${DOCKER_BRANCH}-dashboard
+    environment:
+      - THEGRAPH_API_KEY=$THEGRAPH_API_KEY
+      - COMMUNITY_API_KEY=$COMMUNITY_API_KEY
+    networks:
+      - traefik-realt
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.dashboard-${DOCKER_BRANCH}.rule=Host(`${HOSTNAME}`)'
+      - 'traefik.http.routers.dashboard-${DOCKER_BRANCH}.entrypoints=websecure'
+      - 'traefik.http.services.dashboard-${DOCKER_BRANCH}.loadbalancer.server.port=3000'
+    restart: always
+
+networks:
+  traefik-realt:
+    external: true

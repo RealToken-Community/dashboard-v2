@@ -33,13 +33,12 @@ export interface RmmPosition {
     name: string
     amount: number
     debt: number
-    isColateral: boolean
   }[]
 }
 
 const executeRMM2Query = useCacheWithLocalStorage(
   async (addressList: string[]) =>
-    RMM2Client.query<RmmResult>({
+    RMM2Client().query<RmmResult>({
       query: RmmQuery,
       variables: { addressList },
     }),
@@ -47,50 +46,29 @@ const executeRMM2Query = useCacheWithLocalStorage(
     duration: 1000 * 60 * 10, // 10 minutes
     usePreviousValueOnError: true,
     key: 'Rmm2Query',
-  }
+  },
 )
 
 const executeRMM3Query = useCacheWithLocalStorage(
   async (addressList: string[]) => {
-    const mainQuery = RMM3Client.query<RmmResult>({
-      query: RmmQuery,
-      variables: { addressList },
-    })
-
-    const wrapperQuery = RMM3WrapperClient.query<RmmWrapperResult>({
+    const result = await RMM3WrapperClient().query<RmmWrapperResult>({
       query: RmmWrapperQuery,
       variables: { addressList },
     })
 
-    const [mainResult, wrapperResult] = await Promise.all([
-      mainQuery,
-      wrapperQuery,
-    ])
-    const wrappedUsers = _keyBy(wrapperResult.data.users, 'id')
     return {
-      ...mainResult,
       data: {
-        users: mainResult.data.users.map((user) => ({
-          ...user,
-          reserves: user.reserves
-            .map((item) => {
-              if (item.reserve.underlyingAsset === WRAPPER_ADDRESS) {
-                const { balances } = wrappedUsers[user.id] ?? { balances: [] }
-                return balances.map((balance) => ({
-                  reserve: {
-                    underlyingAsset: balance.token.address,
-                    name: balance.token.name,
-                    decimals: balance.token.decimals,
-                    usageAsCollateralEnabled:
-                      item.reserve.usageAsCollateralEnabled,
-                  },
-                  currentATokenBalance: balance.amount,
-                  currentTotalDebt: '0', // RealToken cannot be borrowed
-                }))
-              }
-              return item
-            })
-            .flat(),
+        users: result.data.users.map((user) => ({
+          id: user.id,
+          reserves: user.balances.map((balance) => ({
+            reserve: {
+              underlyingAsset: balance.token.address,
+              name: balance.token.name,
+              decimals: balance.token.decimals,
+            },
+            currentATokenBalance: balance.amount,
+            currentTotalDebt: '0',
+          })),
         })),
       },
     }
@@ -99,7 +77,7 @@ const executeRMM3Query = useCacheWithLocalStorage(
     duration: 1000 * 60 * 10, // 10 minutes
     usePreviousValueOnError: true,
     key: 'Rmm3Query',
-  }
+  },
 )
 
 const RmmQuery = gql`
@@ -116,7 +94,6 @@ const RmmQuery = gql`
           underlyingAsset
           name
           decimals
-          usageAsCollateralEnabled
         }
         currentATokenBalance
         currentTotalDebt
@@ -133,7 +110,6 @@ interface RmmResult {
         underlyingAsset: string
         name: string
         decimals: number
-        usageAsCollateralEnabled: boolean
       }
       currentATokenBalance: string
       currentTotalDebt: string
@@ -193,7 +169,6 @@ function formatPositions(users: RmmResult['users']): RmmPosition[] {
         10 ** position.reserve.decimals,
       debt:
         parseInt(position.currentTotalDebt) / 10 ** position.reserve.decimals,
-      isColateral: position.reserve.usageAsCollateralEnabled,
     })),
   }))
 }

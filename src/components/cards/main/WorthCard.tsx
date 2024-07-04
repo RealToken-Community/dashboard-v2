@@ -16,8 +16,8 @@ export const WorthCard: FC = () => {
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
       <Title order={4}>{t('title')}</Title>
-      <Box mx={'sm'} mt={'xs'}>
-        <Text fz={'lg'} fw={500}>
+      <Box mx={'sm'}>
+        <Text fz={'lg'} fw={500} component={'div'}>
           <CurrencyField label={t('total')} value={realtokensValue.total} />
         </Text>
         <CurrencyField label={t('ethereum')} value={realtokensValue.ethereum} />

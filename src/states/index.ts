@@ -12,7 +12,7 @@ import {
 
 export const assetViewChoosedAtom = atomWithStorage<AssetViewType>(
   'displayChoosed',
-  AssetViewType.GRID
+  AssetViewType.GRID,
 )
 
 export interface AssetsViewFilterType {
@@ -37,5 +37,5 @@ export const assetsViewDefaultFilter: AssetsViewFilterType = {
 
 export const assetsViewFilterAtom = atomWithStorage<AssetsViewFilterType>(
   'assetsViewFilter',
-  assetsViewDefaultFilter
+  assetsViewDefaultFilter,
 )

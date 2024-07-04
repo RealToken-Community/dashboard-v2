@@ -15,12 +15,12 @@ const getRealTokenList = useCache(
     })
 
     if (!response.ok) {
-      throw new Error('Failed to fetch properties')
+      throw new Error('Failed to fetch properties : ' + (await response.text()))
     }
 
     return response.json()
   },
-  { duration: 1000 * 60 * 60 }
+  { duration: 1000 * 60 * 60 },
 )
 
 const handler: NextApiHandler = async (req, res) => {

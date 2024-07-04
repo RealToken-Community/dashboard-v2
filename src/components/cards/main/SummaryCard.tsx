@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { Box, Card, Text, Title } from '@mantine/core'
 
+import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
   selectOwnedRealtokensValue,
   selectRmmDetails,
@@ -16,6 +17,7 @@ export const SummaryCard: FC = () => {
 
   const realtokensValue = useSelector(selectOwnedRealtokensValue)
   const rmmDetails = useSelector(selectRmmDetails)
+  const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
 
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
@@ -25,14 +27,20 @@ export const SummaryCard: FC = () => {
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
       <Title order={4}>{t('title')}</Title>
-      <Box mx={'sm'} mt={'xs'}>
-        <Text fz={'lg'} fw={500}>
+      <Box mx={'sm'}>
+        <Text fz={'lg'} fw={500} component={'div'}>
           <CurrencyField label={t('netValue')} value={totalNetValue} />
         </Text>
         <CurrencyField
           label={t('realtokenValue')}
           value={realtokensValue.total}
         />
+        {transfersIsLoaded ? (
+          <CurrencyField
+            label={t('totalPriceCost')}
+            value={realtokensValue.totalPriceCost}
+          />
+        ) : null}
         <CurrencyField label={t('stableDeposit')} value={stableDepositValue} />
         <CurrencyField label={t('stableBorrow')} value={stableDebtValue} />
       </Box>

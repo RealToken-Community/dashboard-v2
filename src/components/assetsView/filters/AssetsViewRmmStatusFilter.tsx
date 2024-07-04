@@ -43,7 +43,7 @@ export const AssetsViewRmmStatusFilter: FC<AssetsViewRmmStatusFilterProps> = ({
       label={t('label')}
       data={viewOptions}
       value={filter.rmmStatus}
-      onChange={(value: AssetRmmStatusType) => onChange({ rmmStatus: value })}
+      onChange={(value) => onChange({ rmmStatus: value as AssetRmmStatusType })}
       classNames={inputClasses}
     />
   )
@@ -51,7 +51,7 @@ export const AssetsViewRmmStatusFilter: FC<AssetsViewRmmStatusFilterProps> = ({
 AssetsViewRmmStatusFilter.displayName = 'AssetsViewRmmStatusFilter'
 
 export function useAssetsViewRmmStatusFilter(
-  filter: AssetsViewRmmStatusFilterModel
+  filter: AssetsViewRmmStatusFilterModel,
 ) {
   function assetRmmStatusFilterFunction(asset: UserRealtoken) {
     switch (filter.rmmStatus) {

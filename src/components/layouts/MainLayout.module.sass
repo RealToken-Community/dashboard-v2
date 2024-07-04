@@ -1,0 +1,24 @@
+.header
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  z-index: 200
+  height: 60px
+  background-color: var(--mantine-color-body)
+
+.container
+  margin-top: 60px
+  display: flex
+  flex-direction: column
+  min-height: calc(100vh - 60px)
+
+.main
+  display: flex
+  flex-direction: column
+  flex-grow: 1
+  padding: 0 var(--mantine-spacing-sm)
+
+.footer
+  @media (max-width: 576px)
+    display: none

@@ -2,14 +2,13 @@ import { ethers } from 'ethers'
 
 import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
+import { GnosisRpcProvider } from './RpcProvider'
+
 export interface CurrencyRates {
   XdaiUsd: number
   EurUsd: number
   ChfUsd: number
 }
-
-const RPC_URL = 'https://rpc.ankr.com/gnosis'
-const RpcProvider = new ethers.providers.JsonRpcBatchProvider(RPC_URL)
 
 function getChainlinkHandler(options: {
   priceFeedContract: string
@@ -17,16 +16,20 @@ function getChainlinkHandler(options: {
 }) {
   const { priceFeedContract, decimals } = options
   const ABI = ['function latestAnswer() view returns (int256)']
-  const contract = new ethers.Contract(priceFeedContract, ABI, RpcProvider)
+  const contract = new ethers.Contract(
+    priceFeedContract,
+    ABI,
+    GnosisRpcProvider,
+  )
 
   return useCacheWithLocalStorage(
     async () =>
-      Number(ethers.utils.formatUnits(await contract.latestAnswer(), decimals)),
+      Number(ethers.formatUnits(await contract.latestAnswer(), decimals)),
     {
       duration: 1000 * 60 * 60 * 24, // 24 hours
       key: `getChainlinkHandler-${priceFeedContract}`,
       usePreviousValueOnError: true,
-    }
+    },
   )
 }
 

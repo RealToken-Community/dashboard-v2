@@ -6,8 +6,8 @@ import {
   WalletRmmPosition,
 } from 'src/repositories/rmm.repository'
 import { AppDispatch, RootState } from 'src/store/store'
+import { RealToken } from 'src/types/RealToken'
 
-import { Realtoken } from '../realtokens/realtokensSelector'
 import { selectUserAddressList } from '../settings/settingsSelector'
 
 interface WalletsInitialStateType {
@@ -34,15 +34,15 @@ const isLoadingDispatchType = 'wallets/isLoading'
 
 // ACTIONS
 const balancesChanged = createAction<WalletBalances>(
-  balancesChangedDispatchType
+  balancesChangedDispatchType,
 )
 const rmmPositionsChanged = createAction<WalletRmmPosition[]>(
-  rmmPositionsChangedDispatchType
+  rmmPositionsChangedDispatchType,
 )
 const balancesIsLoading = createAction<boolean>(isLoadingDispatchType)
 
 // THUNKS
-export function fetchWallets(realtokens: Realtoken[]) {
+export function fetchWallets(realtokens: RealToken[]) {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState()
     const isLoading = state.wallets.isLoading

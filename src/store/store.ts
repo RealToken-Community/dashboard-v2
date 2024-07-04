@@ -3,6 +3,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { currenciesReducers } from './features/currencies/currenciesSlice'
 import { realtokensReducers } from './features/realtokens/realtokensSlice'
 import { settingsReducers } from './features/settings/settingsSlice'
+import { transfersReducers } from './features/transfers/transfersSlice'
 import { walletsReducers } from './features/wallets/walletsSlice'
 
 const rootReducer = combineReducers({
@@ -10,6 +11,7 @@ const rootReducer = combineReducers({
   realtokens: realtokensReducers,
   wallets: walletsReducers,
   currencies: currenciesReducers,
+  transfers: transfersReducers,
 })
 
 const store = configureStore({

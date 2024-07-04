@@ -2,18 +2,11 @@ import { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import {
-  Button,
-  Flex,
-  Modal,
-  Stack,
-  TextInput,
-  createStyles,
-} from '@mantine/core'
+import { Button, Flex, Modal, Stack, TextInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { ContextModalProps } from '@mantine/modals'
 
-import { utils as EthersUtils } from 'ethers'
+import { ethers } from 'ethers'
 
 import { useAppDispatch } from 'src/hooks/react-hooks'
 import { selectUser } from 'src/store/features/settings/settingsSelector'
@@ -21,6 +14,8 @@ import {
   setCustomAddressList,
   setHiddenAddressList,
 } from 'src/store/features/settings/settingsSlice'
+
+import styles from './ManageWalletModal.module.sass'
 
 const AddAddressButton: FC<{
   onChange: (value: string) => void
@@ -32,7 +27,7 @@ const AddAddressButton: FC<{
   const [address, setAddress] = useState('')
   const [isDirty, setIsDirty] = useState(false)
 
-  const isInvalidAddress = !EthersUtils.isAddress(address)
+  const isInvalidAddress = !ethers.isAddress(address)
   const isAddressAlreadyAdded = props.addresses
     .map((address) => address.toLowerCase())
     .includes(address.toLowerCase())
@@ -40,8 +35,8 @@ const AddAddressButton: FC<{
   const currentError = isInvalidAddress
     ? t('invalidAddress')
     : isAddressAlreadyAdded
-    ? t('addressAlreadyAdded')
-    : undefined
+      ? t('addressAlreadyAdded')
+      : undefined
 
   function resetAndClose() {
     setAddress('')
@@ -92,35 +87,21 @@ const AddAddressButton: FC<{
 }
 AddAddressButton.displayName = 'AddAddressButton'
 
-const useStyles = createStyles({
-  address: {
-    border: '1px solid rgb(92, 95, 102)',
-    borderRadius: '10px',
-    fontFamily: 'monospace',
-    fontSize: '13px',
-    display: 'inline-block',
-    padding: '4px 8px',
-    maxWidth: '100%',
-    overflowWrap: 'break-word',
-  },
-})
-
 const WalletItem: FC<{
   address: string
   isVisible: boolean
   onToggle: (address: string) => void
   onRemove?: (address: string) => void
 }> = (props) => {
-  const { classes } = useStyles()
   const { t } = useTranslation('common', {
     keyPrefix: 'manageWalletModal.item',
   })
 
-  const address = EthersUtils.getAddress(props.address)
+  const address = ethers.getAddress(props.address)
 
   return (
     <div
-      className={classes.address}
+      className={styles.address}
       style={{
         opacity: props.isVisible ? 1 : 0.5,
         transition: 'opacity 0.2s',
@@ -136,8 +117,7 @@ const WalletItem: FC<{
       >
         <Button
           onClick={() => props.onToggle(props.address)}
-          size={'xs'}
-          compact={true}
+          size={'compact-xs'}
           variant={'outline'}
         >
           {props.isVisible ? t('hide') : t('show')}
@@ -145,8 +125,7 @@ const WalletItem: FC<{
         {props.onRemove ? (
           <Button
             onClick={() => props.onRemove?.(props.address)}
-            size={'xs'}
-            compact={true}
+            size={'compact-xs'}
             variant={'outline'}
             color={'red'}
           >
@@ -169,10 +148,10 @@ export const ManageWalletModal: FC<ContextModalProps> = ({ context, id }) => {
 
   const user = useSelector(selectUser)
   const [customAddresses, setCustomAddresses] = useState(
-    user?.customAddressList ?? []
+    user?.customAddressList ?? [],
   )
   const [hiddenAddresses, setHiddenAddresses] = useState(
-    user?.hiddenAddressList ?? []
+    user?.hiddenAddressList ?? [],
   )
 
   const addresses = [...(user?.addressList ?? []), ...(customAddresses ?? [])]

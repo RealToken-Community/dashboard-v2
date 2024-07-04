@@ -1,6 +1,9 @@
 {
   "header": {
     "title": "Realtoken Dashboard",
+    "transactions": "My transactions",
+    "histories": "Changes history",
+    "documentation": "Community Wiki",
     "home": "Home",
     "realt": "RealT",
     "RMM": "RMM",
@@ -60,6 +63,7 @@
     "title": "Summary",
     "netValue": "Net value",
     "realtokenValue": "RealTokens",
+    "totalPriceCost": "Estimated price cost",
     "stableDeposit": "RMM deposit",
     "stableBorrow": "RMM borrow"
   },
@@ -70,6 +74,9 @@
     "gnosis": "Gnosis",
     "rmm": "RMM",
     "levinSwap": "LevinSwap"
+  },
+  "realtimeIndicator": {
+    "realtime": "Realtime"
   },
   "rentsCard": {
     "title": "Rents",
@@ -102,7 +109,10 @@
       "totalUnit": "Units",
       "rentedUnit": "Rented units",
       "occupancy": "Occupancy rate",
-      "initialLaunch": "Initial launch"
+      "initialLaunch": "Initial launch",
+      "unitPriceCost": "Unit price cost",
+      "unrealizedCapitalGain": "Capital gain",
+      "lastChange": "Last change"
     },
     "sortReverse": "Reverse",
     "viewOptions": {
@@ -192,13 +202,18 @@
   },
   "assetTable": {
     "property": "Property",
-    "apr": "Yield",
-    "ownedTokens": "Tokens",
     "ownedValue": "Value",
+    "priceCost": "Price cost",
+    "ownedTokens": "Tokens",
+    "tokenPrice": "Token price",
+    "unitPriceCost": "Unit price cost",
+    "unrealizedCapitalGain": "Capital gain",
+    "apr": "Yield",
     "weeklyRents": "Weekly rents",
     "yearlyRents": "Yearly rents",
     "rentedUnits": "Rented units",
-    "propertyValue": "Property value"
+    "propertyValue": "Property value",
+    "lastChange": "Last change"
   },
   "assetPage": {
     "home": "Home",
@@ -206,6 +221,7 @@
     "tabs": {
       "main": "Main informations",
       "property": "Property details",
+      "history": "Property changes",
       "transfers": "My transactions",
       "yamStatistics": "Secondary market statistics (Yam)"
     },
@@ -215,9 +231,12 @@
       "ownedGnosisValue": "Gnosis",
       "ownedRmmValue": "RMM",
       "ownedLevinSwapValue": "LevinSwap",
-      "annualYield": "Annual yield",
-      "nbToken": "Tokens owned",
+      "priceCost": "Price cost",
+      "unrealizedCapitalGain": "Unrealized capital gain",
       "tokenPrice": "Token price",
+      "unitPriceCost": "Unit price cost",
+      "nbToken": "Tokens owned",
+      "annualYield": "Annual yield",
       "rentWeek": "Weekly rent",
       "rentMonth": "Monthly rent",
       "rentYear": "Yearly rent",
@@ -246,7 +265,61 @@
       "subsidyBy": "Subsidy",
       "subsidyShare": "Rent Subsidized"
     },
+    "history": {
+      "noHistory": "No history found for this property",
+      "date": "Date",
+      "canal": "Canal",
+      "tokenPrice": "Token price",
+      "underlyingAssetPrice": "Asset price",
+      "initialMaintenanceReserve": "Maintenance reserve",
+      "renovationReserve": "Renovation reserve",
+      "totalInvestment": "Total investment",
+      "grossRentMonth": "Gross monthly rent",
+      "netRentMonth": "Net monthly rent",
+      "rentedUnits": "Rented units"
+    },
+    "yamStatistics": {
+      "noVolume": "No volume on the last 30 days",
+      "tokenPrice": "RealT price",
+      "yamPrice": "Yam price (30 days)",
+      "yamDifference": "Difference",
+      "yamVolume": "Volume (30 days)"
+    },
     "transfers": {
+      "noTransfers": "You have no transactions for this property",
+      "gnosisScan": "view on GnosisScan"
+    }
+  },
+  "transactionPage": {
+    "home": "Home",
+    "title": "My transactions",
+    "item": {
+      "value": "Value",
+      "price": "Price",
+      "gnosisScan": "view on GnosisScan"
+    },
+    "filter": {
+      "field": "Filter",
+      "all": "All",
+      "internal": "Internal transfers",
+      "other": "Others",
+      "swapcat": "Swapcat",
+      "yam": "YAM",
+      "primary": "RealT",
+      "reinvest": "Reinvest",
+      "rmm": "RMM",
+      "levinSwap": "LevinSwap",
+      "levinSwapPool": "LevinSwap Pool",
+      "migration": "Migration",
+      "bridge": "Bridge"
+    }
+  },
+  "transfers": {
+    "informationWarning": {
+      "title": "Informations",
+      "text": "Some transactions may be incomplete if the RPC is overloaded. In addition, certain types of unusual transactions are currently not or partially covered (RMM liquidations, etc.)"
+    },
+    "titleValues": {
       "swapcatIn": "Purchase on Swapcat",
       "swapcatOut": "Sale on Swapcat",
       "yamIn": "Purchase on YAM",
@@ -255,17 +328,47 @@
       "primaryOut": "Sale to RealT",
       "rmmIn": "Withdrawal from RMM",
       "rmmOut": "Deposit on RMM",
-      "levinSwapIn": "Purchase/Withdrawal on LevinSwap",
-      "levinSwapOut": "Sale/Deposit on LevinSwap",
-      "reinvest": "Rent reinvest",
+      "levinSwapIn": "Purchase on LevinSwap",
+      "levinSwapOut": "Sale on LevinSwap",
+      "levinSwapPoolIn": "Withdrawal on LevinSwap",
+      "levinSwapPoolOut": "Deposit on LevinSwap",
+      "levinSwapUnknownIn": "Purchase/Withdrawal on LevinSwap",
+      "levinSwapUnknownOut": "Sale/Deposit on LevinSwap",
+      "reinvest": "Reinvest",
+      "bridge": "Bridge",
+      "migration": "Migration",
       "internal": "Internal transaction",
       "unknown": "Other"
-    },
-    "yamStatistics": {
-      "tokenPrice": "RealT price",
-      "yamPrice": "Yam price (30 days)",
-      "yamDifference": "Difference",
-      "yamVolume": "Volume (30 days)"
     }
+  },
+  "historiesPage": {
+    "home": "Home",
+    "title": "Changes",
+    "valueItem": {
+      "title": "Revaluation",
+      "token": "Token",
+      "property": "Property",
+      "yield": "Yield"
+    },
+    "rentItem": {
+      "title": "Rents",
+      "netRentMonth": "Net monthly",
+      "grossRentMonth": "Gross monthly",
+      "yield": "Yield",
+      "rentedUnits": "Rented units"
+    },
+    "filter": {
+      "field": "Filter",
+      "all": "All properties",
+      "allValue": "All revaluation",
+      "allRent": "All rents",
+      "owned": "My properties",
+      "ownedValue": "My revaluation",
+      "ownedRent": "My rents"
+    }
+  },
+  "initialTransfersLoader": {
+    "title": "Initial data loading",
+    "description": "Retrieving your transactions in progress. This loading can take some time depending on the number of transactions performed (10-20 seconds / 1000 transactions). On your next visits, only new transactions will be retrieved."
   }
 }

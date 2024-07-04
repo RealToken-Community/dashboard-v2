@@ -18,9 +18,12 @@ To run the project you will need to set-up a `.env` file in the root folder:
 
 ```
 COMMUNITY_API_KEY=XXXXXXXXXXXX
+THEGRAPH_API_KEY=XXXXXXXXXXXX
 ```
 
 To get a `COMMUNITY_API_KEY`, join the dedicated [telegram dev channel](https://t.me/+XQyoaFfmN61yk7X0) then ask for.
+
+To get a THEGRAPH_API_KEY, you need to create an account on thegraph.com [Thegraph docs](https://thegraph.com/docs/en/querying/managing-api-keys/)
 
 ### Node.js version
 

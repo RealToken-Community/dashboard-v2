@@ -15,6 +15,10 @@ import {
   setUserAddress,
 } from 'src/store/features/settings/settingsSlice'
 import {
+  fetchTransfers,
+  resetTransfers,
+} from 'src/store/features/transfers/transfersSlice'
+import {
   fetchWallets,
   resetWallets,
 } from 'src/store/features/wallets/walletsSlice'
@@ -48,9 +52,11 @@ export default function useInitStore() {
     if (addressList.length) {
       if (realtokens.length) {
         dispatch(fetchWallets(realtokens))
+        // dispatch(fetchTransfers(realtokens))
       }
     } else {
       dispatch(resetWallets())
+      dispatch(resetTransfers())
     }
   }, [realtokens, addresses, dispatch])
 }

@@ -1,13 +1,15 @@
-name: Test and deploy to prod
+name: Test and deploy to branch
 
 on:
   push:
     branches:
       - master
+      - preprod
+      - develop
 
 jobs:
   validate:
-    name: Validate production
+    name: Validate branch
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -28,25 +30,25 @@ jobs:
         run: npm run build
 
   deploy:
-    name: Deploy to production
+    name: Deploy to branch
     runs-on: ubuntu-latest
     needs: validate
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Login to registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ${{ secrets.DOCKER_REGISTRY }}
           username: ${{ secrets.DOCKER_LOGIN }}
           password: ${{ secrets.DOCKER_PASSWD }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: registry.realt.community/realtdashboard_prod:latest
+          tags: ${{ secrets.DOCKER_REGISTRY }}/dashboard:${{ github.ref_name }}
 
       - name: Configure SSH
         run: |
@@ -67,10 +69,14 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
 
-      - name: Update production environment
+      - name: Update branch environment
         run: |
-          ssh staging 'cd /home/realt/docker/dashboard-v2/prod
-          git pull origin master
-          docker compose --file docker-compose-prod.yml pull
-          docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWD }} ${{ secrets.DOCKER_REGISTRY }}
-          docker compose --file docker-compose-prod.yml up -d'
+          ssh staging 'export DOCKER_BRANCH=${{ github.ref_name }} DOCKER_REGISTRY=${{ secrets.DOCKER_REGISTRY }}
+          cd /var/docker/dashboard-v2/${DOCKER_BRANCH}
+          git pull origin ${DOCKER_BRANCH}
+          docker compose --file docker-compose-branch.yml pull
+          docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWD }} ${DOCKER_REGISTRY}
+          THEGRAPH_API_KEY=${{ secrets.THEGRAPH_API_KEY }} \
+          COMMUNITY_API_KEY=${{ secrets.COMMUNITY_API_KEY }} \
+          HOSTNAME=${{ github.ref_name == 'master' && 'dashboard.realt.community' || 'dashboard.${DOCKER_BRANCH}.realt.community' }} \
+          docker compose --project-name ${{ github.ref_name }}-dashboard --file docker-compose-branch.yml up -d'

@@ -5,7 +5,10 @@ import { GetServerSidePropsContext } from 'next'
 import type { AppProps as NextAppProps } from 'next/app'
 import { Router } from 'next/router'
 
-import { ColorScheme } from '@mantine/core'
+import { MantineColorScheme } from '@mantine/core'
+import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
+import '@mantine/notifications/styles.css'
 import {
   CHAINS,
   ChainSelectConfig,
@@ -26,6 +29,7 @@ import {
 import { getCookie } from 'cookies-next'
 import { Provider as JotaiProvider } from 'jotai'
 
+import { Favicon } from 'src/assets'
 import { Head, MainLayout } from 'src/components/layouts'
 import 'src/i18next'
 import { resources } from 'src/i18next'
@@ -35,7 +39,13 @@ import store from 'src/store/store'
 
 const i18n = initLanguage(resources)
 
-type AppProps = NextAppProps & { colorScheme: ColorScheme; locale: string }
+type AppProps = NextAppProps & {
+  colorScheme: MantineColorScheme
+  locale: string
+  env: {
+    THEGRAPH_API_KEY: string
+  }
+}
 
 const queryClient = new QueryClient({})
 
@@ -52,7 +62,7 @@ const walletConnect = getWalletConnectV2(
   dashbordChains,
   env,
   walletConnectKey,
-  false
+  false,
 )
 
 const libraryConnectors = getConnectors({
@@ -61,7 +71,16 @@ const libraryConnectors = getConnectors({
   walletConnectV2: walletConnect,
 } as unknown as ConnectorsAvailable)
 
-const App = ({ Component, pageProps, colorScheme }: AppProps) => {
+export const getServerSideProps = async () => ({
+  props: {
+    THEGRAPH_API_KEY: process.env.THEGRAPH_API_KEY,
+  },
+})
+
+const App = ({ Component, pageProps, colorScheme, env }: AppProps) => {
+  if (typeof window !== 'undefined') {
+    process.env = { ...process.env, ...env }
+  }
   function scrollToTop() {
     document.getElementById('main-layout-container')?.scroll({
       top: 0,
@@ -83,6 +102,7 @@ const App = ({ Component, pageProps, colorScheme }: AppProps) => {
                 description={
                   'A Realtoken Dashboard for follow assets related to RealT'
                 }
+                favicon={Favicon}
               />
               <MantineProviders initialColorScheme={colorScheme}>
                 <LanguageInit i={i18n} />
@@ -98,9 +118,14 @@ const App = ({ Component, pageProps, colorScheme }: AppProps) => {
   )
 }
 
-App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  colorScheme: getCookie('mantine-color-scheme', ctx) || 'dark',
-  locale: getCookie('react-i18next', ctx) || 'fr',
-})
+App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => {
+  return {
+    env: {
+      THEGRAPH_API_KEY: process.env.THEGRAPH_API_KEY,
+    },
+    colorScheme: getCookie('mantine-color-scheme', ctx) || 'dark',
+    locale: getCookie('react-i18next', ctx) || 'fr',
+  }
+}
 
 export default App

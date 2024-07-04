@@ -1,15 +1,18 @@
+import { createSelector } from '@reduxjs/toolkit'
+
 import { RootState } from 'src/store/store'
-import { Currency, CurrencySymbol } from 'src/types/Currencies'
+import { CurrencySymbol } from 'src/types/Currencies'
 
-export const selectCurrencyRates = (
-  state: RootState
-): Record<Currency, number> => state.currencies.rates
+export const selectCurrencyRates = createSelector(
+  (state: RootState) => state.currencies,
+  (state) => state.rates,
+)
 
-export const selectUserCurrency = (
-  state: RootState
-): { rate: number; symbol: string } => {
-  return {
-    rate: state.currencies.rates[state.settings.userCurrency],
-    symbol: CurrencySymbol[state.settings.userCurrency],
-  }
-}
+export const selectUserCurrency = createSelector(
+  (state: RootState) => state.currencies.rates,
+  (state: RootState) => state.settings.userCurrency,
+  (rates, userCurrency) => ({
+    rate: rates[userCurrency],
+    symbol: CurrencySymbol[userCurrency],
+  }),
+)

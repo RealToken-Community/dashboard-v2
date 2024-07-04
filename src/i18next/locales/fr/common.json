@@ -1,6 +1,9 @@
 {
   "header": {
     "title": "Realtoken Dashboard",
+    "transactions": "Mes transactions",
+    "histories": "Historique des changements",
+    "documentation": "Wiki communautaire",
     "home": "Accueil",
     "realt": "RealT",
     "RMM": "RMM",
@@ -60,6 +63,7 @@
     "title": "Résumé",
     "netValue": "Valeur nette",
     "realtokenValue": "RealTokens",
+    "totalPriceCost": "Prix d'achat estimé",
     "stableDeposit": "Dépôt RMM",
     "stableBorrow": "Emprunt RMM"
   },
@@ -70,6 +74,9 @@
     "gnosis": "Gnosis",
     "rmm": "RMM",
     "levinSwap": "LevinSwap"
+  },
+  "realtimeIndicator": {
+    "realtime": "Temps réel"
   },
   "rentsCard": {
     "title": "Loyers",
@@ -102,7 +109,10 @@
       "totalUnit": "Logements totaux",
       "rentedUnit": "Logements loués",
       "occupancy": "Taux d'occupation",
-      "initialLaunch": "Mise en vente"
+      "initialLaunch": "Mise en vente",
+      "unitPriceCost": "Prix de revient unitaire",
+      "unrealizedCapitalGain": "Plus-value latente",
+      "lastChange": "Changement récent"
     },
     "sortReverse": "Inverser",
     "viewOptions": {
@@ -192,13 +202,18 @@
   },
   "assetTable": {
     "property": "Propriété",
-    "apr": "Rendement annuel",
-    "ownedTokens": "Tokens",
     "ownedValue": "Valeur",
-    "weeklyRents": "Loyer hebdomadaire",
+    "priceCost": "Prix d'achat",
+    "unrealizedCapitalGain": "Plus-value",
+    "ownedTokens": "Tokens",
+    "tokenPrice": "Prix du token",
+    "unitPriceCost": "Prix de revient",
+    "apr": "Rendement annuel",
+    "weeklyRents": "Loyer hebdo",
     "yearlyRents": "Loyer annuel",
     "rentedUnits": "Logements loués",
-    "propertyValue": "Valeur de la propriété"
+    "propertyValue": "Valeur de la propriété",
+    "lastChange": "Dernier changement"
   },
   "assetPage": {
     "home": "Accueil",
@@ -206,18 +221,22 @@
     "tabs": {
       "main": "Informations générales",
       "property": "Détail du bien",
+      "history": "Changements du bien",
       "transfers": "Mes transactions",
       "yamStatistics": "Statistiques marché secondaire (Yam)"
     },
     "main": {
-      "ownedValue": "Mon investissement",
+      "ownedValue": "Valeur actuelle",
       "ownedEthereumValue": "Ethereum",
       "ownedGnosisValue": "Gnosis",
       "ownedRmmValue": "RMM",
       "ownedLevinSwapValue": "LevinSwap",
-      "annualYield": "Rendement annuel",
-      "nbToken": "Nombre de tokens",
+      "priceCost": "Prix d'achat",
+      "unrealizedCapitalGain": "Plus-value latente",
       "tokenPrice": "Prix d'un token",
+      "unitPriceCost": "Prix de revient unitaire",
+      "nbToken": "Nombre de tokens",
+      "annualYield": "Rendement annuel",
       "rentWeek": "Loyer hebdomadaire",
       "rentMonth": "Loyer mensuel",
       "rentYear": "Loyer annuel",
@@ -246,7 +265,63 @@
       "subsidyBy": "Subvention",
       "subsidyShare": "Loyer subventionné"
     },
+    "history": {
+      "noHistory": "Aucun changement n'a été enregistré pour cette propriété",
+      "date": "Date",
+      "canal": "Canal",
+      "tokenPrice": "Prix du token",
+      "underlyingAssetPrice": "Prix du bien",
+      "initialMaintenanceReserve": "Réserve de maintenance",
+      "renovationReserve": "Réserve de rénovation",
+      "totalInvestment": "Investissement total",
+      "grossRentMonth": "Loyer brut mensuel",
+      "netRentMonth": "Loyer net mensuel",
+      "rentedUnits": "Logements loués"
+    },
+    "yamStatistics": {
+      "noVolume": "Aucun volume sur les 30 derniers jours",
+      "tokenPrice": "Prix RealT",
+      "yamPrice": "Prix Yam (30 jours)",
+      "yamDifference": "Différence",
+      "yamVolume": "Volume (30 jours)"
+    },
     "transfers": {
+      "noTransfers": "Vous n'avez pas de transactions pour cette propriété",
+      "etherScan": "voir sur EtherScan",
+      "gnosisScan": "voir sur GnosisScan"
+    }
+  },
+  "transactionPage": {
+    "home": "Accueil",
+    "title": "Mes transactions",
+    "item": {
+      "value": "Valeur",
+      "price": "Prix",
+      "etherScan": "voir sur EtherScan",
+      "gnosisScan": "voir sur GnosisScan"
+    },
+    "filter": {
+      "field": "Filtre",
+      "all": "Tous",
+      "internal": "Transferts internes",
+      "other": "Autres",
+      "swapcat": "Swapcat",
+      "yam": "YAM",
+      "primary": "RealT",
+      "reinvest": "Réinvestissement",
+      "rmm": "RMM",
+      "levinSwap": "LevinSwap",
+      "levinSwapPool": "LevinSwap Pool",
+      "migration": "Migration",
+      "bridge": "Bridge"
+    }
+  },
+  "transfers": {
+    "informationWarning": {
+      "title": "Informations",
+      "text": "Certaines transactions peuvent être incomplètes si le RPC est surchargé. De plus certains type de transactions peu communes ne sont pour le moment pas ou partiellement prisent en charges (liquidations RMM, ...)"
+    },
+    "titleValues": {
       "swapcatIn": "Achat sur Swapcat",
       "swapcatOut": "Vente sur Swapcat",
       "yamIn": "Achat sur Yam",
@@ -255,17 +330,47 @@
       "primaryOut": "Vente à RealT",
       "rmmIn": "Retrait du RMM",
       "rmmOut": "Dépôt sur le RMM",
-      "levinSwapIn": "Achat/Retrait sur LevinSwap",
-      "levinSwapOut": "Vente/Dépôt sur LevinSwap",
-      "reinvest": "Réinvestissement des loyers",
+      "levinSwapIn": "Achat sur LevinSwap",
+      "levinSwapOut": "Vente sur LevinSwap",
+      "levinSwapPoolIn": "Retrait sur LevinSwap",
+      "levinSwapPoolOut": "Dépôt sur LevinSwap",
+      "levinSwapUnknownIn": "Achat/Retrait sur LevinSwap",
+      "levinSwapUnknownOut": "Vente/Dépôt sur LevinSwap",
+      "reinvest": "Réinvestissement",
+      "bridge": "Bridge",
+      "migration": "Migration",
       "internal": "Transfert interne",
       "unknown": "Autre"
-    },
-    "yamStatistics": {
-      "tokenPrice": "Prix RealT",
-      "yamPrice": "Prix Yam (30 jours)",
-      "yamDifference": "Différence",
-      "yamVolume": "Volume (30 jours)"
     }
+  },
+  "historiesPage": {
+    "home": "Accueil",
+    "title": "Historique des changements",
+    "valueItem": {
+      "title": "Réévaluation",
+      "token": "Token",
+      "property": "Propriété",
+      "yield": "Rendement"
+    },
+    "rentItem": {
+      "title": "Loyers",
+      "netRentMonth": "Net mensuel",
+      "grossRentMonth": "Brut mensuel",
+      "yield": "Rendement",
+      "rentedUnits": "Logements loués"
+    },
+    "filter": {
+      "field": "Filtre",
+      "all": "Toutes les propriétés",
+      "allValue": "Toutes les réévaluations",
+      "allRent": "Tous les changement de loyers",
+      "owned": "Mes propriétés",
+      "ownedValue": "Mes réévaluations",
+      "ownedRent": "Mes changements de loyers"
+    }
+  },
+  "initialTransfersLoader": {
+    "title": "Chargement initial des données",
+    "description": "Récupération de vos transactions en cours. Ce chargement peut prendre un certain temps en fonction du nombre de transactions effecutées (10-20 secondes / 1000 transactions). Lors de vos prochaines visites, seul les nouvelles transactions seront récupérées."
   }
 }
