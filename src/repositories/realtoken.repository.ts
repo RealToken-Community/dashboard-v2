@@ -47,7 +47,7 @@ function getRentStatus(item: APIRealToken) {
 }
 
 function getRmmStatus(item: APIRealToken) {
-  return !!item.blockchainAddresses.xDai.rmmPoolAddress
+  return !!item.blockchainAddresses.xDai.rmmV3WrapperAddress
 }
 
 function fixSubsidyBy(item: APIRealToken) {
