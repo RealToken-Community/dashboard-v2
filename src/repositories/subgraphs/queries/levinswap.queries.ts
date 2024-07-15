@@ -8,7 +8,11 @@ import { LevinSwapClient } from '../clients'
 export async function getLevinSwapBalances(
   addressList: string[],
   realtokens: RealToken[],
+  options: { includesLevinSwap?: boolean } = {},
 ) {
+  if (!options.includesLevinSwap) {
+    return []
+  }
   const result = await executeQuery(
     addressList.map((item) => item.toLowerCase()),
   )

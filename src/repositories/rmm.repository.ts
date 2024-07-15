@@ -8,8 +8,11 @@ import { GnosisRpcProvider } from './RpcProvider'
 import { RmmPosition, getRmmPositions } from './subgraphs/queries/rmm.queries'
 
 export const RmmRepository = {
-  async getPositions(addressList: string[]) {
-    const result = await getRmmPositions(addressList)
+  async getPositions(
+    addressList: string[],
+    options?: { includesRmmV2?: boolean },
+  ) {
+    const result = await getRmmPositions(addressList, options)
     const merged = mergeWalletsPositions(result)
     const stableRMM3 = await Promise.all(
       addressList.map(getBalanceOfStableRMM3),

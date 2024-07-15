@@ -47,13 +47,18 @@ export function fetchWallets(realtokens: RealToken[]) {
     const state = getState()
     const isLoading = state.wallets.isLoading
     const addressList = selectUserAddressList(state)
+    const options = {
+      includesEth: state.settings.includesEth,
+      includesLevinSwap: state.settings.includesLevinSwap,
+      includesRmmV2: state.settings.includesRmmV2,
+    }
 
     if (isLoading) return
     dispatch({ type: isLoadingDispatchType, payload: true })
     try {
       const [balances, rmmPositions] = await Promise.all([
-        WalletsRepository.getBalances(addressList, realtokens),
-        RmmRepository.getPositions(addressList),
+        WalletsRepository.getBalances(addressList, realtokens, options),
+        RmmRepository.getPositions(addressList, options),
       ])
       dispatch({ type: balancesChangedDispatchType, payload: balances })
       dispatch({ type: rmmPositionsChangedDispatchType, payload: rmmPositions })
