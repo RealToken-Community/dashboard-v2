@@ -62,3 +62,18 @@ export const selectVersion = createSelector(
   (state: RootState) => state.settings,
   (state) => state.version,
 )
+
+export const selectUserIncludesEth = createSelector(
+  (state: RootState) => state.settings,
+  (state) => state.includesEth,
+)
+
+export const selectUserIncludesLevinSwap = createSelector(
+  (state: RootState) => state.settings,
+  (state) => state.includesLevinSwap,
+)
+
+export const selectUserIncludesRmmV2 = createSelector(
+  (state: RootState) => state.settings,
+  (state) => state.includesRmmV2,
+)

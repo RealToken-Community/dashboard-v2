@@ -23,7 +23,10 @@
     "realtime": "Temps réel",
     "global": "Global",
     "date": "Date",
-    "dateFormat": "DD MMMM YYYY"
+    "dateFormat": "DD MMMM YYYY",
+    "includesEth": "Inclure Ethereum",
+    "includesLevinSwap": "Inclure LevinSwap",
+    "includesRmmV2": "Inclure RMM V2"
   },
   "walletButton": {
     "connectWallet": "Connecter mon portefeuille",

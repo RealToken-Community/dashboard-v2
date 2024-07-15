@@ -22,18 +22,31 @@ export const WalletsRepository = {
   getBalances: async (
     addressList: string[],
     realtokens: RealToken[],
-  ): Promise<WalletBalances> => getWalletsBalances(addressList, realtokens),
+    options: {
+      includesEth?: boolean
+      includesLevinSwap?: boolean
+      includesRmmV2?: boolean
+    } = {},
+  ): Promise<WalletBalances> =>
+    getWalletsBalances(addressList, realtokens, options),
 }
 
 async function getWalletsBalances(
   addressList: string[],
   realtokens: RealToken[],
+  options: {
+    includesEth?: boolean
+    includesLevinSwap?: boolean
+    includesRmmV2?: boolean
+  } = {},
 ) {
   const [realtokenBalances, rmmBalances, levinSwapBalances] = await Promise.all(
     [
-      getRealtokenBalances(addressList),
-      getRmmBalances(addressList),
-      getLevinSwapBalances(addressList, realtokens),
+      getRealtokenBalances(addressList, { includesEth: options.includesEth }),
+      getRmmBalances(addressList, { includesRmmV2: options.includesRmmV2 }),
+      getLevinSwapBalances(addressList, realtokens, {
+        includesLevinSwap: options.includesLevinSwap,
+      }),
     ],
   )
 
