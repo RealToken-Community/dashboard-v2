@@ -34,7 +34,7 @@ const executeQuery = useCacheWithLocalStorage(
         : Promise.resolve({ data: { accounts: [] } }),
     ]),
   {
-    duration: 1000 * 60 * 10, // 10 minutes
+    duration: 1000 * 60 * 60, // 1 hour
     usePreviousValueOnError: true,
     key: 'RealtokenQuery',
   },

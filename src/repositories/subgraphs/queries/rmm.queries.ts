@@ -49,7 +49,7 @@ const executeRMM2Query = useCacheWithLocalStorage(
       variables: { addressList },
     }),
   {
-    duration: 1000 * 60 * 10, // 10 minutes
+    duration: 1000 * 60 * 60 * 12, // 12 hours
     usePreviousValueOnError: true,
     key: 'Rmm2Query',
   },
@@ -80,7 +80,7 @@ const executeRMM3Query = useCacheWithLocalStorage(
     }
   },
   {
-    duration: 1000 * 60 * 10, // 10 minutes
+    duration: 1000 * 60 * 60, // 1 hour
     usePreviousValueOnError: true,
     key: 'Rmm3Query',
   },
