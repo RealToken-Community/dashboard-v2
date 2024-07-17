@@ -26,7 +26,7 @@ const executeQuery = useCacheWithLocalStorage(
       variables: { addressList },
     }),
   {
-    duration: 1000 * 60 * 10, // 10 minutes
+    duration: 1000 * 60 * 60 * 12, // 12 hours
     usePreviousValueOnError: true,
     key: 'LevinSwapQuery',
   },
