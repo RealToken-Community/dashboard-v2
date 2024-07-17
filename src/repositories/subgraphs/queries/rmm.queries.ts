@@ -1,26 +1,32 @@
 import { gql } from '@apollo/client'
 
-import _keyBy from 'lodash/keyBy'
-
 import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
-import { RMM2Client, RMM3Client, RMM3WrapperClient } from '../clients'
+import { RMM2Client, RMM3WrapperClient } from '../clients'
 
-const WRAPPER_ADDRESS = '0xd3dff217818b4f33eb38a243158fbed2bbb029d3'
-
-export async function getRmmBalances(addressList: string[]) {
+export async function getRmmBalances(
+  addressList: string[],
+  options: { includesRmmV2?: boolean } = {},
+) {
   const addresses = addressList.map((item) => item.toLowerCase())
   const [resultRMM2, resultRMM3] = await Promise.all([
-    executeRMM2Query(addresses),
+    options.includesRmmV2
+      ? executeRMM2Query(addresses)
+      : Promise.resolve({ data: { users: [] } }),
     executeRMM3Query(addresses),
   ])
   return formatBalances([...resultRMM2.data.users, ...resultRMM3.data.users])
 }
 
-export async function getRmmPositions(addressList: string[]) {
+export async function getRmmPositions(
+  addressList: string[],
+  options: { includesRmmV2?: boolean } = {},
+) {
   const addresses = addressList.map((item) => item.toLowerCase())
   const [resultRMM2, resultRMM3] = await Promise.all([
-    executeRMM2Query(addresses),
+    options.includesRmmV2
+      ? executeRMM2Query(addresses)
+      : Promise.resolve({ data: { users: [] } }),
     executeRMM3Query(addresses),
   ])
   return formatPositions([...resultRMM2.data.users, ...resultRMM3.data.users])
@@ -43,7 +49,7 @@ const executeRMM2Query = useCacheWithLocalStorage(
       variables: { addressList },
     }),
   {
-    duration: 1000 * 60 * 10, // 10 minutes
+    duration: 1000 * 60 * 60 * 12, // 12 hours
     usePreviousValueOnError: true,
     key: 'Rmm2Query',
   },
@@ -74,7 +80,7 @@ const executeRMM3Query = useCacheWithLocalStorage(
     }
   },
   {
-    duration: 1000 * 60 * 10, // 10 minutes
+    duration: 1000 * 60 * 60, // 1 hour
     usePreviousValueOnError: true,
     key: 'Rmm3Query',
   },

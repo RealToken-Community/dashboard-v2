@@ -11,6 +11,7 @@ import {
   Menu,
   SegmentedControl,
   Select,
+  Switch,
   useMantineColorScheme,
 } from '@mantine/core'
 import { DatePickerInput } from '@mantine/dates'
@@ -30,11 +31,17 @@ import { setCookie } from 'cookies-next'
 import { TransferDatabaseService } from 'src/repositories/transfers/TransferDatabase'
 import {
   selectUserCurrency,
+  selectUserIncludesEth,
+  selectUserIncludesLevinSwap,
+  selectUserIncludesRmmV2,
   selectUserRentCalculation,
   selectVersion,
 } from 'src/store/features/settings/settingsSelector'
 import {
   userCurrencyChanged,
+  userIncludesEthChanged,
+  userIncludesLevinSwapChanged,
+  userIncludesRmmV2Changed,
   userRentCalculationChanged,
 } from 'src/store/features/settings/settingsSlice'
 import { Currency } from 'src/types/Currencies'
@@ -230,6 +237,47 @@ const CurrencySelect: FC = () => {
   )
 }
 
+const FetchDataSettings: FC = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'settings' })
+  const dispatch = useDispatch()
+
+  const userIncludesEth = useSelector(selectUserIncludesEth)
+  const userIncludesLevinSwap = useSelector(selectUserIncludesLevinSwap)
+  const userIncludesRmmV2 = useSelector(selectUserIncludesRmmV2)
+
+  const setUserIncludesEth = (value: boolean) =>
+    dispatch(userIncludesEthChanged(value))
+  const setUserIncludesLevinSwap = (value: boolean) =>
+    dispatch(userIncludesLevinSwapChanged(value))
+  const setUserIncludesRmmV2 = (value: boolean) =>
+    dispatch(userIncludesRmmV2Changed(value))
+
+  return (
+    <>
+      <Switch
+        checked={userIncludesEth}
+        onChange={(event) => setUserIncludesEth(event.currentTarget.checked)}
+        label={t('includesEth')}
+        style={{ margin: '4px 8px' }}
+      />
+      <Switch
+        checked={userIncludesLevinSwap}
+        onChange={(event) =>
+          setUserIncludesLevinSwap(event.currentTarget.checked)
+        }
+        label={t('includesLevinSwap')}
+        style={{ margin: '4px 8px' }}
+      />
+      <Switch
+        checked={userIncludesRmmV2}
+        onChange={(event) => setUserIncludesRmmV2(event.currentTarget.checked)}
+        label={t('includesRmmV2')}
+        style={{ margin: '4px 8px' }}
+      />
+    </>
+  )
+}
+
 const RefreshDataButton: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'settings' })
   const [loading, setLoading] = useState(false)
@@ -283,6 +331,7 @@ export const SettingsMenu: FC = () => {
         <RealtimeRentMenu />
         <ColorSchemeMenuItem />
         <Menu.Divider />
+        <FetchDataSettings />
         <RefreshDataButton />
         <Menu.Divider />
         <Box

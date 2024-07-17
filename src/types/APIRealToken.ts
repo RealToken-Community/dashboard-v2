@@ -79,6 +79,7 @@ export interface APIRealToken {
       distributor: string | 0
       rmmPoolAddress: string | 0
       chainlinkPriceContract: string | 0
+      rmmV3WrapperAddress: string | 0
     }
     goerli: {
       chainName: string
