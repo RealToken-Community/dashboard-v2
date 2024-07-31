@@ -27,13 +27,16 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
   }
 
   const paginationOffers: UserRealtoken[] = useMemo(() => {
+    console.log({ realtokens: props.realtokens })
+    if (pageSize === Infinity) return props.realtokens
+
     const start = (page - 1) * pageSize
     const end = start + pageSize
     return props.realtokens.slice(start, end)
   }, [props.realtokens, page, pageSize])
 
   // Go to first page when data changes (e.g. search, filter, order, ...)
-  useEffect(() => setPage(1), [props.realtokens])
+  // useEffect(() => setPage(1), [props.realtokens])
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -73,7 +76,11 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
       >
         <Pagination
           value={page}
-          total={Math.ceil(props.realtokens.length / pageSize)}
+          total={
+            pageSize === Infinity
+              ? 0
+              : Math.ceil(props.realtokens.length / pageSize)
+          }
           boundaries={1}
           siblings={1}
           size={'sm'}
@@ -83,7 +90,7 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
           store={combobox}
           withinPortal={false}
           onOptionSubmit={(val) => {
-            if (val === 'All') return setPageSize(props.realtokens.length)
+            if (val === 'All') return setPageSize(Infinity)
             setPageSize(Number(val))
 
             combobox.closeDropdown()
@@ -92,7 +99,7 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
           <Combobox.Target>
             <InputBase
               rightSection={<Combobox.Chevron />}
-              value={pageSize == props.realtokens.length ? 'All' : pageSize}
+              value={pageSize == Infinity ? 'All' : pageSize}
               type={'button'}
               onChange={() => {
                 combobox.openDropdown()
