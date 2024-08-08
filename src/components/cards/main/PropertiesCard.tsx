@@ -23,6 +23,42 @@ import {
 const RentedUnitsField: FC<{ label: string; realtokens: UserRealtoken[] }> = (
   props,
 ) => {
+  console.log({ realtokens: props.realtokens })
+  console.log({
+    units: props.realtokens
+      .filter((r) => r.rentedUnits !== r.totalUnits)
+      .map((r) => {
+        if (r.history.length > 0) {
+          let propInfo = r.history[0].values
+          const history = r.history.map((h) => {
+            return { ...propInfo, ...h.values }
+          })
+
+          // Find last rent from history where property was fully rented
+          for (const h of history.reverse()) {
+            if (h.rentedUnits === r.totalTokens && h.netRentYear) {
+              return {
+                total: r.totalUnits,
+                rented: r.rentedUnits,
+                yearlyRentPerTokenIfFullyRented: h.netRentYear / r.totalTokens,
+              }
+            }
+          }
+        }
+
+        // If no history, use current values
+        // please note that this estimation is most of the time underestimating the real value
+        // because maintenance cost is take into account but not shared between all the units
+        return {
+          total: r.totalUnits,
+          rented: r.rentedUnits,
+          netRentYearPerToken: r.netRentYearPerToken,
+          yearlyRentPerTokenIfFullyRented: r.rentedUnits
+            ? (r.netRentYearPerToken * r.totalUnits) / r.rentedUnits
+            : NaN,
+        }
+      }),
+  })
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
 
   const totalValue = _sumBy(props.realtokens, 'totalUnits')
