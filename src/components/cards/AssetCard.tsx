@@ -182,6 +182,14 @@ const fullyRentedRentEstimation = (token: UserRealtoken) => {
           return h.netRentYear / token.totalTokens
         }
       }
+
+      // If no fully rented history, use last history
+      const lastHistory = history.reverse()[0]
+      if (lastHistory.netRentYear && lastHistory.rentedUnits)
+        return (
+          (lastHistory.netRentYear * token.totalUnits) /
+          (token.totalTokens * lastHistory.rentedUnits)
+        )
     }
 
     // If no history, use current values
