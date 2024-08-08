@@ -48,6 +48,10 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   const yearlyAmount = props.value.amount * props.value.netRentYearPerToken
   const totalInvestment = props.value.totalInvestment
 
+  const fullyRentedRentEstimationValue = useCurrencyValue(
+    fullyRentedRentEstimation(props.value),
+  )
+
   return (
     <Card
       shadow={'sm'}
@@ -152,9 +156,7 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 
       <div className={styles.groupApart}>
         <div className={styles.textSm}>{t('fullyRentedEstimation')}*</div>
-        <div className={styles.textSm}>
-          {useCurrencyValue(fullyRentedRentEstimation(props.value))}
-        </div>
+        <div className={styles.textSm}>{fullyRentedRentEstimationValue}</div>
       </div>
 
       <div style={{ flex: '1 1 auto' }} />
