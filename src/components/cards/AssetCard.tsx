@@ -150,12 +150,45 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
         </div>
       </div>
 
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('fullyRentedEstimation')}*</div>
+        <div className={styles.textSm}>
+          {useCurrencyValue(fullyRentedRentEstimation(props.value))}
+        </div>
+      </div>
+
       <div style={{ flex: '1 1 auto' }} />
       <Divider height={1} my={'xs'} />
 
       <div className={styles.textLocation}>{props.value.fullName}</div>
     </Card>
   )
+}
+
+const fullyRentedRentEstimation = (token: UserRealtoken) => {
+  const rentPerToken = () => {
+    if (token.history.length > 0) {
+      let propInfo = token.history[0].values
+      const history = token.history.map((h) => {
+        return { ...propInfo, ...h.values }
+      })
+
+      // Find last rent from history where property was fully rented
+      for (const h of history.reverse()) {
+        if (h.rentedUnits === token.totalTokens && h.netRentYear) {
+          return h.netRentYear / token.totalTokens
+        }
+      }
+    }
+
+    // If no history, use current values
+    // please note that this estimation is most of the time underestimating the real value
+    // because maintenance cost is take into account but not shared between all the units
+    return token.rentedUnits
+      ? (token.netRentYearPerToken * token.totalUnits) / token.rentedUnits
+      : NaN
+  }
+  return rentPerToken() * token.amount
 }
 
 export const AssetCard = memo(AssetCardComponent)
