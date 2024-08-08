@@ -187,7 +187,7 @@
     "rentedUnits": "Rented units",
     "propertyValue": "Property value",
     "rentStartDate": "Rent Start",
-    "fullyRentedEstimation": "Estimated annual rent if fully rented",
+    "fullyRentedEstimation": "Fully rented APR",
     "rentNotStarted": "Rent not started yet",
     "isRmmAvailable": "RMM",
     "rentStatus": {

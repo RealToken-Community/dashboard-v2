@@ -48,9 +48,8 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   const yearlyAmount = props.value.amount * props.value.netRentYearPerToken
   const totalInvestment = props.value.totalInvestment
 
-  const fullyRentedRentEstimationValue = useCurrencyValue(
-    fullyRentedRentEstimation(props.value),
-  )
+  const fullyRentedRentEstimationValue =
+    Math.floor(fullyRentedRentEstimation(props.value) * 100) / 100
 
   return (
     <Card
@@ -156,7 +155,7 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 
       <div className={styles.groupApart}>
         <div className={styles.textSm}>{t('fullyRentedEstimation')}*</div>
-        <div className={styles.textSm}>{fullyRentedRentEstimationValue}</div>
+        <div className={styles.textSm}>{fullyRentedRentEstimationValue} %</div>
       </div>
 
       <div style={{ flex: '1 1 auto' }} />
@@ -168,7 +167,15 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 }
 
 const fullyRentedRentEstimation = (token: UserRealtoken) => {
-  const rentPerToken = () => {
+  if (token.rentedUnits === 0 && token.annualPercentageYield !== 0) {
+    return token.annualPercentageYield
+  }
+
+  if (token.rentedUnits !== 0 && token.annualPercentageYield !== 0) {
+    return (token.annualPercentageYield * token.totalUnits) / token.rentedUnits
+  }
+
+  const APREstimation = () => {
     if (token.history.length > 0) {
       let propInfo = token.history[0].values
       const history = token.history.map((h) => {
@@ -178,28 +185,41 @@ const fullyRentedRentEstimation = (token: UserRealtoken) => {
 
       // Find last rent from history where property was fully rented
       for (const h of history.reverse()) {
-        if (h.rentedUnits === token.totalUnits && h.netRentYear) {
-          return h.netRentYear / token.totalTokens
+        if (
+          h.rentedUnits === token.totalUnits &&
+          h.netRentYear &&
+          h.tokenPrice
+        ) {
+          return (h.netRentYear / (token.totalTokens * h.tokenPrice)) * 100
         }
       }
 
       // If no fully rented history, use last history
-      const lastHistory = history.reverse()[0]
-      if (lastHistory.netRentYear && lastHistory.rentedUnits)
+      const lastHistory = history
+        .reverse()
+        .find(
+          (h) =>
+            h.netRentYear &&
+            h.rentedUnits &&
+            h.tokenPrice &&
+            token.rentedUnits !== 0,
+        )
+      if (
+        lastHistory &&
+        lastHistory.netRentYear &&
+        lastHistory.rentedUnits != 0 &&
+        lastHistory.tokenPrice
+      )
         return (
-          (lastHistory.netRentYear * token.totalUnits) /
-          (token.totalTokens * lastHistory.rentedUnits)
+          (token.totalUnits / token.rentedUnits) *
+          (lastHistory.netRentYear /
+            (token.totalTokens * lastHistory.tokenPrice)) *
+          100
         )
     }
-
-    // If no history, use current values
-    // please note that this estimation is most of the time underestimating the real value
-    // because maintenance cost is take into account but not shared between all the units
-    return token.rentedUnits
-      ? (token.netRentYearPerToken * token.totalUnits) / token.rentedUnits
-      : NaN
   }
-  return rentPerToken() * token.amount
+
+  return APREstimation() || 0
 }
 
 export const AssetCard = memo(AssetCardComponent)
