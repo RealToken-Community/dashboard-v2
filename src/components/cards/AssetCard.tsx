@@ -172,7 +172,8 @@ const fullyRentedRentEstimation = (token: UserRealtoken) => {
     if (token.history.length > 0) {
       let propInfo = token.history[0].values
       const history = token.history.map((h) => {
-        return { ...propInfo, ...h.values }
+        propInfo = { ...propInfo, ...h.values }
+        return propInfo
       })
 
       // Find last rent from history where property was fully rented
