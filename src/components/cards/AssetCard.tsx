@@ -178,7 +178,7 @@ const fullyRentedRentEstimation = (token: UserRealtoken) => {
 
       // Find last rent from history where property was fully rented
       for (const h of history.reverse()) {
-        if (h.rentedUnits === token.totalTokens && h.netRentYear) {
+        if (h.rentedUnits === token.totalUnits && h.netRentYear) {
           return h.netRentYear / token.totalTokens
         }
       }
