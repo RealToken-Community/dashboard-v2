@@ -48,8 +48,8 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   const yearlyAmount = props.value.amount * props.value.netRentYearPerToken
   const totalInvestment = props.value.totalInvestment
 
-  const fullyRentedRentEstimationValue =
-    Math.floor(fullyRentedRentEstimation(props.value) * 100) / 100
+  const fullyRentedAPR =
+    Math.floor(fullyRentedAPREstimation(props.value) * 100) / 100
 
   return (
     <Card
@@ -155,7 +155,7 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 
       <div className={styles.groupApart}>
         <div className={styles.textSm}>{t('fullyRentedEstimation')}*</div>
-        <div className={styles.textSm}>{fullyRentedRentEstimationValue} %</div>
+        <div className={styles.textSm}>{fullyRentedAPR} %</div>
       </div>
 
       <div style={{ flex: '1 1 auto' }} />
@@ -166,7 +166,7 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   )
 }
 
-const fullyRentedRentEstimation = (token: UserRealtoken) => {
+const fullyRentedAPREstimation = (token: UserRealtoken) => {
   if (token.rentedUnits === token.totalUnits) {
     return token.annualPercentageYield
   }
