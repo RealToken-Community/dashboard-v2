@@ -167,12 +167,12 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
 }
 
 const fullyRentedRentEstimation = (token: UserRealtoken) => {
-  if (token.rentedUnits === 0 && token.annualPercentageYield !== 0) {
+  if (token.rentedUnits === token.totalUnits) {
     return token.annualPercentageYield
   }
 
-  if (token.rentedUnits !== 0 && token.annualPercentageYield !== 0) {
-    return (token.annualPercentageYield * token.totalUnits) / token.rentedUnits
+  if (token.rentedUnits === 0 && token.annualPercentageYield !== 0) {
+    return token.annualPercentageYield
   }
 
   const APREstimation = () => {
@@ -183,43 +183,31 @@ const fullyRentedRentEstimation = (token: UserRealtoken) => {
         return propInfo
       })
 
-      // Find last rent from history where property was fully rented
-      for (const h of history.reverse()) {
-        if (
-          h.rentedUnits === token.totalUnits &&
-          h.netRentYear &&
-          h.tokenPrice
-        ) {
-          return (h.netRentYear / (token.totalTokens * h.tokenPrice)) * 100
-        }
-      }
-
-      // If no fully rented history, use last history
-      const lastHistory = history
-        .reverse()
-        .find(
-          (h) =>
-            h.netRentYear &&
+      const previousAPR = history
+        .map((h) => {
+          if (
             h.rentedUnits &&
-            h.tokenPrice &&
-            token.rentedUnits !== 0,
-        )
-      if (
-        lastHistory &&
-        lastHistory.netRentYear &&
-        lastHistory.rentedUnits != 0 &&
-        lastHistory.tokenPrice
-      )
-        return (
-          (token.totalUnits / token.rentedUnits) *
-          (lastHistory.netRentYear /
-            (token.totalTokens * lastHistory.tokenPrice)) *
-          100
-        )
+            h.rentedUnits !== 0 &&
+            h.netRentYear &&
+            h.tokenPrice
+          ) {
+            return (
+              ((h.netRentYear * token.totalUnits) /
+                (token.totalTokens * h.tokenPrice * h.rentedUnits)) *
+              100
+            )
+          }
+          return 0
+        })
+        .filter((apr) => apr !== undefined)
+
+      return Math.max(...previousAPR)
+    } else {
+      return 0
     }
   }
 
-  return APREstimation() || 0
+  return APREstimation()
 }
 
 export const AssetCard = memo(AssetCardComponent)
