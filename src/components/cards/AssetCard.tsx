@@ -171,7 +171,12 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
 export const AssetCard: FC<AssetCardProps> = (props) => {
   const isAProperty = props.value && props.value.hasOwnProperty('rentStatus')
   if (isAProperty) {
-    return <PropertyCardComponent value={props.value as UserRealtoken} />
+    return (
+      <PropertyCardComponent
+        value={props.value as UserRealtoken}
+        onClick={props.onClick}
+      />
+    )
   } else {
     return <RWACard value={props.value as RWARealtoken} />
   }
