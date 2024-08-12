@@ -1,10 +1,17 @@
 import { FC, useEffect, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
 
 import { Grid, Group, Pagination } from '@mantine/core'
 
-import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import useRWA from 'src/hooks/useRWA'
+import getRWA from 'src/hooks/useRWA'
+import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
+import {
+  RWARealtoken,
+  UserRealtoken,
+} from 'src/store/features/wallets/walletsSelector'
 
 import { AssetCard } from '../../cards'
 
@@ -19,11 +26,25 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
     document.getElementsByClassName('asset-grid')[0]?.scrollIntoView()
   }
 
-  const paginationOffers: UserRealtoken[] = useMemo(() => {
-    const start = (page - 1) * pageSize
-    const end = start + pageSize
-    return props.realtokens.slice(start, end)
-  }, [props.realtokens, page, pageSize])
+  const [paginationOffers, setPaginationOffers] = useState<
+    (UserRealtoken | RWARealtoken)[]
+  >([])
+
+  const addressList = useSelector(selectUserAddressList)
+
+  useEffect(() => {
+    if (addressList.length === 0) return
+
+    const fetchData = async () => {
+      const start = (page - 1) * pageSize
+      const end = start + pageSize
+      const rwa = await getRWA(addressList)
+      const items = [...props.realtokens, rwa]
+      setPaginationOffers(items.slice(start, end))
+    }
+
+    fetchData()
+  }, [props.realtokens, page, pageSize, addressList])
 
   // Go to first page when data changes (e.g. search, filter, order, ...)
   useEffect(() => setPage(1), [props.realtokens])

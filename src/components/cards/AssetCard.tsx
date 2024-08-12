@@ -6,11 +6,15 @@ import Image from 'next/image'
 
 import { Badge, Card, Group } from '@mantine/core'
 
+import { es } from 'date-fns/locale'
 import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
-import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  RWARealtoken,
+  UserRealtoken,
+} from 'src/store/features/wallets/walletsSelector'
 import { RentCalculationState } from 'src/types/RentCalculation'
 
 import {
@@ -20,13 +24,19 @@ import {
   SubsidyStatusTag,
 } from '../commons'
 import styles from './AssetCard.module.sass'
+import { RWACard } from './RWACard'
 
 interface AssetCardProps {
+  value: UserRealtoken | RWARealtoken
+  onClick?: (id: string) => unknown
+}
+
+interface PropertyCardProps {
   value: UserRealtoken
   onClick?: (id: string) => unknown
 }
 
-const AssetCardComponent: FC<AssetCardProps> = (props) => {
+const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
@@ -158,4 +168,11 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   )
 }
 
-export const AssetCard = memo(AssetCardComponent)
+export const AssetCard: FC<AssetCardProps> = (props) => {
+  const isAProperty = props.value && props.value.hasOwnProperty('rentStatus')
+  if (isAProperty) {
+    return <PropertyCardComponent value={props.value as UserRealtoken} />
+  } else {
+    return <RWACard value={props.value as RWARealtoken} />
+  }
+}
