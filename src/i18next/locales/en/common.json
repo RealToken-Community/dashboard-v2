@@ -358,7 +358,8 @@
       "netRentMonth": "Net monthly",
       "grossRentMonth": "Gross monthly",
       "yield": "Yield",
-      "rentedUnits": "Rented units"
+      "rentedUnits": "Rented units",
+      "rwa": "RWA value"
     },
     "filter": {
       "field": "Filter",

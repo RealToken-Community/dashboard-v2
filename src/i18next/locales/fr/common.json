@@ -68,7 +68,8 @@
     "realtokenValue": "RealTokens",
     "totalPriceCost": "Prix d'achat estimé",
     "stableDeposit": "Dépôt RMM",
-    "stableBorrow": "Emprunt RMM"
+    "stableBorrow": "Emprunt RMM",
+    "rwa": "RWA"
   },
   "worthCard": {
     "title": "RealTokens",
