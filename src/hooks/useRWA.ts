@@ -18,16 +18,25 @@ const getRWA = async (addressList: string[]): Promise<RWARealtoken> => {
     totalAmount += Number(RWAContractBalance)
   }
 
+  const totalTokens = 100_000
+  const amount = totalAmount / 10 ** tokenDecimals
+  const unitPriceCost = 50
+
+  const value = unitPriceCost * amount
+  const totalInvestment = totalTokens * unitPriceCost
+
   return {
     id: '0',
     fullName: 'RWA Holdings SA, Neuchatel, NE, Suisse',
     shortName: 'RWA',
-    amount: totalAmount / 10 ** tokenDecimals,
-    totalTokens: 100_000,
+    amount,
+    totalTokens,
     imageLink: [
       'https://realt.co/wp-content/uploads/2024/02/Equity_FinalDesign-2000px-800x542.png',
     ],
     isRmmAvailable: false,
+    value,
+    totalInvestment,
   }
 }
 

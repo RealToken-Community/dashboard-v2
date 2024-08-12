@@ -42,9 +42,12 @@ export interface RWARealtoken {
   fullName: string
   shortName: string
   amount: number
+  value: number
+  totalInvestment: number
   totalTokens: number
   imageLink: string[]
   isRmmAvailable: boolean
+  unitPriceCost: number
 }
 
 const DAYS_PER_YEAR = 365

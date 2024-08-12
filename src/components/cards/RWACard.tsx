@@ -5,6 +5,7 @@ import Image from 'next/image'
 
 import { Badge, Card, Group } from '@mantine/core'
 
+import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { RWARealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import {
@@ -23,6 +24,10 @@ interface RWACardProps {
 const RWACardComponent: FC<RWACardProps> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
+
+  // In Dollars
+  const value = props.value.value
+  const totalInvestment = props.value.totalInvestment
 
   return (
     <Card
@@ -47,7 +52,7 @@ const RWACardComponent: FC<RWACardProps> = (props) => {
 
       <Group justify={'space-between'} mt={'md'}>
         <div className={styles.textBold}>{props.value.shortName}</div>
-        <Badge variant={'light'}></Badge>
+        <Badge variant={'light'}>{useCurrencyValue(value)}</Badge>
       </Group>
 
       <Divider height={1} my={'xs'} />
@@ -59,6 +64,11 @@ const RWACardComponent: FC<RWACardProps> = (props) => {
           {' / '}
           {tNumbers('integer', { value: props.value.totalTokens })}
         </div>
+      </div>
+
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('propertyValue')}</div>
+        <div className={styles.textSm}>{useCurrencyValue(totalInvestment)}</div>
       </div>
 
       <div style={{ flex: '1 1 auto' }} />
