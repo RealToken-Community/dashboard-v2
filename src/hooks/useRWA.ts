@@ -37,6 +37,7 @@ const getRWA = async (addressList: string[]): Promise<RWARealtoken> => {
     isRmmAvailable: false,
     value,
     totalInvestment,
+    unitPriceCost,
   }
 }
 
