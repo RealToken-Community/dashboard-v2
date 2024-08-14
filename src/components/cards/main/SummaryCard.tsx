@@ -26,8 +26,9 @@ export const SummaryCard: FC = () => {
 
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
+  const rwaValue = rwa?.value ?? 0
   const totalNetValue =
-    realtokensValue.total + stableDepositValue - stableDebtValue
+    realtokensValue.total + stableDepositValue + rwaValue - stableDebtValue
 
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
@@ -48,7 +49,7 @@ export const SummaryCard: FC = () => {
         ) : null}
         <CurrencyField label={t('stableDeposit')} value={stableDepositValue} />
         <CurrencyField label={t('stableBorrow')} value={stableDebtValue} />
-        <CurrencyField label={t('rwa')} value={rwa?.value} />
+        <CurrencyField label={t('rwa')} value={rwaValue} />
       </Box>
     </Card>
   )
