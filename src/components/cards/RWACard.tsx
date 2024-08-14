@@ -8,12 +8,7 @@ import { Badge, Card, Group } from '@mantine/core'
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { RWARealtoken } from 'src/store/features/wallets/walletsSelector'
 
-import {
-  Divider,
-  RentStatusTag,
-  RmmStatusTag,
-  SubsidyStatusTag,
-} from '../commons'
+import { Divider } from '../commons'
 import styles from './AssetCard.module.sass'
 
 interface RWACardProps {
