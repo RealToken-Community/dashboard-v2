@@ -1,7 +1,11 @@
+import { useEffect, useState } from 'react'
+
 import { ethers } from 'ethers'
 
 import { GnosisRpcProvider } from 'src/repositories/RpcProvider'
 import { RWARealtoken } from 'src/store/features/wallets/walletsSelector'
+import { useSelector } from 'react-redux'
+import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
 
 const tokenDecimals = 9
 
@@ -41,4 +45,16 @@ const getRWA = async (addressList: string[]): Promise<RWARealtoken> => {
   }
 }
 
-export default getRWA
+export const useRWA = () => {
+  const [rwa, setRwa] = useState<RWARealtoken | null>(null)
+  const addressList = useSelector(selectUserAddressList)
+
+  useEffect(() => {
+    (async () => {
+      const rwa_ = await getRWA(addressList)
+      setRwa(rwa_)
+    })()
+  }, [addressList])
+
+  return rwa
+}

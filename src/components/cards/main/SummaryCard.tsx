@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { Box, Card, Text, Title } from '@mantine/core'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
-import getRWA from 'src/hooks/useRWA'
+import { useRWA } from 'src/hooks/useRWA'
 import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
@@ -21,15 +21,8 @@ export const SummaryCard: FC = () => {
   const realtokensValue = useSelector(selectOwnedRealtokensValue)
   const rmmDetails = useSelector(selectRmmDetails)
   const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
-  const addressList = useSelector(selectUserAddressList)
-  const [rwaValue, setRwaValue] = useState<number>(0)
 
-  useEffect(() => {
-    ;(async () => {
-      const { value } = await getRWA(addressList)
-      setRwaValue(value as number) // warning it's dollar value
-    })()
-  }, [addressList])
+  const rwa = useRWA()
 
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
@@ -55,7 +48,7 @@ export const SummaryCard: FC = () => {
         ) : null}
         <CurrencyField label={t('stableDeposit')} value={stableDepositValue} />
         <CurrencyField label={t('stableBorrow')} value={stableDebtValue} />
-        <CurrencyField label={t('rwa')} value={rwaValue} />
+        <CurrencyField label={t('rwa')} value={rwa?.value} />
       </Box>
     </Card>
   )

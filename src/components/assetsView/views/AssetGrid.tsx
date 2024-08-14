@@ -5,8 +5,7 @@ import { useRouter } from 'next/router'
 
 import { Grid, Group, Pagination } from '@mantine/core'
 
-import useRWA from 'src/hooks/useRWA'
-import getRWA from 'src/hooks/useRWA'
+import { useRWA } from 'src/hooks/useRWA'
 import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
 import {
   RWARealtoken,
@@ -26,25 +25,16 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
     document.getElementsByClassName('asset-grid')[0]?.scrollIntoView()
   }
 
-  const [paginationOffers, setPaginationOffers] = useState<
-    (UserRealtoken | RWARealtoken)[]
-  >([])
+  const rwa = useRWA()
 
-  const addressList = useSelector(selectUserAddressList)
+  const paginationOffers = useMemo(() => {
+    if (!rwa) return []
 
-  useEffect(() => {
-    if (addressList.length === 0) return
-
-    const fetchData = async () => {
-      const start = (page - 1) * pageSize
-      const end = start + pageSize
-      const rwa = await getRWA(addressList)
-      const items = [...props.realtokens, rwa]
-      setPaginationOffers(items.slice(start, end))
-    }
-
-    fetchData()
-  }, [props.realtokens, page, pageSize, addressList])
+    const start = (page - 1) * pageSize
+    const end = start + pageSize
+    const items = [...props.realtokens, rwa]
+    return items.slice(start, end)
+  }, [props.realtokens, page, pageSize, rwa])
 
   // Go to first page when data changes (e.g. search, filter, order, ...)
   useEffect(() => setPage(1), [props.realtokens])
