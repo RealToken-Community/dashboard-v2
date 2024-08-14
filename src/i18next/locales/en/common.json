@@ -68,7 +68,8 @@
     "realtokenValue": "RealTokens",
     "totalPriceCost": "Estimated price cost",
     "stableDeposit": "RMM deposit",
-    "stableBorrow": "RMM borrow"
+    "stableBorrow": "RMM borrow",
+    "rwa": "RWA"
   },
   "worthCard": {
     "title": "RealTokens",
