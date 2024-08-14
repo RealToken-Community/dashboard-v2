@@ -25,7 +25,6 @@ const RWACardComponent: FC<RWACardProps> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
-  // In Dollars
   const value = props.value.value
   const totalInvestment = props.value.totalInvestment
 
