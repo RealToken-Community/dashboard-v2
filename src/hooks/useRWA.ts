@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { ethers } from 'ethers'
 
 import { GnosisRpcProvider } from 'src/repositories/RpcProvider'
-import { RWARealtoken } from 'src/store/features/wallets/walletsSelector'
-import { useSelector } from 'react-redux'
+import { selectUserCurrency } from 'src/store/features/currencies/currenciesSelector'
 import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
+import { RWARealtoken } from 'src/store/features/wallets/walletsSelector'
 
 const tokenDecimals = 9
 
-const getRWA = async (addressList: string[]): Promise<RWARealtoken> => {
+const getRWA = async (
+  addressList: string[],
+  rate: number,
+): Promise<RWARealtoken> => {
   let totalAmount = 0
 
   for (let i = 0; i < addressList.length; i++) {
@@ -24,7 +28,7 @@ const getRWA = async (addressList: string[]): Promise<RWARealtoken> => {
 
   const totalTokens = 100_000
   const amount = totalAmount / 10 ** tokenDecimals
-  const unitPriceCost = 50
+  const unitPriceCost = 50 / rate
 
   const value = unitPriceCost * amount
   const totalInvestment = totalTokens * unitPriceCost
@@ -49,9 +53,12 @@ export const useRWA = () => {
   const [rwa, setRwa] = useState<RWARealtoken | null>(null)
   const addressList = useSelector(selectUserAddressList)
 
+  const { rate } = useSelector(selectUserCurrency)
+
   useEffect(() => {
-    (async () => {
-      const rwa_ = await getRWA(addressList)
+    ;(async () => {
+      const rwa_ = await getRWA(addressList, rate)
+
       setRwa(rwa_)
     })()
   }, [addressList])
