@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
-import { Grid, Group, Pagination } from '@mantine/core'
+import { Grid, Group, Pagination, Text } from '@mantine/core'
 
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
@@ -56,6 +56,12 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
           onChange={onPageChange}
         />
       </Group>
+      <Text style={{ fontSize: 'small', color: 'grey' }}>
+        * This is a beta estimation done by RealT community. Please report any
+        issues. Please note that is an indicative value and not a guarantee.
+        RealT community does not take any responsibility for the accuracy of
+        this information.
+      </Text>
     </>
   )
 }
