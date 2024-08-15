@@ -372,5 +372,8 @@
   "initialTransfersLoader": {
     "title": "Initial data loading",
     "description": "Retrieving your transactions in progress. This loading can take some time depending on the number of transactions performed (10-20 seconds / 1000 transactions). On your next visits, only new transactions will be retrieved."
+  },
+  "disclaimer":{
+    "fullyRentedAPR": "This is a beta estimation done by RealT community. Please report any issues. Please note that is an indicative value and not a guarantee. RealT community does not take any responsibility for the accuracy of this information."
   }
 }

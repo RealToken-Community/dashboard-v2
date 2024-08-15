@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 
 import { Grid, Group, Pagination, Text } from '@mantine/core'
 
+import FullyRentedAPRDisclaimer from 'src/components/commons/others/FullyRentedAPRDisclaimer'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { AssetCard } from '../../cards'
@@ -55,13 +56,8 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
           size={'sm'}
           onChange={onPageChange}
         />
+        <FullyRentedAPRDisclaimer />
       </Group>
-      <Text style={{ fontSize: 'small', color: 'grey' }}>
-        * This is a beta estimation done by RealT community. Please report any
-        issues. Please note that is an indicative value and not a guarantee.
-        RealT community does not take any responsibility for the accuracy of
-        this information.
-      </Text>
     </>
   )
 }
