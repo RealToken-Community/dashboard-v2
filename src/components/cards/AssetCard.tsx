@@ -156,7 +156,9 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
       <div className={styles.groupApart}>
         <div className={styles.textSm}>{t('fullyRentedEstimation')}*</div>
         <div className={styles.textSm}>
-          {tNumbers('percent', { value: fullyRentedAPR })}
+          {fullyRentedAPR
+            ? tNumbers('percent', { value: fullyRentedAPR })
+            : '-'}
         </div>
       </div>
 
