@@ -73,7 +73,7 @@ export const useRWA = () => {
   const includeETH = useSelector(selectUserIncludesEth)
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const rwa_ = await getRWA(addressList, rate, includeETH)
 
       setRwa(rwa_)
