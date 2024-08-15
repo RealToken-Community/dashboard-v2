@@ -81,6 +81,7 @@
   "rentsCard": {
     "title": "Rents",
     "apr": "APR",
+    "fullyRentedAPR": "Fully rented APR *",
     "daily": "Daily",
     "weekly": "Weekly",
     "monthly": "Monthly",

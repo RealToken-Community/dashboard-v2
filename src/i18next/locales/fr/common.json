@@ -81,6 +81,7 @@
   "rentsCard": {
     "title": "Loyers",
     "apr": "Rendement annuel",
+    "fullyRentedAPR": "Rendement 100% loué *",
     "daily": "Journaliers",
     "weekly": "Hebdomadaires",
     "monthly": "Mensuels",

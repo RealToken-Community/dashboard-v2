@@ -5,7 +5,10 @@ import moment from 'moment'
 
 import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
-import { RentCalculationState } from 'src/types/RentCalculation'
+import {
+  RentCalculation,
+  RentCalculationState,
+} from 'src/types/RentCalculation'
 
 const fullyRentedAPREstimation = (token: UserRealtoken) => {
   // Case of fully rented property
@@ -54,14 +57,43 @@ export const useFullyRentedAPR = (token: UserRealtoken) => {
   const rentCalculation = useSelector(selectUserRentCalculation)
 
   const fullyRentedAPR = useMemo(() => {
-    const realtimeDate = moment(new Date(rentCalculation.date))
-    const rentStartDate = new Date(token.rentStartDate.date)
-    const isDisabled =
-      rentCalculation.state === RentCalculationState.Realtime &&
-      rentStartDate > realtimeDate.toDate()
+    const isDisabled = APRDisabled(rentCalculation, token)
     if (isDisabled) return 0
     return fullyRentedAPREstimation(token)
   }, [token, rentCalculation])
 
   return fullyRentedAPR
+}
+
+export const useGeneralFullyRentedAPR = (tokens: UserRealtoken[]) => {
+  const rentCalculation = useSelector(selectUserRentCalculation)
+  // Fully rented APR average using valuation ponderation
+  const fullyRentedAPR = useMemo(() => {
+    const totalValue = tokens.reduce((acc, token) => {
+      const isDisabled = APRDisabled(rentCalculation, token)
+      if (isDisabled) return acc
+      return acc + token.value
+    }, 0)
+    const totalAPR = tokens.reduce((acc, token) => {
+      const isDisabled = APRDisabled(rentCalculation, token)
+      if (isDisabled) return acc
+      return acc + token.value * fullyRentedAPREstimation(token)
+    }, 0)
+    console.log({ totalValue, totalAPR, fullyRentedAPR: totalAPR / totalValue })
+    return totalAPR / totalValue
+  }, [tokens, rentCalculation])
+
+  return fullyRentedAPR
+}
+
+const APRDisabled = (
+  rentCalculation: RentCalculation,
+  token: UserRealtoken,
+) => {
+  const realtimeDate = moment(new Date(rentCalculation.date))
+  const rentStartDate = new Date(token.rentStartDate.date)
+  const isDisabled =
+    rentCalculation.state === RentCalculationState.Realtime &&
+    rentStartDate > realtimeDate.toDate()
+  return isDisabled
 }
