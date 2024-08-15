@@ -1,6 +1,11 @@
 import { useMemo } from 'react'
+import { useSelector } from 'react-redux'
 
+import moment from 'moment'
+
+import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { RentCalculationState } from 'src/types/RentCalculation'
 
 const fullyRentedAPREstimation = (token: UserRealtoken) => {
   // Case of fully rented property
@@ -46,7 +51,17 @@ const fullyRentedAPREstimation = (token: UserRealtoken) => {
 }
 
 export const useFullyRentedAPR = (token: UserRealtoken) => {
-  const fullyRentedAPR = useMemo(() => fullyRentedAPREstimation(token), [token])
+  const rentCalculation = useSelector(selectUserRentCalculation)
+
+  const fullyRentedAPR = useMemo(() => {
+    const realtimeDate = moment(new Date(rentCalculation.date))
+    const rentStartDate = new Date(token.rentStartDate.date)
+    const isDisabled =
+      rentCalculation.state === RentCalculationState.Realtime &&
+      rentStartDate > realtimeDate.toDate()
+    if (isDisabled) return 0
+    return fullyRentedAPREstimation(token)
+  }, [token, rentCalculation])
 
   return fullyRentedAPR
 }
