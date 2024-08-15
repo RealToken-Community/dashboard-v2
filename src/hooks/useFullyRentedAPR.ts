@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 
@@ -46,13 +46,7 @@ const fullyRentedAPREstimation = (token: UserRealtoken) => {
 }
 
 export const useFullyRentedAPR = (token: UserRealtoken) => {
-  const [fullyRentedAPR, setFullyRentedAPR] = useState(
-    fullyRentedAPREstimation(token),
-  )
-
-  useEffect(() => {
-    setFullyRentedAPR(fullyRentedAPREstimation(token))
-  }, [token])
+  const fullyRentedAPR = useMemo(() => fullyRentedAPREstimation(token), [token])
 
   return fullyRentedAPR
 }
