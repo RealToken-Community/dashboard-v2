@@ -5,8 +5,6 @@ import { useRouter } from 'next/router'
 
 import { Grid, Group, Pagination } from '@mantine/core'
 
-import { useRWA } from 'src/hooks/useRWA'
-import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
 import {
   RWARealtoken,
   UserRealtoken,
@@ -14,7 +12,9 @@ import {
 
 import { AssetCard } from '../../cards'
 
-export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
+export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
+  props,
+) => {
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
   const pageSize = 24
@@ -25,16 +25,11 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
     document.getElementsByClassName('asset-grid')[0]?.scrollIntoView()
   }
 
-  const rwa = useRWA()
-
   const paginationOffers = useMemo(() => {
-    if (!rwa) return []
-
     const start = (page - 1) * pageSize
     const end = start + pageSize
-    const items = [...props.realtokens, rwa]
-    return items.slice(start, end)
-  }, [props.realtokens, page, pageSize, rwa])
+    return props.realtokens.slice(start, end)
+  }, [props.realtokens, page, pageSize])
 
   // Go to first page when data changes (e.g. search, filter, order, ...)
   useEffect(() => setPage(1), [props.realtokens])

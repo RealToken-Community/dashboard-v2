@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { Grid } from '@mantine/core'
 
+import { useRWA } from 'src/hooks/useRWA'
 import { selectUserRealtokens } from 'src/store/features/wallets/walletsSelector'
 
 import { AssetsViewSearch, useAssetsViewSearch } from './AssetsViewSearch'
@@ -19,11 +20,12 @@ export const AssetsView: FC = () => {
   const { choosenAssetView } = useAssetsViewSelect()
 
   const realtokens = useSelector(selectUserRealtokens)
+  const rwa = useRWA()
 
-  const data = useMemo(
-    () => assetsViewFilterFunction(realtokens.filter(assetSearchFunction)),
-    [realtokens, assetSearchFunction, assetsViewFilterFunction],
-  )
+  const data = useMemo(() => {
+    const assets = rwa ? [...realtokens, rwa] : realtokens
+    return assetsViewFilterFunction(assets.filter(assetSearchFunction))
+  }, [realtokens, rwa, assetSearchFunction, assetsViewFilterFunction])
 
   return realtokens.length ? (
     <>

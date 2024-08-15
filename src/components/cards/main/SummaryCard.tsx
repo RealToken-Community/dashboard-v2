@@ -1,12 +1,10 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { Box, Card, Text, Title } from '@mantine/core'
 
-import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { useRWA } from 'src/hooks/useRWA'
-import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
   selectOwnedRealtokensValue,
