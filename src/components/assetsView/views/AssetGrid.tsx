@@ -1,5 +1,4 @@
 import { FC, useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
 

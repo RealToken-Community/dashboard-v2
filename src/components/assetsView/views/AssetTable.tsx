@@ -14,7 +14,6 @@ import {
   RWARealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
-import { RealToken } from 'src/types/RealToken'
 
 export const AssetTable: FC<{
   realtokens: (UserRealtoken | RWARealtoken)[]

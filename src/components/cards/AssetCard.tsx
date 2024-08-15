@@ -6,7 +6,6 @@ import Image from 'next/image'
 
 import { Badge, Card, Group } from '@mantine/core'
 
-import { es } from 'date-fns/locale'
 import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
