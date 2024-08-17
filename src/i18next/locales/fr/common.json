@@ -372,6 +372,10 @@
       "ownedRent": "Mes changements de loyers"
     }
   },
+  "yamStatisticsPage": {
+    "home": "Accueil",
+    "title": "Statistiques marché secondaire (Yam)"
+  },
   "initialTransfersLoader": {
     "title": "Chargement initial des données",
     "description": "Récupération de vos transactions en cours. Ce chargement peut prendre un certain temps en fonction du nombre de transactions effecutées (10-20 secondes / 1000 transactions). Lors de vos prochaines visites, seul les nouvelles transactions seront récupérées."
