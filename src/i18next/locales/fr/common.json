@@ -68,7 +68,8 @@
     "realtokenValue": "RealTokens",
     "totalPriceCost": "Prix d'achat estimé",
     "stableDeposit": "Dépôt RMM",
-    "stableBorrow": "Emprunt RMM"
+    "stableBorrow": "Emprunt RMM",
+    "rwa": "RWA"
   },
   "worthCard": {
     "title": "RealTokens",
@@ -371,6 +372,10 @@
       "ownedValue": "Mes réévaluations",
       "ownedRent": "Mes changements de loyers"
     }
+  },
+  "yamStatisticsPage": {
+    "home": "Accueil",
+    "title": "Statistiques marché secondaire (Yam)"
   },
   "initialTransfersLoader": {
     "title": "Chargement initial des données",

@@ -14,7 +14,7 @@ module.exports = {
     '^i18next(.*)',
     '^(?!(src|../|./))(.*)',
     '^src(.*)$',
-    '^(.*)$'
+    '^(.*)$',
   ],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,

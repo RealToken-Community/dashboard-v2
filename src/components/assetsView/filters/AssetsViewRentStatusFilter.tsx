@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next'
 
 import { Select } from '@mantine/core'
 
-import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  RWARealtoken,
+  UserRealtoken,
+} from 'src/store/features/wallets/walletsSelector'
 
 import { useInputStyles } from '../../inputs/useInputStyles'
 import { AssetRentStatusType } from '../types'
@@ -58,16 +61,17 @@ AssetsViewRentStatusFilter.displayName = 'AssetsViewRentStatusFilter'
 export function useAssetsViewRentStatusFilter(
   filter: AssetsViewRentStatusFilterModel,
 ) {
-  function assetRentStatusFilterFunction(asset: UserRealtoken) {
+  function assetRentStatusFilterFunction(asset: UserRealtoken | RWARealtoken) {
+    const Asset = asset as UserRealtoken
     switch (filter.rentStatus) {
       case AssetRentStatusType.ALL:
         return true
       case AssetRentStatusType.RENTED:
-        return asset.rentStatus === 'full'
+        return Asset.rentStatus === 'full'
       case AssetRentStatusType.PARTIALLY_RENTED:
-        return asset.rentStatus === 'partial'
+        return Asset.rentStatus === 'partial'
       case AssetRentStatusType.NOT_RENTED:
-        return asset.rentStatus === 'none'
+        return Asset.rentStatus === 'none'
     }
   }
 

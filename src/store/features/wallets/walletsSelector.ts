@@ -37,6 +37,19 @@ export interface UserRealtoken extends RealToken {
   >
 }
 
+export interface RWARealtoken {
+  id: string
+  fullName: string
+  shortName: string
+  amount: number
+  value: number
+  totalInvestment: number
+  totalTokens: number
+  imageLink: string[]
+  isRmmAvailable: boolean
+  unitPriceCost: number
+}
+
 const DAYS_PER_YEAR = 365
 const MONTHS_PER_YEAR = 12
 const AVG_DAYS_PER_MONTH = DAYS_PER_YEAR / MONTHS_PER_YEAR
