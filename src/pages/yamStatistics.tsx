@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { Divider } from '@mantine/core'
+import { Divider, Pagination } from '@mantine/core'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { GetYamStatistics, YamStatistics } from 'src/repositories'
@@ -49,9 +49,14 @@ const YamStatisticsRow: React.FC<{
 
 const YamStatisticsPage = () => {
   const realtokens = useSelector(selectAllUserRealtokens)
+  const realtokensWithYam = useMemo(() => {
+    return realtokens.filter(
+      (realtoken) => realtoken.blockchainAddresses.xDai.contract,
+    )
+  }, [realtokens])
 
   const [yamStatistics, setYamStatistics] = useState<YamStatistics[]>(
-    realtokens.map(() => {
+    realtokensWithYam.map(() => {
       return {
         quantity: 0,
         volume: 0,
@@ -59,18 +64,26 @@ const YamStatisticsPage = () => {
       }
     }),
   )
+  const [page, setPage] = useState<number>(1)
+  const pageSize = 25
 
   const [isLoading, setIsLoading] = useState(true)
 
+  function onPageChange(page: number) {
+    setPage(page)
+    // Scroll to top of grid
+    document.getElementsByClassName('history-list')[0]?.scrollIntoView()
+  }
+
   const yamStatisticsPromise: Promise<YamStatistics[]> = useMemo(async () => {
     console.log({ realtokens })
-    if (!realtokens.length) return Promise.resolve([])
-    const statsPromises = realtokens.map((realtoken) =>
+    if (!realtokensWithYam.length) return Promise.resolve([])
+    const statsPromises = realtokensWithYam.map((realtoken) =>
       GetYamStatistics({ realtoken }),
     )
     const data = await Promise.all(statsPromises)
     return data
-  }, [realtokens])
+  }, [realtokensWithYam])
 
   useEffect(() => {
     setIsLoading(true)
@@ -80,6 +93,12 @@ const YamStatisticsPage = () => {
       console.log({ data })
     })
   }, [yamStatisticsPromise])
+
+  const paginationYamStatistics: YamStatistics[] = useMemo(() => {
+    const start = (page - 1) * pageSize
+    const end = start + pageSize
+    return yamStatistics.slice(start, end)
+  }, [yamStatistics, page, pageSize])
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -96,15 +115,22 @@ const YamStatisticsPage = () => {
           <th>Yam Difference (30 days)</th>
           <th>Yam Volume</th>
         </tr>
-        {yamStatistics &&
-          yamStatistics.map((statistics, index) => (
-            <YamStatisticsRow
-              key={index}
-              statistics={statistics}
-              realtoken={realtokens[index]}
-            />
-          ))}
+        {paginationYamStatistics.map((statistics, index) => (
+          <YamStatisticsRow
+            key={index}
+            statistics={statistics}
+            realtoken={realtokens[index]}
+          />
+        ))}
       </table>
+      <Pagination
+        value={page}
+        total={Math.ceil(yamStatistics.length / pageSize)}
+        boundaries={1}
+        siblings={1}
+        size={'sm'}
+        onChange={onPageChange}
+      />
     </div>
   )
 }
