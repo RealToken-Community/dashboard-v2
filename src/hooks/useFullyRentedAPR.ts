@@ -79,7 +79,6 @@ export const useGeneralFullyRentedAPR = (tokens: UserRealtoken[]) => {
       if (isDisabled) return acc
       return acc + token.value * fullyRentedAPREstimation(token)
     }, 0)
-    console.log({ totalValue, totalAPR, fullyRentedAPR: totalAPR / totalValue })
     return totalAPR / totalValue
   }, [tokens, rentCalculation])
 

@@ -33,7 +33,6 @@ export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
   }
 
   const paginationOffers: (UserRealtoken | RWARealtoken)[] = useMemo(() => {
-    console.log({ realtokens: props.realtokens })
     if (pageSize === Infinity) return props.realtokens
     const start = (page - 1) * pageSize
     const end = start + pageSize

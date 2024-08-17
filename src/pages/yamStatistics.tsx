@@ -87,7 +87,6 @@ const YamStatisticsPage = () => {
   }
 
   const yamStatisticsPromise: Promise<YamStatistics[]> = useMemo(async () => {
-    console.log({ realtokens })
     if (!realtokensWithYam.length) return Promise.resolve([])
     const statsPromises = realtokensWithYam.map((realtoken) =>
       GetYamStatistics({ realtoken }),
@@ -101,7 +100,6 @@ const YamStatisticsPage = () => {
     yamStatisticsPromise.then((data) => {
       setYamStatistics(data)
       setIsLoading(false)
-      console.log({ data })
     })
   }, [yamStatisticsPromise])
 
