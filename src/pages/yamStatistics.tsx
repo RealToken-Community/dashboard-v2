@@ -20,11 +20,12 @@ const YamStatisticsRow: React.FC<{
   const yamDifference = yamPrice - realtoken.tokenPrice
   const yamDifferencePercent = (yamDifference / realtoken.tokenPrice) * 100
 
-  const yamPriceValue = useCurrencyValue(yamPrice)
-  const yamDifferenceValue = useCurrencyValue(yamDifference)
-  const volumeValue = useCurrencyValue(statistics.volume)
+  const fallback = '-'
+  const yamPriceValue = useCurrencyValue(yamPrice, fallback)
+  const yamDifferenceValue = useCurrencyValue(yamDifference, fallback)
+  const volumeValue = useCurrencyValue(statistics.volume, fallback)
 
-  return (
+  return yamPriceValue !== fallback ? (
     <>
       <tr key={realtoken.id}>
         <td>{realtoken.tokenPrice}</td>
@@ -42,7 +43,7 @@ const YamStatisticsRow: React.FC<{
         </td>
       </tr>
     </>
-  )
+  ) : null
 }
 
 const YamStatisticsPage = () => {
