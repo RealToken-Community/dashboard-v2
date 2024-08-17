@@ -23,7 +23,10 @@
     "realtime": "Temps réel",
     "global": "Global",
     "date": "Date",
-    "dateFormat": "DD MMMM YYYY"
+    "dateFormat": "DD MMMM YYYY",
+    "includesEth": "Inclure Ethereum",
+    "includesLevinSwap": "Inclure LevinSwap",
+    "includesRmmV2": "Inclure RMM V2"
   },
   "walletButton": {
     "connectWallet": "Connecter mon portefeuille",
@@ -65,7 +68,8 @@
     "realtokenValue": "RealTokens",
     "totalPriceCost": "Prix d'achat estimé",
     "stableDeposit": "Dépôt RMM",
-    "stableBorrow": "Emprunt RMM"
+    "stableBorrow": "Emprunt RMM",
+    "rwa": "RWA"
   },
   "worthCard": {
     "title": "RealTokens",
@@ -370,6 +374,10 @@
       "ownedValue": "Mes réévaluations",
       "ownedRent": "Mes changements de loyers"
     }
+  },
+  "yamStatisticsPage": {
+    "home": "Accueil",
+    "title": "Statistiques marché secondaire (Yam)"
   },
   "initialTransfersLoader": {
     "title": "Chargement initial des données",

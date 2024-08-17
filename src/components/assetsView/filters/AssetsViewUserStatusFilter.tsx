@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next'
 
 import { Select } from '@mantine/core'
 
-import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  RWARealtoken,
+  UserRealtoken,
+} from 'src/store/features/wallets/walletsSelector'
 
 import { useInputStyles } from '../../inputs/useInputStyles'
 import { AssetUserStatusType } from '../types'
@@ -66,20 +69,21 @@ AssetsViewUserStatusFilter.displayName = 'AssetsViewUserStatusFilter'
 export function useAssetsViewUserStatusFilter(
   filter: AssetsViewUserStatusFilterModel,
 ) {
-  function assetUserStatusFilterFunction(asset: UserRealtoken) {
+  function assetUserStatusFilterFunction(asset: UserRealtoken | RWARealtoken) {
+    const Asset = asset as UserRealtoken
     switch (filter.userStatus) {
       case AssetUserStatusType.ALL:
         return true
       case AssetUserStatusType.OWNED:
-        return asset.amount > 0
+        return Asset.amount > 0
       case AssetUserStatusType.WHITELISTED:
-        return asset.isWhitelisted
+        return Asset.isWhitelisted
       case AssetUserStatusType.WHITELISTED_NOT_OWNED:
-        return asset.isWhitelisted && asset.amount === 0
+        return Asset.isWhitelisted && Asset.amount === 0
       case AssetUserStatusType.NOT_OWNED:
-        return asset.amount === 0
+        return Asset.amount === 0
       case AssetUserStatusType.NOT_WHITELISTED:
-        return !asset.isWhitelisted
+        return !Asset.isWhitelisted
     }
   }
 

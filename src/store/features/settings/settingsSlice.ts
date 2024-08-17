@@ -15,6 +15,9 @@ import {
 const USER_LS_KEY = 'store:settings/user'
 const USER_CURRENCY_LS_KEY = 'store:settings/userCurrency'
 const USER_RENT_CALCULATION_LS_KEY = 'store:settings/userRentCalculation'
+const USER_INCLUDES_ETH_LS_KEY = 'store:settings/includesEth'
+const USER_INCLUDES_LEVIN_SWAP_LS_KEY = 'store:settings/includesLevinSwap'
+const USER_INCLUDES_RMM_V2_LS_KEY = 'store:settings/includesRmmV2'
 
 export interface User {
   id: string
@@ -30,6 +33,9 @@ interface SettingsInitialStateType {
   userCurrency: Currency
   isInitialized: boolean
   rentCalculation: RentCalculation
+  includesEth: boolean
+  includesLevinSwap: boolean
+  includesRmmV2: boolean
   version?: string
 }
 
@@ -41,6 +47,9 @@ const settingsInitialState: SettingsInitialStateType = {
     date: new Date().getTime(),
   },
   isInitialized: false,
+  includesEth: false,
+  includesLevinSwap: false,
+  includesRmmV2: false,
 }
 
 // DISPATCH TYPE
@@ -49,6 +58,11 @@ export const userChangedDispatchType = 'settings/userChanged'
 export const userCurrencyChangedDispatchType = 'settings/userCurrencyChanged'
 export const userRentCalculationChangedDispatchType =
   'settings/userRentCalculationChanged'
+export const userIncludesEthChangedDispatchType = 'settings/includesEthChanged'
+export const userIncludesLevinSwapChangedDispatchType =
+  'settings/includesLevinSwapChanged'
+export const userIncludesRmmV2ChangedDispatchType =
+  'settings/includesRmmV2Changed'
 
 // ACTIONS
 export const initializeSettings = createAction(initializeSettingsDispatchType)
@@ -64,6 +78,15 @@ export const userRentCalculationChanged = createAction(
       date: rentCalculation.date,
     },
   }),
+)
+export const userIncludesEthChanged = createAction<boolean>(
+  userIncludesEthChangedDispatchType,
+)
+export const userIncludesLevinSwapChanged = createAction<boolean>(
+  userIncludesLevinSwapChangedDispatchType,
+)
+export const userIncludesRmmV2Changed = createAction<boolean>(
+  userIncludesRmmV2ChangedDispatchType,
 )
 
 // THUNKS
@@ -169,12 +192,41 @@ export const settingsReducers = createReducer(
         state.rentCalculation = action.payload
         localStorage.setItem(USER_RENT_CALCULATION_LS_KEY, action.payload.state)
       })
+      .addCase(userIncludesEthChanged, (state, action) => {
+        state.includesEth = action.payload
+        localStorage.setItem(
+          USER_INCLUDES_ETH_LS_KEY,
+          action.payload.toString(),
+        )
+      })
+      .addCase(userIncludesLevinSwapChanged, (state, action) => {
+        state.includesLevinSwap = action.payload
+        localStorage.setItem(
+          USER_INCLUDES_LEVIN_SWAP_LS_KEY,
+          action.payload.toString(),
+        )
+      })
+      .addCase(userIncludesRmmV2Changed, (state, action) => {
+        state.includesRmmV2 = action.payload
+        localStorage.setItem(
+          USER_INCLUDES_RMM_V2_LS_KEY,
+          action.payload.toString(),
+        )
+      })
       .addCase(initializeSettings, (state) => {
         const user = localStorage.getItem(USER_LS_KEY)
         const userCurrency = localStorage.getItem(USER_CURRENCY_LS_KEY)
         const userRentCalculation = localStorage.getItem(
           USER_RENT_CALCULATION_LS_KEY,
         )
+        const userIncludesEth = localStorage.getItem(USER_INCLUDES_ETH_LS_KEY)
+        const userIncludesLevinSwap = localStorage.getItem(
+          USER_INCLUDES_LEVIN_SWAP_LS_KEY,
+        )
+        const userIncludesRmmV2 = localStorage.getItem(
+          USER_INCLUDES_RMM_V2_LS_KEY,
+        )
+
         state.user = user ? JSON.parse(user) : undefined
         state.userCurrency = userCurrency
           ? (userCurrency as Currency)
@@ -188,6 +240,11 @@ export const settingsReducers = createReducer(
               state: RentCalculationState.Global,
               date: new Date().getTime(),
             }
+
+        state.includesEth = userIncludesEth === 'true'
+        state.includesLevinSwap = userIncludesLevinSwap === 'true'
+        state.includesRmmV2 = userIncludesRmmV2 === 'true'
+
         const { publicRuntimeConfig } = getConfig() as {
           publicRuntimeConfig?: { version: string }
         }

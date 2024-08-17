@@ -29,6 +29,7 @@ import {
 import { getCookie } from 'cookies-next'
 import { Provider as JotaiProvider } from 'jotai'
 
+import { Favicon } from 'src/assets'
 import { Head, MainLayout } from 'src/components/layouts'
 import 'src/i18next'
 import { resources } from 'src/i18next'
@@ -101,6 +102,7 @@ const App = ({ Component, pageProps, colorScheme, env }: AppProps) => {
                 description={
                   'A Realtoken Dashboard for follow assets related to RealT'
                 }
+                favicon={Favicon}
               />
               <MantineProviders initialColorScheme={colorScheme}>
                 <LanguageInit i={i18n} />

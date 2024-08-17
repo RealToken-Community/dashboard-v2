@@ -23,7 +23,10 @@
     "realtime": "Realtime",
     "global": "Global",
     "date": "Date",
-    "dateFormat": "MMMM DD, YYYY"
+    "dateFormat": "MMMM DD, YYYY",
+    "includesEth": "Includes Ethereum",
+    "includesLevinSwap": "Includes LevinSwap",
+    "includesRmmV2": "Includes RMM V2"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
@@ -65,7 +68,8 @@
     "realtokenValue": "RealTokens",
     "totalPriceCost": "Estimated price cost",
     "stableDeposit": "RMM deposit",
-    "stableBorrow": "RMM borrow"
+    "stableBorrow": "RMM borrow",
+    "rwa": "RWA"
   },
   "worthCard": {
     "title": "RealTokens",
@@ -357,7 +361,8 @@
       "netRentMonth": "Net monthly",
       "grossRentMonth": "Gross monthly",
       "yield": "Yield",
-      "rentedUnits": "Rented units"
+      "rentedUnits": "Rented units",
+      "rwa": "RWA value"
     },
     "filter": {
       "field": "Filter",
@@ -368,6 +373,10 @@
       "ownedValue": "My revaluation",
       "ownedRent": "My rents"
     }
+  },
+  "yamStatisticsPage": {
+    "home": "Home",
+    "title": "Secondary market statistics (Yam)"
   },
   "initialTransfersLoader": {
     "title": "Initial data loading",

@@ -4,9 +4,13 @@ import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
 import { EthereumClient, GnosisClient } from '../clients'
 
-export async function getRealtokenBalances(addressList: string[]) {
+export async function getRealtokenBalances(
+  addressList: string[],
+  options: { includesEth?: boolean } = {},
+) {
   const [gnosisResult, ethereumResult] = await executeQuery(
     addressList.map((item) => item.toLowerCase()),
+    options,
   )
 
   return {
@@ -16,19 +20,21 @@ export async function getRealtokenBalances(addressList: string[]) {
 }
 
 const executeQuery = useCacheWithLocalStorage(
-  async (addressList: string[]) =>
+  async (addressList: string[], options: { includesEth?: boolean } = {}) =>
     Promise.all([
       GnosisClient().query<RealtokenResult>({
         query: RealtokenQuery,
         variables: { addressList },
       }),
-      EthereumClient().query<RealtokenResult>({
-        query: RealtokenQuery,
-        variables: { addressList },
-      }),
+      options.includesEth
+        ? EthereumClient().query<RealtokenResult>({
+            query: RealtokenQuery,
+            variables: { addressList },
+          })
+        : Promise.resolve({ data: { accounts: [] } }),
     ]),
   {
-    duration: 1000 * 60 * 10, // 10 minutes
+    duration: 1000 * 60 * 60, // 1 hour
     usePreviousValueOnError: true,
     key: 'RealtokenQuery',
   },

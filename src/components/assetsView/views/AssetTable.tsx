@@ -10,10 +10,14 @@ import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
-import { transfersIsLoaded } from 'src/store/features/transfers/transfersSlice'
-import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  RWARealtoken,
+  UserRealtoken,
+} from 'src/store/features/wallets/walletsSelector'
 
-export const AssetTable: FC<{ realtokens: UserRealtoken[] }> = (props) => {
+export const AssetTable: FC<{
+  realtokens: (UserRealtoken | RWARealtoken)[]
+}> = (props) => {
   return (
     <ScrollArea>
       <Table>
@@ -22,9 +26,13 @@ export const AssetTable: FC<{ realtokens: UserRealtoken[] }> = (props) => {
         </Table.Thead>
 
         <Table.Tbody>
-          {props.realtokens.map((item) => (
-            <AssetTableRow key={item.id} value={item} />
-          ))}
+          {props.realtokens.map((item, index) => {
+            const isAProperty = item.hasOwnProperty('rentStatus')
+            if (!isAProperty) {
+              return <AssetTableRow key={'0'} value={item as UserRealtoken} />
+            }
+            return <AssetTableRow key={index} value={item as UserRealtoken} />
+          })}
         </Table.Tbody>
       </Table>
     </ScrollArea>
