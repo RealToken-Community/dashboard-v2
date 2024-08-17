@@ -2,7 +2,14 @@ import { FC, useEffect, useMemo, useState } from 'react'
 
 import { useRouter } from 'next/router'
 
-import { Grid, Group, Pagination } from '@mantine/core'
+import {
+  Combobox,
+  Grid,
+  Group,
+  InputBase,
+  Pagination,
+  useCombobox,
+} from '@mantine/core'
 
 import {
   RWARealtoken,
@@ -16,7 +23,7 @@ export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
 ) => {
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
-  const pageSize = 24
+  const [pageSize, setPageSize] = useState<number>(20)
 
   function onPageChange(page: number) {
     setPage(page)
@@ -24,14 +31,33 @@ export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
     document.getElementsByClassName('asset-grid')[0]?.scrollIntoView()
   }
 
-  const paginationOffers = useMemo(() => {
+  const paginationOffers: (UserRealtoken | RWARealtoken)[] = useMemo(() => {
+    console.log({ realtokens: props.realtokens })
+    if (pageSize === Infinity) return props.realtokens
     const start = (page - 1) * pageSize
     const end = start + pageSize
     return props.realtokens.slice(start, end)
   }, [props.realtokens, page, pageSize])
 
   // Go to first page when data changes (e.g. search, filter, order, ...)
-  useEffect(() => setPage(1), [props.realtokens])
+  // useEffect(() => setPage(1), [props.realtokens])
+
+  const combobox = useCombobox({
+    onDropdownClose: () => combobox.resetSelectedOption(),
+  })
+
+  const values = [20, 40, 100, 200]
+
+  const options = [
+    <Combobox.Option value={'All'} key={'All'}>
+      {'All'}
+    </Combobox.Option>,
+    ...values.map((item) => (
+      <Combobox.Option value={item.toString()} key={item}>
+        {item}
+      </Combobox.Option>
+    )),
+  ]
 
   return (
     <>
@@ -54,12 +80,49 @@ export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
       >
         <Pagination
           value={page}
-          total={Math.ceil(props.realtokens.length / pageSize)}
+          total={
+            pageSize === Infinity
+              ? 0
+              : Math.ceil(props.realtokens.length / pageSize)
+          }
           boundaries={1}
           siblings={1}
           size={'sm'}
           onChange={onPageChange}
         />
+        <Combobox
+          store={combobox}
+          withinPortal={false}
+          onOptionSubmit={(val) => {
+            if (val === 'All') return setPageSize(Infinity)
+            setPageSize(Number(val))
+
+            combobox.closeDropdown()
+          }}
+        >
+          <Combobox.Target>
+            <InputBase
+              rightSection={<Combobox.Chevron />}
+              value={pageSize == Infinity ? 'All' : pageSize}
+              type={'button'}
+              onChange={() => {
+                combobox.openDropdown()
+                combobox.updateSelectedOptionIndex()
+              }}
+              onClick={() => combobox.openDropdown()}
+              onFocus={() => combobox.openDropdown()}
+              onBlur={() => {
+                combobox.closeDropdown()
+              }}
+              placeholder={'Search value'}
+              rightSectionPointerEvents={'none'}
+            />
+          </Combobox.Target>
+
+          <Combobox.Dropdown>
+            <Combobox.Options>{options}</Combobox.Options>
+          </Combobox.Dropdown>
+        </Combobox>
       </Group>
     </>
   )
