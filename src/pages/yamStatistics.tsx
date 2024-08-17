@@ -28,6 +28,7 @@ const YamStatisticsRow: React.FC<{
   return yamPriceValue !== fallback ? (
     <>
       <tr key={realtoken.id}>
+        <td>{realtoken.shortName}</td>
         <td>{realtoken.tokenPrice}</td>
         <td>{yamPriceValue}</td>
         <td>
@@ -89,6 +90,7 @@ const YamStatisticsPage = () => {
       <h1>Yam Statistics</h1>
       <table style={{ width: '100%' }}>
         <tr style={{ textAlign: 'left' }}>
+          <th>Token</th>
           <th>Token Price</th>
           <th>Yam Price</th>
           <th>Yam Difference (30 days)</th>
