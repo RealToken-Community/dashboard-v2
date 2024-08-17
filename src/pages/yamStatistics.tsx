@@ -2,7 +2,16 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
-import { Divider, Pagination } from '@mantine/core'
+import { useRouter } from 'next/router'
+
+import {
+  Anchor,
+  Breadcrumbs,
+  Divider,
+  Flex,
+  Group,
+  Pagination,
+} from '@mantine/core'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { GetYamStatistics, YamStatistics } from 'src/repositories'
@@ -48,6 +57,8 @@ const YamStatisticsRow: React.FC<{
 }
 
 const YamStatisticsPage = () => {
+  const { t } = useTranslation('common', { keyPrefix: 'yamStatisticsPage' })
+  const router = useRouter()
   const realtokens = useSelector(selectAllUserRealtokens)
   const realtokensWithYam = useMemo(() => {
     return realtokens.filter(
@@ -105,33 +116,53 @@ const YamStatisticsPage = () => {
   }
 
   return (
-    <div>
-      <h1>Yam Statistics</h1>
-      <table style={{ width: '100%' }}>
-        <tr style={{ textAlign: 'left' }}>
-          <th>Token</th>
-          <th>Token Price</th>
-          <th>Yam Price</th>
-          <th>Yam Difference (30 days)</th>
-          <th>Yam Volume</th>
-        </tr>
-        {paginationYamStatistics.map((statistics, index) => (
-          <YamStatisticsRow
-            key={index}
-            statistics={statistics}
-            realtoken={realtokens[index]}
-          />
-        ))}
-      </table>
-      <Pagination
-        value={page}
-        total={Math.ceil(yamStatistics.length / pageSize)}
-        boundaries={1}
-        siblings={1}
-        size={'sm'}
-        onChange={onPageChange}
-      />
-    </div>
+    <Flex my={'lg'} mx={0} direction={'column'} align={'center'}>
+      <div
+        style={{ maxWidth: '900px', width: '100%' }}
+        className={'history-list'}
+      >
+        <Breadcrumbs>
+          <Anchor onClick={() => router.push('/')}>{t('home')}</Anchor>
+          {t('title')}
+        </Breadcrumbs>
+        <h2 style={{ textAlign: 'center' }}>{`${t('title')}`}</h2>
+
+        <div style={{ width: '100%', marginTop: '20px' }}>
+          <table style={{ width: '100%' }}>
+            <tr style={{ textAlign: 'left' }}>
+              <th>Token</th>
+              <th>Token Price</th>
+              <th>Yam Price</th>
+              <th>Yam Difference (30 days)</th>
+              <th>Yam Volume</th>
+            </tr>
+            {paginationYamStatistics.map((statistics, index) => (
+              <YamStatisticsRow
+                key={index}
+                statistics={statistics}
+                realtoken={realtokens[index]}
+              />
+            ))}
+          </table>
+          <Group
+            justify={'center'}
+            align={'center'}
+            gap={8}
+            py={'xs'}
+            style={{ width: '100%' }}
+          >
+            <Pagination
+              value={page}
+              total={Math.ceil(yamStatistics.length / pageSize)}
+              boundaries={1}
+              siblings={1}
+              size={'sm'}
+              onChange={onPageChange}
+            />
+          </Group>
+        </div>
+      </div>
+    </Flex>
   )
 }
 
