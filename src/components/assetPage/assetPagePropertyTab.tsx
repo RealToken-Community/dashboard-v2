@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
+import { useFullyRentedAPR } from 'src/hooks/useFullyRentedAPR'
 import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
 import { RealTokenRentalType } from 'src/types/RealToken'
 
@@ -44,6 +45,8 @@ export const AssetPagePropertyTab: FC<{
   const propertyStories = realtoken.propertyStories
     ? tNumbers('integer', { value: realtoken.propertyStories })
     : '-'
+  const fullyRentedAPR = useFullyRentedAPR(realtoken)
+  const fullyRentedAPRValue = tNumbers('percent', { value: fullyRentedAPR })
 
   return (
     <>
@@ -105,6 +108,10 @@ export const AssetPagePropertyTab: FC<{
           {
             label: t('annualYield'),
             value: annualYield,
+          },
+          {
+            label: t('fullyRentedAPR'),
+            value: fullyRentedAPRValue,
           },
         ]}
       />

@@ -264,6 +264,7 @@
       "grossRentMonth": "Gross monthly rent",
       "netRentMonth": "Net monthly rent",
       "annualYield": "Annual yield",
+      "fullyRentedAPR": "Fully rented APR *",
       "constructionYear": "Construction year",
       "propertyStories": "Number of stories",
       "propertyUnits": "Number of units",

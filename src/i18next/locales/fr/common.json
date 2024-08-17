@@ -264,6 +264,7 @@
       "grossRentMonth": "Loyer brut mensuel",
       "netRentMonth": "Loyer net mensuel",
       "annualYield": "Rendement annuel",
+      "fullyRentedAPR": "Rendement 100% loué *",
       "constructionYear": "Année de construction",
       "propertyStories": "Nombre d'étages",
       "propertyUnits": "Nombre de logements",
