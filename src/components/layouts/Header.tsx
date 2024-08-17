@@ -78,6 +78,12 @@ export const Header: FC = () => {
           onClick={() => router.push('/histories').then(() => close())}
         />
 
+        <NavLink
+          label={t('yamStatistics')}
+          leftSection={<IconFilePencil size={'1rem'} stroke={1.5} />}
+          onClick={() => router.push('/yamStatistics').then(() => close())}
+        />
+
         <div style={{ marginTop: '20px' }} />
         <NavLink
           component={'a'}
