@@ -76,7 +76,7 @@ const YamStatisticsPage = () => {
     }),
   )
   const [page, setPage] = useState<number>(1)
-  const pageSize = 25
+  const pageSize = 100
 
   const [isLoading, setIsLoading] = useState(true)
 
