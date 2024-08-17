@@ -9,6 +9,7 @@ import { Anchor, ScrollArea, Table } from '@mantine/core'
 import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
+import { useFullyRentedAPR } from 'src/hooks/useFullyRentedAPR'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
   RWARealtoken,
@@ -62,6 +63,7 @@ const AssetTableHeader: FC = () => {
       ) : null}
       <Table.Th style={{ textAlign: 'right' }}>{t('ownedTokens')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('apr')}</Table.Th>
+      <Table.Th style={{ textAlign: 'right' }}>{t('fullyRentedAPR')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('weeklyRents')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('yearlyRents')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('rentedUnits')}</Table.Th>
@@ -85,6 +87,10 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
   const weeklyAmount = props.value.amount * props.value.netRentDayPerToken * 7
   const yearlyAmount = props.value.amount * props.value.netRentYearPerToken
   const totalInvestment = props.value.totalInvestment
+  const isAProperty = props.value.hasOwnProperty('rentStatus')
+  const fullyRentedAPR = isAProperty
+    ? useFullyRentedAPR(props.value as UserRealtoken)
+    : null
 
   return (
     <Table.Tr>
@@ -121,6 +127,13 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {t('percent', { value: props.value.annualPercentageYield })}
       </Table.Td>
+      {isAProperty ? (
+        <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+          {t('percent', { value: fullyRentedAPR })}
+        </Table.Td>
+      ) : (
+        <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }} />
+      )}
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {useCurrencyValue(weeklyAmount)}
       </Table.Td>

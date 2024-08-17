@@ -215,6 +215,7 @@
     "unitPriceCost": "Unit price cost",
     "unrealizedCapitalGain": "Capital gain",
     "apr": "Yield",
+    "fullyRentedAPR":"Fully rented APR *",
     "weeklyRents": "Weekly rents",
     "yearlyRents": "Yearly rents",
     "rentedUnits": "Rented units",

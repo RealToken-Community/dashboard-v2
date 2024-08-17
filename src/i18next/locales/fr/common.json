@@ -215,6 +215,7 @@
     "tokenPrice": "Prix du token",
     "unitPriceCost": "Prix de revient",
     "apr": "Rendement annuel",
+    "fullyRentedAPR":"Rendement 100% loué *",
     "weeklyRents": "Loyer hebdo",
     "yearlyRents": "Loyer annuel",
     "rentedUnits": "Logements loués",
