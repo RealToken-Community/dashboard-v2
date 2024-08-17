@@ -4,11 +4,16 @@ import { useRouter } from 'next/router'
 
 import { Grid, Group, Pagination } from '@mantine/core'
 
-import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  RWARealtoken,
+  UserRealtoken,
+} from 'src/store/features/wallets/walletsSelector'
 
 import { AssetCard } from '../../cards'
 
-export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
+export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
+  props,
+) => {
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
   const pageSize = 24
@@ -19,7 +24,7 @@ export const AssetGrid: FC<{ realtokens: UserRealtoken[] }> = (props) => {
     document.getElementsByClassName('asset-grid')[0]?.scrollIntoView()
   }
 
-  const paginationOffers: UserRealtoken[] = useMemo(() => {
+  const paginationOffers = useMemo(() => {
     const start = (page - 1) * pageSize
     const end = start + pageSize
     return props.realtokens.slice(start, end)

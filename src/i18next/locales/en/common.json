@@ -68,7 +68,8 @@
     "realtokenValue": "RealTokens",
     "totalPriceCost": "Estimated price cost",
     "stableDeposit": "RMM deposit",
-    "stableBorrow": "RMM borrow"
+    "stableBorrow": "RMM borrow",
+    "rwa": "RWA"
   },
   "worthCard": {
     "title": "RealTokens",
@@ -358,7 +359,8 @@
       "netRentMonth": "Net monthly",
       "grossRentMonth": "Gross monthly",
       "yield": "Yield",
-      "rentedUnits": "Rented units"
+      "rentedUnits": "Rented units",
+      "rwa": "RWA value"
     },
     "filter": {
       "field": "Filter",
