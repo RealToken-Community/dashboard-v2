@@ -384,7 +384,10 @@
     "filter": {
       "field": "Filtre",
       "all": "Toutes les propriétés",
-      "owned": "Mes propriétés"
+      "owned": "Mes propriétés",
+      "subsidized": "Subventionnés",
+      "fullySubsidized": "Entièrement subventionnés",
+      "notSubsidized": "Non subventionnés"
     }
   },
   "initialTransfersLoader": {

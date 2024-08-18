@@ -383,7 +383,10 @@
     "filter": {
       "field": "Filter",
       "all": "All",
-      "owned": "My properties"
+      "owned": "My properties",
+      "subsidized": "Subsidized",
+      "fullySubsidized": "Fully subsidized",
+      "notSubsidized": "Not subsidized"
     }
   },
   "initialTransfersLoader": {

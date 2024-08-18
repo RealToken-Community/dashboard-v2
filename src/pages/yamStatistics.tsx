@@ -14,6 +14,7 @@ import {
   Select,
 } from '@mantine/core'
 
+import { AssetSubsidyType } from 'src/components/assetsView'
 import { useInputStyles } from 'src/components/inputs/useInputStyles'
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { GetYamStatistics, YamStatistics } from 'src/repositories'
@@ -24,8 +25,9 @@ import {
 
 const YamStatisticsRow: React.FC<{
   statistics: YamStatistics
-  realtoken: UserRealtoken
+  realtoken: UserRealtoken | null
 }> = ({ statistics, realtoken }) => {
+  if (!realtoken) return null
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const yamPrice = statistics.volume / statistics.quantity
   const yamDifference = yamPrice - realtoken.tokenPrice
@@ -150,7 +152,11 @@ const YamStatisticsPage = () => {
               <YamStatisticsRow
                 key={index}
                 statistics={statistics}
-                realtoken={filteredRealtokens[index]}
+                realtoken={
+                  filteredRealtokens[index]?.tokenPrice
+                    ? (filteredRealtokens[index] as UserRealtoken)
+                    : null
+                }
               />
             ))}
           </table>
@@ -185,12 +191,24 @@ const getFilteredRealtokens = (
       return realtokens
     case 'owned':
       return realtokens.filter((realtoken) => realtoken.amount > 0)
+    case AssetSubsidyType.SUBSIDIZED:
+      return realtokens.filter((realtoken) => realtoken.subsidyStatus !== 'no')
+    case AssetSubsidyType.FULLY_SUBSIDIZED:
+      return realtokens.filter(
+        (realtoken) =>
+          realtoken.subsidyStatus === 'yes' && !!realtoken.subsidyStatusValue,
+      )
     default:
       return realtokens
   }
 }
 
-type YamStatisticsPageFilterValue = 'all' | 'owned'
+type YamStatisticsPageFilterValue =
+  | 'all'
+  | 'owned'
+  | AssetSubsidyType.SUBSIDIZED
+  | AssetSubsidyType.FULLY_SUBSIDIZED
+  | AssetSubsidyType.NOT_SUBSIDIZED
 
 const YamStatisticsPageFilter = ({
   currentFilter,
@@ -210,6 +228,12 @@ const YamStatisticsPageFilter = ({
   }[] = [
     { value: 'all', label: t('all') },
     { value: 'owned', label: t('owned') },
+    { value: AssetSubsidyType.SUBSIDIZED, label: t('subsidized') },
+    { value: AssetSubsidyType.FULLY_SUBSIDIZED, label: t('fullySubsidized') },
+    {
+      value: AssetSubsidyType.NOT_SUBSIDIZED,
+      label: t('notSubsidized'),
+    },
   ]
 
   return (
