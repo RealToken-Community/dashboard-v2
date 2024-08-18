@@ -11,6 +11,7 @@ import {
   useCombobox,
 } from '@mantine/core'
 
+import FullyRentedAPRDisclaimer from 'src/components/commons/others/FullyRentedAPRDisclaimer'
 import {
   RWARealtoken,
   UserRealtoken,
@@ -32,7 +33,6 @@ export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
   }
 
   const paginationOffers: (UserRealtoken | RWARealtoken)[] = useMemo(() => {
-    console.log({ realtokens: props.realtokens })
     if (pageSize === Infinity) return props.realtokens
     const start = (page - 1) * pageSize
     const end = start + pageSize
@@ -123,6 +123,7 @@ export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
             <Combobox.Options>{options}</Combobox.Options>
           </Combobox.Dropdown>
         </Combobox>
+        <FullyRentedAPRDisclaimer />
       </Group>
     </>
   )

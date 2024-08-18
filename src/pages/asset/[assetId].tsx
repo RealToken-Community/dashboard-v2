@@ -14,6 +14,7 @@ import { AssetPageMainTab } from 'src/components/assetPage/assetPageMainTab'
 import { AssetPagePropertyTab } from 'src/components/assetPage/assetPagePropertyTab'
 import { AssetPageTransfersTab } from 'src/components/assetPage/assetPageTransfersTab'
 import { AssetPageYamStatisticsTab } from 'src/components/assetPage/assetPageYamStatisticsTab'
+import FullyRentedAPRDisclaimer from 'src/components/commons/others/FullyRentedAPRDisclaimer'
 import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import { selectAllUserRealtokens } from 'src/store/features/wallets/walletsSelector'
@@ -158,6 +159,7 @@ const AssetPage: NextPage = () => {
           </Button>
         </div>
       </div>
+      <FullyRentedAPRDisclaimer />
     </Flex>
   )
 }

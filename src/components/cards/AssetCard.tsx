@@ -9,6 +9,7 @@ import { Badge, Card, Group } from '@mantine/core'
 import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
+import { useFullyRentedAPR } from 'src/hooks/useFullyRentedAPR'
 import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import {
   RWARealtoken,
@@ -56,6 +57,8 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
   const weeklyAmount = props.value.amount * props.value.netRentDayPerToken * 7
   const yearlyAmount = props.value.amount * props.value.netRentYearPerToken
   const totalInvestment = props.value.totalInvestment
+
+  const fullyRentedAPR = useFullyRentedAPR(props.value)
 
   return (
     <Card
@@ -156,6 +159,15 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
         <div className={styles.textSm}>{t('rentStartDate')}</div>
         <div className={styles.textSm}>
           {rentStartDate.toLocaleDateString()}
+        </div>
+      </div>
+
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('fullyRentedEstimation')}*</div>
+        <div className={styles.textSm}>
+          {fullyRentedAPR
+            ? tNumbers('percent', { value: fullyRentedAPR })
+            : '-'}
         </div>
       </div>
 
