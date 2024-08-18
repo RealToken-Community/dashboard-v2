@@ -40,7 +40,7 @@ export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
   }, [props.realtokens, page, pageSize])
 
   // Go to first page when data changes (e.g. search, filter, order, ...)
-  // useEffect(() => setPage(1), [props.realtokens])
+  useEffect(() => setPage(1), [props.realtokens])
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
