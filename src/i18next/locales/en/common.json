@@ -379,7 +379,12 @@
   },
   "yamStatisticsPage": {
     "home": "Home",
-    "title": "Secondary market statistics (Yam)"
+    "title": "Secondary market statistics (Yam)",
+    "filter": {
+      "field": "Filter",
+      "all": "All",
+      "owned": "My properties"
+    }
   },
   "initialTransfersLoader": {
     "title": "Initial data loading",

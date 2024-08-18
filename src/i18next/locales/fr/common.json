@@ -380,7 +380,12 @@
   },
   "yamStatisticsPage": {
     "home": "Accueil",
-    "title": "Statistiques marché secondaire (Yam)"
+    "title": "Statistiques marché secondaire (Yam)",
+    "filter": {
+      "field": "Filtre",
+      "all": "Toutes les propriétés",
+      "owned": "Mes propriétés"
+    }
   },
   "initialTransfersLoader": {
     "title": "Chargement initial des données",

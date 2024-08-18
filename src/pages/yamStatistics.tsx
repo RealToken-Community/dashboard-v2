@@ -11,8 +11,10 @@ import {
   Flex,
   Group,
   Pagination,
+  Select,
 } from '@mantine/core'
 
+import { useInputStyles } from 'src/components/inputs/useInputStyles'
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { GetYamStatistics, YamStatistics } from 'src/repositories'
 import {
@@ -79,6 +81,12 @@ const YamStatisticsPage = () => {
   const [page, setPage] = useState<number>(1)
   const pageSize = 100
 
+  const [currentFilter, setCurrentFilter] =
+    useState<YamStatisticsPageFilterValue>('owned')
+  const filteredRealtokens = useMemo(() => {
+    return getFilteredRealtokens(currentFilter, realtokensWithYam)
+  }, [realtokensWithYam, currentFilter])
+
   const [isLoading, setIsLoading] = useState(true)
 
   function onPageChange(page: number) {
@@ -88,13 +96,14 @@ const YamStatisticsPage = () => {
   }
 
   const yamStatisticsPromise: Promise<YamStatistics[]> = useMemo(async () => {
-    if (!realtokensWithYam.length) return Promise.resolve([])
-    const statsPromises = realtokensWithYam.map((realtoken) =>
+    if (!filteredRealtokens.length) return Promise.resolve([])
+
+    const statsPromises = filteredRealtokens.map((realtoken) =>
       GetYamStatistics({ realtoken }),
     )
     const data = await Promise.all(statsPromises)
     return data
-  }, [realtokensWithYam])
+  }, [filteredRealtokens, currentFilter])
 
   useEffect(() => {
     setIsLoading(true)
@@ -126,6 +135,8 @@ const YamStatisticsPage = () => {
         </Breadcrumbs>
         <h2 style={{ textAlign: 'center' }}>{`${t('title')}`}</h2>
 
+        <YamStatisticsPageFilter {...{ currentFilter, setCurrentFilter }} />
+
         <div style={{ width: '100%', marginTop: '20px' }}>
           <table style={{ width: '100%' }}>
             <tr style={{ textAlign: 'left' }}>
@@ -139,7 +150,7 @@ const YamStatisticsPage = () => {
               <YamStatisticsRow
                 key={index}
                 statistics={statistics}
-                realtoken={realtokens[index]}
+                realtoken={filteredRealtokens[index]}
               />
             ))}
           </table>
@@ -160,6 +171,62 @@ const YamStatisticsPage = () => {
             />
           </Group>
         </div>
+      </div>
+    </Flex>
+  )
+}
+
+const getFilteredRealtokens = (
+  filter: YamStatisticsPageFilterValue,
+  realtokens: UserRealtoken[],
+) => {
+  switch (filter) {
+    case 'all':
+      return realtokens
+    case 'owned':
+      return realtokens.filter((realtoken) => realtoken.amount > 0)
+    default:
+      return realtokens
+  }
+}
+
+type YamStatisticsPageFilterValue = 'all' | 'owned'
+
+const YamStatisticsPageFilter = ({
+  currentFilter,
+  setCurrentFilter,
+}: {
+  currentFilter: YamStatisticsPageFilterValue
+  setCurrentFilter: (value: YamStatisticsPageFilterValue) => void
+}) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'yamStatisticsPage.filter',
+  })
+  const { classes: inputClasses } = useInputStyles()
+
+  const filterOptions: {
+    value: YamStatisticsPageFilterValue
+    label: string
+  }[] = [
+    { value: 'all', label: t('all') },
+    { value: 'owned', label: t('owned') },
+  ]
+
+  return (
+    <Flex my={'lg'} mx={0} direction={'column'} align={'left'}>
+      <div
+        style={{ maxWidth: '450px', width: '100%' }}
+        className={'history-list'}
+      >
+        <Select
+          label={t('field')}
+          data={filterOptions}
+          value={currentFilter}
+          onChange={(value) =>
+            setCurrentFilter(value as YamStatisticsPageFilterValue)
+          }
+          classNames={inputClasses}
+        />
       </div>
     </Flex>
   )
