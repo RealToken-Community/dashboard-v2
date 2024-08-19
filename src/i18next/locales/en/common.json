@@ -3,6 +3,7 @@
     "title": "Realtoken Dashboard",
     "transactions": "My transactions",
     "histories": "Changes history",
+    "yamStatistics": "Secondary market statistics (Yam)",
     "documentation": "Community Wiki",
     "home": "Home",
     "realt": "RealT",
@@ -378,7 +379,15 @@
   },
   "yamStatisticsPage": {
     "home": "Home",
-    "title": "Secondary market statistics (Yam)"
+    "title": "Secondary market statistics (Yam)",
+    "filter": {
+      "field": "Filter",
+      "all": "All",
+      "owned": "My properties",
+      "subsidized": "Subsidized",
+      "fullySubsidized": "Fully subsidized",
+      "notSubsidized": "Not subsidized"
+    }
   },
   "initialTransfersLoader": {
     "title": "Initial data loading",

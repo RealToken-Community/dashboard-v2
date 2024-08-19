@@ -3,6 +3,7 @@
     "title": "Realtoken Dashboard",
     "transactions": "Mes transactions",
     "histories": "Historique des changements",
+    "yamStatistics": "Statistiques marché secondaire (Yam)",
     "documentation": "Wiki communautaire",
     "home": "Accueil",
     "realt": "RealT",
@@ -379,7 +380,15 @@
   },
   "yamStatisticsPage": {
     "home": "Accueil",
-    "title": "Statistiques marché secondaire (Yam)"
+    "title": "Statistiques marché secondaire (Yam)",
+    "filter": {
+      "field": "Filtre",
+      "all": "Toutes les propriétés",
+      "owned": "Mes propriétés",
+      "subsidized": "Subventionnés",
+      "fullySubsidized": "Entièrement subventionnés",
+      "notSubsidized": "Non subventionnés"
+    }
   },
   "initialTransfersLoader": {
     "title": "Chargement initial des données",

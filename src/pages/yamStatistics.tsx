@@ -11,8 +11,11 @@ import {
   Flex,
   Group,
   Pagination,
+  Select,
 } from '@mantine/core'
 
+import { AssetSubsidyType } from 'src/components/assetsView'
+import { useInputStyles } from 'src/components/inputs/useInputStyles'
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { GetYamStatistics, YamStatistics } from 'src/repositories'
 import {
@@ -22,14 +25,16 @@ import {
 
 const YamStatisticsRow: React.FC<{
   statistics: YamStatistics
-  realtoken: UserRealtoken
+  realtoken: UserRealtoken | null
 }> = ({ statistics, realtoken }) => {
+  if (!realtoken) return null
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const yamPrice = statistics.volume / statistics.quantity
   const yamDifference = yamPrice - realtoken.tokenPrice
   const yamDifferencePercent = (yamDifference / realtoken.tokenPrice) * 100
 
   const fallback = '-'
+  const tokenPriceValue = useCurrencyValue(realtoken.tokenPrice, fallback)
   const yamPriceValue = useCurrencyValue(yamPrice, fallback)
   const yamDifferenceValue = useCurrencyValue(yamDifference, fallback)
   const volumeValue = useCurrencyValue(statistics.volume, fallback)
@@ -38,7 +43,7 @@ const YamStatisticsRow: React.FC<{
     <>
       <tr key={realtoken.id}>
         <td>{realtoken.shortName}</td>
-        <td>{realtoken.tokenPrice}</td>
+        <td>{tokenPriceValue}</td>
         <td>{yamPriceValue}</td>
         <td>
           {yamDifferenceValue} (
@@ -78,6 +83,12 @@ const YamStatisticsPage = () => {
   const [page, setPage] = useState<number>(1)
   const pageSize = 100
 
+  const [currentFilter, setCurrentFilter] =
+    useState<YamStatisticsPageFilterValue>('owned')
+  const filteredRealtokens = useMemo(() => {
+    return getFilteredRealtokens(currentFilter, realtokensWithYam)
+  }, [realtokensWithYam, currentFilter])
+
   const [isLoading, setIsLoading] = useState(true)
 
   function onPageChange(page: number) {
@@ -87,13 +98,14 @@ const YamStatisticsPage = () => {
   }
 
   const yamStatisticsPromise: Promise<YamStatistics[]> = useMemo(async () => {
-    if (!realtokensWithYam.length) return Promise.resolve([])
-    const statsPromises = realtokensWithYam.map((realtoken) =>
+    if (!filteredRealtokens.length) return Promise.resolve([])
+
+    const statsPromises = filteredRealtokens.map((realtoken) =>
       GetYamStatistics({ realtoken }),
     )
     const data = await Promise.all(statsPromises)
     return data
-  }, [realtokensWithYam])
+  }, [filteredRealtokens, currentFilter])
 
   useEffect(() => {
     setIsLoading(true)
@@ -125,6 +137,8 @@ const YamStatisticsPage = () => {
         </Breadcrumbs>
         <h2 style={{ textAlign: 'center' }}>{`${t('title')}`}</h2>
 
+        <YamStatisticsPageFilter {...{ currentFilter, setCurrentFilter }} />
+
         <div style={{ width: '100%', marginTop: '20px' }}>
           <table style={{ width: '100%' }}>
             <tr style={{ textAlign: 'left' }}>
@@ -138,7 +152,11 @@ const YamStatisticsPage = () => {
               <YamStatisticsRow
                 key={index}
                 statistics={statistics}
-                realtoken={realtokens[index]}
+                realtoken={
+                  filteredRealtokens[index]?.tokenPrice
+                    ? (filteredRealtokens[index] as UserRealtoken)
+                    : null
+                }
               />
             ))}
           </table>
@@ -159,6 +177,80 @@ const YamStatisticsPage = () => {
             />
           </Group>
         </div>
+      </div>
+    </Flex>
+  )
+}
+
+const getFilteredRealtokens = (
+  filter: YamStatisticsPageFilterValue,
+  realtokens: UserRealtoken[],
+) => {
+  switch (filter) {
+    case 'all':
+      return realtokens
+    case 'owned':
+      return realtokens.filter((realtoken) => realtoken.amount > 0)
+    case AssetSubsidyType.SUBSIDIZED:
+      return realtokens.filter((realtoken) => realtoken.subsidyStatus !== 'no')
+    case AssetSubsidyType.FULLY_SUBSIDIZED:
+      return realtokens.filter(
+        (realtoken) =>
+          realtoken.subsidyStatus === 'yes' && !!realtoken.subsidyStatusValue,
+      )
+    default:
+      return realtokens
+  }
+}
+
+type YamStatisticsPageFilterValue =
+  | 'all'
+  | 'owned'
+  | AssetSubsidyType.SUBSIDIZED
+  | AssetSubsidyType.FULLY_SUBSIDIZED
+  | AssetSubsidyType.NOT_SUBSIDIZED
+
+const YamStatisticsPageFilter = ({
+  currentFilter,
+  setCurrentFilter,
+}: {
+  currentFilter: YamStatisticsPageFilterValue
+  setCurrentFilter: (value: YamStatisticsPageFilterValue) => void
+}) => {
+  const { t } = useTranslation('common', {
+    keyPrefix: 'yamStatisticsPage.filter',
+  })
+  const { classes: inputClasses } = useInputStyles()
+
+  const filterOptions: {
+    value: YamStatisticsPageFilterValue
+    label: string
+  }[] = [
+    { value: 'all', label: t('all') },
+    { value: 'owned', label: t('owned') },
+    { value: AssetSubsidyType.SUBSIDIZED, label: t('subsidized') },
+    { value: AssetSubsidyType.FULLY_SUBSIDIZED, label: t('fullySubsidized') },
+    {
+      value: AssetSubsidyType.NOT_SUBSIDIZED,
+      label: t('notSubsidized'),
+    },
+  ]
+
+  return (
+    <Flex my={'lg'} mx={0} direction={'column'} align={'left'}>
+      <div
+        style={{ maxWidth: '450px', width: '100%' }}
+        className={'history-list'}
+      >
+        <Select
+          label={t('field')}
+          data={filterOptions}
+          value={currentFilter}
+          onChange={(value) =>
+            setCurrentFilter(value as YamStatisticsPageFilterValue)
+          }
+          classNames={inputClasses}
+        />
       </div>
     </Flex>
   )
