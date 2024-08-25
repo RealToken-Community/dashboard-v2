@@ -9,10 +9,40 @@ declare module 'ethers' {
   }
 }
 
-const GNOSIS_RPC_URL = 'https://rpc.ankr.com/gnosis'
-const ETHEREUM_RPC_URL = 'https://rpc.ankr.com/eth'
-export const GnosisRpcProvider = new ethers.JsonRpcProvider(GNOSIS_RPC_URL)
-export const EthereumRpcProvider = new ethers.JsonRpcProvider(ETHEREUM_RPC_URL)
+const GNOSIS_RPC_URLS = [
+  'https://gnosis-rpc.publicnode.com',
+  'https://rpc.ankr.com/gnosis',
+  'https://gnosis.drpc.org',
+]
+const ETHEREUM_RPC_URLS = [
+  'https://rpc.ankr.com/eth',
+  'https://eth.llamarpc.com',
+  'https://eth-pokt.nodies.app',
+]
+
+async function getWorkingRpcUrl(urls: string[]): Promise<string> {
+  for (const url of urls) {
+    const provider = new ethers.JsonRpcProvider(url)
+    try {
+      await provider.getBlockNumber()
+      return url
+    } catch (error) {
+      console.error(`Failed to connect to ${url}, trying next one...`)
+    }
+  }
+
+  throw new Error('All RPC URLs failed')
+}
+
+export const initializeProviders = async () => {
+  const gnosisRpcUrl = await getWorkingRpcUrl(GNOSIS_RPC_URLS)
+  const ethereumRpcUrl = await getWorkingRpcUrl(ETHEREUM_RPC_URLS)
+
+  const GnosisRpcProvider = new ethers.JsonRpcProvider(gnosisRpcUrl)
+  const EthereumRpcProvider = new ethers.JsonRpcProvider(ethereumRpcUrl)
+
+  return { GnosisRpcProvider, EthereumRpcProvider }
+}
 
 /**
  * Get transaction receipt
@@ -26,6 +56,8 @@ export async function getTransactionReceipt(
 ): Promise<ethers.TransactionReceipt | null> {
   let attempt = 0
   let receipt: ethers.TransactionReceipt | null = null
+
+  const { GnosisRpcProvider, EthereumRpcProvider } = await initializeProviders()
 
   const RpcProvider = chainId === 1 ? EthereumRpcProvider : GnosisRpcProvider
 
