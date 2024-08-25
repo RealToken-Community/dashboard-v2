@@ -5,7 +5,10 @@ import { useSelector } from 'react-redux'
 import { Grid, Select, Switch } from '@mantine/core'
 
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
-import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  RWARealtoken,
+  UserRealtoken,
+} from 'src/store/features/wallets/walletsSelector'
 
 import { useInputStyles } from '../../inputs/useInputStyles'
 import { AssetSortType } from '../types'
@@ -90,42 +93,50 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
 AssetsViewSort.displayName = 'AssetsViewSort'
 
 export function useAssetsViewSort(filter: AssetsViewSortFilter) {
-  function assetSortFunction(a: UserRealtoken, b: UserRealtoken) {
+  function assetSortFunction(
+    a: UserRealtoken | RWARealtoken,
+    b: UserRealtoken | RWARealtoken,
+  ) {
     const value = getAssetSortValue(a, b)
     return filter.sortReverse ? value * -1 : value
   }
-  function getAssetSortValue(a: UserRealtoken, b: UserRealtoken) {
+  function getAssetSortValue(
+    a: UserRealtoken | RWARealtoken,
+    b: UserRealtoken | RWARealtoken,
+  ) {
+    const A = a as UserRealtoken
+    const B = b as UserRealtoken
     switch (filter.sortBy) {
       case AssetSortType.VALUE:
-        return b.value - a.value
+        return B.value - A.value
       case AssetSortType.APR:
-        return b.annualPercentageYield - a.annualPercentageYield
+        return B.annualPercentageYield - A.annualPercentageYield
       case AssetSortType.RENT:
-        return b.amount * b.netRentDayPerToken - a.amount * a.netRentDayPerToken
+        return B.amount * B.netRentDayPerToken - A.amount * A.netRentDayPerToken
       case AssetSortType.RENT_START:
-        return b.rentStartDate.date.localeCompare(a.rentStartDate.date)
+        return B.rentStartDate.date.localeCompare(A.rentStartDate.date)
       case AssetSortType.NAME:
-        return a.shortName.localeCompare(b.shortName)
+        return A.shortName.localeCompare(b.shortName)
       case AssetSortType.SUPPLY:
-        return b.totalInvestment - a.totalInvestment
+        return B.totalInvestment - A.totalInvestment
       case AssetSortType.TOKEN:
-        return b.amount - a.amount
+        return B.amount - A.amount
       case AssetSortType.TOTAL_UNIT:
-        return b.totalUnits - a.totalUnits
+        return B.totalUnits - A.totalUnits
       case AssetSortType.RENTED_UNIT:
-        return b.rentedUnits - a.rentedUnits
+        return B.rentedUnits - A.rentedUnits
       case AssetSortType.OCCUPANCY:
-        return b.rentedUnits / b.totalUnits - a.rentedUnits / a.totalUnits
+        return B.rentedUnits / B.totalUnits - A.rentedUnits / A.totalUnits
       case AssetSortType.INITIAL_LAUNCH:
-        return b.initialLaunchDate?.date.localeCompare(
-          a.initialLaunchDate?.date,
+        return B.initialLaunchDate?.date.localeCompare(
+          A.initialLaunchDate?.date,
         )
       case AssetSortType.UNIT_PRICE_COST:
-        return (b.unitPriceCost ?? 0) - (a.unitPriceCost ?? 0)
+        return (B.unitPriceCost ?? 0) - (A.unitPriceCost ?? 0)
       case AssetSortType.UNREALIZED_CAPITAL_GAIN:
-        return (b.unrealizedCapitalGain ?? 0) - (a.unrealizedCapitalGain ?? 0)
+        return (B.unrealizedCapitalGain ?? 0) - (A.unrealizedCapitalGain ?? 0)
       case AssetSortType.LAST_CHANGE:
-        return b.lastChanges.localeCompare(a.lastChanges) ?? 0
+        return B.lastChanges.localeCompare(A.lastChanges) ?? 0
     }
   }
 

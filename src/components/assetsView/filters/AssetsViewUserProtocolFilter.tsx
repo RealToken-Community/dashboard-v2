@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next'
 
 import { Select } from '@mantine/core'
 
-import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  RWARealtoken,
+  UserRealtoken,
+} from 'src/store/features/wallets/walletsSelector'
 
 import { useInputStyles } from '../../inputs/useInputStyles'
 import { AssetUserProtocolType } from '../types'
@@ -62,18 +65,21 @@ AssetsViewUserProtocolFilter.displayName = 'AssetsViewUserProtocolFilter'
 export function useAssetsViewUserProtocolFilter(
   filter: AssetsViewUserProtocolFilterModel,
 ) {
-  function assetUserProtocolFilterFunction(asset: UserRealtoken) {
+  function assetUserProtocolFilterFunction(
+    asset: UserRealtoken | RWARealtoken,
+  ) {
+    const Asset = asset as UserRealtoken
     switch (filter.userProtocol) {
       case AssetUserProtocolType.ALL:
         return true
       case AssetUserProtocolType.ETHEREUM:
-        return asset.balance.ethereum.amount > 0
+        return Asset.balance.ethereum.amount > 0
       case AssetUserProtocolType.GNOSIS:
-        return asset.balance.gnosis.amount > 0
+        return Asset.balance.gnosis.amount > 0
       case AssetUserProtocolType.RMM:
-        return asset.balance.rmm.amount > 0
+        return Asset.balance.rmm.amount > 0
       case AssetUserProtocolType.LEVINSWAP:
-        return asset.balance.levinSwap.amount > 0
+        return Asset.balance.levinSwap.amount > 0
     }
   }
 

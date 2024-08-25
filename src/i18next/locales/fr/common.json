@@ -3,6 +3,7 @@
     "title": "Realtoken Dashboard",
     "transactions": "Mes transactions",
     "histories": "Historique des changements",
+    "yamStatistics": "Statistiques marché secondaire (Yam)",
     "documentation": "Wiki communautaire",
     "home": "Accueil",
     "realt": "RealT",
@@ -68,7 +69,8 @@
     "realtokenValue": "RealTokens",
     "totalPriceCost": "Prix d'achat estimé",
     "stableDeposit": "Dépôt RMM",
-    "stableBorrow": "Emprunt RMM"
+    "stableBorrow": "Emprunt RMM",
+    "rwa": "RWA"
   },
   "worthCard": {
     "title": "RealTokens",
@@ -84,6 +86,7 @@
   "rentsCard": {
     "title": "Loyers",
     "apr": "Rendement annuel",
+    "fullyRentedAPR": "Rendement 100% loué *",
     "daily": "Journaliers",
     "weekly": "Hebdomadaires",
     "monthly": "Mensuels",
@@ -190,6 +193,7 @@
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
     "rentStartDate": "Date du premier loyer",
+    "fullyRentedEstimation": "Rendement 100% loué",
     "rentNotStarted": "Le loyer n'a pas débuté",
     "isRmmAvailable": "RMM",
     "rentStatus": {
@@ -212,6 +216,7 @@
     "tokenPrice": "Prix du token",
     "unitPriceCost": "Prix de revient",
     "apr": "Rendement annuel",
+    "fullyRentedAPR":"Rendement 100% loué *",
     "weeklyRents": "Loyer hebdo",
     "yearlyRents": "Loyer annuel",
     "rentedUnits": "Logements loués",
@@ -260,6 +265,7 @@
       "grossRentMonth": "Loyer brut mensuel",
       "netRentMonth": "Loyer net mensuel",
       "annualYield": "Rendement annuel",
+      "fullyRentedAPR": "Rendement 100% loué *",
       "constructionYear": "Année de construction",
       "propertyStories": "Nombre d'étages",
       "propertyUnits": "Nombre de logements",
@@ -372,8 +378,23 @@
       "ownedRent": "Mes changements de loyers"
     }
   },
+  "yamStatisticsPage": {
+    "home": "Accueil",
+    "title": "Statistiques marché secondaire (Yam)",
+    "filter": {
+      "field": "Filtre",
+      "all": "Toutes les propriétés",
+      "owned": "Mes propriétés",
+      "subsidized": "Subventionnés",
+      "fullySubsidized": "Entièrement subventionnés",
+      "notSubsidized": "Non subventionnés"
+    }
+  },
   "initialTransfersLoader": {
     "title": "Chargement initial des données",
     "description": "Récupération de vos transactions en cours. Ce chargement peut prendre un certain temps en fonction du nombre de transactions effecutées (10-20 secondes / 1000 transactions). Lors de vos prochaines visites, seul les nouvelles transactions seront récupérées."
+  },
+  "disclaimer":{
+    "fullyRentedAPR": "Cette estimation est en phase bêta et a été développée par la communauté RealT. Nous vous invitons à signaler tout problème éventuel. Les informations fournies sont à titre indicatif uniquement. La communauté RealT ou RealT ne peut être tenu responsable en cas de décision prise à partir de données inexactites."
   }
 }

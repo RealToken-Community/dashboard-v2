@@ -1,4 +1,4 @@
-import { FC, memo } from 'react'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
@@ -9,8 +9,12 @@ import { Badge, Card, Group } from '@mantine/core'
 import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
+import { useFullyRentedAPR } from 'src/hooks/useFullyRentedAPR'
 import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
-import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  RWARealtoken,
+  UserRealtoken,
+} from 'src/store/features/wallets/walletsSelector'
 import { RentCalculationState } from 'src/types/RentCalculation'
 
 import {
@@ -20,13 +24,19 @@ import {
   SubsidyStatusTag,
 } from '../commons'
 import styles from './AssetCard.module.sass'
+import { RWACard } from './RWACard'
 
 interface AssetCardProps {
+  value: UserRealtoken | RWARealtoken
+  onClick?: (id: string) => unknown
+}
+
+interface PropertyCardProps {
   value: UserRealtoken
   onClick?: (id: string) => unknown
 }
 
-const AssetCardComponent: FC<AssetCardProps> = (props) => {
+const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
 
@@ -47,6 +57,8 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   const weeklyAmount = props.value.amount * props.value.netRentDayPerToken * 7
   const yearlyAmount = props.value.amount * props.value.netRentYearPerToken
   const totalInvestment = props.value.totalInvestment
+
+  const fullyRentedAPR = useFullyRentedAPR(props.value)
 
   return (
     <Card
@@ -150,6 +162,15 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
         </div>
       </div>
 
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('fullyRentedEstimation')}*</div>
+        <div className={styles.textSm}>
+          {fullyRentedAPR
+            ? tNumbers('percent', { value: fullyRentedAPR })
+            : '-'}
+        </div>
+      </div>
+
       <div style={{ flex: '1 1 auto' }} />
       <Divider height={1} my={'xs'} />
 
@@ -158,4 +179,16 @@ const AssetCardComponent: FC<AssetCardProps> = (props) => {
   )
 }
 
-export const AssetCard = memo(AssetCardComponent)
+export const AssetCard: FC<AssetCardProps> = (props) => {
+  const isAProperty = props.value && props.value.hasOwnProperty('rentStatus')
+  if (isAProperty) {
+    return (
+      <PropertyCardComponent
+        value={props.value as UserRealtoken}
+        onClick={props.onClick}
+      />
+    )
+  } else {
+    return <RWACard value={props.value as RWARealtoken} />
+  }
+}
