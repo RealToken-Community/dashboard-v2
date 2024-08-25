@@ -11,11 +11,11 @@ const nextConfig = {
     outputStandalone: true,
   },
   images: {
-    domains: ['realt.co']
+    domains: ['realt.co'],
   },
   publicRuntimeConfig: {
     version,
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

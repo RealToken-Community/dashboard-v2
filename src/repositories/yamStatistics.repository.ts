@@ -18,8 +18,17 @@ export interface YamStatistics {
 export async function GetYamStatistics(params: {
   realtoken: APIRealToken
 }): Promise<YamStatistics> {
-  const address =
-    params.realtoken.blockchainAddresses.xDai.contract.toLowerCase()
+  const address = params.realtoken.blockchainAddresses.xDai.contract
+    ? params.realtoken.blockchainAddresses.xDai.contract.toLowerCase()
+    : null
+
+  if (!address) {
+    return {
+      quantity: 0,
+      volume: 0,
+      days: [],
+    }
+  }
 
   const volumes = await getRealtokenYamStatistics(address)
 

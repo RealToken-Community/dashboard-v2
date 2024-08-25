@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next'
 
 import { Select } from '@mantine/core'
 
-import { UserRealtoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  RWARealtoken,
+  UserRealtoken,
+} from 'src/store/features/wallets/walletsSelector'
 
 import { useInputStyles } from '../../inputs/useInputStyles'
 import { AssetRmmStatusType } from '../types'
@@ -53,14 +56,15 @@ AssetsViewRmmStatusFilter.displayName = 'AssetsViewRmmStatusFilter'
 export function useAssetsViewRmmStatusFilter(
   filter: AssetsViewRmmStatusFilterModel,
 ) {
-  function assetRmmStatusFilterFunction(asset: UserRealtoken) {
+  function assetRmmStatusFilterFunction(asset: UserRealtoken | RWARealtoken) {
+    const Asset = asset as UserRealtoken
     switch (filter.rmmStatus) {
       case AssetRmmStatusType.ALL:
         return true
       case AssetRmmStatusType.AVAILABLE:
-        return asset.isRmmAvailable
+        return Asset.isRmmAvailable
       case AssetRmmStatusType.NOT_AVAILABLE:
-        return !asset.isRmmAvailable
+        return !Asset.isRmmAvailable
     }
   }
 

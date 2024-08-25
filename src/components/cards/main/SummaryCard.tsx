@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { Box, Card, Text, Title } from '@mantine/core'
 
+import { useRWA } from 'src/hooks/useRWA'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
   selectOwnedRealtokensValue,
@@ -19,10 +20,13 @@ export const SummaryCard: FC = () => {
   const rmmDetails = useSelector(selectRmmDetails)
   const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
 
+  const rwa = useRWA()
+
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
+  const rwaValue = rwa?.value ?? 0
   const totalNetValue =
-    realtokensValue.total + stableDepositValue - stableDebtValue
+    realtokensValue.total + stableDepositValue + rwaValue - stableDebtValue
 
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
@@ -43,6 +47,7 @@ export const SummaryCard: FC = () => {
         ) : null}
         <CurrencyField label={t('stableDeposit')} value={stableDepositValue} />
         <CurrencyField label={t('stableBorrow')} value={stableDebtValue} />
+        <CurrencyField label={t('rwa')} value={rwaValue} />
       </Box>
     </Card>
   )
