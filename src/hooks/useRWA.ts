@@ -3,10 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { ethers } from 'ethers'
 
-import {
-  EthereumRpcProvider,
-  GnosisRpcProvider,
-} from 'src/repositories/RpcProvider'
+import { initializeProviders } from 'src/repositories/RpcProvider'
 import { selectUserCurrency } from 'src/store/features/currencies/currenciesSelector'
 import {
   selectUserAddressList,
@@ -22,6 +19,7 @@ const getRWA = async (
   includeETH: boolean = false,
 ): Promise<RWARealtoken> => {
   let totalAmount = 0
+  const { GnosisRpcProvider, EthereumRpcProvider } = await initializeProviders()
 
   let providers = [GnosisRpcProvider]
 
