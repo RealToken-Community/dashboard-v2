@@ -11,8 +11,21 @@ import {
 } from 'src/types/RentCalculation'
 
 const fullyRentedAPREstimation = (token: UserRealtoken) => {
-  // Case of fully rented property
+  // VEFA properties
+  if (token.shortName === 'Playa Caracol Cottage 10' && !token.hasTenants)
+    return 10.77
+  else if (token.shortName === 'Playa Caracol 303300' && !token.hasTenants)
+    return 10.69
+  else if (token.shortName === 'Playa Caracol 303200' && !token.hasTenants)
+    return 10.8
+  else if (token.shortName === 'PH Pinoalto A002' && !token.hasTenants)
+    return 10.11
+  else if (token.shortName === 'PH Pinoalto A003' && !token.hasTenants)
+    return 10.11
+  else if (token.shortName === 'Vervana T1 ' && !token.hasTenants) return 11.33
+
   if (token.rentedUnits === token.totalUnits) {
+    // Case of fully rented property
     return token.annualPercentageYield
   }
 
