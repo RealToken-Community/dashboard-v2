@@ -8,8 +8,7 @@
     "home": "Accueil",
     "realt": "RealT",
     "RMM": "RMM",
-    "YAM": "YAM",
-    "Bridge": "Bridge"
+    "YAM": "YAM"
   },
   "settings": {
     "title": "Langue",
@@ -396,6 +395,6 @@
     "description": "Récupération de vos transactions en cours. Ce chargement peut prendre un certain temps en fonction du nombre de transactions effecutées (10-20 secondes / 1000 transactions). Lors de vos prochaines visites, seul les nouvelles transactions seront récupérées."
   },
   "disclaimer":{
-    "fullyRentedAPR": "Cette estimation est en phase bêta et a été développée par la communauté RealT. Nous vous invitons à signaler tout problème éventuel. Les informations fournies sont à titre indicatif uniquement. La communauté RealT ou RealT ne peut être tenue responsable en cas de décision prise à partir de données inexactes."
+    "fullyRentedAPR": "Cette estimation est en phase bêta et a été développée par la communauté RealT. Nous vous invitons à signaler tout problème éventuel. Les informations fournies sont à titre indicatif uniquement. La communauté RealT ou RealT ne peut être tenu responsable en cas de décision prise à partir de données inexactites."
   }
 }

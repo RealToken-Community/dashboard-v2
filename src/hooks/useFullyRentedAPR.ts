@@ -11,11 +11,6 @@ import {
 } from 'src/types/RentCalculation'
 
 const fullyRentedAPREstimation = (token: UserRealtoken) => {
-  // VEFA properties
-  if (isVEFA(token)) {
-    return VEFAAPRs[token.shortName as keyof typeof VEFAAPRs]
-  }
-
   // Case of fully rented property
   if (token.rentedUnits === token.totalUnits) {
     return token.annualPercentageYield
@@ -63,7 +58,7 @@ export const useFullyRentedAPR = (token: UserRealtoken) => {
 
   const fullyRentedAPR = useMemo(() => {
     const isDisabled = APRDisabled(rentCalculation, token)
-    if (isDisabled && !isVEFA(token)) return 0
+    if (isDisabled) return 0
     return fullyRentedAPREstimation(token)
   }, [token, rentCalculation])
 
@@ -75,12 +70,12 @@ export const useGeneralFullyRentedAPR = (tokens: UserRealtoken[]) => {
   // Fully rented APR average using valuation ponderation
   const fullyRentedAPR = useMemo(() => {
     const totalValue = tokens.reduce((acc, token) => {
-      const isDisabled = APRDisabled(rentCalculation, token) && !isVEFA(token)
+      const isDisabled = APRDisabled(rentCalculation, token)
       if (isDisabled) return acc
       return acc + token.value
     }, 0)
     const totalAPR = tokens.reduce((acc, token) => {
-      const isDisabled = APRDisabled(rentCalculation, token) && !isVEFA(token)
+      const isDisabled = APRDisabled(rentCalculation, token)
       if (isDisabled) return acc
       return acc + token.value * fullyRentedAPREstimation(token)
     }, 0)
@@ -100,24 +95,4 @@ const APRDisabled = (
     rentCalculation.state === RentCalculationState.Realtime &&
     rentStartDate > realtimeDate.toDate()
   return isDisabled
-}
-
-export const isVEFA = (token: UserRealtoken) => {
-  return (
-    token.shortName === 'Playa Caracol Cottage 10' ||
-    token.shortName === 'Playa Caracol 303300' ||
-    token.shortName === 'Playa Caracol 303200' ||
-    token.shortName === 'PH Pinoalto A002' ||
-    token.shortName === 'PH Pinoalto A003' ||
-    token.shortName === 'Vervana T1 '
-  )
-}
-
-const VEFAAPRs = {
-  'Playa Caracol Cottage 10': 10.77,
-  'Playa Caracol 303300': 10.69,
-  'Playa Caracol 303200': 10.8,
-  'PH Pinoalto A002': 10.11,
-  'PH Pinoalto A003': 10.11,
-  'Vervana T1 ': 11.33,
 }
