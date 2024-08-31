@@ -105,8 +105,8 @@ const APRDisabled = (
 export const isVEFA = (token: UserRealtoken) => {
   return (
     token.shortName === 'Playa Caracol Cottage 10' ||
-    token.shortName === 'Playa Caracol 303300' ||
-    token.shortName === 'Playa Caracol 303200' ||
+    token.shortName === 'Playa Caracol 303300 E' ||
+    token.shortName === 'Playa Caracol 303200 E' ||
     token.shortName === 'PH Pinoalto A002' ||
     token.shortName === 'PH Pinoalto A003' ||
     token.shortName === 'Vervana T1 '
@@ -115,8 +115,8 @@ export const isVEFA = (token: UserRealtoken) => {
 
 const VEFAAPRs = {
   'Playa Caracol Cottage 10': 10.77,
-  'Playa Caracol 303300': 10.69,
-  'Playa Caracol 303200': 10.8,
+  'Playa Caracol 303300 E': 10.69,
+  'Playa Caracol 303200 E': 10.8,
   'PH Pinoalto A002': 10.11,
   'PH Pinoalto A003': 10.11,
   'Vervana T1 ': 11.33,
