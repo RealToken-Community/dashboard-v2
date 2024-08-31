@@ -30,7 +30,7 @@ export const AssetTable: FC<{
           {props.realtokens.map((item, index) => {
             const isAProperty = item.hasOwnProperty('rentStatus')
             if (!isAProperty) {
-              return <RWATableRow key={'0'} value={item as RWARealtoken} />
+              return <AssetTableRow key={'0'} value={item as UserRealtoken} />
             }
             return <AssetTableRow key={index} value={item as UserRealtoken} />
           })}
@@ -159,62 +159,4 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
     </Table.Tr>
   )
 }
-
-const RWATableRow: FC<{ value: RWARealtoken }> = (props) => {
-  const { t } = useTranslation('common', { keyPrefix: 'numbers' })
-  const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
-
-  const { shortName, value, unitPriceCost, amount, totalInvestment } =
-    props.value
-
-  return (
-    <Table.Tr>
-      <Table.Td style={{ minWidth: '150px' }}>
-        <Anchor>{shortName}</Anchor>
-      </Table.Td>
-      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {useCurrencyValue(value)}
-      </Table.Td>
-      {transfersIsLoaded ? (
-        <>
-          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-            {'-'}
-          </Table.Td>
-          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-            {'-'}
-          </Table.Td>
-        </>
-      ) : null}
-
-      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {useCurrencyValue(unitPriceCost)}
-      </Table.Td>
-      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {t('decimal', { value: amount })}
-      </Table.Td>
-      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {'-'}
-      </Table.Td>
-      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {'-'}
-      </Table.Td>
-      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {'-'}
-      </Table.Td>
-      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {'-'}
-      </Table.Td>
-      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {'-'}
-      </Table.Td>
-      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {useCurrencyValue(totalInvestment)}
-      </Table.Td>
-      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {'-'}
-      </Table.Td>
-    </Table.Tr>
-  )
-}
-
 AssetTableRow.displayName = 'AssetTableRow'

@@ -113,13 +113,6 @@ export const Header: FC = () => {
           label={t('YAM')}
           leftSection={<IconExternalLink size={'1rem'} stroke={1.5} />}
         />
-        <NavLink
-          component={'a'}
-          href={'https://bridge.realtoken.network/'}
-          target={'_blank'}
-          label={t('Bridge')}
-          leftSection={<IconExternalLink size={'1rem'} stroke={1.5} />}
-        />
       </Drawer>
       <div>
         <Box className={styles.container}>
