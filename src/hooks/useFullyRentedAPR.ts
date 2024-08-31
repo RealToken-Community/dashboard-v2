@@ -16,8 +16,8 @@ const fullyRentedAPREstimation = (token: UserRealtoken) => {
     return VEFAAPRs[token.shortName as keyof typeof VEFAAPRs]
   }
 
+  // Case of fully rented property
   if (token.rentedUnits === token.totalUnits) {
-    // Case of fully rented property
     return token.annualPercentageYield
   }
 
