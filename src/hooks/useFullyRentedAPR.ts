@@ -66,7 +66,7 @@ export const useFullyRentedAPR = (token: UserRealtoken) => {
 
   const fullyRentedAPR = useMemo(() => {
     const isDisabled = APRDisabled(rentCalculation, token)
-    if (isDisabled && !isVEFA(token)) return 0
+    if (isDisabled) return 0
     return fullyRentedAPREstimation(token, rentCalculation)
   }, [token, rentCalculation])
 
