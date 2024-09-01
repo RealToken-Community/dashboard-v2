@@ -10,10 +10,13 @@ import {
   RentCalculationState,
 } from 'src/types/RentCalculation'
 
-const fullyRentedAPREstimation = (token: UserRealtoken) => {
+const fullyRentedAPREstimation = (
+  token: UserRealtoken,
+  rentCalculation: RentCalculation,
+) => {
   // VEFA properties
   if (isVEFA(token)) {
-    return VEFAAPRs[token.shortName as keyof typeof VEFAAPRs]
+    return getVEFAFullRentedAPR(token, rentCalculation)
   }
 
   if (token.rentedUnits === token.totalUnits) {
@@ -64,7 +67,7 @@ export const useFullyRentedAPR = (token: UserRealtoken) => {
   const fullyRentedAPR = useMemo(() => {
     const isDisabled = APRDisabled(rentCalculation, token)
     if (isDisabled && !isVEFA(token)) return 0
-    return fullyRentedAPREstimation(token)
+    return fullyRentedAPREstimation(token, rentCalculation)
   }, [token, rentCalculation])
 
   return fullyRentedAPR
@@ -82,7 +85,9 @@ export const useGeneralFullyRentedAPR = (tokens: UserRealtoken[]) => {
     const totalAPR = tokens.reduce((acc, token) => {
       const isDisabled = APRDisabled(rentCalculation, token) && !isVEFA(token)
       if (isDisabled) return acc
-      return acc + token.value * fullyRentedAPREstimation(token)
+      return (
+        acc + token.value * fullyRentedAPREstimation(token, rentCalculation)
+      )
     }, 0)
     return totalAPR / totalValue
   }, [tokens, rentCalculation])
@@ -120,4 +125,14 @@ const VEFAAPRs = {
   'PH Pinoalto A002': 10.11,
   'PH Pinoalto A003': 10.11,
   'Vervana T1 ': 11.33,
+}
+
+const getVEFAFullRentedAPR = (
+  token: UserRealtoken,
+  rentCalculation: RentCalculation,
+) => {
+  if (rentCalculation.state === RentCalculationState.Realtime) {
+    return token.annualPercentageYield
+  }
+  return VEFAAPRs[token.shortName as keyof typeof VEFAAPRs]
 }
