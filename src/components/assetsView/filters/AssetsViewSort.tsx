@@ -114,7 +114,7 @@ export function useAssetsViewSort(filter: AssetsViewSortFilter) {
       case AssetSortType.RENT:
         return B.amount * B.netRentDayPerToken - A.amount * A.netRentDayPerToken
       case AssetSortType.RENT_START:
-        return B.rentStartDate.date.localeCompare(A.rentStartDate.date)
+        return B.rentStartDate?.date.localeCompare(A.rentStartDate?.date)
       case AssetSortType.NAME:
         return A.shortName.localeCompare(b.shortName)
       case AssetSortType.SUPPLY:
