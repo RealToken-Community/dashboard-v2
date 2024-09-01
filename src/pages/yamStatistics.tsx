@@ -146,7 +146,7 @@ const YamStatisticsPage = () => {
               <th>Token Price</th>
               <th>Yam Price</th>
               <th>Yam Difference (30 days)</th>
-              <th>Yam Volume</th>
+              <th>Yam Volume (30 days)</th>
             </tr>
             {paginationYamStatistics.map((statistics, index) => (
               <YamStatisticsRow
