@@ -35,7 +35,7 @@ const executeQuery = useCacheWithLocalStorage(
     }
   },
   {
-    duration: 1000 * 60 * 60, // 1 hour
+    duration: 1000 * 60 * 60 * 24, // 24 hours
     usePreviousValueOnError: true,
     key: 'RealtokenQuery',
   },

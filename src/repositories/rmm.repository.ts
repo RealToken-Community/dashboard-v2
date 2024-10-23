@@ -104,7 +104,7 @@ const getBalanceOfStableRMM3 = useCacheWithLocalStorage(
     }
   },
   {
-    duration: 1000 * 60 * 60, // 1 hour
+    duration: 1000 * 60 * 60 * 24, // 24 hours
     key: 'BalanceOfStableRMM3',
     usePreviousValueOnError: true,
   },

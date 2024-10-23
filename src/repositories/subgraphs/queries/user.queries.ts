@@ -37,7 +37,7 @@ const executeGetUserIdQuery = useCacheWithLocalStorage(
     return response.data.account.userIds[0].userId ?? null
   },
   {
-    duration: 1000 * 60 * 60 * 24, // 1 day
+    duration: 1000 * 60 * 60 * 24 * 7, // 7 days
     key: 'GetUserIdQuery',
     usePreviousValueOnError: true,
   },
@@ -54,7 +54,7 @@ const executeGetUserDetailsQuery = useCacheWithLocalStorage(
     return { id: userId, ...formatUserDetails(response.data) }
   },
   {
-    duration: 1000 * 60 * 60 * 24, // 1 day
+    duration: 1000 * 60 * 60 * 24 * 7, // 7 days
     key: 'GetUserDetailsQuery',
     usePreviousValueOnError: true,
   },

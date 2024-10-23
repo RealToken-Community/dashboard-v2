@@ -33,7 +33,7 @@ const executeQuery = useCacheWithLocalStorage(
     )
   },
   {
-    duration: 1000 * 60 * 60, // 1 hour
+    duration: 1000 * 60 * 60 * 24 * 7, // 7 days
     usePreviousValueOnError: true,
     key: 'YamStatisticsQuery',
   },
