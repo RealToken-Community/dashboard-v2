@@ -32,16 +32,12 @@ export async function GetYamStatistics(params: {
 
   const volumes = await getRealtokenYamStatistics(address)
 
-  const parsedValues = volumes
-    .map((volume) =>
-      volume.volumeDays.map((volumeDay) => ({
-        date: volumeDay.date,
-        quantity: volumeDay.quantity,
-        volume: volumeDay.volume,
-        average: volumeDay.volume / volumeDay.quantity,
-      })),
-    )
-    .flat()
+  const parsedValues = volumes.map((item) => ({
+    date: item.date,
+    quantity: item.qte,
+    volume: item.vol,
+    average: item.vol / item.qte,
+  }))
 
   const groupedValues = Object.values(_groupBy(parsedValues, 'date')).map(
     (item) => ({
