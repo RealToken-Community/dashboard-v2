@@ -8,20 +8,15 @@ export async function getRealtokenBalances(
   addressList: string[],
   options: { includesEth?: boolean } = {},
 ) {
-  const [gnosisResult, ethereumResult] = await executeQuery(
+  return executeQuery(
     addressList.map((item) => item.toLowerCase()),
     options,
   )
-
-  return {
-    gnosis: formatBalances(gnosisResult.data.accounts),
-    ethereum: formatBalances(ethereumResult.data.accounts),
-  }
 }
 
 const executeQuery = useCacheWithLocalStorage(
-  async (addressList: string[], options: { includesEth?: boolean } = {}) =>
-    Promise.all([
+  async (addressList: string[], options: { includesEth?: boolean } = {}) => {
+    const [gnosisResult, ethereumResult] = await Promise.all([
       GnosisClient().query<RealtokenResult>({
         query: RealtokenQuery,
         variables: { addressList },
@@ -32,9 +27,15 @@ const executeQuery = useCacheWithLocalStorage(
             variables: { addressList },
           })
         : Promise.resolve({ data: { accounts: [] } }),
-    ]),
+    ])
+
+    return {
+      gnosis: formatBalances(gnosisResult.data.accounts),
+      ethereum: formatBalances(ethereumResult.data.accounts),
+    }
+  },
   {
-    duration: 1000 * 60 * 60, // 1 hour
+    duration: 1000 * 60 * 60 * 24, // 24 hours
     usePreviousValueOnError: true,
     key: 'RealtokenQuery',
   },

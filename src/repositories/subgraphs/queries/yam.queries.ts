@@ -11,41 +11,43 @@ const STABLE_TOKENS = [
 ]
 
 export async function getRealtokenYamStatistics(address: string) {
-  const result = await executeQuery(address)
-  return result.data.token ? formatStatistics(result.data.token) : []
+  const result = await executeQuery()
+  return result.find((item) => item.address === address)?.value ?? []
 }
 
 const executeQuery = useCacheWithLocalStorage(
-  async (address: string) =>
-    YamStatisticsClient().query<YamStatisticsResult>({
+  async () => {
+    const response = await YamStatisticsClient().query<YamStatisticsResult>({
       query: YamStatisticsQuery,
       variables: {
-        address,
         limitDate: getLastMonthDate(),
         stables: STABLE_TOKENS,
       },
-    }),
+    })
+
+    return (
+      response.data?.tokens?.map((item) => ({
+        address: item.id,
+        value: formatStatistics(item),
+      })) ?? []
+    )
+  },
   {
-    duration: 1000 * 60 * 60, // 1 hour
+    duration: 1000 * 60 * 60 * 24 * 7, // 7 days
     usePreviousValueOnError: true,
     key: 'YamStatisticsQuery',
   },
 )
 
 const YamStatisticsQuery = gql`
-  query GetTokenVolumes(
-    $address: String!
-    $stables: [String!]
-    $limitDate: String!
-  ) {
-    token(id: $address) {
+  query GetTokenVolumes($stables: [String!], $limitDate: String!) {
+    tokens(first: 1000) {
+      id
       decimals
       volumes(where: { token_in: $stables }) {
         token {
           decimals
         }
-        quantity
-        volume
         volumeDays(
           orderBy: date
           orderDirection: desc
@@ -61,19 +63,18 @@ const YamStatisticsQuery = gql`
 `
 
 interface YamStatisticsResult {
-  token: {
+  tokens: {
+    id: string
     decimals: string
     volumes: {
       token: { decimals: string }
-      quantity: string
-      volume: string
       volumeDays: {
         date: string
         quantity: string
         volume: string
       }[]
     }[]
-  }
+  }[]
 }
 
 function getLastMonthDate() {
@@ -85,15 +86,13 @@ function getLastMonthDate() {
   return `${year}-${month}-${day}`
 }
 
-function formatStatistics(statistics: YamStatisticsResult['token']) {
+function formatStatistics(statistics: YamStatisticsResult['tokens'][0]) {
   const decimals = parseInt(statistics.decimals)
-  return statistics.volumes.map((volume) => ({
-    quantity: parseFloat(volume.quantity) / 10 ** decimals,
-    volume: parseFloat(volume.volume) / 10 ** parseInt(volume.token.decimals),
-    volumeDays: volume.volumeDays.map((day) => ({
+  return statistics.volumes.flatMap((volume) =>
+    volume.volumeDays.map((day) => ({
       date: day.date,
-      quantity: parseFloat(day.quantity) / 10 ** decimals,
-      volume: parseFloat(day.volume) / 10 ** parseInt(volume.token.decimals),
+      qte: parseFloat(day.quantity) / 10 ** decimals,
+      vol: parseFloat(day.volume) / 10 ** parseInt(volume.token.decimals),
     })),
-  }))
+  )
 }

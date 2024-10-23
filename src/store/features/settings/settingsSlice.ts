@@ -11,6 +11,7 @@ import {
   RentCalculation,
   RentCalculationState,
 } from 'src/types/RentCalculation'
+import { expiresLocalStorageCaches } from 'src/utils/useCache'
 
 const USER_LS_KEY = 'store:settings/user'
 const USER_CURRENCY_LS_KEY = 'store:settings/userCurrency'
@@ -249,6 +250,10 @@ export const settingsReducers = createReducer(
           publicRuntimeConfig?: { version: string }
         }
         const version = publicRuntimeConfig?.version ?? ''
+        const lastVersionUsed = localStorage.getItem('lastVersionUsed')
+        if (lastVersionUsed && lastVersionUsed !== version) {
+          expiresLocalStorageCaches()
+        }
         localStorage.setItem('lastVersionUsed', version)
         state.version = version
 

@@ -1,6 +1,6 @@
 {
   "name": "realtoken-dashboard-v2",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
