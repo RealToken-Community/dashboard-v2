@@ -5,15 +5,11 @@ import { useCacheWithLocalStorage } from 'src/utils/useCache'
 import { GnosisClient } from '../clients'
 
 export async function getUserId(address: string): Promise<string | null> {
-  const result = await executeGetUserIdQuery(address.toLowerCase())
-  return result.data.account.userIds[0].userId ?? null
+  return executeGetUserIdQuery(address.toLowerCase())
 }
 
 export async function getUserDetails(id: string) {
-  const trustedIntermediary = '0x296033cb983747b68911244ec1a3f01d7708851b'
-  const userId = `${trustedIntermediary}-${id}`
-  const result = await executeGetUserDetailsQuery(userId)
-  return { id, ...formatUserDetails(result.data) }
+  return executeGetUserDetailsQuery(id)
 }
 
 function formatUserDetails(result: GetUserDetailsResult) {
@@ -32,11 +28,14 @@ function formatUserDetails(result: GetUserDetailsResult) {
 }
 
 const executeGetUserIdQuery = useCacheWithLocalStorage(
-  async (address: string) =>
-    GnosisClient().query<GetUserIdResult>({
+  async (address: string) => {
+    const response = await GnosisClient().query<GetUserIdResult>({
       query: GetUserIdQuery,
       variables: { address },
-    }),
+    })
+
+    return response.data.account.userIds[0].userId ?? null
+  },
   {
     duration: 1000 * 60 * 60 * 24, // 1 day
     key: 'GetUserIdQuery',
@@ -45,11 +44,15 @@ const executeGetUserIdQuery = useCacheWithLocalStorage(
 )
 
 const executeGetUserDetailsQuery = useCacheWithLocalStorage(
-  async (userId: string) =>
-    GnosisClient().query<GetUserDetailsResult>({
+  async (userId: string) => {
+    const trustedIntermediary = '0x296033cb983747b68911244ec1a3f01d7708851b'
+    const response = await GnosisClient().query<GetUserDetailsResult>({
       query: GetUserDetailsQuery,
-      variables: { userId },
-    }),
+      variables: { userId: `${trustedIntermediary}-${userId}` },
+    })
+
+    return { id: userId, ...formatUserDetails(response.data) }
+  },
   {
     duration: 1000 * 60 * 60 * 24, // 1 day
     key: 'GetUserDetailsQuery',
