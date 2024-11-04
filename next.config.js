@@ -11,7 +11,7 @@ const nextConfig = {
     outputStandalone: true,
   },
   images: {
-    domains: ['realt.co'],
+    domains: ['realt.co', 'static.debank.com'],
   },
   publicRuntimeConfig: {
     version,

@@ -37,7 +37,7 @@ export interface UserRealtoken extends RealToken {
   >
 }
 
-export interface RWARealtoken {
+export interface OtherRealtoken {
   id: string
   fullName: string
   shortName: string
@@ -49,6 +49,13 @@ export interface RWARealtoken {
   isRmmAvailable: boolean
   unitPriceCost: number
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface RWARealtoken extends OtherRealtoken {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface REGRealtoken extends RWARealtoken {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface REGVotingPowertoken extends RWARealtoken {}
 
 const DAYS_PER_YEAR = 365
 const MONTHS_PER_YEAR = 12

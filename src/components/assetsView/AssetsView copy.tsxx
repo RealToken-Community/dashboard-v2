@@ -6,7 +6,12 @@ import { Grid } from '@mantine/core'
 import { useREG } from 'src/hooks/useREG'
 import { useRegVotingPower } from 'src/hooks/useREGVotingPower'
 import { useRWA } from 'src/hooks/useRWA'
-import { selectUserRealtokens } from 'src/store/features/wallets/walletsSelector'
+import {
+  // REGRealtoken,
+  // REGVotingPowertoken,
+  // RWARealtoken,
+  selectUserRealtokens,
+} from 'src/store/features/wallets/walletsSelector'
 
 import { AssetsViewSearch, useAssetsViewSearch } from './AssetsViewSearch'
 import { AssetsViewSelect, useAssetsViewSelect } from './assetsViewSelect'
@@ -25,11 +30,33 @@ export const AssetsView: FC = () => {
   const rwa = useRWA()
   const reg = useREG()
   const regVotingPower = useRegVotingPower()
+  // const additionalTokens: Array<
+  //   RWARealtoken | REGRealtoken | REGVotingPowertoken
+  // > = []
+  // rwa && additionalTokens.push(rwa)
+  // reg && additionalTokens.push(reg)
+  // regVotingPower && additionalTokens.push(regVotingPower)
+  // console.dir(rwa)
+  // console.dir(reg)
+  // console.dir(regVotingPower)
+  // console.log(additionalTokens.length)
 
   const data = useMemo(() => {
-    const assets = [...realtokens, rwa, reg, regVotingPower].filter(
-      (asset) => asset != null && asset != undefined,
-    ) // remove null/undefined values
+    // const assets = additionalTokens.length
+    //   ? [...realtokens, ...additionalTokens]
+    //   : realtokens
+    // remove null values
+    // const assets = [...realtokens, rwa, reg, regVotingPower].filter(
+    //   (asset) => asset !== null,
+    // )
+    const assets = [
+      ...realtokens,
+      rwa,
+      reg,
+      // undefined,
+      // null,
+      regVotingPower,
+    ].filter((asset) => asset != null && asset != undefined) // remove null/undefined values
     return assetsViewFilterFunction(assets.filter(assetSearchFunction))
   }, [
     realtokens,
