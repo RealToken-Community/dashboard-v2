@@ -33,14 +33,13 @@ const getRWA = async (
   rate: number,
   includeETH = false, // boolean
 ): Promise<RWARealtoken> => {
-  // let totalAmount = 0
   const { GnosisRpcProvider, EthereumRpcProvider } = await initializeProviders()
   const providers = [GnosisRpcProvider]
   if (includeETH) {
     providers.push(EthereumRpcProvider)
   }
 
-  const RwaContract_Gnosis = new Contract(
+  const contractRwa_Gnosis = new Contract(
     RWA_ContractAddress,
     ERC20ABI,
     GnosisRpcProvider,
@@ -50,13 +49,8 @@ const getRWA = async (
     addressList,
     providers,
   )
-  console.log('RWA totalAmount', totalAmount)
-
-  const RegContractTotalSupply = await RwaContract_Gnosis.totalSupply()
-
-  console.log('RWA totalsupply', RegContractTotalSupply)
-
-  const totalTokens = Number(RegContractTotalSupply) // RWATokenSypply
+  const RwaContractTotalSupply = await contractRwa_Gnosis.totalSupply()
+  const totalTokens = Number(RwaContractTotalSupply)
   const amount = totalAmount / 10 ** RWAtokenDecimals
 
   const rwaPriceUsdc = await getUniV2AssetPrice(
@@ -66,8 +60,6 @@ const getRWA = async (
     RWAtokenDecimals,
     USDCtokenDecimals,
     GnosisRpcProvider,
-    0,
-    true,
   )
   const rwaPriceWxdai = await getUniV2AssetPrice(
     HoneySwapFactory_Address,
@@ -77,14 +69,8 @@ const getRWA = async (
     WXDAItokenDecimals,
     GnosisRpcProvider,
   )
-  console.log('rwaPriceUsdc', rwaPriceUsdc)
-  console.log('rwaPriceWxdai', rwaPriceWxdai)
-
   const averagePrice = averageValues([rwaPriceUsdc, rwaPriceWxdai])
-  console.log('RWA averagePrice', averagePrice)
-
   const unitPriceCost = (averagePrice ?? DEFAULT_RWA_PRICE) / rate
-
   const value = unitPriceCost * amount
   const totalInvestment = totalTokens * unitPriceCost
 
@@ -107,10 +93,8 @@ const getRWA = async (
 export const useRWA = () => {
   const [rwa, setRwa] = useState<RWARealtoken | null>(null)
   const addressList = useSelector(selectUserAddressList)
-
   const { rate } = useSelector(selectUserCurrency)
   const includeETH = useSelector(selectUserIncludesEth)
-
   useEffect(() => {
     ;(async () => {
       const rwa_ = await getRWA(addressList, rate, includeETH)

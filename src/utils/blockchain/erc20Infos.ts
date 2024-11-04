@@ -39,7 +39,7 @@ const getAddressesBalances = async (
     })
     const balances = await Promise.all(balancesPromises.flat())
     showDebug && console.debug('balances', balances)
-    // Sum all the balances
+    // Sum all balances
     totalAmount = balances.reduce((acc, curr) => acc + Number(curr), 0)
   } catch (error) {
     console.warn('Failed to get balances', error)

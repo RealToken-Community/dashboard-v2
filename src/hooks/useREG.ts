@@ -34,7 +34,6 @@ const getREG = async (
   rate: number,
   includeETH = false, // boolean
 ): Promise<REGRealtoken> => {
-  // let totalAmount = 0
   const { GnosisRpcProvider, EthereumRpcProvider } = await initializeProviders()
   const providers = [GnosisRpcProvider]
   if (includeETH) {
@@ -45,17 +44,13 @@ const getREG = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
-
   const totalAmount = await getAddressesBalances(
     REG_ContractAddress,
     addressList,
     providers,
   )
-  console.log('REG totalAmount', totalAmount)
-  const RegContractTotalSupply = await RegContract_Gnosis.totalSupply()
-  console.log('REG totalsupply', RegContractTotalSupply)
-
-  const totalTokens = Number(RegContractTotalSupply)
+  const contractRegTotalSupply = await RegContract_Gnosis.totalSupply()
+  const totalTokens = Number(contractRegTotalSupply)
   const amount = totalAmount / 10 ** REGtokenDecimals
 
   const regPriceUsdc = await getUniV2AssetPrice(
@@ -75,22 +70,11 @@ const getREG = async (
     GnosisRpcProvider,
   )
 
-  console.log('regPriceUsdc', regPriceUsdc)
-  console.log('regPriceWxdai', regPriceWxdai)
-
-  // const averagePrice =
-  //   regPriceUsdc && regPriceWxdai
-  //     ? (regPriceUsdc + regPriceWxdai) / 2
-  //     : regPriceUsdc
-  //       ? regPriceUsdc
-  //       : regPriceWxdai
-
   const averagePrice = averageValues([regPriceUsdc, regPriceWxdai])
-  console.log('REG averagePrice', averagePrice)
   const unitPriceCost = averagePrice ? averagePrice / rate : DEFAULT_REG_PRICE
 
   const value = unitPriceCost * amount
-  const totalInvestment = Infinity // totalTokens * unitPriceCost // Should display circulating supply
+  const totalInvestment = Infinity
 
   return {
     id: `${REG_asset_ID}`,

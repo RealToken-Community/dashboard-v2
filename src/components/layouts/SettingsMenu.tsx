@@ -33,6 +33,7 @@ import {
   selectUserCurrency,
   selectUserIncludesEth,
   selectUserIncludesLevinSwap,
+  selectUserIncludesOtherAssets,
   selectUserIncludesRmmV2,
   selectUserRentCalculation,
   selectVersion,
@@ -41,6 +42,7 @@ import {
   userCurrencyChanged,
   userIncludesEthChanged,
   userIncludesLevinSwapChanged,
+  userIncludesOtherAssetsChanged,
   userIncludesRmmV2Changed,
   userRentCalculationChanged,
 } from 'src/store/features/settings/settingsSlice'
@@ -244,6 +246,7 @@ const FetchDataSettings: FC = () => {
   const userIncludesEth = useSelector(selectUserIncludesEth)
   const userIncludesLevinSwap = useSelector(selectUserIncludesLevinSwap)
   const userIncludesRmmV2 = useSelector(selectUserIncludesRmmV2)
+  const userIncludesOtherAssets = useSelector(selectUserIncludesOtherAssets)
 
   const setUserIncludesEth = (value: boolean) =>
     dispatch(userIncludesEthChanged(value))
@@ -251,6 +254,8 @@ const FetchDataSettings: FC = () => {
     dispatch(userIncludesLevinSwapChanged(value))
   const setUserIncludesRmmV2 = (value: boolean) =>
     dispatch(userIncludesRmmV2Changed(value))
+  const setUserIncludesOtherAssets = (value: boolean) =>
+    dispatch(userIncludesOtherAssetsChanged(value))
 
   return (
     <>
@@ -272,6 +277,14 @@ const FetchDataSettings: FC = () => {
         checked={userIncludesRmmV2}
         onChange={(event) => setUserIncludesRmmV2(event.currentTarget.checked)}
         label={t('includesRmmV2')}
+        style={{ margin: '4px 8px' }}
+      />
+      <Switch
+        checked={userIncludesOtherAssets}
+        onChange={(event) =>
+          setUserIncludesOtherAssets(event.currentTarget.checked)
+        }
+        label={t('includesOtherAssets')}
         style={{ margin: '4px 8px' }}
       />
     </>

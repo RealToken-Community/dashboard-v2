@@ -28,7 +28,8 @@
     "dateFormat": "MMMM DD, YYYY",
     "includesEth": "Includes Ethereum",
     "includesLevinSwap": "Includes LevinSwap",
-    "includesRmmV2": "Includes RMM V2"
+    "includesRmmV2": "Includes RMM V2",
+    "includesOtherAssets": "Includes other assets"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
@@ -71,7 +72,9 @@
     "totalPriceCost": "Estimated price cost",
     "stableDeposit": "RMM deposit",
     "stableBorrow": "RMM borrow",
-    "rwa": "RWA"
+    "rwa": "RWA",
+    "reg": "REG",
+    "regVote": "REG Vote Power"
   },
   "worthCard": {
     "title": "RealTokens",

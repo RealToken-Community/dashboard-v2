@@ -10,6 +10,7 @@ import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { useFullyRentedAPR } from 'src/hooks/useFullyRentedAPR'
+import { selectUserIncludesOtherAssets } from 'src/store/features/settings/settingsSelector'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
   OtherRealtoken,
@@ -19,6 +20,7 @@ import {
 export const AssetTable: FC<{
   realtokens: (UserRealtoken | OtherRealtoken)[]
 }> = (props) => {
+  const showOtherAssets = useSelector(selectUserIncludesOtherAssets)
   return (
     <ScrollArea>
       <Table>
@@ -30,6 +32,9 @@ export const AssetTable: FC<{
           {props.realtokens.map((item, index) => {
             const isAProperty = item.hasOwnProperty('rentStatus')
             if (!isAProperty) {
+              if (!showOtherAssets) {
+                return null
+              }
               return (
                 <OtherTableRow
                   key={'000' + index}

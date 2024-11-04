@@ -20,8 +20,7 @@ import { getAddressesBalances } from 'src/utils/blockchain/erc20Infos'
 
 const getRegVotingPower = async (
   addressList: string[],
-  // rate: number,
-  includeETH /* : boolean */ = false,
+  includeETH = false, // boolean
 ): Promise<REGVotingPowertoken> => {
   const { GnosisRpcProvider, EthereumRpcProvider } = await initializeProviders()
   const providers = [GnosisRpcProvider]
@@ -38,17 +37,14 @@ const getRegVotingPower = async (
     addressList,
     providers,
   )
-  console.log('RegVotingPower totalAmount', totalAmount)
 
-  const RWAContractTotalSupply = await RegVotingPowerContract.totalSupply()
-
-  const totalTokens = Number(RWAContractTotalSupply)
+  const contractRegVotePowerTotalSupply =
+    await RegVotingPowerContract.totalSupply()
+  const totalTokens = Number(contractRegVotePowerTotalSupply)
   const amount = totalAmount / 10 ** REGVotingPowertokenDecimals
-
   const unitPriceCost = DEFAULT_REGVotingPower_PRICE
-
   const value = unitPriceCost * amount
-  const totalInvestment = Infinity // totalTokens * unitPriceCost // Should display circulating supply
+  const totalInvestment = Infinity
 
   return {
     id: `${REGVotingPower_asset_ID}`,
@@ -70,16 +66,11 @@ export const useRegVotingPower = () => {
   const [regVotingPower, setRegVotingPower] =
     useState<REGVotingPowertoken | null>(null)
   const addressList = useSelector(selectUserAddressList)
-  // const { rate } = useSelector(selectUserCurrency)
   const includeETH = useSelector(selectUserIncludesEth)
 
   useEffect(() => {
     ;(async () => {
-      const regVotingPower_ = await getRegVotingPower(
-        addressList,
-        // rate,
-        includeETH,
-      )
+      const regVotingPower_ = await getRegVotingPower(addressList, includeETH)
       setRegVotingPower(regVotingPower_)
     })()
   }, [addressList])

@@ -6,6 +6,7 @@ import { StringField } from './StringField'
 interface DecimalFieldProps {
   label: string
   value: number
+  prefix?: string
   suffix?: string
 }
 
@@ -15,7 +16,11 @@ export const DecimalField: FC<DecimalFieldProps> = (props) => {
   return (
     <StringField
       label={props.label}
-      value={t('decimal', { value: props.value }) + (props.suffix || '')}
+      value={
+        (props.prefix || '') +
+        t('decimal', { value: props.value }) +
+        (props.suffix || '')
+      }
     />
   )
 }
