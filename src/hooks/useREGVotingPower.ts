@@ -4,10 +4,7 @@ import { useSelector } from 'react-redux'
 import { Contract } from 'ethers'
 
 import { initializeProviders } from 'src/repositories/RpcProvider'
-import {
-  selectUserAddressList,
-  selectUserIncludesEth,
-} from 'src/store/features/settings/settingsSelector'
+import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
 import { REGVotingPowertoken } from 'src/store/features/wallets/walletsSelector'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
@@ -20,13 +17,10 @@ import { getAddressesBalances } from 'src/utils/blockchain/erc20Infos'
 
 const getRegVotingPower = async (
   addressList: string[],
-  includeETH = false, // boolean
+  // includeETH = false, // boolean
 ): Promise<REGVotingPowertoken> => {
-  const { GnosisRpcProvider, EthereumRpcProvider } = await initializeProviders()
+  const { GnosisRpcProvider } = await initializeProviders()
   const providers = [GnosisRpcProvider]
-  if (includeETH) {
-    providers.push(EthereumRpcProvider)
-  }
   const RegVotingPowerContract = new Contract(
     RegVotingPower_ContractAddress,
     ERC20ABI,
@@ -66,11 +60,13 @@ export const useRegVotingPower = () => {
   const [regVotingPower, setRegVotingPower] =
     useState<REGVotingPowertoken | null>(null)
   const addressList = useSelector(selectUserAddressList)
-  const includeETH = useSelector(selectUserIncludesEth)
 
   useEffect(() => {
     ;(async () => {
-      const regVotingPower_ = await getRegVotingPower(addressList, includeETH)
+      const regVotingPower_ = await getRegVotingPower(
+        addressList,
+        // Reg Voting Power is not deployed on Ethereum
+      )
       setRegVotingPower(regVotingPower_)
     })()
   }, [addressList])
