@@ -2,12 +2,13 @@ import { Contract, JsonRpcProvider } from 'ethers'
 
 import { getErc20AbiBalanceOfOnly } from 'src/utils/blockchain/ERC20'
 
+import { batchCallOneContractOneFunctionMultipleParams } from './contract'
+
 const getAddressesBalances = async (
   contractAddress: string,
   addressList: string[],
   providers: JsonRpcProvider[],
   consoleWarnOnError = false,
-  showDebug = false,
 ) => {
   let totalAmount = 0
   try {
@@ -33,14 +34,25 @@ const getAddressesBalances = async (
         erc20AbiBalanceOfOnly,
         provider,
       )
-      return addressList.map(async (address: string) => {
-        return Erc20BalanceContract.balanceOf(address)
-      })
+      const balances = batchCallOneContractOneFunctionMultipleParams(
+        Erc20BalanceContract,
+        'balanceOf',
+        addressList.map((address: string) => [address as unknown as object]),
+      )
+      return balances
     })
-    const balances = await Promise.all(balancesPromises.flat())
-    showDebug && console.debug('balances', balances)
-    // Sum all balances
-    totalAmount = balances.reduce((acc, curr) => acc + Number(curr), 0)
+
+    const balancesArray = await Promise.all(balancesPromises.flat())
+    const balances = balancesArray.flat()
+    // Sum all valid balances
+    balances.forEach((balance: object | null | undefined) => {
+      try {
+        if (balance) {
+          totalAmount += Number(balance)
+        }
+      } catch (error) {}
+    })
+    return totalAmount
   } catch (error) {
     console.warn('Failed to get balances', error)
   }
