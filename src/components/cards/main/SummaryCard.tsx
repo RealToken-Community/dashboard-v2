@@ -64,7 +64,7 @@ export const SummaryCard: FC = () => {
           label={t('regVote')}
           labelIcon={<IconArchive size={16} />}
           value={regVotingPowerAmount}
-          unit={
+          unitIcon={
             regVotingPowerAmount > 0 ? (
               <IconBolt size={16} />
             ) : (

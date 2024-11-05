@@ -7,9 +7,9 @@ import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
 
 export const StringField: FC<{
   label: string
-  labelIcon: React.ReactNode
+  labelIcon?: React.ReactNode
   value: string
-  unit: React.ReactNode
+  unitIcon?: React.ReactNode
 }> = (props) => {
   const isLoading = useSelector(selectIsLoading)
 
@@ -34,9 +34,18 @@ export const StringField: FC<{
       {isLoading ? (
         <Skeleton width={100} height={15} />
       ) : (
-        <Box ta={'right'}>
-          {props.value} {props.unit}
-        </Box>
+        <Flex ta={'right'}>
+          {props.value}
+          <Box
+            ml={4}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          ></Box>
+          {props.unitIcon && <Box mt={1}>{props.unitIcon}</Box>}
+        </Flex>
       )}
     </Group>
   )

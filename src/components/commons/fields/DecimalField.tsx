@@ -9,7 +9,7 @@ interface DecimalFieldProps {
   value: number
   prefix?: string
   suffix?: string
-  unit?: React.ReactNode
+  unitIcon?: React.ReactNode
 }
 
 export const DecimalField: FC<DecimalFieldProps> = (props) => {
@@ -25,7 +25,7 @@ export const DecimalField: FC<DecimalFieldProps> = (props) => {
           t('decimal', { value: props.value }) +
           (props.suffix || '')
         }
-        unit={props.unit}
+        unitIcon={props.unitIcon}
       />
     </>
   )
