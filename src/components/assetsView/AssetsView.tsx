@@ -31,7 +31,7 @@ export const AssetsView: FC = () => {
   const regVotingPower = useRegVotingPower()
 
   const data = useMemo(() => {
-    const assets: (UserRealtoken | OtherRealtoken)[] = [
+    const assets: (UserRealtoken | OtherRealtoken | null)[] = [
       ...realtokens,
       rwa,
       reg,
@@ -40,7 +40,8 @@ export const AssetsView: FC = () => {
       // remove null/undefined values
       (asset) => asset != null && asset != undefined,
     )
-    return assetsViewFilterFunction(assets.filter(assetSearchFunction))
+    const assetsT = assets as (UserRealtoken | OtherRealtoken)[]
+    return assetsViewFilterFunction(assetsT.filter(assetSearchFunction))
   }, [
     realtokens,
     rwa,
