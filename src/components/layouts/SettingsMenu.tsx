@@ -18,8 +18,12 @@ import { DatePickerInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import {
   IconCash,
+  IconCircleOff,
   IconClock,
-  IconClockOff,
+  IconCoins,
+  IconCrystalBall,
+  IconCurrencyEthereum,
+  IconHome,
   IconLanguage,
   IconMoon,
   IconSettings,
@@ -102,6 +106,7 @@ const RealtimeRentMenuItem: FC = () => {
 
   return (
     <Box px={5}>
+      <Menu.Label pb={0}>{t('rents')}</Menu.Label>
       <SegmentedControl
         color={'brand'}
         fullWidth={true}
@@ -126,8 +131,8 @@ const RealtimeRentMenuItem: FC = () => {
             value: RentCalculationState.Global,
             label: (
               <Center>
-                <IconClockOff size={16} />
-                <Box ml={'xs'}>{t('global')}</Box>
+                <IconCrystalBall size={16} />
+                <Box ml={'xs'}>{t('future')}</Box>
               </Center>
             ),
           },
@@ -263,6 +268,8 @@ const FetchDataSettings: FC = () => {
         checked={userIncludesEth}
         onChange={(event) => setUserIncludesEth(event.currentTarget.checked)}
         label={t('includesEth')}
+        onLabel={<IconCurrencyEthereum size={16} />}
+        offLabel={<IconCircleOff size={16} />}
         style={{ margin: '4px 8px' }}
       />
       <Switch
@@ -285,6 +292,8 @@ const FetchDataSettings: FC = () => {
           setUserIncludesOtherAssets(event.currentTarget.checked)
         }
         label={t('includesOtherAssets')}
+        onLabel={<IconCoins size={16} />}
+        offLabel={<IconHome size={16} />}
         style={{ margin: '4px 8px' }}
       />
     </>

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { Box, Card, Text, Title } from '@mantine/core'
+import { IconArchive, IconBolt, IconBoltOff } from '@tabler/icons'
 
 import { useREG } from 'src/hooks/useREG'
 import { useRegVotingPower } from 'src/hooks/useREGVotingPower'
@@ -60,9 +61,16 @@ export const SummaryCard: FC = () => {
         <CurrencyField label={t('rwa')} value={rwaValue} />
         <CurrencyField label={t('reg')} value={regValue} />
         <DecimalField
-          label={t('regVote') + ' 🗳️'}
+          label={t('regVote')}
+          labelIcon={<IconArchive size={16} />}
           value={regVotingPowerAmount}
-          suffix={' ⚡️'}
+          unit={
+            regVotingPowerAmount > 0 ? (
+              <IconBolt size={16} />
+            ) : (
+              <IconBoltOff size={16} />
+            )
+          }
         />
       </Box>
     </Card>
