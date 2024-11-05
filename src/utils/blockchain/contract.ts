@@ -40,8 +40,11 @@ const batchCallOneContractOneFunctionMultipleParams = async (
         }
         return results
       } catch (error) {
+        const chainId =
+          (await _contract?.runner?.provider?.getNetwork())?.chainId ??
+          'unknown'
         console.error(
-          `batchCallOneContractOneFunctionMultipleParams error ${_methodName} _argsArray ${_argsArray}`,
+          `batchCallOneContractOneFunctionMultipleParams Error:: chainId: ${chainId} contract address: ${_contract?.target} methodName: ${_methodName} args: [${_argsArray}]`,
         )
       }
     } while (attempt < BATCH_MAX_ATTEMPTS)
@@ -66,6 +69,7 @@ const contractCall = async (
 export { batchCallOneContractOneFunctionMultipleParams }
 
 // Call the same method with the same arguments on multiple contracts
+// not fullytested
 /*
 const batchCallOneFunction = async (
   _contractsArray: Contract[],
