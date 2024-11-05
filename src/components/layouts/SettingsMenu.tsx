@@ -17,12 +17,15 @@ import {
 import { DatePickerInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import {
+  IconBuildingBank,
   IconCash,
   IconCircleOff,
   IconClock,
   IconCoins,
   IconCrystalBall,
   IconCurrencyEthereum,
+  IconDatabase,
+  IconDatabaseOff,
   IconHome,
   IconLanguage,
   IconMoon,
@@ -64,6 +67,7 @@ const ColorSchemeMenuItem: FC = () => {
 
   return (
     <Box px={5}>
+      <Menu.Label pb={0}>{t('theme')}</Menu.Label>
       <SegmentedControl
         color={'brand'}
         fullWidth={true}
@@ -264,6 +268,7 @@ const FetchDataSettings: FC = () => {
 
   return (
     <>
+      <Menu.Label pb={0}>{t('options')}</Menu.Label>
       <Switch
         checked={userIncludesEth}
         onChange={(event) => setUserIncludesEth(event.currentTarget.checked)}
@@ -278,11 +283,15 @@ const FetchDataSettings: FC = () => {
           setUserIncludesLevinSwap(event.currentTarget.checked)
         }
         label={t('includesLevinSwap')}
+        onLabel={<IconDatabase size={16} />}
+        offLabel={<IconDatabaseOff size={16} />}
         style={{ margin: '4px 8px' }}
       />
       <Switch
         checked={userIncludesRmmV2}
         onChange={(event) => setUserIncludesRmmV2(event.currentTarget.checked)}
+        onLabel={<IconBuildingBank size={16} />}
+        offLabel={<IconCircleOff size={16} />}
         label={t('includesRmmV2')}
         style={{ margin: '4px 8px' }}
       />
