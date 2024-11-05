@@ -1,4 +1,5 @@
 import { FC, useEffect, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
 
@@ -12,16 +13,17 @@ import {
 } from '@mantine/core'
 
 import FullyRentedAPRDisclaimer from 'src/components/commons/others/FullyRentedAPRDisclaimer'
+import { selectUserIncludesOtherAssets } from 'src/store/features/settings/settingsSelector'
 import {
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
 import { AssetCard } from '../../cards'
 
-export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
-  props,
-) => {
+export const AssetGrid: FC<{
+  realtokens: (UserRealtoken | OtherRealtoken)[]
+}> = (props) => {
   const router = useRouter()
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
@@ -32,7 +34,7 @@ export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
     document.getElementsByClassName('asset-grid')[0]?.scrollIntoView()
   }
 
-  const paginationOffers: (UserRealtoken | RWARealtoken)[] = useMemo(() => {
+  const paginationOffers: (UserRealtoken | OtherRealtoken)[] = useMemo(() => {
     if (pageSize === Infinity) return props.realtokens
     const start = (page - 1) * pageSize
     const end = start + pageSize
@@ -58,18 +60,35 @@ export const AssetGrid: FC<{ realtokens: (UserRealtoken | RWARealtoken)[] }> = (
       </Combobox.Option>
     )),
   ]
+  const showOtherAssets = useSelector(selectUserIncludesOtherAssets)
 
   return (
     <>
       <Grid className={'asset-grid'}>
-        {paginationOffers.map((item) => (
-          <Grid.Col key={item.id} span={{ base: 12, sm: 6, lg: 4, xl: 3 }}>
-            <AssetCard
-              value={item}
-              onClick={(id) => router.push(`/asset/${id}`)}
-            />
-          </Grid.Col>
-        ))}
+        {paginationOffers.map((item) => {
+          const isAProperty = item.hasOwnProperty('rentStatus')
+          if (!isAProperty) {
+            if (!showOtherAssets) {
+              return null
+            }
+            return (
+              <Grid.Col key={item.id} span={{ base: 12, sm: 6, lg: 4, xl: 3 }}>
+                <AssetCard
+                  value={item as OtherRealtoken}
+                  onClick={(id) => router.push(`/asset/${id}`)}
+                />
+              </Grid.Col>
+            )
+          }
+          return (
+            <Grid.Col key={item.id} span={{ base: 12, sm: 6, lg: 4, xl: 3 }}>
+              <AssetCard
+                value={item as UserRealtoken}
+                onClick={(id) => router.push(`/asset/${id}`)}
+              />
+            </Grid.Col>
+          )
+        })}
       </Grid>
       <Group
         justify={'center'}
