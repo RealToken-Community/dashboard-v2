@@ -15,13 +15,15 @@ const batchCallOneContractOneFunctionMultipleParams = async (
   try {
     let attempt = 0
     do {
-      attempt && wait(BATCH_WAIT_BETWEEN_ATTEMPTS_MS * attempt) // wait if attempt > 0 and grow wait time for each attempt
+      // wait if attempt > 0 and grow wait time for each attempt
+      attempt && wait(BATCH_WAIT_BETWEEN_ATTEMPTS_MS * attempt)
       attempt++
       try {
         let results: object[] = []
         // Split the array into chunks
         const chunks = []
-        const chunkSize = MAX_BATCH_CONTRACT_PER_CHUNK / attempt // Divide chunk size by attempt at each iteration
+        // Divide chunk size by attempt at each iteration (decrease chunk size for each attempt)
+        const chunkSize = MAX_BATCH_CONTRACT_PER_CHUNK / attempt
         for (let i = 0; i < _argsArray.length; i += chunkSize) {
           chunks.push(_argsArray.slice(i, i + chunkSize))
         }
@@ -69,7 +71,7 @@ const contractCall = async (
 export { batchCallOneContractOneFunctionMultipleParams }
 
 // Call the same method with the same arguments on multiple contracts
-// not fullytested
+// NOT FULLYTESTED
 /*
 const batchCallOneFunction = async (
   _contractsArray: Contract[],

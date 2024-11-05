@@ -95,6 +95,7 @@ export const useRWA = () => {
   const addressList = useSelector(selectUserAddressList)
   const { rate } = useSelector(selectUserCurrency)
   const includeETH = useSelector(selectUserIncludesEth)
+
   useEffect(() => {
     ;(async () => {
       const rwa_ = await getRWA(addressList, rate, includeETH)

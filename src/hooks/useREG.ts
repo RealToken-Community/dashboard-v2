@@ -95,7 +95,6 @@ const getREG = async (
 export const useREG = () => {
   const [reg, setReg] = useState<REGRealtoken | null>(null)
   const addressList = useSelector(selectUserAddressList)
-
   const { rate } = useSelector(selectUserCurrency)
   const includeETH = useSelector(selectUserIncludesEth)
 
