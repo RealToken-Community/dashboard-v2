@@ -401,4 +401,8 @@
   "disclaimer":{
     "fullyRentedAPR": "Cette estimation est en phase bêta et a été développée par la communauté RealT. Nous vous invitons à signaler tout problème éventuel. Les informations fournies sont à titre indicatif uniquement. La communauté RealT ou RealT ne peut être tenue responsable en cas de décision prise à partir de données inexactes."
   }
+  ,
+  "errors" : {
+    "userNotFound": "User not found"
+  }
 }

@@ -399,5 +399,8 @@
   },
   "disclaimer":{
     "fullyRentedAPR": "This is a beta estimation done by RealT community. Please report any issues. Please note that is an indicative value and not a guarantee. RealT community or RealT does not take any responsibility for user actions based on this value."
+  },
+  "errors" : {
+    "userNotFound": "User not found"
   }
 }

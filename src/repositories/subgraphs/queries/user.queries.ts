@@ -33,8 +33,7 @@ const executeGetUserIdQuery = useCacheWithLocalStorage(
       query: GetUserIdQuery,
       variables: { address },
     })
-
-    return response.data.account.userIds[0].userId ?? null
+    return response.data?.account?.userIds[0].userId ?? null
   },
   {
     duration: 1000 * 60 * 60 * 24 * 7, // 7 days
