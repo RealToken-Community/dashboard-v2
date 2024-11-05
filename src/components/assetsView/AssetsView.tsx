@@ -6,7 +6,11 @@ import { Grid } from '@mantine/core'
 import { useREG } from 'src/hooks/useREG'
 import { useRegVotingPower } from 'src/hooks/useREGVotingPower'
 import { useRWA } from 'src/hooks/useRWA'
-import { selectUserRealtokens } from 'src/store/features/wallets/walletsSelector'
+import {
+  OtherRealtoken,
+  UserRealtoken,
+  selectUserRealtokens,
+} from 'src/store/features/wallets/walletsSelector'
 
 import { AssetsViewSearch, useAssetsViewSearch } from './AssetsViewSearch'
 import { AssetsViewSelect, useAssetsViewSelect } from './assetsViewSelect'
@@ -27,7 +31,12 @@ export const AssetsView: FC = () => {
   const regVotingPower = useRegVotingPower()
 
   const data = useMemo(() => {
-    const assets = [...realtokens, rwa, reg, regVotingPower].filter(
+    const assets: (UserRealtoken | OtherRealtoken)[] = [
+      ...realtokens,
+      rwa,
+      reg,
+      regVotingPower,
+    ].filter(
       // remove null/undefined values
       (asset) => asset != null && asset != undefined,
     )

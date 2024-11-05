@@ -4,9 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { TextInput } from '@mantine/core'
 
 import {
-  REGRealtoken,
-  REGVotingPowertoken,
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
@@ -41,9 +39,7 @@ export function useAssetsViewSearch() {
     [assetSearch],
   )
 
-  function assetSearchFunction(
-    asset: UserRealtoken | RWARealtoken | REGRealtoken | REGVotingPowertoken,
-  ) {
+  function assetSearchFunction(asset: UserRealtoken | OtherRealtoken) {
     return (
       !cleanSearch ||
       asset?.shortName?.toLowerCase().includes(cleanSearch) ||
