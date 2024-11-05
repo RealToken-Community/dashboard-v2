@@ -56,10 +56,7 @@ AssetsViewRmmStatusFilter.displayName = 'AssetsViewRmmStatusFilter'
 export function useAssetsViewRmmStatusFilter(
   filter: AssetsViewRmmStatusFilterModel,
 ) {
-  function assetRmmStatusFilterFunction(
-    asset: UserRealtoken | OtherRealtoken | null,
-  ) {
-    if (!asset) return false
+  function assetRmmStatusFilterFunction(asset: UserRealtoken | OtherRealtoken) {
     const Asset = asset as UserRealtoken
     switch (filter.rmmStatus) {
       case AssetRmmStatusType.ALL:
