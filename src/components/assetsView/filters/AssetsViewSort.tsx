@@ -6,7 +6,7 @@ import { Grid, Select, Switch } from '@mantine/core'
 
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
@@ -94,15 +94,15 @@ AssetsViewSort.displayName = 'AssetsViewSort'
 
 export function useAssetsViewSort(filter: AssetsViewSortFilter) {
   function assetSortFunction(
-    a: UserRealtoken | RWARealtoken,
-    b: UserRealtoken | RWARealtoken,
+    a: UserRealtoken | OtherRealtoken,
+    b: UserRealtoken | OtherRealtoken,
   ) {
     const value = getAssetSortValue(a, b)
     return filter.sortReverse ? value * -1 : value
   }
   function getAssetSortValue(
-    a: UserRealtoken | RWARealtoken,
-    b: UserRealtoken | RWARealtoken,
+    a: UserRealtoken | OtherRealtoken,
+    b: UserRealtoken | OtherRealtoken,
   ) {
     const A = a as UserRealtoken
     const B = b as UserRealtoken

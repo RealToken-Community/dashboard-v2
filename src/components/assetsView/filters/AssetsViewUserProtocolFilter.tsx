@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Select } from '@mantine/core'
 
 import {
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
@@ -66,7 +66,7 @@ export function useAssetsViewUserProtocolFilter(
   filter: AssetsViewUserProtocolFilterModel,
 ) {
   function assetUserProtocolFilterFunction(
-    asset: UserRealtoken | RWARealtoken,
+    asset: UserRealtoken | OtherRealtoken,
   ) {
     const Asset = asset as UserRealtoken
     switch (filter.userProtocol) {
