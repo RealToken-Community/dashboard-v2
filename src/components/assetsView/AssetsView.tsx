@@ -31,7 +31,7 @@ export const AssetsView: FC = () => {
   const regVotingPower = useRegVotingPower()
 
   const data = useMemo(() => {
-    const assets: (UserRealtoken | OtherRealtoken)[] = [
+    const assets: (UserRealtoken | OtherRealtoken | null)[] = [
       ...realtokens,
       rwa,
       reg,

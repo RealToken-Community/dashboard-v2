@@ -39,7 +39,7 @@ export function useAssetsViewSearch() {
     [assetSearch],
   )
 
-  function assetSearchFunction(asset: UserRealtoken | OtherRealtoken) {
+  function assetSearchFunction(asset: UserRealtoken | OtherRealtoken | null) {
     return (
       !cleanSearch ||
       asset?.shortName?.toLowerCase().includes(cleanSearch) ||
