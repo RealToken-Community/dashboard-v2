@@ -163,7 +163,10 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
       </div>
 
       <div className={styles.groupApart}>
-        <div className={styles.textSm}>{t('fullyRentedEstimation')}*</div>
+        <div className={styles.textSm}>
+          {t('fullyRentedEstimation')}
+          {'*'}
+        </div>
         <div className={styles.textSm}>
           {fullyRentedAPR
             ? tNumbers('percent', { value: fullyRentedAPR })
