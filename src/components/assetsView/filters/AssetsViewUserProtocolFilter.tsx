@@ -73,13 +73,13 @@ export function useAssetsViewUserProtocolFilter(
       case AssetUserProtocolType.ALL:
         return true
       case AssetUserProtocolType.ETHEREUM:
-        return Asset.balance.ethereum.amount > 0
+        return Asset.balance?.ethereum?.amount > 0
       case AssetUserProtocolType.GNOSIS:
-        return Asset.balance.gnosis.amount > 0
+        return Asset.balance?.gnosis?.amount > 0
       case AssetUserProtocolType.RMM:
-        return Asset.balance.rmm.amount > 0
+        return Asset.balance?.rmm?.amount > 0
       case AssetUserProtocolType.LEVINSWAP:
-        return Asset.balance.levinSwap.amount > 0
+        return Asset.balance?.levinSwap?.amount > 0
     }
   }
 
