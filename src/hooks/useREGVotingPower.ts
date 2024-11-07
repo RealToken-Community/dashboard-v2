@@ -17,7 +17,6 @@ import { getAddressesBalances } from 'src/utils/blockchain/erc20Infos'
 
 const getRegVotingPower = async (
   addressList: string[],
-  // includeETH = false, // boolean // Reg Voting Power is only deployed on Gnosis/xDai
 ): Promise<REGVotingPowertoken> => {
   const { GnosisRpcProvider } = await initializeProviders()
   const providers = [GnosisRpcProvider]
@@ -62,10 +61,9 @@ export const useRegVotingPower = () => {
   const addressList = useSelector(selectUserAddressList)
 
   useEffect(() => {
-    ;(async () => {
-      const regVotingPower_ = await getRegVotingPower(addressList)
-      setRegVotingPower(regVotingPower_)
-    })()
+    if (addressList.length) {
+      getRegVotingPower(addressList).then(setRegVotingPower)
+    }
   }, [addressList])
 
   return regVotingPower

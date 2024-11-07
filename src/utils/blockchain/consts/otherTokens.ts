@@ -24,8 +24,6 @@ const REGVotingPowertokenDecimals = 18
 const USDCtokenDecimals = 6
 const WXDAItokenDecimals = 18
 
-// const RWATokenSypply = 100_000 // Now directly fetched from the contract
-
 const HoneySwapFactory_Address = '0xA818b4F111Ccac7AA31D0BCc0806d64F2E0737D7'
 
 export {

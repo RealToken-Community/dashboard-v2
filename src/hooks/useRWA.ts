@@ -31,7 +31,7 @@ import {
 const getRWA = async (
   addressList: string[],
   rate: number,
-  includeETH = false, // boolean
+  includeETH = false,
 ): Promise<RWARealtoken> => {
   const { GnosisRpcProvider, EthereumRpcProvider } = await initializeProviders()
   const providers = [GnosisRpcProvider]
@@ -97,11 +97,9 @@ export const useRWA = () => {
   const includeETH = useSelector(selectUserIncludesEth)
 
   useEffect(() => {
-    ;(async () => {
-      const rwa_ = await getRWA(addressList, rate, includeETH)
-
-      setRwa(rwa_)
-    })()
+    if (addressList.length) {
+      getRWA(addressList, rate, includeETH).then(setRwa)
+    }
   }, [addressList])
 
   return rwa

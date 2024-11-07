@@ -10,7 +10,6 @@ import {
   selectUserIncludesEth,
 } from 'src/store/features/settings/settingsSelector'
 import { REGRealtoken } from 'src/store/features/wallets/walletsSelector'
-// import { getErc20AbiBalanceOfOnly } from 'src/utils/blockchain/ERC20'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
   DEFAULT_REG_PRICE,
@@ -32,7 +31,7 @@ import {
 const getREG = async (
   addressList: string[],
   rate: number,
-  includeETH = false, // boolean
+  includeETH = false,
 ): Promise<REGRealtoken> => {
   const { GnosisRpcProvider, EthereumRpcProvider } = await initializeProviders()
   const providers = [GnosisRpcProvider]
@@ -99,11 +98,9 @@ export const useREG = () => {
   const includeETH = useSelector(selectUserIncludesEth)
 
   useEffect(() => {
-    ;(async () => {
-      const reg_ = await getREG(addressList, rate, includeETH)
-
-      setReg(reg_)
-    })()
+    if (addressList.length) {
+      getREG(addressList, rate, includeETH).then(setReg)
+    }
   }, [addressList])
 
   return reg
