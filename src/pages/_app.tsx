@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
 
@@ -25,12 +26,14 @@ import {
   metaMaskHooks,
   parseAllowedChain,
 } from '@realtoken/realt-commons'
+import { init as initMatomoNext } from '@socialgouv/matomo-next'
 
 import { getCookie } from 'cookies-next'
 import { Provider as JotaiProvider } from 'jotai'
 
 import { Favicon } from 'src/assets'
 import { Head, MainLayout } from 'src/components/layouts'
+import useMatomoTracker from 'src/hooks/useMatomoTracker'
 import 'src/i18next'
 import { resources } from 'src/i18next'
 import { MantineProviders } from 'src/providers'
@@ -56,6 +59,8 @@ const dashbordChains: ChainSelectConfig<RealtChains> = {
 
 const env = process.env.NEXT_PUBLIC_ENV ?? 'development'
 const walletConnectKey = process.env.NEXT_PUBLIC_WALLET_CONNECT_KEY ?? ''
+const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL ?? ''
+const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? ''
 
 const readOnly = getReadOnlyConnector(dashbordChains)
 const walletConnect = getWalletConnectV2(
@@ -90,6 +95,23 @@ const App = ({ Component, pageProps, colorScheme, env }: AppProps) => {
     Router.events.off('routeChangeComplete', scrollToTop)
   }
   Router.events.on('routeChangeComplete', scrollToTop)
+
+  // Event tracking
+  useEffect(() => {
+    // eslint-disable-next-line no-underscore-dangle
+    if (!window._paq) {
+      console.log('initMatomoNext')
+      // Triggered twice on page load when using strict mode in dev
+      initMatomoNext({
+        url: MATOMO_URL,
+        siteId: MATOMO_SITE_ID,
+        disableCookies: false, // TODO: cookie consent banner
+        // excludeUrlsPatterns: [/^\/login.php/, /\?token=.+/],
+      })
+    }
+  }, [])
+
+  useMatomoTracker()
 
   return (
     <QueryClientProvider client={queryClient}>

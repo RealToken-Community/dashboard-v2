@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Button, Flex, Stack } from '@mantine/core'
 import { ContextModalProps } from '@mantine/modals'
+import { push } from '@socialgouv/matomo-next'
 
 import { useAtom } from 'jotai'
 
@@ -53,8 +54,27 @@ export const AssetsViewFilterModal: FC<ContextModalProps> = ({
     context.closeModal(id)
   }, [context, id])
 
+  // push(['trackEvent', 'contact', 'click phone', 'applyFilter'])
+  const matomoFilterTracking = () => {
+    push([
+      'trackEvent',
+      'applySearchFilter',
+      'click phone',
+      'applyFilter',
+
+      // 'joe',
+      // 'sponge',
+      // 33,
+      // 44,
+      // 55,
+      // 66,
+    ])
+  }
+
   const onSubmit = () => {
+    console.dir(filterModel)
     applyFilter(filterModel)
+    matomoFilterTracking()
     onClose()
   }
 
