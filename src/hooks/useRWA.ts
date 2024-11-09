@@ -50,7 +50,7 @@ const getRWA = async (
     providers,
   )
   const RwaContractTotalSupply = await contractRwa_Gnosis.totalSupply()
-  const totalTokens = Number(RwaContractTotalSupply)
+  const totalTokens = Number(RwaContractTotalSupply) / 10 ** RWAtokenDecimals
   const amount = totalAmount / 10 ** RWAtokenDecimals
 
   const rwaPriceUsdc = await getUniV2AssetPrice(
@@ -70,15 +70,16 @@ const getRWA = async (
     GnosisRpcProvider,
   )
   const averagePrice = averageValues([rwaPriceUsdc, rwaPriceWxdai])
-  const unitPriceCost = (averagePrice ?? DEFAULT_RWA_PRICE) / rate
-  const value = unitPriceCost * amount
-  const totalInvestment = totalTokens * unitPriceCost
+  const tokenPrice = (averagePrice ?? DEFAULT_RWA_PRICE) / rate
+  const value = tokenPrice * amount
+  const totalInvestment = totalTokens * tokenPrice
 
   return {
     id: `${RWA_asset_ID}`,
     fullName: 'RWA Holdings SA, Neuchatel, NE, Suisse',
     shortName: 'RWA',
     amount,
+    tokenPrice,
     totalTokens,
     imageLink: [
       'https://realt.co/wp-content/uploads/2024/02/Equity_FinalDesign-2000px-800x542.png',
@@ -86,7 +87,7 @@ const getRWA = async (
     isRmmAvailable: false,
     value,
     totalInvestment,
-    unitPriceCost,
+    unitPriceCost: tokenPrice,
   }
 }
 

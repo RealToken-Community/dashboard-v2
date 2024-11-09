@@ -61,6 +61,13 @@ const RWACardComponent: FC<RWACardProps> = (props) => {
       </div>
 
       <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('tokenPrice')}</div>
+        <div className={styles.textSm}>
+          {useCurrencyValue(props.value.tokenPrice)}
+        </div>
+      </div>
+
+      <div className={styles.groupApart}>
         <div className={styles.textSm}>{t('propertyValue')}</div>
         <div className={styles.textSm}>{useCurrencyValue(totalInvestment)}</div>
       </div>

@@ -198,6 +198,7 @@
     "weekly": "Loyers hebdomadaires",
     "yearly": "Loyers annuels",
     "rentedUnits": "Logements loués",
+    "tokenPrice":"Prix d'un token",
     "propertyValue": "Valeur de la propriété",
     "rentStartDate": "Date du premier loyer",
     "fullyRentedEstimation": "Rendement 100% loué",

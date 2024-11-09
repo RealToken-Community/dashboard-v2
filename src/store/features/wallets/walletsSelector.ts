@@ -43,6 +43,7 @@ export interface OtherRealtoken {
   shortName: string
   amount: number
   value: number
+  tokenPrice: number
   totalInvestment: number
   totalTokens: number
   imageLink: string[]

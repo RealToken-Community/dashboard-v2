@@ -49,7 +49,7 @@ const getREG = async (
     providers,
   )
   const contractRegTotalSupply = await RegContract_Gnosis.totalSupply()
-  const totalTokens = Number(contractRegTotalSupply)
+  const totalTokens = Number(contractRegTotalSupply) / 10 ** REGtokenDecimals
   const amount = totalAmount / 10 ** REGtokenDecimals
 
   const regPriceUsdc = await getUniV2AssetPrice(
@@ -70,16 +70,17 @@ const getREG = async (
   )
 
   const averagePrice = averageValues([regPriceUsdc, regPriceWxdai])
-  const unitPriceCost = averagePrice ? averagePrice / rate : DEFAULT_REG_PRICE
+  const tokenPrice = averagePrice ? averagePrice / rate : DEFAULT_REG_PRICE
 
-  const value = unitPriceCost * amount
-  const totalInvestment = Infinity
+  const value = tokenPrice * amount
+  const totalInvestment = totalTokens * tokenPrice
 
   return {
     id: `${REG_asset_ID}`,
     fullName: 'RealToken Ecosystem Governance',
     shortName: 'REG',
     amount,
+    tokenPrice,
     totalTokens,
     imageLink: [
       'https://static.debank.com/image/xdai_token/logo_url/0x0aa1e96d2a46ec6beb2923de1e61addf5f5f1dce/c56091d1d22e34e5e77aed0c64d19338.png',
@@ -87,7 +88,7 @@ const getREG = async (
     isRmmAvailable: false,
     value,
     totalInvestment,
-    unitPriceCost,
+    unitPriceCost: tokenPrice,
   }
 }
 

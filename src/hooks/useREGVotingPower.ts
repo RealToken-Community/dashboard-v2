@@ -33,17 +33,19 @@ const getRegVotingPower = async (
 
   const contractRegVotePowerTotalSupply =
     await RegVotingPowerContract.totalSupply()
-  const totalTokens = Number(contractRegVotePowerTotalSupply)
+  const totalTokens =
+    Number(contractRegVotePowerTotalSupply) / 10 ** REGVotingPowertokenDecimals
   const amount = totalAmount / 10 ** REGVotingPowertokenDecimals
-  const unitPriceCost = DEFAULT_REGVotingPower_PRICE
-  const value = unitPriceCost * amount
-  const totalInvestment = Infinity
+  const tokenPrice = DEFAULT_REGVotingPower_PRICE
+  const value = tokenPrice * amount
+  const totalInvestment = tokenPrice * totalTokens
 
   return {
     id: `${REGVotingPower_asset_ID}`,
     fullName: 'REG Voting Power Registry',
-    shortName: 'REG-VOTING-POWER',
+    shortName: 'REG VOTING POWER',
     amount,
+    tokenPrice,
     totalTokens,
     imageLink: [
       'https://static.debank.com/image/xdai_token/logo_url/0x0aa1e96d2a46ec6beb2923de1e61addf5f5f1dce/c56091d1d22e34e5e77aed0c64d19338.png',
@@ -51,7 +53,7 @@ const getRegVotingPower = async (
     isRmmAvailable: false,
     value,
     totalInvestment,
-    unitPriceCost,
+    unitPriceCost: tokenPrice,
   }
 }
 

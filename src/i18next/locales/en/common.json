@@ -198,6 +198,7 @@
     "weekly": "Weekly rents",
     "yearly": "Yearly rents",
     "rentedUnits": "Rented units",
+    "tokenPrice": "Token price",
     "propertyValue": "Property value",
     "rentStartDate": "Rent Start",
     "fullyRentedEstimation": "Fully rented APR",
