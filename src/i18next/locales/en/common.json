@@ -388,6 +388,13 @@
   "yamStatisticsPage": {
     "home": "Home",
     "title": "Secondary market statistics (Yam)",
+    "columns": {
+      "token": "Token",
+      "tokenPrice": "RealT price",
+      "yamPrice": "Yam price (30 days)",
+      "yamDifference": "Difference",
+      "yamVolume": "Volume (30 days)"
+    },
     "filter": {
       "field": "Filter",
       "all": "All",

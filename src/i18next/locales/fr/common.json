@@ -389,6 +389,13 @@
   "yamStatisticsPage": {
     "home": "Accueil",
     "title": "Statistiques marché secondaire (Yam)",
+    "columns": {
+      "token": "Token",
+      "tokenPrice": "Prix RealT",
+      "yamPrice": "Prix Yam (30 jours)",
+      "yamDifference": "Différence",
+      "yamVolume": "Volume (30 jours)"
+    },
     "filter": {
       "field": "Filtre",
       "all": "Toutes les propriétés",

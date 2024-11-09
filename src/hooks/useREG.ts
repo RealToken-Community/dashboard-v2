@@ -11,7 +11,6 @@ import {
 } from 'src/store/features/settings/settingsSelector'
 import { REGRealtoken } from 'src/store/features/wallets/walletsSelector'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
-import { RegVaultABI } from 'src/utils/blockchain/abi/RegVaultABI'
 import {
   DEFAULT_REG_PRICE,
   HoneySwapFactory_Address,
