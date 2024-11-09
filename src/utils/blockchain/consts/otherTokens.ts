@@ -6,6 +6,7 @@ const REGVotingPower_asset_ID = 2
 const RWA_ContractAddress = '0x0675e8F4A52eA6c845CB6427Af03616a2af42170'
 // Gnosis/xDai, Ethereum
 const REG_ContractAddress = '0x0AA1e96D2a46Ec6beB2923dE1E61Addf5F5f1dce'
+const REG_VaultContractAddress = '0xe1877d33471e37fe0f62d20e60c469eff83fb4a0'
 // Reg Voting Power only deployed on Gnosis/xDai
 const RegVotingPower_ContractAddress =
   '0x6382856a731Af535CA6aea8D364FCE67457da438'
@@ -29,6 +30,7 @@ const HoneySwapFactory_Address = '0xA818b4F111Ccac7AA31D0BCc0806d64F2E0737D7'
 export {
   RWA_ContractAddress,
   REG_ContractAddress,
+  REG_VaultContractAddress,
   RegVotingPower_ContractAddress,
   WXDAI_ContractAddress,
   USDConXdai_ContractAddress,

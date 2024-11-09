@@ -11,10 +11,12 @@ import {
 } from 'src/store/features/settings/settingsSelector'
 import { REGRealtoken } from 'src/store/features/wallets/walletsSelector'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
+import { RegVaultABI } from 'src/utils/blockchain/abi/RegVaultABI'
 import {
   DEFAULT_REG_PRICE,
   HoneySwapFactory_Address,
   REG_ContractAddress,
+  REG_VaultContractAddress,
   REG_asset_ID,
   REGtokenDecimals,
   USDConXdai_ContractAddress,
@@ -27,6 +29,7 @@ import {
   averageValues,
   getUniV2AssetPrice,
 } from 'src/utils/blockchain/poolPrice'
+import { getAddressesLockedBalances } from 'src/utils/blockchain/regVault'
 
 const getREG = async (
   addressList: string[],
@@ -43,11 +46,18 @@ const getREG = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
-  const totalAmount = await getAddressesBalances(
+  const availableBalance = await getAddressesBalances(
     REG_ContractAddress,
     addressList,
     providers,
   )
+  const lockedBalance = await getAddressesLockedBalances(
+    REG_VaultContractAddress,
+    addressList,
+    providers,
+  )
+
+  const totalAmount = availableBalance + lockedBalance
   const contractRegTotalSupply = await RegContract_Gnosis.totalSupply()
   const totalTokens = Number(contractRegTotalSupply) / 10 ** REGtokenDecimals
   const amount = totalAmount / 10 ** REGtokenDecimals
