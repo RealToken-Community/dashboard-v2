@@ -1,5 +1,7 @@
 import { ethers } from 'ethers'
 
+import { WaitingQueue } from 'src/utils/waitingQueue'
+
 declare module 'ethers' {
   interface Interface {
     parseLog(log: {
@@ -20,12 +22,12 @@ const ETHEREUM_RPC_URLS = [
   'https://eth-pokt.nodies.app',
 ]
 
-async function getWorkingRpcUrl(urls: string[]): Promise<string> {
+async function getWorkingRpc(urls: string[]): Promise<ethers.JsonRpcProvider> {
   for (const url of urls) {
     const provider = new ethers.JsonRpcProvider(url)
     try {
       await provider.getBlockNumber()
-      return url
+      return provider
     } catch (error) {
       console.error(`Failed to connect to ${url}, trying next one...`)
     }
@@ -34,14 +36,28 @@ async function getWorkingRpcUrl(urls: string[]): Promise<string> {
   throw new Error('All RPC URLs failed')
 }
 
+interface Providers {
+  GnosisRpcProvider: ethers.JsonRpcProvider
+  EthereumRpcProvider: ethers.JsonRpcProvider
+}
+
+let initializeProvidersQueue: WaitingQueue<Providers> | null = null
+let providers: Providers | undefined = undefined
+
 export const initializeProviders = async () => {
-  const gnosisRpcUrl = await getWorkingRpcUrl(GNOSIS_RPC_URLS)
-  const ethereumRpcUrl = await getWorkingRpcUrl(ETHEREUM_RPC_URLS)
+  if (initializeProvidersQueue) {
+    return initializeProvidersQueue.wait()
+  }
+  initializeProvidersQueue = new WaitingQueue()
 
-  const GnosisRpcProvider = new ethers.JsonRpcProvider(gnosisRpcUrl)
-  const EthereumRpcProvider = new ethers.JsonRpcProvider(ethereumRpcUrl)
+  const [GnosisRpcProvider, EthereumRpcProvider] = await Promise.all([
+    getWorkingRpc(GNOSIS_RPC_URLS),
+    getWorkingRpc(ETHEREUM_RPC_URLS),
+  ])
 
-  return { GnosisRpcProvider, EthereumRpcProvider }
+  providers = { GnosisRpcProvider, EthereumRpcProvider }
+  initializeProvidersQueue.resolve(providers)
+  return providers
 }
 
 /**
