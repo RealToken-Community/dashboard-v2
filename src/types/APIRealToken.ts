@@ -13,7 +13,7 @@ export enum APIRealTokenProductType {
   LoanIncome = 'loan_income',
 }
 
-interface APIRealTokenDate {
+export interface APIRealTokenDate {
   date: string
   timezone_type: number
   timezone: string

@@ -8,6 +8,7 @@ import moment from 'moment'
 import { WalletBalances, WalletType } from 'src/repositories'
 import { UserRealTokenTransfer } from 'src/repositories/transfers/transfers.type'
 import { RootState } from 'src/store/store'
+import { APIRealTokenDate } from 'src/types/APIRealToken'
 import { RealToken, RealTokenCanal } from 'src/types/RealToken'
 import {
   RentCalculation,
@@ -52,7 +53,9 @@ export interface OtherRealtoken {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface RWARealtoken extends OtherRealtoken {}
+export interface RWARealtoken extends OtherRealtoken {
+  initialLaunchDate: APIRealTokenDate
+}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface REGRealtoken extends OtherRealtoken {}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

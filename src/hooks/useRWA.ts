@@ -88,6 +88,11 @@ const getRWA = async (
     value,
     totalInvestment,
     unitPriceCost: tokenPrice,
+    initialLaunchDate: {
+      date: '2024-03-21 00:00:00.000000',
+      timezone_type: 3,
+      timezone: 'UTC',
+    },
   }
 }
 
