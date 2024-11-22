@@ -1,19 +1,51 @@
 import { Contract } from 'ethers'
 
-const MAX_BATCH_CONTRACT_PER_CHUNK = 100
+const MAX_BATCH_CONTRACT_PER_CHUNK_DEFAULT = 100
+const MIN_BATCH_CONTRACT_PER_CHUNK_DEFAULT = 10
+const BATCH_MAX_ATTEMPTS_DEFAULT = 5
 const BATCH_WAIT_BETWEEN_ATTEMPTS_MS = 200
 const BATCH_WAIT_BETWEEN_CHUNKS_MS = 20
-const BATCH_MAX_ATTEMPTS = 5
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
+/**
+ * Batch call one contract one function with multiple parameters
+ *
+ * Required parameters
+ * @param _contract: Contract instance
+ * @param _methodName: string = contract method name
+ * @param _argsArray: object[n][m] // n: number of calls, m: number of parameters per call
+ *
+ * Optional parameters
+ * @param _initialBatchSize: number
+ * @param _minBatchSize: number
+ * @param _maxAttempts: number : max number of attempts, any value less than 1 will behave as a single attempt
+ * @returns Promise<object[]> :array of results
+ * @description Batch call one contract one function with multiple parameters
+ **/
 const batchCallOneContractOneFunctionMultipleParams = async (
   _contract: Contract,
   _methodName: string,
   _argsArray: object[][],
+  _initialBatchSize: number = MAX_BATCH_CONTRACT_PER_CHUNK_DEFAULT,
+  _minBatchSize: number = MIN_BATCH_CONTRACT_PER_CHUNK_DEFAULT,
+  _maxAttempts: number = BATCH_MAX_ATTEMPTS_DEFAULT,
 ) => {
   try {
     let attempt = 0
+    if (!_contract || !_methodName || !_argsArray) {
+      throw new Error(
+        'batchCallOneContractOneFunctionMultipleParams Error:: Missing required parameters',
+      )
+    }
+    if (_initialBatchSize < _minBatchSize || _initialBatchSize < 1) {
+      console.warn(
+        'batchCallOneContractOneFunctionMultipleParams Warning:: _initialBatchSize cannot be less than _minBatchSize || _initialBatchSize < 1',
+      )
+      // Set default values
+      _initialBatchSize = MAX_BATCH_CONTRACT_PER_CHUNK_DEFAULT
+      _minBatchSize = MIN_BATCH_CONTRACT_PER_CHUNK_DEFAULT
+    }
     do {
       // wait if attempt > 0 and grow wait time for each attempt
       attempt && wait(BATCH_WAIT_BETWEEN_ATTEMPTS_MS * attempt)
@@ -23,14 +55,19 @@ const batchCallOneContractOneFunctionMultipleParams = async (
         // Split the array into chunks
         const chunks = []
         // Divide chunk size by attempt at each iteration (decrease chunk size for each attempt)
-        const chunkSize = MAX_BATCH_CONTRACT_PER_CHUNK / attempt
+        const currentBatchSize = _initialBatchSize / attempt
+        // Keep chunk size consistent
+        const chunkSize =
+          currentBatchSize < MIN_BATCH_CONTRACT_PER_CHUNK_DEFAULT
+            ? _minBatchSize
+            : currentBatchSize
         for (let i = 0; i < _argsArray.length; i += chunkSize) {
           chunks.push(_argsArray.slice(i, i + chunkSize))
         }
         for (let i = 0; i < chunks.length; i++) {
           const chunkPromises: object[] = []
           const _argsChunk = chunks[i]
-          _argsChunk.forEach(async (_args /* , idx */) => {
+          _argsChunk.forEach(async (_args) => {
             chunkPromises.push(contractCall(_contract, _methodName, _args))
           })
           const chunkResults = await Promise.all(chunkPromises)
@@ -46,10 +83,10 @@ const batchCallOneContractOneFunctionMultipleParams = async (
           (await _contract?.runner?.provider?.getNetwork())?.chainId ??
           'unknown'
         console.error(
-          `batchCallOneContractOneFunctionMultipleParams Error:: chainId: ${chainId} contract address: ${_contract?.target} methodName: ${_methodName} args: [${_argsArray}]`,
+          `batchCallOneContractOneFunctionMultipleParams Error:: chainId: ${chainId} contract address: ${_contract?.target} methodName: ${_methodName} args: [${_argsArray}] initialBatchSize: ${_initialBatchSize} minBatchSize: ${_minBatchSize}`,
         )
       }
-    } while (attempt < BATCH_MAX_ATTEMPTS)
+    } while (attempt < _maxAttempts)
   } catch (error) {
     console.error(error)
   }
@@ -68,4 +105,9 @@ const contractCall = async (
   return null
 }
 
-export { batchCallOneContractOneFunctionMultipleParams }
+export {
+  batchCallOneContractOneFunctionMultipleParams,
+  MAX_BATCH_CONTRACT_PER_CHUNK_DEFAULT,
+  MIN_BATCH_CONTRACT_PER_CHUNK_DEFAULT,
+  BATCH_MAX_ATTEMPTS_DEFAULT,
+}
