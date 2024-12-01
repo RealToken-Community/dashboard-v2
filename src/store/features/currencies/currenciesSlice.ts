@@ -15,6 +15,7 @@ const currenciesInitialState: CurrenciesInitialStateType = {
     [Currency.EUR]: 1,
     [Currency.CHF]: 1,
     [Currency.XDAI]: 1,
+    [Currency.USDC]: 1,
   },
   isLoading: false,
 }
@@ -40,8 +41,8 @@ export function fetchCurrenciesRates() {
     if (isLoading) return
     dispatch({ type: currenciesIsLoadingDispatchType, payload: true })
     try {
-      const { ChfUsd, EurUsd, XdaiUsd } = await CurrenciesRepository.getRates()
-
+      const { ChfUsd, EurUsd, XdaiUsd, UsdcUsd } =
+        await CurrenciesRepository.getRates()
       dispatch({
         type: currenciesChangedDispatchType,
         payload: {
@@ -49,6 +50,7 @@ export function fetchCurrenciesRates() {
           [Currency.EUR]: EurUsd,
           [Currency.CHF]: ChfUsd,
           [Currency.XDAI]: XdaiUsd,
+          [Currency.USDC]: UsdcUsd,
         },
       })
     } catch (error) {
