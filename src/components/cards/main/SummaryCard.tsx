@@ -32,6 +32,7 @@ export const SummaryCard: FC = () => {
   const rwaValue = rwa?.value ?? 0
   const regValue = reg?.value ?? 0
   const regVotingPowerAmount = regVotingPower?.amount ?? 0
+  const isOver9000 = regVotingPowerAmount >= 9_000
   const totalNetValue =
     realtokensValue.total +
     stableDepositValue +
@@ -66,7 +67,11 @@ export const SummaryCard: FC = () => {
           value={regVotingPowerAmount}
           unitIcon={
             regVotingPowerAmount > 0 ? (
-              <IconBolt size={16} />
+              <IconBolt
+                size={isOver9000 ? 24 : 20}
+                color={'orange'}
+                fill={isOver9000 ? 'orange' : 'none'}
+              />
             ) : (
               <IconBoltOff size={16} />
             )
