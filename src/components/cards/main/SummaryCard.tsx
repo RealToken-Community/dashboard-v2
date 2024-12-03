@@ -33,9 +33,10 @@ export const SummaryCard: FC = () => {
   const regValue = reg?.value ?? 0
   const regVotingPowerAmount = regVotingPower?.amount ?? 0
   // Calculate the power logo size of the voting power depending on the amount
-  const powerSize = Math.floor(Math.log10(regVotingPowerAmount))
-  // Chnage the color of the bolt icon based on the power size
-  const powerFill = powerSize > 3 ? 'orange' : 'none'
+  const additionnalPowerSize = Math.floor(Math.log10(regVotingPowerAmount))
+  const iconPowerSize = 20 + additionnalPowerSize
+  // Change the fill color of the bolt icon based on the power size (filled if > 3 = > 1000)
+  const iconPowerFillColor = additionnalPowerSize > 3 ? 'orange' : 'none'
   const totalNetValue =
     realtokensValue.total +
     stableDepositValue +
@@ -71,9 +72,9 @@ export const SummaryCard: FC = () => {
           unitIcon={
             regVotingPowerAmount > 0 ? (
               <IconBolt
-                size={20 + powerSize}
+                size={iconPowerSize}
                 color={'orange'}
-                fill={powerFill}
+                fill={iconPowerFillColor}
               />
             ) : (
               <IconBoltOff size={16} />
