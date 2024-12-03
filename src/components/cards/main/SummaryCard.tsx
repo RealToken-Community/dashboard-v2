@@ -32,7 +32,10 @@ export const SummaryCard: FC = () => {
   const rwaValue = rwa?.value ?? 0
   const regValue = reg?.value ?? 0
   const regVotingPowerAmount = regVotingPower?.amount ?? 0
-  const isOver9000 = regVotingPowerAmount >= 9_000
+  // Calculate the power logo size of the voting power depending on the amount
+  const powerSize = Math.floor(Math.log10(regVotingPowerAmount))
+  // Chnage the color of the bolt icon based on the power size
+  const powerFill = powerSize > 3 ? 'orange' : 'none'
   const totalNetValue =
     realtokensValue.total +
     stableDepositValue +
@@ -68,9 +71,9 @@ export const SummaryCard: FC = () => {
           unitIcon={
             regVotingPowerAmount > 0 ? (
               <IconBolt
-                size={isOver9000 ? 24 : 20}
+                size={20 + powerSize}
                 color={'orange'}
-                fill={isOver9000 ? 'orange' : 'none'}
+                fill={powerFill}
               />
             ) : (
               <IconBoltOff size={16} />
