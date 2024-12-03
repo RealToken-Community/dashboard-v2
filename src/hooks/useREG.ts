@@ -4,18 +4,24 @@ import { useSelector } from 'react-redux'
 import { Contract } from 'ethers'
 
 import { initializeProviders } from 'src/repositories/RpcProvider'
-import { selectUserCurrency } from 'src/store/features/currencies/currenciesSelector'
+import {
+  selectCurrencyRates,
+  selectUserCurrency,
+} from 'src/store/features/currencies/currenciesSelector'
 import {
   selectUserAddressList,
   selectUserIncludesEth,
 } from 'src/store/features/settings/settingsSelector'
 import { REGRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { Currency } from 'src/types/Currencies'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
   DEFAULT_REG_PRICE,
+  DEFAULT_USDC_USD_RATE,
+  DEFAULT_XDAI_USD_RATE,
   HoneySwapFactory_Address,
   REG_ContractAddress,
-  REG_VaultContractAddress,
+  REG_Vault_Gnosis_ContractAddress,
   REG_asset_ID,
   REGtokenDecimals,
   USDConXdai_ContractAddress,
@@ -28,11 +34,23 @@ import {
   averageValues,
   getUniV2AssetPrice,
 } from 'src/utils/blockchain/poolPrice'
-import { getAddressesLockedBalances } from 'src/utils/blockchain/regVault'
+import {
+  getAddressesLockedBalances,
+  getRegVaultAbiGetUserGlobalStateOnly,
+} from 'src/utils/blockchain/regVault'
 
+/**
+ *
+ * @param addressList : user addresses list
+ * @param userRate : user selected currency rate
+ * @param currenciesRates : currencies rates
+ * @param includeETH : include balances on ETH in the calculation
+ * @returns
+ */
 const getREG = async (
   addressList: string[],
-  rate: number,
+  userRate: number,
+  currenciesRates: Record<Currency, number>,
   includeETH = false,
 ): Promise<REGRealtoken> => {
   const { GnosisRpcProvider, EthereumRpcProvider } = await initializeProviders()
@@ -50,8 +68,35 @@ const getREG = async (
     addressList,
     providers,
   )
+
+  const regVaultAbiGetUserGlobalStateOnly =
+    getRegVaultAbiGetUserGlobalStateOnly()
+
   const lockedBalance = await getAddressesLockedBalances(
-    REG_VaultContractAddress,
+    [
+      // First provider
+      [
+        // First vault
+        [
+          REG_Vault_Gnosis_ContractAddress, // Contract address
+          regVaultAbiGetUserGlobalStateOnly, // Contract ABI
+          'getUserGlobalState', // Contract method for getting balance
+        ],
+        // Second vault ...
+      ],
+      /*
+      // Second provider
+      [
+        // First vault ...
+        [
+          // Contract address
+          // Contract ABI
+          // Contract method for getting balance
+        ],
+      ],
+      // ...
+      */
+    ],
     addressList,
     providers,
   )
@@ -61,6 +106,7 @@ const getREG = async (
   const totalTokens = Number(contractRegTotalSupply) / 10 ** REGtokenDecimals
   const amount = totalAmount / 10 ** REGtokenDecimals
 
+  // Get REG token prices in USDC and WXDAI from LPs
   const regPriceUsdc = await getUniV2AssetPrice(
     HoneySwapFactory_Address,
     REG_ContractAddress,
@@ -78,9 +124,22 @@ const getREG = async (
     GnosisRpcProvider,
   )
 
-  const averagePrice = averageValues([regPriceUsdc, regPriceWxdai])
-  const tokenPrice = averagePrice ? averagePrice / rate : DEFAULT_REG_PRICE
-
+  // Get rates for XDAI and USDC against USD
+  const rateXdaiUsd = currenciesRates?.XDAI
+    ? currenciesRates.XDAI
+    : DEFAULT_XDAI_USD_RATE
+  const rateUsdcUsd = currenciesRates?.USDC
+    ? currenciesRates.USDC
+    : DEFAULT_USDC_USD_RATE
+  // Convert token prices to USD
+  const assetPriceUsd1 = regPriceUsdc ? regPriceUsdc * rateUsdcUsd : null
+  const assetPriceUsd2 = regPriceWxdai ? regPriceWxdai * rateXdaiUsd : null
+  // Get average token prices in USD
+  const assetAveragePriceUSD = averageValues([assetPriceUsd1, assetPriceUsd2])
+  // Convert prices in Currency by applying rate
+  const tokenPrice = assetAveragePriceUSD
+    ? assetAveragePriceUSD / userRate
+    : DEFAULT_REG_PRICE / userRate
   const value = tokenPrice * amount
   const totalInvestment = totalTokens * tokenPrice
 
@@ -104,14 +163,15 @@ const getREG = async (
 export const useREG = () => {
   const [reg, setReg] = useState<REGRealtoken | null>(null)
   const addressList = useSelector(selectUserAddressList)
-  const { rate } = useSelector(selectUserCurrency)
+  const { rate: userRate } = useSelector(selectUserCurrency)
   const includeETH = useSelector(selectUserIncludesEth)
+  const currenciesRates = useSelector(selectCurrencyRates)
 
   useEffect(() => {
     if (addressList.length) {
-      getREG(addressList, rate, includeETH).then(setReg)
+      getREG(addressList, userRate, currenciesRates, includeETH).then(setReg)
     }
-  }, [addressList])
+  }, [addressList, userRate, currenciesRates, includeETH])
 
   return reg
 }

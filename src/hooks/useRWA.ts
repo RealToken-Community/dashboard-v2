@@ -4,15 +4,20 @@ import { useSelector } from 'react-redux'
 import { Contract } from 'ethers'
 
 import { initializeProviders } from 'src/repositories/RpcProvider'
-import { selectUserCurrency } from 'src/store/features/currencies/currenciesSelector'
 import {
-  selectUserAddressList,
-  selectUserIncludesEth,
+  selectCurrencyRates,
+  selectUserCurrency,
+} from 'src/store/features/currencies/currenciesSelector'
+import {
+  selectUserAddressList, // selectUserIncludesEth,
 } from 'src/store/features/settings/settingsSelector'
 import { RWARealtoken } from 'src/store/features/wallets/walletsSelector'
+import { Currency } from 'src/types/Currencies'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
   DEFAULT_RWA_PRICE,
+  DEFAULT_USDC_USD_RATE,
+  DEFAULT_XDAI_USD_RATE,
   HoneySwapFactory_Address,
   RWA_ContractAddress,
   RWA_asset_ID,
@@ -30,14 +35,13 @@ import {
 
 const getRWA = async (
   addressList: string[],
-  rate: number,
-  includeETH = false,
+  userRate: number,
+  currenciesRates: Record<Currency, number>,
+  // includeETH = false,
 ): Promise<RWARealtoken> => {
-  const { GnosisRpcProvider, EthereumRpcProvider } = await initializeProviders()
+  const { GnosisRpcProvider /* , EthereumRpcProvider */ } =
+    await initializeProviders()
   const providers = [GnosisRpcProvider]
-  if (includeETH) {
-    providers.push(EthereumRpcProvider)
-  }
 
   const contractRwa_Gnosis = new Contract(
     RWA_ContractAddress,
@@ -53,6 +57,7 @@ const getRWA = async (
   const totalTokens = Number(RwaContractTotalSupply) / 10 ** RWAtokenDecimals
   const amount = totalAmount / 10 ** RWAtokenDecimals
 
+  // RWA token prices in USDC and WXDAI from LPs
   const rwaPriceUsdc = await getUniV2AssetPrice(
     HoneySwapFactory_Address,
     RWA_ContractAddress,
@@ -69,8 +74,21 @@ const getRWA = async (
     WXDAItokenDecimals,
     GnosisRpcProvider,
   )
-  const averagePrice = averageValues([rwaPriceUsdc, rwaPriceWxdai])
-  const tokenPrice = (averagePrice ?? DEFAULT_RWA_PRICE) / rate
+
+  // Get rates for XDAI and USDC against USD
+  const rateXdaiUsd = currenciesRates?.XDAI
+    ? currenciesRates.XDAI
+    : DEFAULT_XDAI_USD_RATE
+  const rateUsdcUsd = currenciesRates?.USDC
+    ? currenciesRates.USDC
+    : DEFAULT_USDC_USD_RATE
+  // Convert token prices to USD
+  const assetPriceUsd1 = rwaPriceUsdc ? rwaPriceUsdc * rateUsdcUsd : null
+  const assetPriceUsd2 = rwaPriceWxdai ? rwaPriceWxdai * rateXdaiUsd : null
+  // Get average token price in USD
+  const assetAveragePriceUSD = averageValues([assetPriceUsd1, assetPriceUsd2])
+  // Convert price in Currency by applying rate
+  const tokenPrice = (assetAveragePriceUSD ?? DEFAULT_RWA_PRICE) / userRate
   const value = tokenPrice * amount
   const totalInvestment = totalTokens * tokenPrice
 
@@ -99,14 +117,14 @@ const getRWA = async (
 export const useRWA = () => {
   const [rwa, setRwa] = useState<RWARealtoken | null>(null)
   const addressList = useSelector(selectUserAddressList)
-  const { rate } = useSelector(selectUserCurrency)
-  const includeETH = useSelector(selectUserIncludesEth)
-
+  const { rate: userRate } = useSelector(selectUserCurrency)
+  const currenciesRates = useSelector(selectCurrencyRates)
+  // const includeETH = useSelector(selectUserIncludesEth) // useless: RWA does not (yet ?) exist on Ethereum
   useEffect(() => {
     if (addressList.length) {
-      getRWA(addressList, rate, includeETH).then(setRwa)
+      getRWA(addressList, userRate, currenciesRates).then(setRwa)
     }
-  }, [addressList])
+  }, [addressList, userRate, currenciesRates])
 
   return rwa
 }

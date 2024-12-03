@@ -11,7 +11,7 @@ import {
   DEFAULT_REGVotingPower_PRICE,
   REGVotingPower_asset_ID,
   REGVotingPowertokenDecimals,
-  RegVotingPower_ContractAddress,
+  RegVotingPower_Gnosis_ContractAddress,
 } from 'src/utils/blockchain/consts/otherTokens'
 import { getAddressesBalances } from 'src/utils/blockchain/erc20Infos'
 
@@ -21,12 +21,12 @@ const getRegVotingPower = async (
   const { GnosisRpcProvider } = await initializeProviders()
   const providers = [GnosisRpcProvider]
   const RegVotingPowerContract = new Contract(
-    RegVotingPower_ContractAddress,
+    RegVotingPower_Gnosis_ContractAddress,
     ERC20ABI,
     GnosisRpcProvider,
   )
   const totalAmount = await getAddressesBalances(
-    RegVotingPower_ContractAddress,
+    RegVotingPower_Gnosis_ContractAddress,
     addressList,
     providers,
   )
