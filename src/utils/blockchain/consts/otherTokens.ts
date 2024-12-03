@@ -1,3 +1,4 @@
+// Each asset must have a different ID (used as KEY assets view)
 const RWA_asset_ID = 0
 const REG_asset_ID = 1
 const REGVotingPower_asset_ID = 2
