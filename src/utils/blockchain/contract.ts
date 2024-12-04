@@ -1,12 +1,12 @@
 import { Contract } from 'ethers'
 
+import { wait } from '../general'
+
 const MAX_BATCH_CONTRACT_PER_CHUNK_DEFAULT = 100
 const MIN_BATCH_CONTRACT_PER_CHUNK_DEFAULT = 10
 const BATCH_MAX_ATTEMPTS_DEFAULT = 5
 const BATCH_WAIT_BETWEEN_ATTEMPTS_MS = 200
 const BATCH_WAIT_BETWEEN_CHUNKS_MS = 20
-
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 /**
  * Batch call one contract one function with multiple parameters
@@ -20,8 +20,11 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
  * @param _initialBatchSize: number
  * @param _minBatchSize: number
  * @param _maxAttempts: number : max number of attempts, any value less than 1 will behave as a single attempt
+ * @param consoleWarnOnError: boolean : log error to console ; default: true ; set to false to suppress console error ; params error will still be logged
+ *
  * @returns Promise<object[]> :array of results
- * @description Batch call one contract one function with multiple parameters
+ *
+ * @description Batch call the same function on the same contract with multiple parameters mutliple times
  **/
 const batchCallOneContractOneFunctionMultipleParams = async (
   _contract: Contract,
@@ -30,6 +33,7 @@ const batchCallOneContractOneFunctionMultipleParams = async (
   _initialBatchSize: number = MAX_BATCH_CONTRACT_PER_CHUNK_DEFAULT,
   _minBatchSize: number = MIN_BATCH_CONTRACT_PER_CHUNK_DEFAULT,
   _maxAttempts: number = BATCH_MAX_ATTEMPTS_DEFAULT,
+  consoleWarnOnError = true,
 ) => {
   try {
     let attempt = 0
@@ -79,12 +83,14 @@ const batchCallOneContractOneFunctionMultipleParams = async (
         }
         return results
       } catch (error) {
-        const chainId =
-          (await _contract?.runner?.provider?.getNetwork())?.chainId ??
-          'unknown'
-        console.error(
-          `batchCallOneContractOneFunctionMultipleParams Error:: chainId: ${chainId} contract address: ${_contract?.target} methodName: ${_methodName} args: [${_argsArray}] initialBatchSize: ${_initialBatchSize} minBatchSize: ${_minBatchSize}`,
-        )
+        if (consoleWarnOnError) {
+          const chainId =
+            (await _contract?.runner?.provider?.getNetwork())?.chainId ??
+            'unknown'
+          console.error(
+            `batchCallOneContractOneFunctionMultipleParams Error:: chainId: ${chainId} contract address: ${_contract?.target} methodName: ${_methodName} args: [${_argsArray}] initialBatchSize: ${_initialBatchSize} minBatchSize: ${_minBatchSize}`,
+          )
+        }
       }
     } while (attempt < _maxAttempts)
   } catch (error) {
