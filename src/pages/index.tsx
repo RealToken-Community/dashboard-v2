@@ -1,21 +1,72 @@
+import { useMemo } from 'react'
+import { useSelector } from 'react-redux'
+
 import { NextPage } from 'next'
 
 import { Box, Flex, Grid } from '@mantine/core'
 
 import { AssetsView } from 'src/components/assetsView'
+import { useAssetsViewSearch } from 'src/components/assetsView/AssetsViewSearch'
+import { useAssetsViewFilters } from 'src/components/assetsView/filters/useFilters'
 import {
   PropertiesCard,
   RentsCard,
   SummaryCard,
   WorthCard,
 } from 'src/components/cards'
+import { useREG } from 'src/hooks/useREG'
+import { useRegVotingPower } from 'src/hooks/useREGVotingPower'
+import { useRWA } from 'src/hooks/useRWA'
+import {
+  OtherRealtoken,
+  UserRealtoken,
+  selectUserRealtokens,
+} from 'src/store/features/wallets/walletsSelector'
 
 const HomePage: NextPage = () => {
+  const { assetsViewFilterFunction } = useAssetsViewFilters()
+  const { assetSearchFunction } = useAssetsViewSearch()
+
+  const realtokens = useSelector(selectUserRealtokens)
+  const rwa = useRWA()
+  const reg = useREG()
+  const regVotingPower = useRegVotingPower()
+
+  const allAssetsData = useMemo(() => {
+    const assets: (UserRealtoken | OtherRealtoken | null)[] = [
+      ...realtokens,
+      rwa,
+      reg,
+      regVotingPower,
+    ].filter(
+      // remove null/undefined values
+      (asset) => asset != null && asset != undefined,
+    )
+    const assetsT = assets as (UserRealtoken | OtherRealtoken)[]
+    return assetsViewFilterFunction(assetsT.filter(assetSearchFunction))
+  }, [
+    realtokens,
+    rwa,
+    reg,
+    regVotingPower,
+    assetSearchFunction,
+    assetsViewFilterFunction,
+  ])
+
+  const otherAssetsData = useMemo(() => {
+    const assets = {
+      rwa,
+      reg,
+      regVotingPower,
+    }
+    return assets
+  }, [rwa, reg, regVotingPower])
+
   return (
     <Flex my={'lg'} direction={'column'}>
       <Grid>
         <Grid.Col span={{ base: 12, sm: 6, lg: 3 }}>
-          <SummaryCard />
+          <SummaryCard otherAssetsData={otherAssetsData} />
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, lg: 3 }}>
           <WorthCard />
@@ -28,7 +79,7 @@ const HomePage: NextPage = () => {
         </Grid.Col>
       </Grid>
       <Box my={'md'}>
-        <AssetsView />
+        <AssetsView allAssetsData={allAssetsData} />
       </Box>
     </Flex>
   )

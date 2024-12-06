@@ -5,10 +5,8 @@ import { useSelector } from 'react-redux'
 import { Box, Card, Text, Title } from '@mantine/core'
 import { IconArchive, IconBolt, IconBoltOff } from '@tabler/icons'
 
-import { useREG } from 'src/hooks/useREG'
-import { useRegVotingPower } from 'src/hooks/useREGVotingPower'
-import { useRWA } from 'src/hooks/useRWA'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
+import { OtherRealtoken } from 'src/store/features/wallets/walletsSelector'
 import {
   selectOwnedRealtokensValue,
   selectRmmDetails,
@@ -16,22 +14,26 @@ import {
 
 import { CurrencyField, DecimalField } from '../../commons'
 
-export const SummaryCard: FC = () => {
+interface SummaryCardProps {
+  otherAssetsData: {
+    rwa: OtherRealtoken | null
+    reg: OtherRealtoken | null
+    regVotingPower: OtherRealtoken | null
+  }
+}
+export const SummaryCard: FC<SummaryCardProps> = ({ otherAssetsData }) => {
   const { t } = useTranslation('common', { keyPrefix: 'summaryCard' })
 
   const realtokensValue = useSelector(selectOwnedRealtokensValue)
   const rmmDetails = useSelector(selectRmmDetails)
   const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
 
-  const rwa = useRWA()
-  const reg = useREG()
-  const regVotingPower = useRegVotingPower()
-
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
-  const rwaValue = rwa?.value ?? 0
-  const regValue = reg?.value ?? 0
-  const regVotingPowerAmount = regVotingPower?.amount ?? 0
+
+  const rwaValue = otherAssetsData?.rwa?.value ?? 0
+  const regValue = otherAssetsData?.reg?.value ?? 0
+  const regVotingPowerAmount = otherAssetsData?.regVotingPower?.amount ?? 0
   // Calculate the power logo size of the voting power depending on the amount
   const additionnalPowerSize = Math.floor(Math.log10(regVotingPowerAmount))
   const iconPowerSize = 20 + additionnalPowerSize

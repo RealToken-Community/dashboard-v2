@@ -1,57 +1,27 @@
-import { FC, useMemo } from 'react'
-import { useSelector } from 'react-redux'
-
+import { FC } from 'react'
 import { Grid } from '@mantine/core'
 
-import { useREG } from 'src/hooks/useREG'
-import { useRegVotingPower } from 'src/hooks/useREGVotingPower'
-import { useRWA } from 'src/hooks/useRWA'
 import {
   OtherRealtoken,
   UserRealtoken,
-  selectUserRealtokens,
 } from 'src/store/features/wallets/walletsSelector'
 
 import { AssetsViewSearch, useAssetsViewSearch } from './AssetsViewSearch'
 import { AssetsViewSelect, useAssetsViewSelect } from './assetsViewSelect'
 import { AssetsViewFilterButton } from './filters/AssetsViewFilterButton'
-import { useAssetsViewFilters } from './filters/useFilters'
 import { RealtimeIndicator } from './indicators/RealtimeIndicator'
 import { AssetViewType } from './types'
 import { AssetGrid, AssetTable } from './views'
 
-export const AssetsView: FC = () => {
-  const { assetsViewFilterFunction } = useAssetsViewFilters()
-  const { assetSearchFunction, assetSearchProps } = useAssetsViewSearch()
+interface AssetsViewProps {
+  allAssetsData: (UserRealtoken | OtherRealtoken)[];
+}
+
+export const AssetsView: FC<AssetsViewProps> = ({ allAssetsData }) => {
+  const { assetSearchProps } = useAssetsViewSearch()
   const { choosenAssetView } = useAssetsViewSelect()
 
-  const realtokens = useSelector(selectUserRealtokens)
-  const rwa = useRWA()
-  const reg = useREG()
-  const regVotingPower = useRegVotingPower()
-
-  const data = useMemo(() => {
-    const assets: (UserRealtoken | OtherRealtoken | null)[] = [
-      ...realtokens,
-      rwa,
-      reg,
-      regVotingPower,
-    ].filter(
-      // remove null/undefined values
-      (asset) => asset != null && asset != undefined,
-    )
-    const assetsT = assets as (UserRealtoken | OtherRealtoken)[]
-    return assetsViewFilterFunction(assetsT.filter(assetSearchFunction))
-  }, [
-    realtokens,
-    rwa,
-    reg,
-    regVotingPower,
-    assetSearchFunction,
-    assetsViewFilterFunction,
-  ])
-
-  return realtokens.length ? (
+  return allAssetsData.length ? (
     <>
       <Grid align={'center'}>
         <Grid.Col
@@ -69,10 +39,10 @@ export const AssetsView: FC = () => {
         </Grid.Col>
       </Grid>
       {choosenAssetView == AssetViewType.TABLE && (
-        <AssetTable key={'table'} realtokens={data} />
+        <AssetTable key={'table'} realtokens={allAssetsData} />
       )}
       {choosenAssetView == AssetViewType.GRID && (
-        <AssetGrid key={'grid'} realtokens={data} />
+        <AssetGrid key={'grid'} realtokens={allAssetsData} />
       )}
     </>
   ) : null
