@@ -1,4 +1,5 @@
 import { FC } from 'react'
+
 import { Grid } from '@mantine/core'
 
 import {
@@ -14,7 +15,7 @@ import { AssetViewType } from './types'
 import { AssetGrid, AssetTable } from './views'
 
 interface AssetsViewProps {
-  allAssetsData: (UserRealtoken | OtherRealtoken)[];
+  allAssetsData: (UserRealtoken | OtherRealtoken)[]
 }
 
 export const AssetsView: FC<AssetsViewProps> = ({ allAssetsData }) => {
