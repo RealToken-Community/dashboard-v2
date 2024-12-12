@@ -131,8 +131,8 @@ export function useAssetsViewSort(filter: AssetsViewSortFilter) {
         return (b.rentedUnits ?? 0) - (a.rentedUnits ?? 0)
       case AssetSortType.OCCUPANCY:
         return (
-          (b.rentedUnits ?? 0) / (b.totalUnits ?? 0) -
-          (a.rentedUnits ?? 0) / (a.totalUnits ?? 0)
+          (b.rentedUnits ?? 0) / (b.totalUnits ?? 1) -
+          (a.rentedUnits ?? 0) / (a.totalUnits ?? 1)
         )
       case AssetSortType.INITIAL_LAUNCH:
         return (b.initialLaunchDate?.date ?? '').localeCompare(
