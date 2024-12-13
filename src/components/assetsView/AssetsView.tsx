@@ -1,7 +1,9 @@
 import { FC, useMemo } from 'react'
+import { useSelector } from 'react-redux'
 
 import { Grid } from '@mantine/core'
 
+import { selectUserIncludesOtherAssets } from 'src/store/features/settings/settingsSelector'
 import {
   OtherRealtoken,
   UserRealtoken,
@@ -25,13 +27,24 @@ export const AssetsView: FC<AssetsViewProps> = ({
   const { assetsViewFilterFunction } = useAssetsViewFilters()
   const { assetSearchFunction, assetSearchProps } = useAssetsViewSearch()
   const { choosenAssetView } = useAssetsViewSelect()
+  const showOtherAssets = useSelector(selectUserIncludesOtherAssets)
+
+  // Check if asset is a UserRealtoken or OtherRealtoken
+  const isOtherAsset = (asset: UserRealtoken | OtherRealtoken) => {
+    return !asset.hasOwnProperty('rentStatus') // rely on rentStatus to determine if it's a UserRealtoken
+  }
 
   // Apply search and filter functions
   const filteredData = useMemo(() => {
-    const filteredAssets = assetsViewFilterFunction(
+    // First filter by user advanced filters
+    const advancedFilteredAssets = assetsViewFilterFunction(
       assetsData.filter(assetSearchFunction),
     )
-    return filteredAssets
+    // Then filter out OtherRealtoken
+    const othersAssetsFiltering = showOtherAssets
+      ? advancedFilteredAssets
+      : advancedFilteredAssets.filter((asset) => !isOtherAsset(asset))
+    return othersAssetsFiltering
   }, [assetsData, assetSearchFunction, assetsViewFilterFunction])
 
   return assetsData.length ? (

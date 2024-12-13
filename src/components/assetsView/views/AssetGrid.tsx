@@ -1,6 +1,5 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
 
@@ -15,7 +14,6 @@ import {
 } from '@mantine/core'
 
 import FullyRentedAPRDisclaimer from 'src/components/commons/others/FullyRentedAPRDisclaimer'
-import { selectUserIncludesOtherAssets } from 'src/store/features/settings/settingsSelector'
 import {
   OtherRealtoken,
   UserRealtoken,
@@ -69,7 +67,6 @@ export const AssetGrid: FC<{
       </Combobox.Option>
     )),
   ]
-  const showOtherAssets = useSelector(selectUserIncludesOtherAssets)
 
   return (
     <>
@@ -77,9 +74,6 @@ export const AssetGrid: FC<{
         {paginationOffers.map((item) => {
           const isAProperty = item.hasOwnProperty('rentStatus')
           if (!isAProperty) {
-            if (!showOtherAssets) {
-              return null
-            }
             return (
               <Grid.Col key={item.id} span={{ base: 12, sm: 6, lg: 4, xl: 3 }}>
                 <AssetCard
