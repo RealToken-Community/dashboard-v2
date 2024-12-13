@@ -131,6 +131,10 @@
     "viewOptions": {
       "table": "Tableau",
       "grid": "Carte"
+    },
+    "paging": {
+      "placeholder": "Search value",
+      "all": "Tous"
     }
   },
   "assetsViewFilterButton": {

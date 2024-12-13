@@ -131,6 +131,10 @@
     "viewOptions": {
       "table": "Table",
       "grid": "Grid"
+    },
+    "paging": {
+      "placeholder": "Search value",
+      "all": "All"
     }
   },
   "assetsViewFilterButton": {

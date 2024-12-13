@@ -1,9 +1,11 @@
 import { FC, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
 
 import {
+  CheckIcon,
   Combobox,
   Grid,
   Group,
@@ -25,8 +27,10 @@ export const AssetGrid: FC<{
   realtokens: (UserRealtoken | OtherRealtoken)[]
 }> = (props) => {
   const router = useRouter()
+  const { t } = useTranslation('common', { keyPrefix: 'assetView' })
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const defaultPageSize = 20
+  const [pageSize, setPageSize] = useState<number>(defaultPageSize)
 
   function onPageChange(page: number) {
     setPage(page)
@@ -48,15 +52,20 @@ export const AssetGrid: FC<{
     onDropdownClose: () => combobox.resetSelectedOption(),
   })
 
-  const values = [20, 40, 100, 200]
+  // 20, 40, 100, 200
+  const values = [
+    0, // All
+    defaultPageSize,
+    defaultPageSize * 2,
+    defaultPageSize * 5,
+    defaultPageSize * 10,
+  ]
 
   const options = [
-    <Combobox.Option value={'All'} key={'All'}>
-      {'All'}
-    </Combobox.Option>,
-    ...values.map((item) => (
+    values.map((item) => (
       <Combobox.Option value={item.toString()} key={item}>
-        {item}
+        {item === pageSize && <CheckIcon size={12} />}&nbsp;
+        {item ? item?.toString() : t('paging.all')}
       </Combobox.Option>
     )),
   ]
@@ -99,11 +108,7 @@ export const AssetGrid: FC<{
       >
         <Pagination
           value={page}
-          total={
-            pageSize === Infinity
-              ? 0
-              : Math.ceil(props.realtokens.length / pageSize)
-          }
+          total={pageSize ? Math.ceil(props.realtokens.length / pageSize) : 0}
           boundaries={1}
           siblings={1}
           size={'sm'}
@@ -113,7 +118,7 @@ export const AssetGrid: FC<{
           store={combobox}
           withinPortal={false}
           onOptionSubmit={(val) => {
-            if (val === 'All') return setPageSize(Infinity)
+            if (!val) return setPageSize(Infinity)
             setPageSize(Number(val))
 
             combobox.closeDropdown()
@@ -122,7 +127,7 @@ export const AssetGrid: FC<{
           <Combobox.Target>
             <InputBase
               rightSection={<Combobox.Chevron />}
-              value={pageSize == Infinity ? 'All' : pageSize}
+              value={pageSize ? pageSize.toString() : t('paging.all')}
               type={'button'}
               onChange={() => {
                 combobox.openDropdown()
@@ -133,7 +138,7 @@ export const AssetGrid: FC<{
               onBlur={() => {
                 combobox.closeDropdown()
               }}
-              placeholder={'Search value'}
+              placeholder={t('paging.placeholder')}
               rightSectionPointerEvents={'none'}
             />
           </Combobox.Target>
