@@ -39,7 +39,7 @@ export const AssetGrid: FC<{
   }
 
   const paginationOffers: (UserRealtoken | OtherRealtoken)[] = useMemo(() => {
-    if (pageSize === Infinity) return props.realtokens
+    if (!pageSize) return props.realtokens
     const start = (page - 1) * pageSize
     const end = start + pageSize
     return props.realtokens.slice(start, end)
@@ -118,9 +118,7 @@ export const AssetGrid: FC<{
           store={combobox}
           withinPortal={false}
           onOptionSubmit={(val) => {
-            if (!val) return setPageSize(Infinity)
             setPageSize(Number(val))
-
             combobox.closeDropdown()
           }}
         >
