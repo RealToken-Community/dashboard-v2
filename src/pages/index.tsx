@@ -6,8 +6,6 @@ import { NextPage } from 'next'
 import { Box, Flex, Grid } from '@mantine/core'
 
 import { AssetsView } from 'src/components/assetsView'
-import { useAssetsViewSearch } from 'src/components/assetsView/AssetsViewSearch'
-import { useAssetsViewFilters } from 'src/components/assetsView/filters/useFilters'
 import {
   PropertiesCard,
   RentsCard,
@@ -24,34 +22,21 @@ import {
 } from 'src/store/features/wallets/walletsSelector'
 
 const HomePage: NextPage = () => {
-  const { assetsViewFilterFunction } = useAssetsViewFilters()
-  const { assetSearchFunction } = useAssetsViewSearch()
-
   const realtokens = useSelector(selectUserRealtokens)
   const rwa = useRWA()
   const reg = useREG()
   const regVotingPower = useRegVotingPower()
 
   const allAssetsData = useMemo(() => {
+    // remove potential null/undefined values, return filtered value with the right type(s)
     const assets: (UserRealtoken | OtherRealtoken | null)[] = [
       ...realtokens,
       rwa,
       reg,
       regVotingPower,
-    ].filter(
-      // remove null/undefined values
-      (asset) => asset != null && asset != undefined,
-    )
-    const assetsT = assets as (UserRealtoken | OtherRealtoken)[]
-    return assetsViewFilterFunction(assetsT.filter(assetSearchFunction))
-  }, [
-    realtokens,
-    rwa,
-    reg,
-    regVotingPower,
-    assetSearchFunction,
-    assetsViewFilterFunction,
-  ])
+    ].filter((asset) => !!asset)
+    return assets as (UserRealtoken | OtherRealtoken)[]
+  }, [realtokens, rwa, reg, regVotingPower])
 
   const otherAssetsData = useMemo(() => {
     const assets = {
