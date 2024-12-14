@@ -136,7 +136,7 @@ const RealtimeRentMenuItem: FC = () => {
             label: (
               <Center>
                 <IconCrystalBall size={16} />
-                <Box ml={'xs'}>{t('future')}</Box>
+                <Box ml={'xs'}>{t('global')}</Box>
               </Center>
             ),
           },
