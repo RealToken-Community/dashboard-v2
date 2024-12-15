@@ -6,6 +6,7 @@ import {
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
+import { useAssetsViewProductTypeFilter } from './AssetsViewFilterType'
 import { useAssetsViewRentStatusFilter } from './AssetsViewRentStatusFilter'
 import { useAssetsViewRmmStatusFilter } from './AssetsViewRmmStatusFilter'
 import { useAssetsViewSort } from './AssetsViewSort'
@@ -22,6 +23,8 @@ export function useAssetsViewFilters() {
     useAssetsViewSubsidyFilter(activeFilter)
   const { assetUserStatusFilterFunction } =
     useAssetsViewUserStatusFilter(activeFilter)
+  const { assetProductTypeFilterFunction } =
+    useAssetsViewProductTypeFilter(activeFilter)
   const { assetRentStatusFilterFunction } =
     useAssetsViewRentStatusFilter(activeFilter)
   const { assetRmmStatusFilterFunction } =
@@ -35,6 +38,7 @@ export function useAssetsViewFilters() {
     return tokenList
       .filter(assetUserStatusFilterFunction)
       .filter(assetUserProtocolFilterFunction)
+      .filter(assetProductTypeFilterFunction)
       .filter(assetRentStatusFilterFunction)
       .filter(assetSubsidyFilterFunction)
       .filter(assetRmmStatusFilterFunction)
