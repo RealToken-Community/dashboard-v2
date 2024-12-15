@@ -12,7 +12,7 @@ import {
   assetsViewFilterAtom,
 } from 'src/states'
 
-import { AssetsViewProductTypeFilter } from './AssetsViewFilterType'
+import { AssetsViewProductTypeFilter } from './AssetsViewFilterProductType'
 import { AssetsViewRentStatusFilter } from './AssetsViewRentStatusFilter'
 import { AssetsViewRmmStatusFilter } from './AssetsViewRmmStatusFilter'
 import { AssetsViewSort } from './AssetsViewSort'

@@ -6,7 +6,7 @@ import {
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
-import { useAssetsViewProductTypeFilter } from './AssetsViewFilterType'
+import { useAssetsViewProductTypeFilter } from './AssetsViewFilterProductType'
 import { useAssetsViewRentStatusFilter } from './AssetsViewRentStatusFilter'
 import { useAssetsViewRmmStatusFilter } from './AssetsViewRmmStatusFilter'
 import { useAssetsViewSort } from './AssetsViewSort'
