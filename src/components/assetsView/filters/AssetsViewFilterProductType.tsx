@@ -22,7 +22,7 @@ interface AssetsViewProductTypeFilterProps {
 export const AssetsViewProductTypeFilter: FC<
   AssetsViewProductTypeFilterProps
 > = ({ filter, onChange }) => {
-  const { t } = useTranslation('common', { keyPrefix: 'assetProduct' })
+  const { t } = useTranslation('common', { keyPrefix: 'assetProductType' })
   const { classes: inputClasses } = useInputStyles()
 
   const viewOptions = [
