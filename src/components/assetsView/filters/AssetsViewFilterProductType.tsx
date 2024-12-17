@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { Select } from '@mantine/core'
 
 import {
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
+import { APIRealTokenProductType } from 'src/types/APIRealToken'
 
 import { useInputStyles } from '../../inputs/useInputStyles'
 import { AssetProductType } from '../types'
@@ -57,19 +58,18 @@ export const AssetsViewProductTypeFilter: FC<
 AssetsViewProductTypeFilter.displayName = 'AssetsViewProductTypeFilter'
 
 export function useAssetsViewProductTypeFilter(filter: AssetsViewFilterType) {
-  function assetProductTypeFilterFunction(asset: UserRealtoken | RWARealtoken) {
-    const Asset = asset as UserRealtoken
+  function assetProductTypeFilterFunction(
+    asset: UserRealtoken | OtherRealtoken,
+  ) {
     switch (filter.productType) {
       case AssetProductType.ALL:
         return true
       case AssetProductType.REAL_EASTATE_RENTAL:
-        return (
-          String(Asset.productType) === AssetProductType.REAL_EASTATE_RENTAL
-        )
+        return asset.productType === APIRealTokenProductType.RealEstateRental
       case AssetProductType.LOAN_INCOME:
-        return String(Asset.productType) === AssetProductType.LOAN_INCOME
+        return asset.productType === APIRealTokenProductType.LoanIncome
       case AssetProductType.EQUITY_TOKEN:
-        return String(Asset.productType) === AssetProductType.EQUITY_TOKEN
+        return asset.productType === APIRealTokenProductType.EquityToken
     }
   }
 

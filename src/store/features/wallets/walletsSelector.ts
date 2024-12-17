@@ -5,10 +5,14 @@ import _max from 'lodash/max'
 import _sumBy from 'lodash/sumBy'
 import moment from 'moment'
 
+import { AssetProductType } from 'src/components/assetsView'
 import { WalletBalances, WalletType } from 'src/repositories'
 import { UserRealTokenTransfer } from 'src/repositories/transfers/transfers.type'
 import { RootState } from 'src/store/store'
-import { APIRealTokenDate } from 'src/types/APIRealToken'
+import {
+  APIRealTokenDate,
+  APIRealTokenProductType,
+} from 'src/types/APIRealToken'
 import { RealToken, RealTokenCanal } from 'src/types/RealToken'
 import {
   RentCalculation,
@@ -42,6 +46,7 @@ export interface OtherRealtoken {
   id: string
   fullName: string
   shortName: string
+  productType: APIRealTokenProductType
   amount: number
   value: number
   tokenPrice: number

@@ -13,6 +13,7 @@ import {
   selectUserIncludesEth,
 } from 'src/store/features/settings/settingsSelector'
 import { REGRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { Currency } from 'src/types/Currencies'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
@@ -147,6 +148,7 @@ const getREG = async (
     id: `${REG_asset_ID}`,
     fullName: 'RealToken Ecosystem Governance',
     shortName: 'REG',
+    productType: APIRealTokenProductType.EquityToken,
     amount,
     tokenPrice,
     totalTokens,

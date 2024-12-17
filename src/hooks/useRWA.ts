@@ -12,6 +12,7 @@ import {
   selectUserAddressList, // selectUserIncludesEth,
 } from 'src/store/features/settings/settingsSelector'
 import { RWARealtoken } from 'src/store/features/wallets/walletsSelector'
+import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { Currency } from 'src/types/Currencies'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
@@ -98,6 +99,7 @@ const getRWA = async (
     shortName: 'RWA',
     amount,
     tokenPrice,
+    productType: APIRealTokenProductType.EquityToken,
     totalTokens,
     imageLink: [
       'https://realt.co/wp-content/uploads/2024/02/Equity_FinalDesign-2000px-800x542.png',

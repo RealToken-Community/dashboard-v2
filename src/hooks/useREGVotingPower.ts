@@ -6,6 +6,7 @@ import { Contract } from 'ethers'
 import { initializeProviders } from 'src/repositories/RpcProvider'
 import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
 import { REGVotingPowertoken } from 'src/store/features/wallets/walletsSelector'
+import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
   DEFAULT_REGVotingPower_PRICE,
@@ -44,6 +45,7 @@ const getRegVotingPower = async (
     id: `${REGVotingPower_asset_ID}`,
     fullName: 'REG Voting Power Registry',
     shortName: 'REG VOTING POWER',
+    productType: APIRealTokenProductType.EquityToken,
     amount,
     tokenPrice,
     totalTokens,
