@@ -15,7 +15,7 @@ import {
   setUserAddress,
 } from 'src/store/features/settings/settingsSlice'
 import {
-  fetchTransfers,
+  // fetchTransfers, // unused
   resetTransfers,
 } from 'src/store/features/transfers/transfersSlice'
 import {

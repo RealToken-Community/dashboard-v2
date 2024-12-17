@@ -6,7 +6,8 @@ const FullyRentedAPRDisclaimer = () => {
   const { t } = useTranslation('common', { keyPrefix: 'disclaimer' })
   return (
     <Text style={{ fontSize: 'small', color: 'grey' }}>
-      *{t('fullyRentedAPR')}
+      {'*'}
+      {t('fullyRentedAPR')}
     </Text>
   )
 }

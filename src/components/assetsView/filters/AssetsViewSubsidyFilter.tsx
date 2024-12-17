@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Select } from '@mantine/core'
 
 import {
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
@@ -76,23 +76,40 @@ AssetsViewSubsidyFilter.displayName = 'AssetsViewSubsidyFilter'
 export function useAssetsViewSubsidyFilter(
   filter: AssetsViewSubsidyFilterModel,
 ) {
-  function assetSubsidyFilterFunction(asset: UserRealtoken | RWARealtoken) {
+  function assetSubsidyFilterFunction(asset: UserRealtoken | OtherRealtoken) {
     const Asset = asset as UserRealtoken
     switch (filter.subsidy) {
       case AssetSubsidyType.ALL:
         return true
       case AssetSubsidyType.SUBSIDIZED:
-        return Asset.subsidyStatus !== 'no'
+        return Asset.subsidyStatus && Asset.subsidyStatus !== 'no'
       case AssetSubsidyType.FULLY_SUBSIDIZED:
-        return Asset.subsidyStatus === 'yes' && !!Asset.subsidyStatusValue
+        return (
+          Asset.subsidyStatus &&
+          Asset.subsidyStatus === 'yes' &&
+          !!Asset.subsidyStatusValue
+        )
       case AssetSubsidyType.PARTIALLY_SUBSIDIZED:
-        return Asset.subsidyStatus !== 'no' && !!Asset.subsidyStatusValue
+        return (
+          Asset.subsidyStatus &&
+          Asset.subsidyStatus !== 'no' &&
+          !!Asset.subsidyStatusValue
+        )
       case AssetSubsidyType.SECTION_8:
-        return Asset.subsidyStatus !== 'no' && Asset.subsidyBy === 'Section 8'
+        return (
+          Asset.subsidyStatus &&
+          Asset.subsidyStatus !== 'no' &&
+          Asset.subsidyBy === 'Section 8'
+        )
       case AssetSubsidyType.SECTION_42:
-        return Asset.subsidyStatus !== 'no' && Asset.subsidyBy === 'Section 42'
+        return (
+          Asset.subsidyStatus &&
+          Asset.subsidyStatus !== 'no' &&
+          Asset.subsidyBy === 'Section 42'
+        )
       case AssetSubsidyType.OTHER_SUBSIDY:
         return (
+          Asset.subsidyStatus &&
           Asset.subsidyStatus !== 'no' &&
           !['Section 8', 'Section 42'].includes(Asset.subsidyBy ?? '')
         )

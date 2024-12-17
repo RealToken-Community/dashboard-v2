@@ -12,12 +12,12 @@ import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { useFullyRentedAPR } from 'src/hooks/useFullyRentedAPR'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
 export const AssetTable: FC<{
-  realtokens: (UserRealtoken | RWARealtoken)[]
+  realtokens: (UserRealtoken | OtherRealtoken)[]
 }> = (props) => {
   return (
     <ScrollArea>
@@ -30,7 +30,12 @@ export const AssetTable: FC<{
           {props.realtokens.map((item, index) => {
             const isAProperty = item.hasOwnProperty('rentStatus')
             if (!isAProperty) {
-              return <RWATableRow key={'0'} value={item as RWARealtoken} />
+              return (
+                <OtherTableRow
+                  key={'000' + index}
+                  value={item as OtherRealtoken}
+                />
+              )
             }
             return <AssetTableRow key={index} value={item as UserRealtoken} />
           })}
@@ -160,7 +165,7 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
   )
 }
 
-const RWATableRow: FC<{ value: RWARealtoken }> = (props) => {
+const OtherTableRow: FC<{ value: OtherRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
   const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
 

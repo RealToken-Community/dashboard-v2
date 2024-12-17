@@ -3,6 +3,7 @@ export enum Currency {
   EUR = 'EUR',
   CHF = 'CHF',
   XDAI = 'XDAI',
+  USDC = 'USDC',
 }
 
 export enum CurrencySymbol {
@@ -10,4 +11,5 @@ export enum CurrencySymbol {
   EUR = '€',
   CHF = 'CHF',
   XDAI = 'xDAI',
+  USDC = 'USDC',
 }

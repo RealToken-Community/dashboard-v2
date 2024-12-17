@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Select } from '@mantine/core'
 
 import {
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
@@ -69,7 +69,9 @@ AssetsViewUserStatusFilter.displayName = 'AssetsViewUserStatusFilter'
 export function useAssetsViewUserStatusFilter(
   filter: AssetsViewUserStatusFilterModel,
 ) {
-  function assetUserStatusFilterFunction(asset: UserRealtoken | RWARealtoken) {
+  function assetUserStatusFilterFunction(
+    asset: UserRealtoken | OtherRealtoken,
+  ) {
     const Asset = asset as UserRealtoken
     switch (filter.userStatus) {
       case AssetUserStatusType.ALL:

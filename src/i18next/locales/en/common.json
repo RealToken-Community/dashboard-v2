@@ -19,16 +19,20 @@
     "usd": "USD ($)",
     "eur": "Euro (€)",
     "chf": "Swiss franc (CHF)",
+    "theme": "Theme",
     "light": "Light",
     "dark": "Dark",
     "refreshDataButton": "Refresh data",
+    "rents": "Rents calculation",
     "realtime": "Realtime",
     "global": "Global",
     "date": "Date",
     "dateFormat": "MMMM DD, YYYY",
+    "options": "Options",
     "includesEth": "Includes Ethereum",
     "includesLevinSwap": "Includes LevinSwap",
-    "includesRmmV2": "Includes RMM V2"
+    "includesRmmV2": "Includes RMM V2",
+    "includesOtherAssets": "Includes other assets"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
@@ -71,7 +75,9 @@
     "totalPriceCost": "Estimated price cost",
     "stableDeposit": "RMM deposit",
     "stableBorrow": "RMM borrow",
-    "rwa": "RWA"
+    "rwa": "RWA",
+    "reg": "REG",
+    "regVote": "REG Vote Power"
   },
   "worthCard": {
     "title": "RealTokens",
@@ -125,6 +131,10 @@
     "viewOptions": {
       "table": "Table",
       "grid": "Grid"
+    },
+    "paging": {
+      "placeholder": "Search value",
+      "all": "All"
     }
   },
   "assetsViewFilterButton": {
@@ -192,6 +202,7 @@
     "weekly": "Weekly rents",
     "yearly": "Yearly rents",
     "rentedUnits": "Rented units",
+    "tokenPrice": "Token price",
     "propertyValue": "Property value",
     "rentStartDate": "Rent Start",
     "fullyRentedEstimation": "Fully rented APR",
@@ -381,6 +392,13 @@
   "yamStatisticsPage": {
     "home": "Home",
     "title": "Secondary market statistics (Yam)",
+    "columns": {
+      "token": "Token",
+      "tokenPrice": "RealT price",
+      "yamPrice": "Yam price (30 days)",
+      "yamDifference": "Difference",
+      "yamVolume": "Volume (30 days)"
+    },
     "filter": {
       "field": "Filter",
       "all": "All",
@@ -396,5 +414,8 @@
   },
   "disclaimer":{
     "fullyRentedAPR": "This is a beta estimation done by RealT community. Please report any issues. Please note that is an indicative value and not a guarantee. RealT community or RealT does not take any responsibility for user actions based on this value."
+  },
+  "errors" : {
+    "userNotFound": "User not found"
   }
 }

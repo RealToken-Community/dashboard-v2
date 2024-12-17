@@ -46,14 +46,15 @@ const YamStatisticsRow: React.FC<{
         <td>{tokenPriceValue}</td>
         <td>{yamPriceValue}</td>
         <td>
-          {yamDifferenceValue} (
-          {tNumbers('percent', { value: yamDifferencePercent })})
+          {yamDifferenceValue} {'('}
+          {tNumbers('percent', { value: yamDifferencePercent })}
+          {')'}
         </td>
         <td>{volumeValue}</td>
       </tr>
 
       <tr>
-        <td colSpan={4}>
+        <td colSpan={5}>
           <Divider my={'xs'} />
         </td>
       </tr>
@@ -122,7 +123,7 @@ const YamStatisticsPage = () => {
   }, [yamStatistics, page, pageSize])
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>{'Loading...'}</div>
   }
 
   return (
@@ -142,11 +143,11 @@ const YamStatisticsPage = () => {
         <div style={{ width: '100%', marginTop: '20px' }}>
           <table style={{ width: '100%' }}>
             <tr style={{ textAlign: 'left' }}>
-              <th>Token</th>
-              <th>Token Price</th>
-              <th>Yam Price</th>
-              <th>Yam Difference (30 days)</th>
-              <th>Yam Volume (30 days)</th>
+              <th>{t('columns.token')}</th>
+              <th>{t('columns.tokenPrice')}</th>
+              <th>{t('columns.yamPrice')}</th>
+              <th>{t('columns.yamDifference')}</th>
+              <th>{t('columns.yamVolume')}</th>
             </tr>
             {paginationYamStatistics.map((statistics, index) => (
               <YamStatisticsRow
