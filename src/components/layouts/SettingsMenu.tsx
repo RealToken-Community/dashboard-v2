@@ -17,9 +17,16 @@ import {
 import { DatePickerInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import {
+  IconBuildingBank,
   IconCash,
+  IconCircleOff,
   IconClock,
-  IconClockOff,
+  IconCoins,
+  IconCrystalBall,
+  IconCurrencyEthereum,
+  IconDatabase,
+  IconDatabaseOff,
+  IconHome,
   IconLanguage,
   IconMoon,
   IconSettings,
@@ -33,6 +40,7 @@ import {
   selectUserCurrency,
   selectUserIncludesEth,
   selectUserIncludesLevinSwap,
+  selectUserIncludesOtherAssets,
   selectUserIncludesRmmV2,
   selectUserRentCalculation,
   selectVersion,
@@ -41,6 +49,7 @@ import {
   userCurrencyChanged,
   userIncludesEthChanged,
   userIncludesLevinSwapChanged,
+  userIncludesOtherAssetsChanged,
   userIncludesRmmV2Changed,
   userRentCalculationChanged,
 } from 'src/store/features/settings/settingsSlice'
@@ -58,6 +67,7 @@ const ColorSchemeMenuItem: FC = () => {
 
   return (
     <Box px={5}>
+      <Menu.Label pb={0}>{t('theme')}</Menu.Label>
       <SegmentedControl
         color={'brand'}
         fullWidth={true}
@@ -100,6 +110,7 @@ const RealtimeRentMenuItem: FC = () => {
 
   return (
     <Box px={5}>
+      <Menu.Label pb={0}>{t('rents')}</Menu.Label>
       <SegmentedControl
         color={'brand'}
         fullWidth={true}
@@ -124,7 +135,7 @@ const RealtimeRentMenuItem: FC = () => {
             value: RentCalculationState.Global,
             label: (
               <Center>
-                <IconClockOff size={16} />
+                <IconCrystalBall size={16} />
                 <Box ml={'xs'}>{t('global')}</Box>
               </Center>
             ),
@@ -244,6 +255,7 @@ const FetchDataSettings: FC = () => {
   const userIncludesEth = useSelector(selectUserIncludesEth)
   const userIncludesLevinSwap = useSelector(selectUserIncludesLevinSwap)
   const userIncludesRmmV2 = useSelector(selectUserIncludesRmmV2)
+  const userIncludesOtherAssets = useSelector(selectUserIncludesOtherAssets)
 
   const setUserIncludesEth = (value: boolean) =>
     dispatch(userIncludesEthChanged(value))
@@ -251,13 +263,18 @@ const FetchDataSettings: FC = () => {
     dispatch(userIncludesLevinSwapChanged(value))
   const setUserIncludesRmmV2 = (value: boolean) =>
     dispatch(userIncludesRmmV2Changed(value))
+  const setUserIncludesOtherAssets = (value: boolean) =>
+    dispatch(userIncludesOtherAssetsChanged(value))
 
   return (
     <>
+      <Menu.Label pb={0}>{t('options')}</Menu.Label>
       <Switch
         checked={userIncludesEth}
         onChange={(event) => setUserIncludesEth(event.currentTarget.checked)}
         label={t('includesEth')}
+        onLabel={<IconCurrencyEthereum size={16} />}
+        offLabel={<IconCircleOff size={16} />}
         style={{ margin: '4px 8px' }}
       />
       <Switch
@@ -266,12 +283,26 @@ const FetchDataSettings: FC = () => {
           setUserIncludesLevinSwap(event.currentTarget.checked)
         }
         label={t('includesLevinSwap')}
+        onLabel={<IconDatabase size={16} />}
+        offLabel={<IconDatabaseOff size={16} />}
         style={{ margin: '4px 8px' }}
       />
       <Switch
         checked={userIncludesRmmV2}
         onChange={(event) => setUserIncludesRmmV2(event.currentTarget.checked)}
+        onLabel={<IconBuildingBank size={16} />}
+        offLabel={<IconCircleOff size={16} />}
         label={t('includesRmmV2')}
+        style={{ margin: '4px 8px' }}
+      />
+      <Switch
+        checked={userIncludesOtherAssets}
+        onChange={(event) =>
+          setUserIncludesOtherAssets(event.currentTarget.checked)
+        }
+        label={t('includesOtherAssets')}
+        onLabel={<IconCoins size={16} />}
+        offLabel={<IconHome size={16} />}
         style={{ margin: '4px 8px' }}
       />
     </>

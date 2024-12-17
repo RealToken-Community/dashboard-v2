@@ -10,7 +10,11 @@
     "prettier:check": "prettier --check src/.",
     "prettier:format": "prettier --write src/.",
     "export": "next build && next export",
-    "docker:local": "docker compose -f docker-compose.local.yml up --force-recreate --build"
+    "docker:local": "docker compose -f docker-compose.local.yml up --force-recreate --build",
+    "clean:cache": "del-cli .next",
+    "clean:mod": "del-cli node_modules",
+    "clean:all": "npm run clean:cache && npm run clean:mod",
+    "clean:build": "npm run clean:cache && npm run build"
   },
   "dependencies": {
     "@apollo/client": "^3.9.5",
@@ -27,6 +31,7 @@
     "cookies-next": "^2.0.5",
     "date-fns": "^3.3.1",
     "dayjs": "^1.11.11",
+    "del-cli": "^6.0.0",
     "dexie": "^3.2.5",
     "ethers": "^6.11.1",
     "graphql": "^16.6.0",

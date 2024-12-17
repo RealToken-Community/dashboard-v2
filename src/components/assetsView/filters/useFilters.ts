@@ -2,7 +2,7 @@ import { useAtom } from 'jotai'
 
 import { assetsViewDefaultFilter, assetsViewFilterAtom } from 'src/states'
 import {
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
@@ -33,7 +33,7 @@ export function useAssetsViewFilters() {
     useAssetsViewUserProtocolFilter(activeFilter)
 
   function assetsViewFilterFunction(
-    tokenList: (UserRealtoken | RWARealtoken)[],
+    tokenList: (UserRealtoken | OtherRealtoken)[],
   ) {
     return tokenList
       .filter(assetUserStatusFilterFunction)
