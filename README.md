@@ -20,8 +20,8 @@ To run the project you will need to set-up a `.env` file in the root folder:
 COMMUNITY_API_KEY=XXXXXXXXXXXX
 THEGRAPH_API_KEY=XXXXXXXXXXXX
 
-NEXT_PUBLIC_REALTOKENAPI='https://api.realtoken.community/v1/token'
-NEXT_PUBLIC_REALTOKENAPI_HISTORY='https://history.api.realtoken.community/'
+REALTOKENAPI='https://api.realtoken.community/v1/token'
+REALTOKENAPI_HISTORY='https://history.api.realtoken.community/'
 ```
 
 To get a `COMMUNITY_API_KEY`, join the dedicated [telegram dev channel](https://t.me/+XQyoaFfmN61yk7X0) then ask for.
