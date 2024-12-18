@@ -8,6 +8,7 @@ import moment from 'moment'
 import { WalletBalances, WalletType } from 'src/repositories'
 import { UserRealTokenTransfer } from 'src/repositories/transfers/transfers.type'
 import { RootState } from 'src/store/store'
+import { APIRealTokenDate } from 'src/types/APIRealToken'
 import { RealToken, RealTokenCanal } from 'src/types/RealToken'
 import {
   RentCalculation,
@@ -37,18 +38,28 @@ export interface UserRealtoken extends RealToken {
   >
 }
 
-export interface RWARealtoken {
+export interface OtherRealtoken {
   id: string
   fullName: string
   shortName: string
   amount: number
   value: number
+  tokenPrice: number
   totalInvestment: number
   totalTokens: number
   imageLink: string[]
   isRmmAvailable: boolean
   unitPriceCost: number
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface RWARealtoken extends OtherRealtoken {
+  initialLaunchDate: APIRealTokenDate
+}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface REGRealtoken extends OtherRealtoken {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface REGVotingPowertoken extends OtherRealtoken {}
 
 const DAYS_PER_YEAR = 365
 const MONTHS_PER_YEAR = 12

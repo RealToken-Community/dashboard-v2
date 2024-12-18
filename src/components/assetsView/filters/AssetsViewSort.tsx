@@ -4,9 +4,10 @@ import { useSelector } from 'react-redux'
 
 import { Grid, Select, Switch } from '@mantine/core'
 
+import { assetsViewDefaultFilter } from 'src/states'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
@@ -73,7 +74,11 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
           data={sortOptions}
           value={filter.sortBy}
           onChange={(value) =>
-            onChange({ ...filter, sortBy: value as AssetSortType })
+            onChange({
+              ...filter,
+              sortBy:
+                (value as AssetSortType) ?? assetsViewDefaultFilter.sortBy,
+            })
           }
           classNames={inputClasses}
         />
@@ -92,51 +97,58 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
 }
 AssetsViewSort.displayName = 'AssetsViewSort'
 
+type MixedRealtoken = Partial<UserRealtoken> &
+  Partial<OtherRealtoken> &
+  Pick<UserRealtoken, keyof OtherRealtoken>
+
 export function useAssetsViewSort(filter: AssetsViewSortFilter) {
   function assetSortFunction(
-    a: UserRealtoken | RWARealtoken,
-    b: UserRealtoken | RWARealtoken,
+    a: UserRealtoken | OtherRealtoken,
+    b: UserRealtoken | OtherRealtoken,
   ) {
     const value = getAssetSortValue(a, b)
     return filter.sortReverse ? value * -1 : value
   }
-  function getAssetSortValue(
-    a: UserRealtoken | RWARealtoken,
-    b: UserRealtoken | RWARealtoken,
-  ) {
-    const A = a as UserRealtoken
-    const B = b as UserRealtoken
+  function getAssetSortValue(a: MixedRealtoken, b: MixedRealtoken) {
     switch (filter.sortBy) {
       case AssetSortType.VALUE:
-        return B.value - A.value
+        return b.value - a.value
       case AssetSortType.APR:
-        return B.annualPercentageYield - A.annualPercentageYield
+        return (b.annualPercentageYield ?? 0) - (a.annualPercentageYield ?? 0)
       case AssetSortType.RENT:
-        return B.amount * B.netRentDayPerToken - A.amount * A.netRentDayPerToken
+        return (
+          b.amount * (b.netRentDayPerToken ?? 0) -
+          a.amount * (a.netRentDayPerToken ?? 0)
+        )
       case AssetSortType.RENT_START:
-        return B.rentStartDate?.date.localeCompare(A.rentStartDate?.date)
+        return (b.rentStartDate?.date ?? '').localeCompare(
+          a.rentStartDate?.date ?? '',
+        )
       case AssetSortType.NAME:
-        return A.shortName.localeCompare(b.shortName)
+        return a.shortName.localeCompare(b.shortName)
       case AssetSortType.SUPPLY:
-        return B.totalInvestment - A.totalInvestment
+        return b.totalInvestment - a.totalInvestment
       case AssetSortType.TOKEN:
-        return B.amount - A.amount
+        return b.amount - a.amount
       case AssetSortType.TOTAL_UNIT:
-        return B.totalUnits - A.totalUnits
+        return (b.totalUnits ?? 0) - (a.totalUnits ?? 0)
       case AssetSortType.RENTED_UNIT:
-        return B.rentedUnits - A.rentedUnits
+        return (b.rentedUnits ?? 0) - (a.rentedUnits ?? 0)
       case AssetSortType.OCCUPANCY:
-        return B.rentedUnits / B.totalUnits - A.rentedUnits / A.totalUnits
+        return (
+          (b.rentedUnits ?? 0) / (b.totalUnits ?? 1) -
+          (a.rentedUnits ?? 0) / (a.totalUnits ?? 1)
+        )
       case AssetSortType.INITIAL_LAUNCH:
-        return B.initialLaunchDate?.date.localeCompare(
-          A.initialLaunchDate?.date,
+        return (b.initialLaunchDate?.date ?? '').localeCompare(
+          a.initialLaunchDate?.date ?? '',
         )
       case AssetSortType.UNIT_PRICE_COST:
-        return (B.unitPriceCost ?? 0) - (A.unitPriceCost ?? 0)
+        return (b.unitPriceCost ?? 0) - (a.unitPriceCost ?? 0)
       case AssetSortType.UNREALIZED_CAPITAL_GAIN:
-        return (B.unrealizedCapitalGain ?? 0) - (A.unrealizedCapitalGain ?? 0)
+        return (b.unrealizedCapitalGain ?? 0) - (a.unrealizedCapitalGain ?? 0)
       case AssetSortType.LAST_CHANGE:
-        return B.lastChanges.localeCompare(A.lastChanges) ?? 0
+        return (b.lastChanges ?? '').localeCompare(a.lastChanges ?? '')
     }
   }
 

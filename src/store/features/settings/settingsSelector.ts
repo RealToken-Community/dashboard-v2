@@ -77,3 +77,8 @@ export const selectUserIncludesRmmV2 = createSelector(
   (state: RootState) => state.settings,
   (state) => state.includesRmmV2,
 )
+
+export const selectUserIncludesOtherAssets = createSelector(
+  (state: RootState) => state.settings,
+  (state) => state.includesOtherAssets,
+)
