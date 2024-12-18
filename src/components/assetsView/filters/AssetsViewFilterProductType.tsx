@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Select } from '@mantine/core'
 
+import { assetsViewDefaultFilter } from 'src/states'
 import {
   OtherRealtoken,
   UserRealtoken,
@@ -50,7 +51,12 @@ export const AssetsViewProductTypeFilter: FC<
       label={t('label')}
       data={viewOptions}
       value={filter.productType}
-      onChange={(value) => onChange({ productType: value as AssetProductType })}
+      onChange={(value) =>
+        onChange({
+          productType:
+            (value as AssetProductType) ?? assetsViewDefaultFilter.productType,
+        })
+      }
       classNames={inputClasses}
     />
   )
