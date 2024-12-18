@@ -3,30 +3,48 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { Box, Card, Text, Title } from '@mantine/core'
+import { IconArchive, IconBolt, IconBoltOff } from '@tabler/icons'
 
-import { useRWA } from 'src/hooks/useRWA'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
+import { OtherRealtoken } from 'src/store/features/wallets/walletsSelector'
 import {
   selectOwnedRealtokensValue,
   selectRmmDetails,
 } from 'src/store/features/wallets/walletsSelector'
 
-import { CurrencyField } from '../../commons'
+import { CurrencyField, DecimalField } from '../../commons'
 
-export const SummaryCard: FC = () => {
+interface SummaryCardProps {
+  otherAssetsData: {
+    rwa: OtherRealtoken | null
+    reg: OtherRealtoken | null
+    regVotingPower: OtherRealtoken | null
+  }
+}
+export const SummaryCard: FC<SummaryCardProps> = ({ otherAssetsData }) => {
   const { t } = useTranslation('common', { keyPrefix: 'summaryCard' })
 
   const realtokensValue = useSelector(selectOwnedRealtokensValue)
   const rmmDetails = useSelector(selectRmmDetails)
   const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
 
-  const rwa = useRWA()
-
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
-  const rwaValue = rwa?.value ?? 0
+
+  const rwaValue = otherAssetsData?.rwa?.value ?? 0
+  const regValue = otherAssetsData?.reg?.value ?? 0
+  const regVotingPowerAmount = otherAssetsData?.regVotingPower?.amount ?? 0
+  // Calculate the power logo size of the voting power depending on the amount
+  const additionnalPowerSize = Math.floor(Math.log10(regVotingPowerAmount))
+  const iconPowerSize = 20 + additionnalPowerSize
+  // Change the fill color of the bolt icon based on the power size (filled if > 3 = > 1000)
+  const iconPowerFillColor = additionnalPowerSize > 3 ? 'orange' : 'none'
   const totalNetValue =
-    realtokensValue.total + stableDepositValue + rwaValue - stableDebtValue
+    realtokensValue.total +
+    stableDepositValue +
+    rwaValue +
+    regValue -
+    stableDebtValue
 
   return (
     <Card shadow={'sm'} radius={'md'} style={{ height: '100%' }}>
@@ -48,6 +66,23 @@ export const SummaryCard: FC = () => {
         <CurrencyField label={t('stableDeposit')} value={stableDepositValue} />
         <CurrencyField label={t('stableBorrow')} value={stableDebtValue} />
         <CurrencyField label={t('rwa')} value={rwaValue} />
+        <CurrencyField label={t('reg')} value={regValue} />
+        <DecimalField
+          label={t('regVote')}
+          labelIcon={<IconArchive size={16} />}
+          value={regVotingPowerAmount}
+          unitIcon={
+            regVotingPowerAmount > 0 ? (
+              <IconBolt
+                size={iconPowerSize}
+                color={'orange'}
+                fill={iconPowerFillColor}
+              />
+            ) : (
+              <IconBoltOff size={16} />
+            )
+          }
+        />
       </Box>
     </Card>
   )

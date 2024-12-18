@@ -12,7 +12,7 @@ import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { useFullyRentedAPR } from 'src/hooks/useFullyRentedAPR'
 import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import {
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 import { RentCalculationState } from 'src/types/RentCalculation'
@@ -27,7 +27,7 @@ import styles from './AssetCard.module.sass'
 import { RWACard } from './RWACard'
 
 interface AssetCardProps {
-  value: UserRealtoken | RWARealtoken
+  value: UserRealtoken | OtherRealtoken
   onClick?: (id: string) => unknown
 }
 
@@ -163,7 +163,10 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
       </div>
 
       <div className={styles.groupApart}>
-        <div className={styles.textSm}>{t('fullyRentedEstimation')}*</div>
+        <div className={styles.textSm}>
+          {t('fullyRentedEstimation')}
+          {'*'}
+        </div>
         <div className={styles.textSm}>
           {fullyRentedAPR
             ? tNumbers('percent', { value: fullyRentedAPR })
@@ -189,6 +192,6 @@ export const AssetCard: FC<AssetCardProps> = (props) => {
       />
     )
   } else {
-    return <RWACard value={props.value as RWARealtoken} />
+    return <RWACard value={props.value as OtherRealtoken} />
   }
 }

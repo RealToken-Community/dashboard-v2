@@ -19,16 +19,20 @@
     "usd": "USD ($)",
     "eur": "Euro (€)",
     "chf": "Franc suisse (CHF)",
+    "theme": "Thème",
     "light": "Clair",
     "dark": "Sombre",
     "refreshDataButton": "Actualiser les données",
+    "rents": "Mode de calcul des loyers",
     "realtime": "Temps réel",
     "global": "Global",
     "date": "Date",
     "dateFormat": "DD MMMM YYYY",
+    "options": "Options",
     "includesEth": "Inclure Ethereum",
     "includesLevinSwap": "Inclure LevinSwap",
-    "includesRmmV2": "Inclure RMM V2"
+    "includesRmmV2": "Inclure RMM V2",
+    "includesOtherAssets": "Inclure d'autres actifs"
   },
   "walletButton": {
     "connectWallet": "Connecter mon portefeuille",
@@ -71,7 +75,9 @@
     "totalPriceCost": "Prix d'achat estimé",
     "stableDeposit": "Dépôt RMM",
     "stableBorrow": "Emprunt RMM",
-    "rwa": "RWA"
+    "rwa": "RWA",
+    "reg": "REG",
+    "regVote": "Pouvoir de vote"
   },
   "worthCard": {
     "title": "RealTokens",
@@ -125,6 +131,10 @@
     "viewOptions": {
       "table": "Tableau",
       "grid": "Carte"
+    },
+    "paging": {
+      "placeholder": "Search value",
+      "all": "Tous"
     }
   },
   "assetsViewFilterButton": {
@@ -192,6 +202,7 @@
     "weekly": "Loyers hebdomadaires",
     "yearly": "Loyers annuels",
     "rentedUnits": "Logements loués",
+    "tokenPrice":"Prix d'un token",
     "propertyValue": "Valeur de la propriété",
     "rentStartDate": "Date du premier loyer",
     "fullyRentedEstimation": "Rendement 100% loué",
@@ -382,6 +393,13 @@
   "yamStatisticsPage": {
     "home": "Accueil",
     "title": "Statistiques marché secondaire (Yam)",
+    "columns": {
+      "token": "Token",
+      "tokenPrice": "Prix RealT",
+      "yamPrice": "Prix Yam (30 jours)",
+      "yamDifference": "Différence",
+      "yamVolume": "Volume (30 jours)"
+    },
     "filter": {
       "field": "Filtre",
       "all": "Toutes les propriétés",
@@ -397,5 +415,9 @@
   },
   "disclaimer":{
     "fullyRentedAPR": "Cette estimation est en phase bêta et a été développée par la communauté RealT. Nous vous invitons à signaler tout problème éventuel. Les informations fournies sont à titre indicatif uniquement. La communauté RealT ou RealT ne peut être tenue responsable en cas de décision prise à partir de données inexactes."
+  }
+  ,
+  "errors" : {
+    "userNotFound": "User not found"
   }
 }

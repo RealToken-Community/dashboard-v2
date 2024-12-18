@@ -8,6 +8,7 @@ export interface CurrencyRates {
   XdaiUsd: number
   EurUsd: number
   ChfUsd: number
+  UsdcUsd: number
 }
 
 function getChainlinkHandler(options: {
@@ -39,6 +40,11 @@ const getXdaiUsd = getChainlinkHandler({
   decimals: 8,
 })
 
+const getUsdcUsd = getChainlinkHandler({
+  priceFeedContract: '0x26C31ac71010aF62E6B486D1132E266D6298857D',
+  decimals: 8,
+})
+
 const getEurUsd = getChainlinkHandler({
   priceFeedContract: '0xab70BCB260073d036d1660201e9d5405F5829b7a',
   decimals: 8,
@@ -51,11 +57,12 @@ const getChfUsd = getChainlinkHandler({
 
 export const CurrenciesRepository = {
   async getRates(): Promise<CurrencyRates> {
-    const [XdaiUsd, EurUsd, ChfUsd] = await Promise.all([
+    const [XdaiUsd, EurUsd, ChfUsd, UsdcUsd] = await Promise.all([
       getXdaiUsd(),
       getEurUsd(),
       getChfUsd(),
+      getUsdcUsd(),
     ])
-    return { XdaiUsd, EurUsd, ChfUsd }
+    return { XdaiUsd, EurUsd, ChfUsd, UsdcUsd }
   },
 }

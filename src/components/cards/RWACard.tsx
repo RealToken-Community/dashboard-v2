@@ -6,13 +6,13 @@ import Image from 'next/image'
 import { Badge, Card, Group } from '@mantine/core'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
-import { RWARealtoken } from 'src/store/features/wallets/walletsSelector'
+import { OtherRealtoken } from 'src/store/features/wallets/walletsSelector'
 
 import { Divider } from '../commons'
 import styles from './AssetCard.module.sass'
 
 interface RWACardProps {
-  value: RWARealtoken
+  value: OtherRealtoken
   onClick?: (id: string) => unknown
 }
 
@@ -57,6 +57,13 @@ const RWACardComponent: FC<RWACardProps> = (props) => {
           {tNumbers('decimal', { value: props.value.amount })}
           {' / '}
           {tNumbers('integer', { value: props.value.totalTokens })}
+        </div>
+      </div>
+
+      <div className={styles.groupApart}>
+        <div className={styles.textSm}>{t('tokenPrice')}</div>
+        <div className={styles.textSm}>
+          {useCurrencyValue(props.value.tokenPrice)}
         </div>
       </div>
 

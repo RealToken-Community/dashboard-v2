@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next'
 
 import { Select } from '@mantine/core'
 
+import { assetsViewDefaultFilter } from 'src/states'
 import {
-  RWARealtoken,
+  OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
 
@@ -50,7 +51,11 @@ export const AssetsViewRentStatusFilter: FC<
       data={viewOptions}
       value={filter.rentStatus}
       onChange={(value) =>
-        onChange({ rentStatus: value as AssetRentStatusType })
+        onChange({
+          rentStatus:
+            (value as AssetRentStatusType) ??
+            assetsViewDefaultFilter.rentStatus,
+        })
       }
       classNames={inputClasses}
     />
@@ -61,7 +66,9 @@ AssetsViewRentStatusFilter.displayName = 'AssetsViewRentStatusFilter'
 export function useAssetsViewRentStatusFilter(
   filter: AssetsViewRentStatusFilterModel,
 ) {
-  function assetRentStatusFilterFunction(asset: UserRealtoken | RWARealtoken) {
+  function assetRentStatusFilterFunction(
+    asset: UserRealtoken | OtherRealtoken,
+  ) {
     const Asset = asset as UserRealtoken
     switch (filter.rentStatus) {
       case AssetRentStatusType.ALL:
