@@ -5,6 +5,8 @@ services:
     environment:
       - THEGRAPH_API_KEY=$THEGRAPH_API_KEY
       - COMMUNITY_API_KEY=$COMMUNITY_API_KEY
+      - REALTOKENAPI=$REALTOKENAPI
+      - REALTOKENAPI_HISTORY=$REALTOKENAPI_HISTORY
     networks:
       - traefik-realt
     labels:
