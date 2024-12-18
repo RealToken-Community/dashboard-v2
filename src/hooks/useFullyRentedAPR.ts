@@ -19,8 +19,8 @@ const fullyRentedAPREstimation = (
     return getVEFAFullRentedAPR(token, rentCalculation)
   }
 
+  // Case of fully rented property
   if (token.rentedUnits === token.totalUnits) {
-    // Case of fully rented property
     return token.annualPercentageYield
   }
 
