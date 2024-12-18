@@ -8,8 +8,10 @@ const getRealTokenList = useCache(
     if (!process.env.COMMUNITY_API_KEY) {
       throw new Error('Missing COMMUNITY_API_KEY env variable')
     }
-
-    const response = await fetch('https://api.realt.community/v1/token', {
+    if (!process.env.REALTOKENAPI) {
+      throw new Error('Missing REALTOKENAPI env variable')
+    }
+    const response = await fetch(process.env.REALTOKENAPI, {
       method: 'GET',
       headers: { 'X-AUTH-REALT-TOKEN': process.env.COMMUNITY_API_KEY },
     })
