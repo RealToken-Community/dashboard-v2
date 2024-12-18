@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Select } from '@mantine/core'
 
+import { assetsViewDefaultFilter } from 'src/states'
 import {
   OtherRealtoken,
   UserRealtoken,
@@ -66,7 +67,12 @@ export const AssetsViewSubsidyFilter: FC<AssetsViewSubsidyFilterProps> = ({
       label={t('label')}
       data={viewOptions}
       value={filter.subsidy}
-      onChange={(value) => onChange({ subsidy: value as AssetSubsidyType })}
+      onChange={(value) =>
+        onChange({
+          subsidy:
+            (value as AssetSubsidyType) ?? assetsViewDefaultFilter.subsidy,
+        })
+      }
       classNames={inputClasses}
     />
   )

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { Grid, Select, Switch } from '@mantine/core'
 
+import { assetsViewDefaultFilter } from 'src/states'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
   OtherRealtoken,
@@ -73,7 +74,11 @@ export const AssetsViewSort: FC<AssetsViewSortProps> = ({
           data={sortOptions}
           value={filter.sortBy}
           onChange={(value) =>
-            onChange({ ...filter, sortBy: value as AssetSortType })
+            onChange({
+              ...filter,
+              sortBy:
+                (value as AssetSortType) ?? assetsViewDefaultFilter.sortBy,
+            })
           }
           classNames={inputClasses}
         />

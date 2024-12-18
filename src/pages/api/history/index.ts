@@ -8,8 +8,10 @@ const getRealTokenHistory = useCache(
     if (!process.env.COMMUNITY_API_KEY) {
       throw new Error('Missing COMMUNITY_API_KEY env variable')
     }
-
-    const response = await fetch('https://history.api.realt.community/', {
+    if (!process.env.REALTOKENAPI_HISTORY) {
+      throw new Error('Missing REALTOKENAPI_HISTORY env variable')
+    }
+    const response = await fetch(process.env.REALTOKENAPI_HISTORY, {
       method: 'GET',
       headers: { 'X-AUTH-REALT-TOKEN': process.env.COMMUNITY_API_KEY },
     })
