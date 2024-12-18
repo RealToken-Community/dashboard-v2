@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Select } from '@mantine/core'
 
+import { assetsViewDefaultFilter } from 'src/states'
 import {
   OtherRealtoken,
   UserRealtoken,
@@ -54,7 +55,11 @@ export const AssetsViewUserProtocolFilter: FC<
       data={viewOptions}
       value={filter.userProtocol}
       onChange={(value) =>
-        onChange({ userProtocol: value as AssetUserProtocolType })
+        onChange({
+          userProtocol:
+            (value as AssetUserProtocolType) ??
+            assetsViewDefaultFilter.userProtocol,
+        })
       }
       classNames={inputClasses}
     />

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Select } from '@mantine/core'
 
+import { assetsViewDefaultFilter } from 'src/states'
 import {
   OtherRealtoken,
   UserRealtoken,
@@ -46,7 +47,12 @@ export const AssetsViewRmmStatusFilter: FC<AssetsViewRmmStatusFilterProps> = ({
       label={t('label')}
       data={viewOptions}
       value={filter.rmmStatus}
-      onChange={(value) => onChange({ rmmStatus: value as AssetRmmStatusType })}
+      onChange={(value) =>
+        onChange({
+          rmmStatus:
+            (value as AssetRmmStatusType) ?? assetsViewDefaultFilter.rmmStatus,
+        })
+      }
       classNames={inputClasses}
     />
   )
