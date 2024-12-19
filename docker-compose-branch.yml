@@ -7,6 +7,8 @@ services:
       - COMMUNITY_API_KEY=$COMMUNITY_API_KEY
       - REALTOKENAPI=$REALTOKENAPI
       - REALTOKENAPI_HISTORY=$REALTOKENAPI_HISTORY
+      - MATOMO_URL=$MATOMO_URL
+      - MATOMO_SITE_ID=$MATOMO_SITE_ID
     networks:
       - traefik-realt
     labels:

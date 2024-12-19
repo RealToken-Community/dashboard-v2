@@ -24,9 +24,18 @@ REALTOKENAPI='https://api.realtoken.community/v1/token'
 REALTOKENAPI_HISTORY='https://history.api.realtoken.community/'
 ```
 
+OPTIONAL:
+
+```
+MATOMO_URL=''
+MATOMO_SITE_ID=''
+```
+
 To get a `COMMUNITY_API_KEY`, join the dedicated [telegram dev channel](https://t.me/+XQyoaFfmN61yk7X0) then ask for.
 
 To get a THEGRAPH_API_KEY, you need to create an account on thegraph.com [Thegraph docs](https://thegraph.com/docs/en/querying/managing-api-keys/)
+
+To get a MATOMO_URL and MATOMO_SITE_ID, you need to create an account on matomo.org [Matomo docs](https://fr.matomo.org/)
 
 ### Node.js version
 
