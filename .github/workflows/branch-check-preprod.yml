@@ -1,0 +1,17 @@
+name: Restrict merges to preprod
+
+on:
+  pull_request:
+    branches:
+      - preprod
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if the source branch is develop
+        run: |
+          if [ "${{ github.event.pull_request.head.ref }}" != "develop" ]; then
+            echo "Pull requests to preprod must come from develop branch."
+            exit 1
+          fi
