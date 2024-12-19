@@ -22,6 +22,7 @@ THEGRAPH_API_KEY=XXXXXXXXXXXX
 
 REALTOKENAPI='https://api.realtoken.community/v1/token'
 REALTOKENAPI_HISTORY='https://history.api.realtoken.community/'
+
 ```
 
 OPTIONAL:
