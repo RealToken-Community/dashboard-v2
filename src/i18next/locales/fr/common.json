@@ -169,6 +169,15 @@
       "notWhitelisted": "Non whitelistées"
     }
   },
+  "assetProductType": {
+    "label": "Type de propriété",
+    "options": {
+      "all": "Tous",
+      "realEstateRental": "Location immobilière",
+      "loanIncome": "Revenu de prêt",
+      "equityToken": "Token d'équité"
+    }
+  },
   "assetRentStatus": {
     "label": "Loyers",
     "options": {

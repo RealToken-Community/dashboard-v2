@@ -169,6 +169,15 @@
       "notWhitelisted": "Not whitelisted"
     }
   },
+  "assetProductType": {
+    "label": "Product type",
+    "options": {
+      "all": "All",
+      "realEstateRental": "Real estate rental",
+      "loanIncome": "Loan income",
+      "equityToken": "Equity token"
+    }
+  },
   "assetRentStatus": {
     "label": "Rent",
     "options": {
