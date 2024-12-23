@@ -2,7 +2,22 @@ import { Contract, JsonRpcProvider } from 'ethers'
 
 import { getErc20AbiBalanceOfOnly } from 'src/utils/blockchain/ERC20'
 
+import {
+  CHAIN_ID_ETHEREUM,
+  CHAIN_ID_GNOSIS_XDAI,
+  CHAIN_NAME_ETHEREUM,
+  CHAIN_NAME_GNOSIS_XDAI,
+} from './consts/otherTokens'
 import { batchCallOneContractOneFunctionMultipleParams } from './contract'
+
+const getChainName = (chainId: number) => {
+  switch (chainId) {
+    case CHAIN_ID_ETHEREUM:
+      return CHAIN_NAME_ETHEREUM
+    case CHAIN_ID_GNOSIS_XDAI:
+      return CHAIN_NAME_GNOSIS_XDAI
+  }
+}
 
 const getAddressesBalances = async (
   contractAddress: string,
@@ -11,6 +26,7 @@ const getAddressesBalances = async (
   consoleWarnOnError = false,
 ) => {
   let totalAmount = 0
+  const balancesByProvider: Record<string, number> = {}
   try {
     if (!contractAddress) {
       consoleWarnOnError && console.error('Invalid contract address')
@@ -44,6 +60,17 @@ const getAddressesBalances = async (
 
     const balancesArray = await Promise.all(balancesPromises.flat())
     const balances = balancesArray.flat()
+    // Providers
+    providers.forEach((provider: JsonRpcProvider) => {
+      console.log('provider', provider?._network?.chainId)
+      const chainId = Number(provider?._network?.chainId)
+
+      balancesByProvider[(getChainName(chainId), 0)] = 0
+    })
+    console.log('addressList?.length', addressList?.length)
+    console.log('balancesArray?.length', balancesArray?.length)
+    console.log('(flat) balances?.length', balances?.length)
+
     // Sum all valid balances
     balances.forEach((balance: object | null | undefined) => {
       try {

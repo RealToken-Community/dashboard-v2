@@ -113,6 +113,23 @@ const getRWA = async (
       timezone_type: 3,
       timezone: 'UTC',
     },
+    balance: {
+      gnosis: {
+        amount: 0,
+        value : 0,
+      },
+      ethereum: {
+        amount: 0,
+        value : 0,
+      },
+      rmm: {
+        amount: 0,
+        value : 0,
+      },
+      levinSwap: {
+        amount: 0,
+        value : 0,
+    },
   }
 }
 
