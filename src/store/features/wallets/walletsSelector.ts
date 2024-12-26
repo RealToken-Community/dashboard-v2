@@ -23,6 +23,15 @@ import { computeUCP } from 'src/utils/transfer/computeUCP'
 import { selectRealtokens } from '../realtokens/realtokensSelector'
 import { selectUserRentCalculation } from '../settings/settingsSelector'
 
+export type BalanceByWalletType =
+  Record<
+    WalletType,
+    {
+      amount: number
+      value: number
+    }
+  >
+
 export interface UserRealtoken extends RealToken {
   id: string
   isWhitelisted: boolean
@@ -33,13 +42,7 @@ export interface UserRealtoken extends RealToken {
   priceCost?: number
   unrealizedCapitalGain?: number
   lastChanges: string
-  balance: Record<
-    WalletType,
-    {
-      amount: number
-      value: number
-    }
-  >
+  balance: BalanceByWalletType
 }
 
 export interface OtherRealtoken {
@@ -55,13 +58,19 @@ export interface OtherRealtoken {
   imageLink: string[]
   isRmmAvailable: boolean
   unitPriceCost: number
-  balance: Record<
-    WalletType,
-    {
-      amount: number
-      value: number
-    }
-  >
+  balance: BalanceByWalletType
+}
+
+/**
+ * Updates all balance values with token price
+ * @param balance 
+ * @param tokenPrice 
+ */
+export const updateBalanceValues = (balance: BalanceByWalletType, tokenPrice:number) => {
+  // Loop on each record
+  Object.keys(balance).forEach((key) => {
+    balance[key as WalletType].value = balance[key as WalletType].amount * tokenPrice;
+  });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

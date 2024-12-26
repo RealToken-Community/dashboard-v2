@@ -12,7 +12,7 @@ import {
   selectUserAddressList,
   selectUserIncludesEth,
 } from 'src/store/features/settings/settingsSelector'
-import { REGRealtoken } from 'src/store/features/wallets/walletsSelector'
+import { REGRealtoken, updateBalanceValues } from 'src/store/features/wallets/walletsSelector'
 import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { Currency } from 'src/types/Currencies'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
@@ -64,12 +64,12 @@ const getREG = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
-  const availableBalance = await getAddressesBalances(
+  const balances = await getAddressesBalances(
     REG_ContractAddress,
     addressList,
     providers,
   )
-
+  // console.debug(`REG ${REG_ContractAddress} balances:`, balances)
   const regVaultAbiGetUserGlobalStateOnly =
     getRegVaultAbiGetUserGlobalStateOnly()
 
@@ -77,7 +77,7 @@ const getREG = async (
     [
       // First provider
       [
-        // First vault
+        // First vault: Gnosis
         [
           REG_Vault_Gnosis_ContractAddress, // Contract address
           regVaultAbiGetUserGlobalStateOnly, // Contract ABI
@@ -102,7 +102,10 @@ const getREG = async (
     providers,
   )
 
-  const totalAmount = availableBalance + lockedBalance
+  // Add locked balance to balance.balance.gnosis.amount
+  balances.balance.gnosis.amount += lockedBalance
+  // Add locked balance to total amount
+  const totalAmount = balances?.totalAmount + lockedBalance
   const contractRegTotalSupply = await RegContract_Gnosis.totalSupply()
   const totalTokens = Number(contractRegTotalSupply) / 10 ** REGtokenDecimals
   const amount = totalAmount / 10 ** REGtokenDecimals
@@ -143,6 +146,8 @@ const getREG = async (
     : DEFAULT_REG_PRICE / userRate
   const value = tokenPrice * amount
   const totalInvestment = totalTokens * tokenPrice
+  // Update all balance values with token price
+  updateBalanceValues(balances.balance, tokenPrice)
 
   return {
     id: `${REG_asset_ID}`,
@@ -159,6 +164,7 @@ const getREG = async (
     value,
     totalInvestment,
     unitPriceCost: tokenPrice,
+    balance: balances.balance
   }
 }
 

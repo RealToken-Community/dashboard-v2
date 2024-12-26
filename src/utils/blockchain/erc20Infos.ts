@@ -9,6 +9,13 @@ import {
   CHAIN_NAME_GNOSIS_XDAI,
 } from './consts/otherTokens'
 import { batchCallOneContractOneFunctionMultipleParams } from './contract'
+// import { BalanceByWalletType } from 'src/store/features/wallets/walletsSelector'
+import { WalletType } from 'src/repositories'
+// import { defaultBalance } from 'src/store/features/wallets/walletsSelector'
+
+const getWalletType = (walletTypeId: number) => {
+  return getChainName(walletTypeId)
+}
 
 const getChainName = (chainId: number) => {
   switch (chainId) {
@@ -19,26 +26,58 @@ const getChainName = (chainId: number) => {
   }
 }
 
+export interface Balances {
+  totalAmount: number,
+  // balance: BalanceByWalletType,
+  balance: Record<
+    WalletType,
+    {
+      amount: number
+      value: number
+    }
+  >
+}
+
 const getAddressesBalances = async (
   contractAddress: string,
   addressList: string[],
   providers: JsonRpcProvider[],
   consoleWarnOnError = false,
-) => {
-  let totalAmount = 0
-  const balancesByProvider: Record<string, number> = {}
+):Promise<Balances> => {
+  console.debug(`getAddressesBalances contractAddress=${contractAddress} addressList = ${addressList} providers =`, providers)
+  const balances: Balances = {
+    totalAmount: 0,
+    balance: {
+      gnosis: {
+        amount: 0,
+        value : 0,
+      },
+      ethereum: {
+        amount: 0,
+        value : 0,
+      },
+      rmm: {
+        amount: 0,
+        value : 0,
+      },
+      levinSwap: {
+        amount: 0,
+        value : 0,
+      }
+    }
+  }
   try {
     if (!contractAddress) {
       consoleWarnOnError && console.error('Invalid contract address')
-      return totalAmount
+      return balances
     }
     if (!addressList?.length) {
       consoleWarnOnError && console.error('Invalid address list')
-      return totalAmount
+      return balances
     }
     if (!providers?.length) {
       consoleWarnOnError && console.error('Invalid providers')
-      return totalAmount
+      return balances
     }
     const erc20AbiBalanceOfOnly = getErc20AbiBalanceOfOnly()
     if (!erc20AbiBalanceOfOnly) {
@@ -57,33 +96,45 @@ const getAddressesBalances = async (
       )
       return balances
     })
-
     const balancesArray = await Promise.all(balancesPromises.flat())
-    const balances = balancesArray.flat()
-    // Providers
-    providers.forEach((provider: JsonRpcProvider) => {
-      console.log('provider', provider?._network?.chainId)
+    // console.debug('balancesArray', balancesArray)
+    if (balancesArray?.length !== providers.length) {
+      // warn but don't stop
+      consoleWarnOnError && console.warn('Invalid balances array (inconsistent providers length)')
+      // console.warn('Invalid balances array')
+    }
+    // let iBalances = 0
+    providers.forEach((provider: JsonRpcProvider, providerIdx) => {
       const chainId = Number(provider?._network?.chainId)
-
-      balancesByProvider[(getChainName(chainId), 0)] = 0
-    })
-    console.log('addressList?.length', addressList?.length)
-    console.log('balancesArray?.length', balancesArray?.length)
-    console.log('(flat) balances?.length', balances?.length)
-
-    // Sum all valid balances
-    balances.forEach((balance: object | null | undefined) => {
-      try {
-        if (balance) {
-          totalAmount += Number(balance)
+      // console.debug(`contractAddress=${contractAddress} chainId=${chainId} balancesArray[${providerIdx}]=${balancesArray[providerIdx]}`)
+      const wt = getWalletType(chainId)
+      if (wt) {
+        balances.balance[wt].value = 0;
+        if (balancesArray[providerIdx]?.length !== addressList.length) {
+          // warn but don't stop
+          consoleWarnOnError && console.warn('Invalid balances array (inconsistent addressList length)')
+          // console.warn('Invalid balances array')
         }
-      } catch (error) {}
+        (balancesArray[providerIdx] as unknown as bigint[])?.forEach((addressBalanceBI: bigint) => {
+          try {
+            const addressBalance = Number(addressBalanceBI)
+            // console.debug(`balances.balance[${wt}].amount = ${balances.balance[wt].amount} addressBalanceBI=${addressBalanceBI} balances.totalAmount=${balances.totalAmount} addressBalance=${addressBalance}`)
+            balances.balance[wt].amount += addressBalance
+            console.debug(`contractAddress=${contractAddress} chainId=${chainId} balances.balance[${wt}].amount = ${balances.balance[wt].amount} addressBalanceBI=${addressBalanceBI} balances.totalAmount=${balances.totalAmount}`)
+          } catch (error) {
+            // Silent
+          }
+        })
+        balances.totalAmount += balances.balance[wt].amount
+      }
     })
-    return totalAmount
+    // console.debug('balances', balances)
+    return balances
   } catch (error) {
     console.warn('Failed to get balances', error)
   }
-  return totalAmount
+  // return totalAmount
+  return balances
 }
 
 export { getAddressesBalances }
