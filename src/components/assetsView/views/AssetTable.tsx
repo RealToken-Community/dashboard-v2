@@ -97,8 +97,6 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
     ? useFullyRentedAPR(props.value as UserRealtoken)
     : null
 
-  console.debug('props.value', props.value)
-
   return (
     <Table.Tr>
       <Table.Td style={{ minWidth: '150px' }}>
