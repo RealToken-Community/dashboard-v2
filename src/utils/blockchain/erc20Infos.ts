@@ -2,40 +2,14 @@ import { Contract, JsonRpcProvider } from 'ethers'
 
 import { getErc20AbiBalanceOfOnly } from 'src/utils/blockchain/ERC20'
 
-import {
-  CHAIN_ID_ETHEREUM,
-  CHAIN_ID_GNOSIS_XDAI,
-  CHAIN_NAME_ETHEREUM,
-  CHAIN_NAME_GNOSIS_XDAI,
-} from './consts/otherTokens'
 import { batchCallOneContractOneFunctionMultipleParams } from './contract'
-// import { BalanceByWalletType } from 'src/store/features/wallets/walletsSelector'
-import { WalletType } from 'src/repositories'
-// import { defaultBalance } from 'src/store/features/wallets/walletsSelector'
-
-const getWalletType = (walletTypeId: number) => {
-  return getChainName(walletTypeId)
-}
-
-const getChainName = (chainId: number) => {
-  switch (chainId) {
-    case CHAIN_ID_ETHEREUM:
-      return CHAIN_NAME_ETHEREUM
-    case CHAIN_ID_GNOSIS_XDAI:
-      return CHAIN_NAME_GNOSIS_XDAI
-  }
-}
+import { BalanceByWalletType } from 'src/store/features/wallets/walletsSelector'
+import { getWalletChainName } from 'src/store/features/wallets/walletsSelector'
+import { getChainId } from 'src/repositories/RpcProvider'
 
 export interface Balances {
   totalAmount: number,
-  // balance: BalanceByWalletType,
-  balance: Record<
-    WalletType,
-    {
-      amount: number
-      value: number
-    }
-  >
+  balance: BalanceByWalletType,
 }
 
 const getAddressesBalances = async (
@@ -44,7 +18,6 @@ const getAddressesBalances = async (
   providers: JsonRpcProvider[],
   consoleWarnOnError = false,
 ):Promise<Balances> => {
-  console.debug(`getAddressesBalances contractAddress=${contractAddress} addressList = ${addressList} providers =`, providers)
   const balances: Balances = {
     totalAmount: 0,
     balance: {
@@ -97,43 +70,31 @@ const getAddressesBalances = async (
       return balances
     })
     const balancesArray = await Promise.all(balancesPromises.flat())
-    // console.debug('balancesArray', balancesArray)
-    if (balancesArray?.length !== providers.length) {
-      // warn but don't stop
-      consoleWarnOnError && console.warn('Invalid balances array (inconsistent providers length)')
-      // console.warn('Invalid balances array')
-    }
-    // let iBalances = 0
+    // warn but don't stop
+    balancesArray?.length !== providers.length && consoleWarnOnError && console.warn(`Invalid balances array length (${balancesArray?.length}) (inconsistent with providers length (${providers.length}))`)
     providers.forEach((provider: JsonRpcProvider, providerIdx) => {
-      const chainId = Number(provider?._network?.chainId)
-      // console.debug(`contractAddress=${contractAddress} chainId=${chainId} balancesArray[${providerIdx}]=${balancesArray[providerIdx]}`)
-      const wt = getWalletType(chainId)
+      const chainId = getChainId(provider)
+      const wt = chainId ? getWalletChainName(chainId) : null
       if (wt) {
         balances.balance[wt].value = 0;
-        if (balancesArray[providerIdx]?.length !== addressList.length) {
-          // warn but don't stop
-          consoleWarnOnError && console.warn('Invalid balances array (inconsistent addressList length)')
-          // console.warn('Invalid balances array')
-        }
-        (balancesArray[providerIdx] as unknown as bigint[])?.forEach((addressBalanceBI: bigint) => {
+        // warn but don't stop
+        balancesArray[providerIdx]?.length !== addressList.length && consoleWarnOnError && console.warn('Invalid balances array (inconsistent addressList length)');
+        (balancesArray[providerIdx] as unknown as bigint[])?.forEach((addressBalanceBI: bigint, addressIdx) => {
           try {
             const addressBalance = Number(addressBalanceBI)
-            // console.debug(`balances.balance[${wt}].amount = ${balances.balance[wt].amount} addressBalanceBI=${addressBalanceBI} balances.totalAmount=${balances.totalAmount} addressBalance=${addressBalance}`)
             balances.balance[wt].amount += addressBalance
-            console.debug(`contractAddress=${contractAddress} chainId=${chainId} balances.balance[${wt}].amount = ${balances.balance[wt].amount} addressBalanceBI=${addressBalanceBI} balances.totalAmount=${balances.totalAmount}`)
           } catch (error) {
-            // Silent
+            // warn but don't stop
+            consoleWarnOnError && console.warn(`Invalid balance conversion for address ${addressList[addressIdx]} on chain ${chainId}`, error)
           }
         })
         balances.totalAmount += balances.balance[wt].amount
       }
     })
-    // console.debug('balances', balances)
     return balances
   } catch (error) {
     console.warn('Failed to get balances', error)
   }
-  // return totalAmount
   return balances
 }
 
