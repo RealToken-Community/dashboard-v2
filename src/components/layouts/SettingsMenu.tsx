@@ -146,7 +146,10 @@ const RealtimeRentMenuItem: FC = () => {
   )
 }
 
-const RealtimeRentMenuSelectDate: FC<{ isCalendarOpen: boolean, setIsCalendarOpen: (open: boolean) => void }> = ({ isCalendarOpen, setIsCalendarOpen }) => {
+const RealtimeRentMenuSelectDate: FC<{
+  isCalendarOpen: boolean
+  setIsCalendarOpen: (open: boolean) => void
+}> = ({ isCalendarOpen, setIsCalendarOpen }) => {
   const dispatch = useDispatch()
   const rentCalculation = useSelector(selectUserRentCalculation)
   const { i18n, t } = useTranslation('common', { keyPrefix: 'settings' })
@@ -172,7 +175,10 @@ const RealtimeRentMenuSelectDate: FC<{ isCalendarOpen: boolean, setIsCalendarOpe
         locale={i18n.language}
         valueFormat={t('dateFormat')}
         value={new Date(rentCalculation.date)}
-        onChange={(value) => {handleDateChange(value as Date) ; toggleIsCalendarOpen()}}
+        onChange={(value) => {
+          handleDateChange(value as Date)
+          toggleIsCalendarOpen()
+        }}
         defaultDate={new Date()}
       />
       <Menu.Divider />
@@ -180,11 +186,17 @@ const RealtimeRentMenuSelectDate: FC<{ isCalendarOpen: boolean, setIsCalendarOpe
   )
 }
 
-const RealtimeRentMenu: FC<{ isCalendarOpen: boolean, setIsCalendarOpen: (open: boolean) => void }> = ({ isCalendarOpen, setIsCalendarOpen }) => {
+const RealtimeRentMenu: FC<{
+  isCalendarOpen: boolean
+  setIsCalendarOpen: (open: boolean) => void
+}> = ({ isCalendarOpen, setIsCalendarOpen }) => {
   return (
     <>
       <RealtimeRentMenuItem />
-      <RealtimeRentMenuSelectDate isCalendarOpen={isCalendarOpen} setIsCalendarOpen={setIsCalendarOpen} />
+      <RealtimeRentMenuSelectDate
+        isCalendarOpen={isCalendarOpen}
+        setIsCalendarOpen={setIsCalendarOpen}
+      />
       <Menu.Divider />
     </>
   )
@@ -363,7 +375,10 @@ export const SettingsMenu: FC = () => {
         <Menu.Divider />
         <CurrencySelect />
         <Menu.Divider />
-        <RealtimeRentMenu isCalendarOpen={isCalendarOpen} setIsCalendarOpen={setIsCalendarOpen} />
+        <RealtimeRentMenu
+          isCalendarOpen={isCalendarOpen}
+          setIsCalendarOpen={setIsCalendarOpen}
+        />
         <ColorSchemeMenuItem />
         <Menu.Divider />
         <FetchDataSettings />
