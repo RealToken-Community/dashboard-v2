@@ -25,18 +25,16 @@ import {
   CHAIN_NAME_ETHEREUM,
   CHAIN_NAME_GNOSIS_XDAI,
 } from '../../../utils/blockchain/consts/otherTokens'
-
 import { selectRealtokens } from '../realtokens/realtokensSelector'
 import { selectUserRentCalculation } from '../settings/settingsSelector'
 
-export type BalanceByWalletType =
-  Record<
-    WalletType,
-    {
-      amount: number
-      value: number
-    }
-  >
+export type BalanceByWalletType = Record<
+  WalletType,
+  {
+    amount: number
+    value: number
+  }
+>
 
 export interface UserRealtoken extends RealToken {
   id: string
@@ -69,14 +67,18 @@ export interface OtherRealtoken {
 
 /**
  * Updates all balance values with token price
- * @param balance 
- * @param tokenPrice 
+ * @param balance
+ * @param tokenPrice
  */
-export const updateBalanceValues = (balance: BalanceByWalletType, tokenPrice:number) => {
+export const updateBalanceValues = (
+  balance: BalanceByWalletType,
+  tokenPrice: number,
+) => {
   // Loop on each record
   Object.keys(balance).forEach((key) => {
-    balance[key as WalletType].value = balance[key as WalletType].amount * tokenPrice;
-  });
+    balance[key as WalletType].value =
+      balance[key as WalletType].amount * tokenPrice
+  })
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

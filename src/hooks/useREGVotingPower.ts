@@ -55,7 +55,7 @@ const getRegVotingPower = async (
     value,
     totalInvestment,
     unitPriceCost: tokenPrice,
-    balance: balances.balance
+    balance: balances.balance,
   }
 }
 

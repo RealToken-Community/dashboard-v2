@@ -12,7 +12,10 @@ import {
   selectUserAddressList,
   selectUserIncludesEth,
 } from 'src/store/features/settings/settingsSelector'
-import { REGRealtoken, updateBalanceValues } from 'src/store/features/wallets/walletsSelector'
+import {
+  REGRealtoken,
+  updateBalanceValues,
+} from 'src/store/features/wallets/walletsSelector'
 import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { Currency } from 'src/types/Currencies'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
@@ -163,7 +166,7 @@ const getREG = async (
     value,
     totalInvestment,
     unitPriceCost: tokenPrice,
-    balance: balances.balance
+    balance: balances.balance,
   }
 }
 

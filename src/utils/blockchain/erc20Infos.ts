@@ -1,15 +1,15 @@
 import { Contract, JsonRpcProvider } from 'ethers'
 
+import { getChainId } from 'src/repositories/RpcProvider'
+import { BalanceByWalletType } from 'src/store/features/wallets/walletsSelector'
+import { getWalletChainName } from 'src/store/features/wallets/walletsSelector'
 import { getErc20AbiBalanceOfOnly } from 'src/utils/blockchain/ERC20'
 
 import { batchCallOneContractOneFunctionMultipleParams } from './contract'
-import { BalanceByWalletType } from 'src/store/features/wallets/walletsSelector'
-import { getWalletChainName } from 'src/store/features/wallets/walletsSelector'
-import { getChainId } from 'src/repositories/RpcProvider'
 
 export interface Balances {
-  totalAmount: number,
-  balance: BalanceByWalletType,
+  totalAmount: number
+  balance: BalanceByWalletType
 }
 
 const getAddressesBalances = async (
@@ -17,27 +17,27 @@ const getAddressesBalances = async (
   addressList: string[],
   providers: JsonRpcProvider[],
   consoleWarnOnError = false,
-):Promise<Balances> => {
+): Promise<Balances> => {
   const balances: Balances = {
     totalAmount: 0,
     balance: {
       gnosis: {
         amount: 0,
-        value : 0,
+        value: 0,
       },
       ethereum: {
         amount: 0,
-        value : 0,
+        value: 0,
       },
       rmm: {
         amount: 0,
-        value : 0,
+        value: 0,
       },
       levinSwap: {
         amount: 0,
-        value : 0,
-      }
-    }
+        value: 0,
+      },
+    },
   }
   try {
     if (!contractAddress) {
@@ -71,23 +71,37 @@ const getAddressesBalances = async (
     })
     const balancesArray = await Promise.all(balancesPromises.flat())
     // warn but don't stop
-    balancesArray?.length !== providers.length && consoleWarnOnError && console.warn(`Invalid balances array length (${balancesArray?.length}) (inconsistent with providers length (${providers.length}))`)
+    balancesArray?.length !== providers.length &&
+      consoleWarnOnError &&
+      console.warn(
+        `Invalid balances array length (${balancesArray?.length}) (inconsistent with providers length (${providers.length}))`,
+      )
     providers.forEach((provider: JsonRpcProvider, providerIdx) => {
       const chainId = getChainId(provider)
       const wt = chainId ? getWalletChainName(chainId) : null
       if (wt) {
-        balances.balance[wt].value = 0;
+        balances.balance[wt].value = 0
         // warn but don't stop
-        balancesArray[providerIdx]?.length !== addressList.length && consoleWarnOnError && console.warn('Invalid balances array (inconsistent addressList length)');
-        (balancesArray[providerIdx] as unknown as bigint[])?.forEach((addressBalanceBI: bigint, addressIdx) => {
-          try {
-            const addressBalance = Number(addressBalanceBI)
-            balances.balance[wt].amount += addressBalance
-          } catch (error) {
-            // warn but don't stop
-            consoleWarnOnError && console.warn(`Invalid balance conversion for address ${addressList[addressIdx]} on chain ${chainId}`, error)
-          }
-        })
+        balancesArray[providerIdx]?.length !== addressList.length &&
+          consoleWarnOnError &&
+          console.warn(
+            'Invalid balances array (inconsistent addressList length)',
+          )
+        ;(balancesArray[providerIdx] as unknown as bigint[])?.forEach(
+          (addressBalanceBI: bigint, addressIdx) => {
+            try {
+              const addressBalance = Number(addressBalanceBI)
+              balances.balance[wt].amount += addressBalance
+            } catch (error) {
+              // warn but don't stop
+              consoleWarnOnError &&
+                console.warn(
+                  `Invalid balance conversion for address ${addressList[addressIdx]} on chain ${chainId}`,
+                  error,
+                )
+            }
+          },
+        )
         balances.totalAmount += balances.balance[wt].amount
       }
     })
