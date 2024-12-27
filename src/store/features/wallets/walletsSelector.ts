@@ -5,7 +5,6 @@ import _max from 'lodash/max'
 import _sumBy from 'lodash/sumBy'
 import moment from 'moment'
 
-import { AssetProductType } from 'src/components/assetsView'
 import { WalletBalances, WalletType } from 'src/repositories'
 import { UserRealTokenTransfer } from 'src/repositories/transfers/transfers.type'
 import { RootState } from 'src/store/store'
@@ -19,6 +18,13 @@ import {
   RentCalculationState,
 } from 'src/types/RentCalculation'
 import { computeUCP } from 'src/utils/transfer/computeUCP'
+
+import {
+  CHAIN_ID_ETHEREUM,
+  CHAIN_ID_GNOSIS_XDAI,
+  CHAIN_NAME_ETHEREUM,
+  CHAIN_NAME_GNOSIS_XDAI,
+} from '../../../utils/blockchain/consts/otherTokens'
 
 import { selectRealtokens } from '../realtokens/realtokensSelector'
 import { selectUserRentCalculation } from '../settings/settingsSelector'
@@ -264,3 +270,12 @@ export const selectRmmDetails = createSelector(
     return _mapValues(rmmDetails, (value) => value / rates.XDAI)
   },
 )
+
+export const getWalletChainName = (chainId: number) => {
+  switch (chainId) {
+    case CHAIN_ID_ETHEREUM:
+      return CHAIN_NAME_ETHEREUM
+    case CHAIN_ID_GNOSIS_XDAI:
+      return CHAIN_NAME_GNOSIS_XDAI
+  }
+}
