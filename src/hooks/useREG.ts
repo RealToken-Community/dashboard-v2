@@ -69,7 +69,6 @@ const getREG = async (
     addressList,
     providers,
   )
-  // console.debug(`REG ${REG_ContractAddress} balances:`, balances)
   const regVaultAbiGetUserGlobalStateOnly =
     getRegVaultAbiGetUserGlobalStateOnly()
 

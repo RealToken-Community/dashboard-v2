@@ -54,7 +54,6 @@ const getRWA = async (
     addressList,
     providers,
   )
-  // console.log(`RWA ${RWA_ContractAddress} balances`, balances)
   const RwaContractTotalSupply = await contractRwa_Gnosis.totalSupply()
   const totalTokens = Number(RwaContractTotalSupply) / 10 ** RWAtokenDecimals
   const amount = balances?.totalAmount / 10 ** RWAtokenDecimals

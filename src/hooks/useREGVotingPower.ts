@@ -31,7 +31,6 @@ const getRegVotingPower = async (
     addressList,
     providers,
   )
-  // console.log(`RegVotingPower ${RegVotingPower_Gnosis_ContractAddress} balances`, balances)
   const contractRegVotePowerTotalSupply =
     await RegVotingPowerContract.totalSupply()
   const totalTokens =
