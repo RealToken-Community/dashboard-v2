@@ -17,7 +17,6 @@
     "clean:build": "npm run clean:cache && npm run build"
   },
   "dependencies": {
-    "@aave/core-v3": "^1.19.3",
     "@apollo/client": "^3.9.5",
     "@bgd-labs/aave-address-book": "^4.7.3",
     "@mantine/core": "^7.5.3",
