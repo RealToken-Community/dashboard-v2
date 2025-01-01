@@ -64,11 +64,19 @@ const getREG = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
-  const availableBalance = await getAddressesBalances(
+  let availableBalance = await getAddressesBalances(
     REG_ContractAddress,
     addressList,
-    providers,
+    GnosisRpcProvider,
   )
+
+  if (includeETH) {
+    availableBalance += await getAddressesBalances(
+      REG_ContractAddress,
+      addressList,
+      EthereumRpcProvider,
+    )
+  }
 
   const regVaultAbiGetUserGlobalStateOnly =
     getRegVaultAbiGetUserGlobalStateOnly()

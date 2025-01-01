@@ -42,7 +42,6 @@ const getRWA = async (
 ): Promise<RWARealtoken> => {
   const { GnosisRpcProvider /* , EthereumRpcProvider */ } =
     await initializeProviders()
-  const providers = [GnosisRpcProvider]
 
   const contractRwa_Gnosis = new Contract(
     RWA_ContractAddress,
@@ -52,7 +51,7 @@ const getRWA = async (
   const totalAmount = await getAddressesBalances(
     RWA_ContractAddress,
     addressList,
-    providers,
+    GnosisRpcProvider,
   )
   const RwaContractTotalSupply = await contractRwa_Gnosis.totalSupply()
   const totalTokens = Number(RwaContractTotalSupply) / 10 ** RWAtokenDecimals

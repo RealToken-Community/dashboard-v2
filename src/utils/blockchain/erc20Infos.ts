@@ -1,13 +1,15 @@
+import { AaveV3Ethereum, AaveV3Gnosis } from '@bgd-labs/aave-address-book'
+
 import { Contract, JsonRpcProvider } from 'ethers'
 
 import { getErc20AbiBalanceOfOnly } from 'src/utils/blockchain/ERC20'
 
-import { batchCallOneContractOneFunctionMultipleParams } from './contract'
+import { WalletBalanceProviderABI } from './abi/WalletBalanceProviderABI'
 
 const getAddressesBalances = async (
   contractAddress: string,
   addressList: string[],
-  providers: JsonRpcProvider[],
+  provider: JsonRpcProvider,
   consoleWarnOnError = false,
 ) => {
   let totalAmount = 0
@@ -20,7 +22,7 @@ const getAddressesBalances = async (
       consoleWarnOnError && console.error('Invalid address list')
       return totalAmount
     }
-    if (!providers?.length) {
+    if (!provider) {
       consoleWarnOnError && console.error('Invalid providers')
       return totalAmount
     }
@@ -28,30 +30,34 @@ const getAddressesBalances = async (
     if (!erc20AbiBalanceOfOnly) {
       throw new Error('balanceOf ABI not found')
     }
-    const balancesPromises = providers.map((provider: JsonRpcProvider) => {
-      const Erc20BalanceContract = new Contract(
-        contractAddress,
-        erc20AbiBalanceOfOnly,
-        provider,
-      )
-      const balances = batchCallOneContractOneFunctionMultipleParams(
-        Erc20BalanceContract,
-        'balanceOf',
-        addressList.map((address: string) => [address as unknown as object]),
-      )
-      return balances
-    })
 
-    const balancesArray = await Promise.all(balancesPromises.flat())
-    const balances = balancesArray.flat()
-    // Sum all valid balances
-    balances.forEach((balance: object | null | undefined) => {
-      try {
-        if (balance) {
-          totalAmount += Number(balance)
-        }
-      } catch (error) {}
-    })
+    let walletBalanceProviderAddress
+    switch (provider._network.chainId) {
+      case 100n:
+        walletBalanceProviderAddress = AaveV3Gnosis.WALLET_BALANCE_PROVIDER
+        break
+      case 1n:
+        walletBalanceProviderAddress = AaveV3Ethereum.WALLET_BALANCE_PROVIDER
+        break
+      default:
+        consoleWarnOnError && console.error('Invalid provider')
+        return totalAmount
+    }
+
+    const balanceWalletProviderContract = new Contract(
+      walletBalanceProviderAddress,
+      WalletBalanceProviderABI,
+      provider,
+    )
+
+    const balances = await balanceWalletProviderContract.batchBalanceOf(
+      addressList,
+      [contractAddress],
+    )
+    totalAmount = balances.reduce(
+      (acc: number, b: bigint) => acc + Number(b),
+      0,
+    )
     return totalAmount
   } catch (error) {
     console.warn('Failed to get balances', error)

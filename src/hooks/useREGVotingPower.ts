@@ -20,7 +20,6 @@ const getRegVotingPower = async (
   addressList: string[],
 ): Promise<REGVotingPowertoken> => {
   const { GnosisRpcProvider } = await initializeProviders()
-  const providers = [GnosisRpcProvider]
   const RegVotingPowerContract = new Contract(
     RegVotingPower_Gnosis_ContractAddress,
     ERC20ABI,
@@ -29,7 +28,7 @@ const getRegVotingPower = async (
   const totalAmount = await getAddressesBalances(
     RegVotingPower_Gnosis_ContractAddress,
     addressList,
-    providers,
+    GnosisRpcProvider,
   )
 
   const contractRegVotePowerTotalSupply =
