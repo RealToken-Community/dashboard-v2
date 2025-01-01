@@ -2,8 +2,6 @@ import { AaveV3Ethereum, AaveV3Gnosis } from '@bgd-labs/aave-address-book'
 
 import { Contract, JsonRpcProvider } from 'ethers'
 
-import { getErc20AbiBalanceOfOnly } from 'src/utils/blockchain/ERC20'
-
 import { WalletBalanceProviderABI } from './abi/WalletBalanceProviderABI'
 
 const getAddressesBalances = async (
@@ -25,10 +23,6 @@ const getAddressesBalances = async (
     if (!provider) {
       consoleWarnOnError && console.error('Invalid providers')
       return totalAmount
-    }
-    const erc20AbiBalanceOfOnly = getErc20AbiBalanceOfOnly()
-    if (!erc20AbiBalanceOfOnly) {
-      throw new Error('balanceOf ABI not found')
     }
 
     let walletBalanceProviderAddress

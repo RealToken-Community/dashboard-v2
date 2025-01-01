@@ -6,7 +6,7 @@ import {
   ZeroAddress,
 } from 'ethers'
 
-import { getErc20AbiBalanceOfOnly } from 'src/utils/blockchain/ERC20'
+import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import { REG_ContractAddress } from 'src/utils/blockchain/consts/otherTokens'
 import { batchCallOneContractOneFunctionMultipleParams } from 'src/utils/blockchain/contract'
 import { wait } from 'src/utils/general'
@@ -80,18 +80,10 @@ async function testRpcThresholds(
     if (concurrentRequestsMin > concurrentRequestsMax) {
       throw new Error('concurrentMin cannot be greater than concurrentMax')
     }
-    const erc20AbiBalanceOfOnly = getErc20AbiBalanceOfOnly()
-    if (!erc20AbiBalanceOfOnly) {
-      throw new Error('balanceOf ABI not found')
-    }
 
     // Create a dummy array of addresses filled with 'ZeroAddress' for fetching balances
     const batchAddressesArray = Array(requestsBatchSize).fill([ZeroAddress])
-    const contract = new Contract(
-      REG_ContractAddress,
-      erc20AbiBalanceOfOnly,
-      provider,
-    )
+    const contract = new Contract(REG_ContractAddress, ERC20ABI, provider)
     // Loop from max to min concurrent requests
     for (
       let currentThresold = concurrentRequestsMax;
