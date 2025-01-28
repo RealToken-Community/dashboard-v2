@@ -3,9 +3,13 @@ import { useSelector } from 'react-redux'
 
 import { Contract } from 'ethers'
 
+import { WalletType } from 'src/repositories'
 import { initializeProviders } from 'src/repositories/RpcProvider'
 import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
-import { REGVotingPowertoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  BalanceByWalletType,
+  REGVotingPowertoken,
+} from 'src/store/features/wallets/walletsSelector'
 import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
@@ -25,12 +29,30 @@ const getRegVotingPower = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
+  const balance: BalanceByWalletType = {
+    [WalletType.Gnosis]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.Ethereum]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.RMM]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.LevinSwap]: {
+      amount: 0,
+      value: 0,
+    },
+  }
   const totalAmount = await getAddressesBalances(
     RegVotingPower_Gnosis_ContractAddress,
     addressList,
     GnosisRpcProvider,
   )
-
+  balance[WalletType.Gnosis].amount = totalAmount
   const contractRegVotePowerTotalSupply =
     await RegVotingPowerContract.totalSupply()
   const totalTokens =
@@ -39,6 +61,7 @@ const getRegVotingPower = async (
   const tokenPrice = DEFAULT_REGVotingPower_PRICE
   const value = tokenPrice * amount
   const totalInvestment = tokenPrice * totalTokens
+  // NO need yo update all balance values: token has no value
 
   return {
     id: `${REGVotingPower_asset_ID}`,
@@ -55,6 +78,7 @@ const getRegVotingPower = async (
     value,
     totalInvestment,
     unitPriceCost: tokenPrice,
+    balance,
   }
 }
 

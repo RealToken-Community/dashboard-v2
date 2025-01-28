@@ -9,7 +9,7 @@ const getAddressesBalances = async (
   addressList: string[],
   provider: JsonRpcProvider,
   consoleWarnOnError = false,
-) => {
+): Promise<number> => {
   let totalAmount = 0
   try {
     if (!contractAddress) {

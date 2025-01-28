@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { Contract } from 'ethers'
 
+import { WalletType } from 'src/repositories'
 import { initializeProviders } from 'src/repositories/RpcProvider'
 import {
   selectCurrencyRates,
@@ -11,7 +12,11 @@ import {
 import {
   selectUserAddressList, // selectUserIncludesEth,
 } from 'src/store/features/settings/settingsSelector'
-import { RWARealtoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  BalanceByWalletType,
+  RWARealtoken,
+  updateBalanceValues,
+} from 'src/store/features/wallets/walletsSelector'
 import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { Currency } from 'src/types/Currencies'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
@@ -48,11 +53,30 @@ const getRWA = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
+  const balance: BalanceByWalletType = {
+    [WalletType.Gnosis]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.Ethereum]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.RMM]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.LevinSwap]: {
+      amount: 0,
+      value: 0,
+    },
+  }
   const totalAmount = await getAddressesBalances(
     RWA_ContractAddress,
     addressList,
     GnosisRpcProvider,
   )
+  balance[WalletType.Gnosis].amount = totalAmount
   const RwaContractTotalSupply = await contractRwa_Gnosis.totalSupply()
   const totalTokens = Number(RwaContractTotalSupply) / 10 ** RWAtokenDecimals
   const amount = totalAmount / 10 ** RWAtokenDecimals
@@ -91,6 +115,8 @@ const getRWA = async (
   const tokenPrice = (assetAveragePriceUSD ?? DEFAULT_RWA_PRICE) / userRate
   const value = tokenPrice * amount
   const totalInvestment = totalTokens * tokenPrice
+  // Update all balance values with token price
+  updateBalanceValues(balance, tokenPrice)
 
   return {
     id: `${RWA_asset_ID}`,
@@ -112,6 +138,7 @@ const getRWA = async (
       timezone_type: 3,
       timezone: 'UTC',
     },
+    balance,
   }
 }
 
