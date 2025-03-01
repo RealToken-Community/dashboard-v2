@@ -239,3 +239,16 @@ export async function getTransactionReceipt(
 
   return receipt
 }
+
+/**
+ * Get chain ID
+ * @param provider (Ethers) RPC provider
+ * @returns Chain ID as number | undefined
+ */
+export const getChainId = (
+  provider: JsonRpcProvider | undefined,
+): number | undefined => {
+  return provider?._network?.chainId
+    ? Number(provider?._network?.chainId)
+    : undefined
+}

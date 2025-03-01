@@ -11,7 +11,10 @@ import {
 import {
   selectUserAddressList, // selectUserIncludesEth,
 } from 'src/store/features/settings/settingsSelector'
-import { RWARealtoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  RWARealtoken,
+  updateBalanceValues,
+} from 'src/store/features/wallets/walletsSelector'
 import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { Currency } from 'src/types/Currencies'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
@@ -49,14 +52,14 @@ const getRWA = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
-  const totalAmount = await getAddressesBalances(
+  const balances = await getAddressesBalances(
     RWA_ContractAddress,
     addressList,
     providers,
   )
   const RwaContractTotalSupply = await contractRwa_Gnosis.totalSupply()
   const totalTokens = Number(RwaContractTotalSupply) / 10 ** RWAtokenDecimals
-  const amount = totalAmount / 10 ** RWAtokenDecimals
+  const amount = balances?.totalAmount / 10 ** RWAtokenDecimals
 
   // RWA token prices in USDC and WXDAI from LPs
   const rwaPriceUsdc = await getUniV2AssetPrice(
@@ -92,6 +95,8 @@ const getRWA = async (
   const tokenPrice = (assetAveragePriceUSD ?? DEFAULT_RWA_PRICE) / userRate
   const value = tokenPrice * amount
   const totalInvestment = totalTokens * tokenPrice
+  // Update all balance values with token price
+  updateBalanceValues(balances.balance, tokenPrice)
 
   return {
     id: `${RWA_asset_ID}`,
@@ -113,6 +118,7 @@ const getRWA = async (
       timezone_type: 3,
       timezone: 'UTC',
     },
+    balance: balances.balance,
   }
 }
 

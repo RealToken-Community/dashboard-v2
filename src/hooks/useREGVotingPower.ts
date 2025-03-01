@@ -26,21 +26,20 @@ const getRegVotingPower = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
-  const totalAmount = await getAddressesBalances(
+  const balances = await getAddressesBalances(
     RegVotingPower_Gnosis_ContractAddress,
     addressList,
     providers,
   )
-
   const contractRegVotePowerTotalSupply =
     await RegVotingPowerContract.totalSupply()
   const totalTokens =
     Number(contractRegVotePowerTotalSupply) / 10 ** REGVotingPowertokenDecimals
-  const amount = totalAmount / 10 ** REGVotingPowertokenDecimals
+  const amount = balances?.totalAmount / 10 ** REGVotingPowertokenDecimals
   const tokenPrice = DEFAULT_REGVotingPower_PRICE
   const value = tokenPrice * amount
   const totalInvestment = tokenPrice * totalTokens
-
+  // Reg voting power does not have (yet) a unit price cost
   return {
     id: `${REGVotingPower_asset_ID}`,
     fullName: 'REG Voting Power Registry',
@@ -56,6 +55,7 @@ const getRegVotingPower = async (
     value,
     totalInvestment,
     unitPriceCost: tokenPrice,
+    balance: balances.balance,
   }
 }
 
