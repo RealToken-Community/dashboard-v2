@@ -112,7 +112,7 @@ const App = ({ Component, pageProps, colorScheme, env }: AppProps) => {
       initMatomoNext({
         url: process.env.MATOMO_URL ?? '',
         siteId: process.env.MATOMO_SITE_ID ?? '',
-        disableCookies: false,
+        disableCookies: true,
         // excludeUrlsPatterns: [/^\/login.php/, /\?token=.+/],
       })
     }
