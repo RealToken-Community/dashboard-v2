@@ -92,6 +92,7 @@ const getREG = async (
     addressList,
     GnosisRpcProvider,
   )
+  
   balance[WalletType.Gnosis].amount = availableBalance
 
   if (includeETH) {
@@ -110,7 +111,7 @@ const getREG = async (
     [
       // First provider
       [
-        // First vault
+        // First vault: Gnosis
         [
           REG_Vault_Gnosis_ContractAddress, // Contract address
           regVaultAbiGetUserGlobalStateOnly, // Contract ABI

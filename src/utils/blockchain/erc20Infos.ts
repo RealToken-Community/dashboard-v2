@@ -1,8 +1,17 @@
 import { AaveV3Ethereum, AaveV3Gnosis } from '@bgd-labs/aave-address-book'
 
 import { Contract, JsonRpcProvider } from 'ethers'
+import { getChainId } from 'src/repositories/RpcProvider'
+import { BalanceByWalletType } from 'src/store/features/wallets/walletsSelector'
+import { getWalletChainName } from 'src/store/features/wallets/walletsSelector'
+import { getErc20AbiBalanceOfOnly } from 'src/utils/blockchain/ERC20'
 
 import { WalletBalanceProviderABI } from './abi/WalletBalanceProviderABI'
+
+export interface Balances {
+  totalAmount: number
+  balance: BalanceByWalletType
+}
 
 const getAddressesBalances = async (
   contractAddress: string,
@@ -14,15 +23,15 @@ const getAddressesBalances = async (
   try {
     if (!contractAddress) {
       consoleWarnOnError && console.error('Invalid contract address')
-      return totalAmount
+      return balances
     }
     if (!addressList?.length) {
       consoleWarnOnError && console.error('Invalid address list')
-      return totalAmount
+      return balances
     }
     if (!provider) {
       consoleWarnOnError && console.error('Invalid providers')
-      return totalAmount
+      return balances
     }
 
     let walletBalanceProviderAddress
@@ -53,10 +62,11 @@ const getAddressesBalances = async (
       0,
     )
     return totalAmount
+
   } catch (error) {
     console.warn('Failed to get balances', error)
   }
-  return totalAmount
+  return balances
 }
 
 export { getAddressesBalances }

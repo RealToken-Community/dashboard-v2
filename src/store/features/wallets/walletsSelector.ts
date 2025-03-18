@@ -19,6 +19,12 @@ import {
 } from 'src/types/RentCalculation'
 import { computeUCP } from 'src/utils/transfer/computeUCP'
 
+import {
+  CHAIN_ID_ETHEREUM,
+  CHAIN_ID_GNOSIS_XDAI,
+  CHAIN_NAME_ETHEREUM,
+  CHAIN_NAME_GNOSIS_XDAI,
+} from '../../../utils/blockchain/consts/otherTokens'
 import { selectRealtokens } from '../realtokens/realtokensSelector'
 import { selectUserRentCalculation } from '../settings/settingsSelector'
 
@@ -266,3 +272,12 @@ export const selectRmmDetails = createSelector(
     return _mapValues(rmmDetails, (value) => value / rates.XDAI)
   },
 )
+
+export const getWalletChainName = (chainId: number) => {
+  switch (chainId) {
+    case CHAIN_ID_ETHEREUM:
+      return CHAIN_NAME_ETHEREUM
+    case CHAIN_ID_GNOSIS_XDAI:
+      return CHAIN_NAME_GNOSIS_XDAI
+  }
+}

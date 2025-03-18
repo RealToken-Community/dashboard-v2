@@ -33,6 +33,12 @@ const WXDAItokenDecimals = 18
 
 const HoneySwapFactory_Address = '0xA818b4F111Ccac7AA31D0BCc0806d64F2E0737D7'
 
+const CHAIN_ID_GNOSIS_XDAI = 100
+const CHAIN_ID_ETHEREUM = 1
+
+const CHAIN_NAME_GNOSIS_XDAI = 'gnosis'
+const CHAIN_NAME_ETHEREUM = 'ethereum'
+
 export {
   RWA_ContractAddress,
   REG_ContractAddress,
@@ -54,4 +60,8 @@ export {
   RWA_asset_ID,
   REG_asset_ID,
   REGVotingPower_asset_ID,
+  CHAIN_ID_GNOSIS_XDAI,
+  CHAIN_ID_ETHEREUM,
+  CHAIN_NAME_GNOSIS_XDAI,
+  CHAIN_NAME_ETHEREUM,
 }

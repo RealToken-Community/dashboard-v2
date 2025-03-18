@@ -53,6 +53,7 @@ const getRWA = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
+
   const balance: BalanceByWalletType = {
     [WalletType.Gnosis]: {
       amount: 0,
@@ -79,7 +80,7 @@ const getRWA = async (
   balance[WalletType.Gnosis].amount = totalAmount
   const RwaContractTotalSupply = await contractRwa_Gnosis.totalSupply()
   const totalTokens = Number(RwaContractTotalSupply) / 10 ** RWAtokenDecimals
-  const amount = totalAmount / 10 ** RWAtokenDecimals
+  const amount = balances?.totalAmount / 10 ** RWAtokenDecimals
 
   // RWA token prices in USDC and WXDAI from LPs
   const rwaPriceUsdc = await getUniV2AssetPrice(

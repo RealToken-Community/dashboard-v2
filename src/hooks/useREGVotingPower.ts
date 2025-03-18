@@ -29,6 +29,7 @@ const getRegVotingPower = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
+
   const balance: BalanceByWalletType = {
     [WalletType.Gnosis]: {
       amount: 0,
@@ -52,15 +53,18 @@ const getRegVotingPower = async (
     addressList,
     GnosisRpcProvider,
   )
+
   balance[WalletType.Gnosis].amount = totalAmount
+
   const contractRegVotePowerTotalSupply =
     await RegVotingPowerContract.totalSupply()
   const totalTokens =
     Number(contractRegVotePowerTotalSupply) / 10 ** REGVotingPowertokenDecimals
-  const amount = totalAmount / 10 ** REGVotingPowertokenDecimals
+  const amount = balances?.totalAmount / 10 ** REGVotingPowertokenDecimals
   const tokenPrice = DEFAULT_REGVotingPower_PRICE
   const value = tokenPrice * amount
   const totalInvestment = tokenPrice * totalTokens
+
   // NO need yo update all balance values: token has no value
 
   return {
@@ -78,7 +82,7 @@ const getRegVotingPower = async (
     value,
     totalInvestment,
     unitPriceCost: tokenPrice,
-    balance,
+    balance
   }
 }
 
