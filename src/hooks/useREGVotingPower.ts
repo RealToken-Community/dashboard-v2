@@ -60,7 +60,7 @@ const getRegVotingPower = async (
     await RegVotingPowerContract.totalSupply()
   const totalTokens =
     Number(contractRegVotePowerTotalSupply) / 10 ** REGVotingPowertokenDecimals
-  const amount = balances?.totalAmount / 10 ** REGVotingPowertokenDecimals
+  const amount = totalAmount / 10 ** REGVotingPowertokenDecimals
   const tokenPrice = DEFAULT_REGVotingPower_PRICE
   const value = tokenPrice * amount
   const totalInvestment = tokenPrice * totalTokens
@@ -82,7 +82,7 @@ const getRegVotingPower = async (
     value,
     totalInvestment,
     unitPriceCost: tokenPrice,
-    balance
+    balance,
   }
 }
 

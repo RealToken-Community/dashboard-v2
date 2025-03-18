@@ -92,7 +92,7 @@ const getREG = async (
     addressList,
     GnosisRpcProvider,
   )
-  
+
   balance[WalletType.Gnosis].amount = availableBalance
 
   if (includeETH) {
