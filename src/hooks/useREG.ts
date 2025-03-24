@@ -181,8 +181,6 @@ const getREG = async (
   // Update all balance values with token price
   updateBalanceValues(balance, tokenPrice)
 
-  console.dir(balance)
-
   return {
     id: `${REG_asset_ID}`,
     fullName: 'RealToken Ecosystem Governance',
