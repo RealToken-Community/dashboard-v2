@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { Contract } from 'ethers'
 
+import { WalletType } from 'src/repositories'
 import { initializeProviders } from 'src/repositories/RpcProvider'
 import {
   selectCurrencyRates,
@@ -13,6 +14,7 @@ import {
   selectUserIncludesEth,
 } from 'src/store/features/settings/settingsSelector'
 import {
+  BalanceByWalletType,
   REGRealtoken,
   updateBalanceValues,
 } from 'src/store/features/wallets/walletsSelector'
@@ -67,11 +69,41 @@ const getREG = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
-  const balances = await getAddressesBalances(
+  const balance: BalanceByWalletType = {
+    [WalletType.Gnosis]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.Ethereum]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.RMM]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.LevinSwap]: {
+      amount: 0,
+      value: 0,
+    },
+  }
+  let availableBalance = await getAddressesBalances(
     REG_ContractAddress,
     addressList,
-    providers,
+    GnosisRpcProvider,
   )
+
+  balance[WalletType.Gnosis].amount = availableBalance
+
+  if (includeETH) {
+    balance[WalletType.Ethereum].amount = await getAddressesBalances(
+      REG_ContractAddress,
+      addressList,
+      EthereumRpcProvider,
+    )
+    availableBalance += balance[WalletType.Ethereum].amount
+  }
+
   const regVaultAbiGetUserGlobalStateOnly =
     getRegVaultAbiGetUserGlobalStateOnly()
 
@@ -104,10 +136,8 @@ const getREG = async (
     providers,
   )
 
-  // Add locked balance to balance.balance.gnosis.amount
-  balances.balance.gnosis.amount += lockedBalance
-  // Add locked balance to total amount
-  const totalAmount = balances?.totalAmount + lockedBalance
+  balance[WalletType.Gnosis].amount += lockedBalance
+  const totalAmount = availableBalance + lockedBalance
   const contractRegTotalSupply = await RegContract_Gnosis.totalSupply()
   const totalTokens = Number(contractRegTotalSupply) / 10 ** REGtokenDecimals
   const amount = totalAmount / 10 ** REGtokenDecimals
@@ -149,7 +179,7 @@ const getREG = async (
   const value = tokenPrice * amount
   const totalInvestment = totalTokens * tokenPrice
   // Update all balance values with token price
-  updateBalanceValues(balances.balance, tokenPrice)
+  updateBalanceValues(balance, tokenPrice)
 
   return {
     id: `${REG_asset_ID}`,
@@ -166,7 +196,7 @@ const getREG = async (
     value,
     totalInvestment,
     unitPriceCost: tokenPrice,
-    balance: balances.balance,
+    balance,
   }
 }
 

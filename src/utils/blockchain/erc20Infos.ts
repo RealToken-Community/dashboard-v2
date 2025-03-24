@@ -1,11 +1,10 @@
+import { AaveV3Ethereum, AaveV3Gnosis } from '@bgd-labs/aave-address-book'
+
 import { Contract, JsonRpcProvider } from 'ethers'
 
-import { getChainId } from 'src/repositories/RpcProvider'
 import { BalanceByWalletType } from 'src/store/features/wallets/walletsSelector'
-import { getWalletChainName } from 'src/store/features/wallets/walletsSelector'
-import { getErc20AbiBalanceOfOnly } from 'src/utils/blockchain/ERC20'
 
-import { batchCallOneContractOneFunctionMultipleParams } from './contract'
+import { WalletBalanceProviderABI } from './abi/WalletBalanceProviderABI'
 
 export interface Balances {
   totalAmount: number
@@ -15,101 +14,56 @@ export interface Balances {
 const getAddressesBalances = async (
   contractAddress: string,
   addressList: string[],
-  providers: JsonRpcProvider[],
+  provider: JsonRpcProvider,
   consoleWarnOnError = false,
-): Promise<Balances> => {
-  const balances: Balances = {
-    totalAmount: 0,
-    balance: {
-      gnosis: {
-        amount: 0,
-        value: 0,
-      },
-      ethereum: {
-        amount: 0,
-        value: 0,
-      },
-      rmm: {
-        amount: 0,
-        value: 0,
-      },
-      levinSwap: {
-        amount: 0,
-        value: 0,
-      },
-    },
-  }
+): Promise<number> => {
+  let totalAmount = 0
   try {
     if (!contractAddress) {
       consoleWarnOnError && console.error('Invalid contract address')
-      return balances
+      return totalAmount
     }
     if (!addressList?.length) {
       consoleWarnOnError && console.error('Invalid address list')
-      return balances
+      return totalAmount
     }
-    if (!providers?.length) {
+    if (!provider) {
       consoleWarnOnError && console.error('Invalid providers')
-      return balances
+      return totalAmount
     }
-    const erc20AbiBalanceOfOnly = getErc20AbiBalanceOfOnly()
-    if (!erc20AbiBalanceOfOnly) {
-      throw new Error('balanceOf ABI not found')
+
+    let walletBalanceProviderAddress
+    switch (provider._network.chainId) {
+      case 100n:
+        walletBalanceProviderAddress = AaveV3Gnosis.WALLET_BALANCE_PROVIDER
+        break
+      case 1n:
+        walletBalanceProviderAddress = AaveV3Ethereum.WALLET_BALANCE_PROVIDER
+        break
+      default:
+        consoleWarnOnError && console.error('Invalid provider')
+        return totalAmount
     }
-    const balancesPromises = providers.map((provider: JsonRpcProvider) => {
-      const Erc20BalanceContract = new Contract(
-        contractAddress,
-        erc20AbiBalanceOfOnly,
-        provider,
-      )
-      const balances = batchCallOneContractOneFunctionMultipleParams(
-        Erc20BalanceContract,
-        'balanceOf',
-        addressList.map((address: string) => [address as unknown as object]),
-      )
-      return balances
-    })
-    const balancesArray = await Promise.all(balancesPromises.flat())
-    // warn but don't stop
-    balancesArray?.length !== providers.length &&
-      consoleWarnOnError &&
-      console.warn(
-        `Invalid balances array length (${balancesArray?.length}) (inconsistent with providers length (${providers.length}))`,
-      )
-    providers.forEach((provider: JsonRpcProvider, providerIdx) => {
-      const chainId = getChainId(provider)
-      const wt = chainId ? getWalletChainName(chainId) : null
-      if (wt) {
-        balances.balance[wt].value = 0
-        // warn but don't stop
-        balancesArray[providerIdx]?.length !== addressList.length &&
-          consoleWarnOnError &&
-          console.warn(
-            'Invalid balances array (inconsistent addressList length)',
-          )
-        ;(balancesArray[providerIdx] as unknown as bigint[])?.forEach(
-          (addressBalanceBI: bigint, addressIdx) => {
-            try {
-              const addressBalance = Number(addressBalanceBI)
-              balances.balance[wt].amount += addressBalance
-            } catch (error) {
-              // warn but don't stop
-              consoleWarnOnError &&
-                console.warn(
-                  `Invalid balance conversion for address ${addressList[addressIdx]} on chain ${chainId}`,
-                  error,
-                )
-            }
-          },
-        )
-        balances.totalAmount += balances.balance[wt].amount
-      }
-    })
-    return balances
+
+    const balanceWalletProviderContract = new Contract(
+      walletBalanceProviderAddress,
+      WalletBalanceProviderABI,
+      provider,
+    )
+
+    const balances = await balanceWalletProviderContract.batchBalanceOf(
+      addressList,
+      [contractAddress],
+    )
+    totalAmount = balances.reduce(
+      (acc: number, b: bigint) => acc + Number(b),
+      0,
+    )
+    return totalAmount
   } catch (error) {
     console.warn('Failed to get balances', error)
   }
-  return balances
+  return totalAmount
 }
 
 export { getAddressesBalances }

@@ -3,9 +3,13 @@ import { useSelector } from 'react-redux'
 
 import { Contract } from 'ethers'
 
+import { WalletType } from 'src/repositories'
 import { initializeProviders } from 'src/repositories/RpcProvider'
 import { selectUserAddressList } from 'src/store/features/settings/settingsSelector'
-import { REGVotingPowertoken } from 'src/store/features/wallets/walletsSelector'
+import {
+  BalanceByWalletType,
+  REGVotingPowertoken,
+} from 'src/store/features/wallets/walletsSelector'
 import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
@@ -20,26 +24,49 @@ const getRegVotingPower = async (
   addressList: string[],
 ): Promise<REGVotingPowertoken> => {
   const { GnosisRpcProvider } = await initializeProviders()
-  const providers = [GnosisRpcProvider]
   const RegVotingPowerContract = new Contract(
     RegVotingPower_Gnosis_ContractAddress,
     ERC20ABI,
     GnosisRpcProvider,
   )
-  const balances = await getAddressesBalances(
+
+  const balance: BalanceByWalletType = {
+    [WalletType.Gnosis]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.Ethereum]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.RMM]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.LevinSwap]: {
+      amount: 0,
+      value: 0,
+    },
+  }
+  const totalAmount = await getAddressesBalances(
     RegVotingPower_Gnosis_ContractAddress,
     addressList,
-    providers,
+    GnosisRpcProvider,
   )
+
+  balance[WalletType.Gnosis].amount = totalAmount
+
   const contractRegVotePowerTotalSupply =
     await RegVotingPowerContract.totalSupply()
   const totalTokens =
     Number(contractRegVotePowerTotalSupply) / 10 ** REGVotingPowertokenDecimals
-  const amount = balances?.totalAmount / 10 ** REGVotingPowertokenDecimals
+  const amount = totalAmount / 10 ** REGVotingPowertokenDecimals
   const tokenPrice = DEFAULT_REGVotingPower_PRICE
   const value = tokenPrice * amount
   const totalInvestment = tokenPrice * totalTokens
-  // Reg voting power does not have (yet) a unit price cost
+
+  // NO need yo update all balance values: token has no value
+
   return {
     id: `${REGVotingPower_asset_ID}`,
     fullName: 'REG Voting Power Registry',
@@ -55,7 +82,7 @@ const getRegVotingPower = async (
     value,
     totalInvestment,
     unitPriceCost: tokenPrice,
-    balance: balances.balance,
+    balance,
   }
 }
 

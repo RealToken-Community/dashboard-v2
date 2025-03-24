@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.9.5",
+    "@bgd-labs/aave-address-book": "^4.7.3",
     "@mantine/core": "^7.5.3",
     "@mantine/dates": "^7.5.3",
     "@mantine/form": "^7.5.3",

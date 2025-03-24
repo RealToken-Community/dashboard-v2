@@ -264,6 +264,11 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
+"@bgd-labs/aave-address-book@^4.7.3":
+  version "4.7.3"
+  resolved "https://registry.yarnpkg.com/@bgd-labs/aave-address-book/-/aave-address-book-4.7.3.tgz#8a2ca1ca3b2e67474c0b07ea8e681a1400f3bc5b"
+  integrity sha512-4/QS5hLcjKuHAfdOAgaxSWVvi6RKu/U5ZHyndptvvKcNmzcC60tczN3NALCqWNXCBmzFY5e6cg82KsZJqVEjOQ==
+
 "@coinbase/wallet-sdk@^3.6.5":
   version "3.7.2"
   resolved "https://registry.npmjs.org/@coinbase/wallet-sdk/-/wallet-sdk-3.7.2.tgz"

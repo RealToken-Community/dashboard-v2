@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 
 import { Contract } from 'ethers'
 
+import { WalletType } from 'src/repositories'
 import { initializeProviders } from 'src/repositories/RpcProvider'
 import {
   selectCurrencyRates,
@@ -12,6 +13,7 @@ import {
   selectUserAddressList, // selectUserIncludesEth,
 } from 'src/store/features/settings/settingsSelector'
 import {
+  BalanceByWalletType,
   RWARealtoken,
   updateBalanceValues,
 } from 'src/store/features/wallets/walletsSelector'
@@ -45,21 +47,40 @@ const getRWA = async (
 ): Promise<RWARealtoken> => {
   const { GnosisRpcProvider /* , EthereumRpcProvider */ } =
     await initializeProviders()
-  const providers = [GnosisRpcProvider]
 
   const contractRwa_Gnosis = new Contract(
     RWA_ContractAddress,
     ERC20ABI,
     GnosisRpcProvider,
   )
-  const balances = await getAddressesBalances(
+
+  const balance: BalanceByWalletType = {
+    [WalletType.Gnosis]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.Ethereum]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.RMM]: {
+      amount: 0,
+      value: 0,
+    },
+    [WalletType.LevinSwap]: {
+      amount: 0,
+      value: 0,
+    },
+  }
+  const totalAmount = await getAddressesBalances(
     RWA_ContractAddress,
     addressList,
-    providers,
+    GnosisRpcProvider,
   )
+  balance[WalletType.Gnosis].amount = totalAmount
   const RwaContractTotalSupply = await contractRwa_Gnosis.totalSupply()
   const totalTokens = Number(RwaContractTotalSupply) / 10 ** RWAtokenDecimals
-  const amount = balances?.totalAmount / 10 ** RWAtokenDecimals
+  const amount = totalAmount / 10 ** RWAtokenDecimals
 
   // RWA token prices in USDC and WXDAI from LPs
   const rwaPriceUsdc = await getUniV2AssetPrice(
@@ -96,7 +117,7 @@ const getRWA = async (
   const value = tokenPrice * amount
   const totalInvestment = totalTokens * tokenPrice
   // Update all balance values with token price
-  updateBalanceValues(balances.balance, tokenPrice)
+  updateBalanceValues(balance, tokenPrice)
 
   return {
     id: `${RWA_asset_ID}`,
@@ -118,7 +139,7 @@ const getRWA = async (
       timezone_type: 3,
       timezone: 'UTC',
     },
-    balance: balances.balance,
+    balance,
   }
 }
 
