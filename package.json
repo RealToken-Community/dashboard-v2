@@ -27,6 +27,7 @@
     "@mantine/notifications": "^7.5.3",
     "@realtoken/realt-commons": "1.4.6",
     "@reduxjs/toolkit": "^2.2.1",
+    "@socialgouv/matomo-next": "^1.9.2",
     "@tabler/icons": "^1.74.0",
     "@web3-react/core": "^8.0.35-beta.0",
     "cookies-next": "^2.0.5",

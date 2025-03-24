@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
 
@@ -25,6 +26,7 @@ import {
   metaMaskHooks,
   parseAllowedChain,
 } from '@realtoken/realt-commons'
+import { init as initMatomoNext } from '@socialgouv/matomo-next'
 
 import { getCookie } from 'cookies-next'
 import { Provider as JotaiProvider } from 'jotai'
@@ -37,6 +39,13 @@ import { MantineProviders } from 'src/providers'
 import InitStoreProvider from 'src/providers/InitStoreProvider'
 import store from 'src/store/store'
 
+// Matomo property added to window object
+declare global {
+  interface Window {
+    _paq?: unknown[]
+  }
+}
+
 const i18n = initLanguage(resources)
 
 type AppProps = NextAppProps & {
@@ -44,6 +53,8 @@ type AppProps = NextAppProps & {
   locale: string
   env: {
     THEGRAPH_API_KEY: string
+    MATOMO_URL: string
+    MATOMO_SITE_ID: string
   }
 }
 
@@ -74,6 +85,8 @@ const libraryConnectors = getConnectors({
 export const getServerSideProps = async () => ({
   props: {
     THEGRAPH_API_KEY: process.env.THEGRAPH_API_KEY,
+    MATOMO_URL: process.env.MATOMO_URL,
+    MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
   },
 })
 
@@ -90,6 +103,20 @@ const App = ({ Component, pageProps, colorScheme, env }: AppProps) => {
     Router.events.off('routeChangeComplete', scrollToTop)
   }
   Router.events.on('routeChangeComplete', scrollToTop)
+
+  // Event tracking
+  useEffect(() => {
+    // eslint-disable-next-line no-underscore-dangle
+    if (!window._paq) {
+      // Note: Triggered twice on page load when using strict mode in DEV
+      initMatomoNext({
+        url: process.env.MATOMO_URL ?? '',
+        siteId: process.env.MATOMO_SITE_ID ?? '',
+        disableCookies: true,
+        // excludeUrlsPatterns: [/^\/login.php/, /\?token=.+/],
+      })
+    }
+  }, [])
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -122,6 +149,8 @@ App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => {
   return {
     env: {
       THEGRAPH_API_KEY: process.env.THEGRAPH_API_KEY,
+      MATOMO_URL: process.env.MATOMO_URL,
+      MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
     },
     colorScheme: getCookie('mantine-color-scheme', ctx) || 'dark',
     locale: getCookie('react-i18next', ctx) || 'fr',
