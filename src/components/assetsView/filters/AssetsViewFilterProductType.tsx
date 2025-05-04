@@ -70,7 +70,7 @@ export function useAssetsViewProductTypeFilter(filter: AssetsViewFilterType) {
     switch (filter.productType) {
       case AssetProductType.ALL:
         return true
-      case AssetProductType.REAL_EASTATE_RENTAL:
+      case AssetProductType.REAL_ESTATE_RENTAL:
         return asset.productType === APIRealTokenProductType.RealEstateRental
       case AssetProductType.LOAN_INCOME:
         return asset.productType === APIRealTokenProductType.LoanIncome
