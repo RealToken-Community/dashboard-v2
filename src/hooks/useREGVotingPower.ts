@@ -65,7 +65,7 @@ const getRegVotingPower = async (
   const value = tokenPrice * amount
   const totalInvestment = tokenPrice * totalTokens
 
-  // NO need yo update all balance values: token has no value
+  // NO need to update all balance values: token has no value
 
   return {
     id: `${REGVotingPower_asset_ID}`,
