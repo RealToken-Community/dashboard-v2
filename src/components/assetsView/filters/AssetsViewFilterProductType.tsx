@@ -33,7 +33,7 @@ export const AssetsViewProductTypeFilter: FC<
       label: t('options.all'),
     },
     {
-      value: AssetProductType.REAL_EASTATE_RENTAL,
+      value: AssetProductType.REAL_ESTATE_RENTAL,
       label: t('options.realEstateRental'),
     },
     {
