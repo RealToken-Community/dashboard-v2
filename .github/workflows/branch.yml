@@ -81,12 +81,6 @@ jobs:
           REALTOKENAPI=https://api.realtoken.community/v1/token \
           REALTOKENAPI_HISTORY=https://history.api.realtoken.community/ \
           MATOMO_URL=https://data.realtoken.community/ \
-          if [ "${{ github.ref_name }}" = "master" ]; then
-            MATOMO_SITE_ID=${{ secrets.MATOMO_ID_PROD }}
-          elif [ "${{ github.ref_name }}" = "preprod" ]; then
-            MATOMO_SITE_ID=${{ secrets.MATOMO_ID_PREPROD }}
-          else
-            MATOMO_SITE_ID=${{ secrets.MATOMO_ID_DEVELOP }}
-          fi
+          MATOMO_SITE_ID=${{ github.ref_name == 'master' && secrets.MATOMO_ID_PROD || github.ref_name == 'preprod' && secrets.MATOMO_ID_PREPROD || secrets.MATOMO_ID_DEVELOP }} \
           HOSTNAME=${{ github.ref_name == 'master' && 'dashboard.realtoken.community' || 'dashboard.${DOCKER_BRANCH}.realtoken.community' }} \
           docker compose --project-name ${{ github.ref_name }}-dashboard --file docker-compose-branch.yml up -d'
