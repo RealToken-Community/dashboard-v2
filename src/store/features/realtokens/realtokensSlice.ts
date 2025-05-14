@@ -41,6 +41,7 @@ export function fetchRealtokens() {
           [
             APIRealTokenProductType.RealEstateRental,
             APIRealTokenProductType.LoanIncome,
+            APIRealTokenProductType.Factoring,
           ].includes(item.productType),
         ),
       })

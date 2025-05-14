@@ -175,7 +175,8 @@
       "all": "Tous",
       "realEstateRental": "Location immobilière",
       "loanIncome": "Revenu de prêt",
-      "equityToken": "Token d'équité"
+      "equityToken": "Token d'équité",
+      "factoring": "Affacturage"
     }
   },
   "assetRentStatus": {
