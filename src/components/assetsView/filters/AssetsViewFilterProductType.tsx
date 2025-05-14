@@ -44,6 +44,10 @@ export const AssetsViewProductTypeFilter: FC<
       value: AssetProductType.EQUITY_TOKEN,
       label: t('options.equityToken'),
     },
+    {
+      value: AssetProductType.FACTORING,
+      label: t('options.factoring'),
+    },
   ]
 
   return (
@@ -76,6 +80,8 @@ export function useAssetsViewProductTypeFilter(filter: AssetsViewFilterType) {
         return asset.productType === APIRealTokenProductType.LoanIncome
       case AssetProductType.EQUITY_TOKEN:
         return asset.productType === APIRealTokenProductType.EquityToken
+      case AssetProductType.FACTORING:
+        return asset.productType === APIRealTokenProductType.Factoring
     }
   }
 

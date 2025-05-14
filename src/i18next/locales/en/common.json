@@ -175,7 +175,8 @@
       "all": "All",
       "realEstateRental": "Real estate rental",
       "loanIncome": "Loan income",
-      "equityToken": "Equity token"
+      "equityToken": "Equity token",
+      "factoring": "Factoring"
     }
   },
   "assetRentStatus": {
