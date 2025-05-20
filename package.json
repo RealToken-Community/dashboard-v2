@@ -25,7 +25,7 @@
     "@mantine/hooks": "^7.5.3",
     "@mantine/modals": "^7.5.3",
     "@mantine/notifications": "^7.5.3",
-    "@realtoken/realt-commons": "1.4.6",
+    "@realtoken/realt-commons": "1.4.20",
     "@reduxjs/toolkit": "^2.2.1",
     "@socialgouv/matomo-next": "^1.9.2",
     "@tabler/icons": "^1.74.0",
