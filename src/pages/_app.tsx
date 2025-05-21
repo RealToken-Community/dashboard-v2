@@ -63,6 +63,7 @@ const queryClient = new QueryClient({})
 const dashbordChains: ChainSelectConfig<RealtChains> = {
   allowedChains: parseAllowedChain(ChainsID),
   chainsConfig: CHAINS,
+  // Explicitly setting Gnosis as the defaultChainId to ensure compatibility with read-only addresses.
   defaultChainId: ChainsID.Gnosis,
 }
 
