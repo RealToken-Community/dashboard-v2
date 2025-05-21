@@ -63,6 +63,7 @@ const queryClient = new QueryClient({})
 const dashbordChains: ChainSelectConfig<RealtChains> = {
   allowedChains: parseAllowedChain(ChainsID),
   chainsConfig: CHAINS,
+  defaultChainId: CHAINS[ChainsID.Gnosis].chainId,
 }
 
 const env = process.env.NEXT_PUBLIC_ENV ?? 'development'
