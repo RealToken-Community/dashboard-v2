@@ -11,12 +11,12 @@ import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
 import '@mantine/notifications/styles.css'
 import {
-  CHAINS,
   ChainSelectConfig,
   ChainsID,
   ConnectorsAvailable,
   LanguageInit,
   Chain as RealtChains,
+  CHAINS as RealtCommonsDefaultChainsConfig,
   Web3Providers,
   getConnectors,
   getReadOnlyConnector,
@@ -37,6 +37,7 @@ import 'src/i18next'
 import { resources } from 'src/i18next'
 import { MantineProviders } from 'src/providers'
 import InitStoreProvider from 'src/providers/InitStoreProvider'
+import { initializeProviders } from 'src/repositories/RpcProvider'
 import store from 'src/store/store'
 
 // Matomo property added to window object
@@ -55,44 +56,37 @@ type AppProps = NextAppProps & {
     THEGRAPH_API_KEY: string
     MATOMO_URL: string
     MATOMO_SITE_ID: string
+    RPC_URLS_ETH_MAINNET: string
+    RPC_URLS_GNOSIS_MAINNET: string
   }
+  GnosisRpcUrl?: string
+  EthereumRpcUrl?: string
 }
 
 const queryClient = new QueryClient({})
 
-const dashbordChains: ChainSelectConfig<RealtChains> = {
-  allowedChains: parseAllowedChain(ChainsID),
-  chainsConfig: CHAINS,
-  // Explicitly setting Gnosis as the defaultChainId to ensure compatibility with read-only addresses.
-  defaultChainId: ChainsID.Gnosis,
+// Seems like getServerSideProps is never executed when defined in _app.* ?
+// Kept for the time being but it looks useless
+export const getServerSideProps = async () => {
+  return {
+    props: {
+      THEGRAPH_API_KEY: process.env.THEGRAPH_API_KEY,
+      MATOMO_URL: process.env.MATOMO_URL,
+      MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
+      RPC_URLS_ETH_MAINNET: process.env.RPC_URLS_ETH_MAINNET,
+      RPC_URLS_GNOSIS_MAINNET: process.env.RPC_URLS_GNOSIS_MAINNET,
+    },
+  }
 }
 
-const env = process.env.NEXT_PUBLIC_ENV ?? 'development'
-const walletConnectKey = process.env.NEXT_PUBLIC_WALLET_CONNECT_KEY ?? ''
-
-const readOnly = getReadOnlyConnector(dashbordChains)
-const walletConnect = getWalletConnectV2(
-  dashbordChains,
+const App = ({
+  Component,
+  pageProps,
+  colorScheme,
   env,
-  walletConnectKey,
-  false,
-)
-
-const libraryConnectors = getConnectors({
-  readOnly: readOnly,
-  metamask: [metaMask, metaMaskHooks],
-  walletConnectV2: walletConnect,
-} as unknown as ConnectorsAvailable)
-
-export const getServerSideProps = async () => ({
-  props: {
-    THEGRAPH_API_KEY: process.env.THEGRAPH_API_KEY,
-    MATOMO_URL: process.env.MATOMO_URL,
-    MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
-  },
-})
-
-const App = ({ Component, pageProps, colorScheme, env }: AppProps) => {
+  GnosisRpcUrl,
+  EthereumRpcUrl,
+}: AppProps) => {
   if (typeof window !== 'undefined') {
     process.env = { ...process.env, ...env }
   }
@@ -119,6 +113,48 @@ const App = ({ Component, pageProps, colorScheme, env }: AppProps) => {
       })
     }
   }, [])
+
+  // Customize chains config for Gnosis and Ethereum
+  // using rpc urls from props
+  const CustomChainsConfig = {
+    // Keep Goerli as testnet else an error will arise at init
+    [ChainsID.Goerli]: RealtCommonsDefaultChainsConfig[ChainsID.Goerli],
+    [ChainsID.Gnosis]: {
+      ...RealtCommonsDefaultChainsConfig[ChainsID.Gnosis],
+      rpcUrl:
+        GnosisRpcUrl || RealtCommonsDefaultChainsConfig[ChainsID.Gnosis].rpcUrl,
+    },
+    [ChainsID.Ethereum]: {
+      ...RealtCommonsDefaultChainsConfig[ChainsID.Ethereum],
+      rpcUrl:
+        EthereumRpcUrl ||
+        RealtCommonsDefaultChainsConfig[ChainsID.Ethereum].rpcUrl,
+    },
+    // TODO: add Polygon
+  }
+
+  const dashbordChains: ChainSelectConfig<RealtChains> = {
+    allowedChains: parseAllowedChain(ChainsID),
+    chainsConfig: CustomChainsConfig,
+    defaultChainId: ChainsID.Gnosis, // Explicitly setting Gnosis as the defaultChainId
+  }
+
+  const envName = process.env.NEXT_PUBLIC_ENV ?? 'development'
+  const walletConnectKey = process.env.NEXT_PUBLIC_WALLET_CONNECT_KEY ?? ''
+
+  const readOnly = getReadOnlyConnector(dashbordChains)
+  const walletConnect = getWalletConnectV2(
+    dashbordChains,
+    envName,
+    walletConnectKey,
+    false,
+  )
+
+  const libraryConnectors = getConnectors({
+    readOnly: readOnly,
+    metamask: [metaMask, metaMaskHooks],
+    walletConnectV2: walletConnect,
+  } as unknown as ConnectorsAvailable)
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -147,15 +183,22 @@ const App = ({ Component, pageProps, colorScheme, env }: AppProps) => {
   )
 }
 
-App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => {
+App.getInitialProps = async ({ ctx }: { ctx: GetServerSidePropsContext }) => {
+  // Call initializeProviders to get custom RPC URLs
+  const providers = await initializeProviders()
+
   return {
     env: {
       THEGRAPH_API_KEY: process.env.THEGRAPH_API_KEY,
       MATOMO_URL: process.env.MATOMO_URL,
       MATOMO_SITE_ID: process.env.MATOMO_SITE_ID,
+      RPC_URLS_ETH_MAINNET: process.env.RPC_URLS_ETH_MAINNET,
+      RPC_URLS_GNOSIS_MAINNET: process.env.RPC_URLS_GNOSIS_MAINNET,
     },
     colorScheme: getCookie('mantine-color-scheme', ctx) || 'dark',
     locale: getCookie('react-i18next', ctx) || 'fr',
+    GnosisRpcUrl: providers.GnosisRpcUrl,
+    EthereumRpcUrl: providers.EthereumRpcUrl,
   }
 }
 

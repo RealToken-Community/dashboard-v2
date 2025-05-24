@@ -82,5 +82,7 @@ jobs:
           REALTOKENAPI_HISTORY=https://history.api.realtoken.community/ \
           MATOMO_URL=https://data.realtoken.community/ \
           MATOMO_SITE_ID=${{ github.ref_name == 'master' && secrets.MATOMO_ID_PROD || github.ref_name == 'preprod' && secrets.MATOMO_ID_PREPROD || secrets.MATOMO_ID_DEVELOP }} \
+          RPC_URLS_ETH_MAINNET=${{ secrets.RPC_URLS_ETH_MAINNET }} \
+          RPC_URLS_GNOSIS_MAINNET=${{ secrets.RPC_URLS_GNOSIS_MAINNET }} \
           HOSTNAME=${{ github.ref_name == 'master' && 'dashboard.realtoken.community' || 'dashboard.${DOCKER_BRANCH}.realtoken.community' }} \
           docker compose --project-name ${{ github.ref_name }}-dashboard --file docker-compose-branch.yml up -d'
