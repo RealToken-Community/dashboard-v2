@@ -146,10 +146,12 @@ const RealtimeRentMenuItem: FC = () => {
   )
 }
 
-const RealtimeRentMenuSelectDate: FC = () => {
+const RealtimeRentMenuSelectDate: FC<{
+  isCalendarOpen: boolean
+  setIsCalendarOpen: (open: boolean) => void
+}> = ({ isCalendarOpen, setIsCalendarOpen }) => {
   const dispatch = useDispatch()
   const rentCalculation = useSelector(selectUserRentCalculation)
-
   const { i18n, t } = useTranslation('common', { keyPrefix: 'settings' })
 
   if (rentCalculation.state !== RentCalculationState.Realtime) return null
@@ -162,16 +164,21 @@ const RealtimeRentMenuSelectDate: FC = () => {
       }),
     )
   }
+  const toggleIsCalendarOpen = () => setIsCalendarOpen(!isCalendarOpen)
 
   return (
     <>
       <Menu.Label pb={0}>{t('date')}</Menu.Label>
       <DatePickerInput
         p={5}
+        onClick={() => toggleIsCalendarOpen()}
         locale={i18n.language}
         valueFormat={t('dateFormat')}
         value={new Date(rentCalculation.date)}
-        onChange={(value) => handleDateChange(value as Date)}
+        onChange={(value) => {
+          handleDateChange(value as Date)
+          toggleIsCalendarOpen()
+        }}
         defaultDate={new Date()}
       />
       <Menu.Divider />
@@ -179,11 +186,17 @@ const RealtimeRentMenuSelectDate: FC = () => {
   )
 }
 
-const RealtimeRentMenu = () => {
+const RealtimeRentMenu: FC<{
+  isCalendarOpen: boolean
+  setIsCalendarOpen: (open: boolean) => void
+}> = ({ isCalendarOpen, setIsCalendarOpen }) => {
   return (
     <>
       <RealtimeRentMenuItem />
-      <RealtimeRentMenuSelectDate />
+      <RealtimeRentMenuSelectDate
+        isCalendarOpen={isCalendarOpen}
+        setIsCalendarOpen={setIsCalendarOpen}
+      />
       <Menu.Divider />
     </>
   )
@@ -341,10 +354,13 @@ const RefreshDataButton: FC = () => {
 export const SettingsMenu: FC = () => {
   const [isOpen, handlers] = useDisclosure(false)
   const version = useSelector(selectVersion)
+  // Prevent menu from closing when the calendar is open
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
   return (
     <Menu
       closeOnItemClick={false}
+      closeOnClickOutside={!isCalendarOpen}
       opened={isOpen}
       onOpen={handlers.open}
       onClose={handlers.close}
@@ -359,7 +375,10 @@ export const SettingsMenu: FC = () => {
         <Menu.Divider />
         <CurrencySelect />
         <Menu.Divider />
-        <RealtimeRentMenu />
+        <RealtimeRentMenu
+          isCalendarOpen={isCalendarOpen}
+          setIsCalendarOpen={setIsCalendarOpen}
+        />
         <ColorSchemeMenuItem />
         <Menu.Divider />
         <FetchDataSettings />

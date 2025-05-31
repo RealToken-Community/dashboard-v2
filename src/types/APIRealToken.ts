@@ -11,6 +11,7 @@ export enum APIRealTokenProductType {
   RealEstateRental = 'real_estate_rental',
   EquityToken = 'equity_token',
   LoanIncome = 'loan_income',
+  Factoring = 'factoring_profitshare',
 }
 
 export interface APIRealTokenDate {
