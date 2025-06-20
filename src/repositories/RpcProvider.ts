@@ -263,16 +263,42 @@ let providers: ProvidersWithUrls | undefined = undefined
 
 export const initializeProviders = async () => {
   if (initializeProvidersQueue) {
-    return initializeProvidersQueue.wait()
+    try {
+      // Timeout of 7 seconds on the queue
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('RPC timeout')), 7000)
+      )
+      return await Promise.race([initializeProvidersQueue.wait(), timeoutPromise])
+    } catch (error) {
+      console.log('[RpcProvider] Timeout of the queue, relaunch without queue')
+      // Reset the blocked queue
+      initializeProvidersQueue = null
+      providers = undefined
+      // Relaunch directly without queue
+      return await initializeProvidersDirect()
+    }
   }
+ 
   initializeProvidersQueue = new WaitingQueue()
 
+  try {
+    const result = await initializeProvidersDirect()
+    initializeProvidersQueue.resolve(result)
+    return result
+  } catch (error) {
+    initializeProvidersQueue.reject(error)
+    throw error
+  }
+}
+
+async function initializeProvidersDirect(): Promise<ProvidersWithUrls> {
   const [GnosisRpcProviderWithUrl, EthereumRpcProviderWithUrl] =
     await Promise.all([
       getWorkingRpc(CHAIN_ID_GNOSIS_XDAI),
       getWorkingRpc(CHAIN_ID_ETHEREUM),
     ])
-  providers = {
+ 
+  return {
     GnosisRpcProvider: GnosisRpcProviderWithUrl.provider,
     EthereumRpcProvider: EthereumRpcProviderWithUrl.provider,
     GnosisRpcUrl: GnosisRpcProviderWithUrl.url,
@@ -280,8 +306,6 @@ export const initializeProviders = async () => {
     // PolygonRpcProvider: undefined, // TODO: add Polygon provider
     // PolygonRpcUrl: undefined, // TODO: add Polygon provider
   }
-  initializeProvidersQueue.resolve(providers)
-  return providers
 }
 
 /**
