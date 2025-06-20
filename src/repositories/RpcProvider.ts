@@ -252,7 +252,7 @@ interface Providers {
   // PolygonRpcProvider?: JsonRpcProvider // TODO: add Polygon provider
 }
 
-interface ProvidersWithUrls extends Providers {
+export interface ProvidersWithUrls extends Providers {
   GnosisRpcUrl: string
   EthereumRpcUrl: string
   // PolygonRpcUrl?: string // TODO: add Polygon provider
@@ -261,20 +261,18 @@ interface ProvidersWithUrls extends Providers {
 let initializeProvidersQueue: WaitingQueue<ProvidersWithUrls> | null = null
 let providers: ProvidersWithUrls | undefined = undefined
 
-export const initializeProviders = async () => {
+export const initializeProviders = async (): Promise<ProvidersWithUrls> => {
   if (initializeProvidersQueue) {
+    const timeoutPromise = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('RPC timeout')), 10000),
+    )
+
     try {
-      // Timeout of 7 seconds on the queue
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('RPC timeout')), 7000),
-      )
       return await Promise.race([
         initializeProvidersQueue.wait(),
         timeoutPromise,
       ])
     } catch (error) {
-      console.log('[RpcProvider] Timeout of the queue, relaunch without queue')
-      // Reset the blocked queue
       initializeProvidersQueue = null
       providers = undefined
       // Relaunch directly without queue
@@ -295,19 +293,28 @@ export const initializeProviders = async () => {
 }
 
 async function initializeProvidersDirect(): Promise<ProvidersWithUrls> {
-  const [GnosisRpcProviderWithUrl, EthereumRpcProviderWithUrl] =
-    await Promise.all([
-      getWorkingRpc(CHAIN_ID_GNOSIS_XDAI),
-      getWorkingRpc(CHAIN_ID_ETHEREUM),
-    ])
+  try {
+    const [GnosisRpcProviderWithUrl, EthereumRpcProviderWithUrl] =
+      await Promise.all([
+        getWorkingRpc(CHAIN_ID_GNOSIS_XDAI),
+        getWorkingRpc(CHAIN_ID_ETHEREUM),
+      ])
 
-  return {
-    GnosisRpcProvider: GnosisRpcProviderWithUrl.provider,
-    EthereumRpcProvider: EthereumRpcProviderWithUrl.provider,
-    GnosisRpcUrl: GnosisRpcProviderWithUrl.url,
-    EthereumRpcUrl: EthereumRpcProviderWithUrl.url,
-    // PolygonRpcProvider: undefined, // TODO: add Polygon provider
-    // PolygonRpcUrl: undefined, // TODO: add Polygon provider
+    return {
+      GnosisRpcProvider: GnosisRpcProviderWithUrl.provider,
+      EthereumRpcProvider: EthereumRpcProviderWithUrl.provider,
+      GnosisRpcUrl: GnosisRpcProviderWithUrl.url,
+      EthereumRpcUrl: EthereumRpcProviderWithUrl.url,
+    }
+  } catch (error) {
+    console.log('fallback to default RPC URLs')
+
+    return {
+      GnosisRpcProvider: new JsonRpcProvider('https://rpc.gnosischain.com'),
+      EthereumRpcProvider: new JsonRpcProvider('https://rpc.eth.gateway.fm'),
+      GnosisRpcUrl: 'https://rpc.gnosischain.com',
+      EthereumRpcUrl: 'https://rpc.eth.gateway.fm',
+    }
   }
 }
 
