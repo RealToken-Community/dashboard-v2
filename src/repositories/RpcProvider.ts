@@ -252,7 +252,7 @@ interface Providers {
   // PolygonRpcProvider?: JsonRpcProvider // TODO: add Polygon provider
 }
 
-interface ProvidersWithUrls extends Providers {
+export interface ProvidersWithUrls extends Providers {
   GnosisRpcUrl: string
   EthereumRpcUrl: string
   // PolygonRpcUrl?: string // TODO: add Polygon provider
@@ -261,27 +261,61 @@ interface ProvidersWithUrls extends Providers {
 let initializeProvidersQueue: WaitingQueue<ProvidersWithUrls> | null = null
 let providers: ProvidersWithUrls | undefined = undefined
 
-export const initializeProviders = async () => {
+export const initializeProviders = async (): Promise<ProvidersWithUrls> => {
   if (initializeProvidersQueue) {
-    return initializeProvidersQueue.wait()
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error('RPC timeout')), 10000),
+    )
+
+    try {
+      return await Promise.race<ProvidersWithUrls>([
+        initializeProvidersQueue.wait(),
+        timeoutPromise,
+      ])
+    } catch (error) {
+      initializeProvidersQueue = null
+      providers = undefined
+      // Relaunch directly without queue
+      return await initializeProvidersDirect()
+    }
   }
+
   initializeProvidersQueue = new WaitingQueue()
 
-  const [GnosisRpcProviderWithUrl, EthereumRpcProviderWithUrl] =
-    await Promise.all([
-      getWorkingRpc(CHAIN_ID_GNOSIS_XDAI),
-      getWorkingRpc(CHAIN_ID_ETHEREUM),
-    ])
-  providers = {
-    GnosisRpcProvider: GnosisRpcProviderWithUrl.provider,
-    EthereumRpcProvider: EthereumRpcProviderWithUrl.provider,
-    GnosisRpcUrl: GnosisRpcProviderWithUrl.url,
-    EthereumRpcUrl: EthereumRpcProviderWithUrl.url,
-    // PolygonRpcProvider: undefined, // TODO: add Polygon provider
-    // PolygonRpcUrl: undefined, // TODO: add Polygon provider
+  try {
+    const result = await initializeProvidersDirect()
+    initializeProvidersQueue.resolve(result)
+    return result
+  } catch (error) {
+    initializeProvidersQueue.reject(error)
+    throw error
   }
-  initializeProvidersQueue.resolve(providers)
-  return providers
+}
+
+async function initializeProvidersDirect(): Promise<ProvidersWithUrls> {
+  try {
+    const [GnosisRpcProviderWithUrl, EthereumRpcProviderWithUrl] =
+      await Promise.all([
+        getWorkingRpc(CHAIN_ID_GNOSIS_XDAI),
+        getWorkingRpc(CHAIN_ID_ETHEREUM),
+      ])
+
+    return {
+      GnosisRpcProvider: GnosisRpcProviderWithUrl.provider,
+      EthereumRpcProvider: EthereumRpcProviderWithUrl.provider,
+      GnosisRpcUrl: GnosisRpcProviderWithUrl.url,
+      EthereumRpcUrl: EthereumRpcProviderWithUrl.url,
+    }
+  } catch (error) {
+    console.log('fallback to default RPC URLs')
+
+    return {
+      GnosisRpcProvider: new JsonRpcProvider('https://rpc.gnosischain.com'),
+      EthereumRpcProvider: new JsonRpcProvider('https://rpc.eth.gateway.fm'),
+      GnosisRpcUrl: 'https://rpc.gnosischain.com',
+      EthereumRpcUrl: 'https://rpc.eth.gateway.fm',
+    }
+  }
 }
 
 /**
