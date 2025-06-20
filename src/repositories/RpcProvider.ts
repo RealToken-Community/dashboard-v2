@@ -263,12 +263,12 @@ let providers: ProvidersWithUrls | undefined = undefined
 
 export const initializeProviders = async (): Promise<ProvidersWithUrls> => {
   if (initializeProvidersQueue) {
-    const timeoutPromise = new Promise((_, reject) =>
+    const timeoutPromise = new Promise<never>((_, reject) =>
       setTimeout(() => reject(new Error('RPC timeout')), 10000),
     )
 
     try {
-      return await Promise.race([
+      return await Promise.race<ProvidersWithUrls>([
         initializeProvidersQueue.wait(),
         timeoutPromise,
       ])
