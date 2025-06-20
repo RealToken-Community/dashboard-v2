@@ -70,19 +70,49 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
 
       - name: Update branch environment
+        env:
+          DOCKER_BRANCH: ${{ github.ref_name }}
+          DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+          DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+          DOCKER_PASSWD: ${{ secrets.DOCKER_PASSWD }}
+          DOMAIN_URL: ${{ secrets.DOMAIN_URL }}
+          THEGRAPH_API_KEY: ${{ secrets.THEGRAPH_API_KEY }}
+          COMMUNITY_API_KEY: ${{ secrets.COMMUNITY_API_KEY }}
+          RPC_URLS_ETH_MAINNET: ${{ secrets.RPC_URLS_ETH_MAINNET }}
+          RPC_URLS_GNOSIS_MAINNET: ${{ secrets.RPC_URLS_GNOSIS_MAINNET }}
+          MATOMO_ID_PROD: ${{ secrets.MATOMO_ID_PROD }}
+          MATOMO_ID_PREPROD: ${{ secrets.MATOMO_ID_PREPROD }}
+          MATOMO_ID_DEVELOP: ${{ secrets.MATOMO_ID_DEVELOP }}
         run: |
-          ssh staging 'export DOCKER_BRANCH=${{ github.ref_name }} DOCKER_REGISTRY=${{ secrets.DOCKER_REGISTRY }}
-          cd /var/docker/dashboard-v2/${DOCKER_BRANCH}
-          git pull origin ${DOCKER_BRANCH}
-          docker compose --file docker-compose-branch.yml pull
-          docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWD }} ${DOCKER_REGISTRY}
-          THEGRAPH_API_KEY=${{ secrets.THEGRAPH_API_KEY }} \
-          COMMUNITY_API_KEY=${{ secrets.COMMUNITY_API_KEY }} \
-          REALTOKENAPI=https://api.realtoken.community/v1/token \
-          REALTOKENAPI_HISTORY=https://history.api.realtoken.community/ \
-          MATOMO_URL=https://data.realtoken.community/ \
-          MATOMO_SITE_ID=${{ github.ref_name == 'master' && secrets.MATOMO_ID_PROD || github.ref_name == 'preprod' && secrets.MATOMO_ID_PREPROD || secrets.MATOMO_ID_DEVELOP }} \
-          RPC_URLS_ETH_MAINNET=${{ secrets.RPC_URLS_ETH_MAINNET }} \
-          RPC_URLS_GNOSIS_MAINNET=${{ secrets.RPC_URLS_GNOSIS_MAINNET }} \
-          HOSTNAME=${{ github.ref_name == 'master' && 'dashboard.realtoken.community' || 'dashboard.${DOCKER_BRANCH}.realtoken.community' }} \
-          docker compose --project-name ${{ github.ref_name }}-dashboard --file docker-compose-branch.yml up -d'
+          if [[ "$DOCKER_BRANCH" == "master" ]]; then
+            export MATOMO_SITE_ID="$MATOMO_ID_PROD"
+            export HOSTNAME="dashboard.$DOMAIN_URL"
+          elif [[ "$DOCKER_BRANCH" == "preprod" ]]; then
+            export MATOMO_SITE_ID="$MATOMO_ID_PREPROD"
+            export HOSTNAME="dashboard.$DOCKER_BRANCH.$DOMAIN_URL"
+          else
+            export MATOMO_SITE_ID="$MATOMO_ID_DEVELOP"
+            export HOSTNAME="dashboard.$DOCKER_BRANCH.$DOMAIN_URL"
+          fi
+      
+          ssh staging <<EOF
+            set -euxo pipefail
+            export DOCKER_BRANCH="$DOCKER_BRANCH"
+            export DOCKER_REGISTRY="$DOCKER_REGISTRY"
+      
+            cd /var/docker/dashboard-v2/\$DOCKER_BRANCH
+            git pull origin \$DOCKER_BRANCH
+            docker compose --file docker-compose-branch.yml pull
+            docker login -u "$DOCKER_LOGIN" -p "$DOCKER_PASSWD" \$DOCKER_REGISTRY
+      
+            THEGRAPH_API_KEY="$THEGRAPH_API_KEY" \
+            COMMUNITY_API_KEY="$COMMUNITY_API_KEY" \
+            REALTOKENAPI="https://api.$DOMAIN_URL/v1/token" \
+            REALTOKENAPI_HISTORY="https://history.api.$DOMAIN_URL/" \
+            MATOMO_URL="https://data.$DOMAIN_URL/" \
+            MATOMO_SITE_ID="$MATOMO_SITE_ID" \
+            RPC_URLS_ETH_MAINNET="$RPC_URLS_ETH_MAINNET" \
+            RPC_URLS_GNOSIS_MAINNET="$RPC_URLS_GNOSIS_MAINNET" \
+            HOSTNAME="$HOSTNAME" \
+            docker compose --project-name \$DOCKER_BRANCH-dashboard --file docker-compose-branch.yml up -d
+          EOF
