@@ -266,9 +266,12 @@ export const initializeProviders = async () => {
     try {
       // Timeout of 7 seconds on the queue
       const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('RPC timeout')), 7000)
+        setTimeout(() => reject(new Error('RPC timeout')), 7000),
       )
-      return await Promise.race([initializeProvidersQueue.wait(), timeoutPromise])
+      return await Promise.race([
+        initializeProvidersQueue.wait(),
+        timeoutPromise,
+      ])
     } catch (error) {
       console.log('[RpcProvider] Timeout of the queue, relaunch without queue')
       // Reset the blocked queue
@@ -278,7 +281,7 @@ export const initializeProviders = async () => {
       return await initializeProvidersDirect()
     }
   }
- 
+
   initializeProvidersQueue = new WaitingQueue()
 
   try {
@@ -297,7 +300,7 @@ async function initializeProvidersDirect(): Promise<ProvidersWithUrls> {
       getWorkingRpc(CHAIN_ID_GNOSIS_XDAI),
       getWorkingRpc(CHAIN_ID_ETHEREUM),
     ])
- 
+
   return {
     GnosisRpcProvider: GnosisRpcProviderWithUrl.provider,
     EthereumRpcProvider: EthereumRpcProviderWithUrl.provider,
