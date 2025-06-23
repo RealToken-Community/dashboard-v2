@@ -69,6 +69,7 @@ const getREG = async (
     ERC20ABI,
     GnosisRpcProvider,
   )
+
   const balance: BalanceByWalletType = {
     [WalletType.Gnosis]: {
       amount: 0,
@@ -103,7 +104,7 @@ const getREG = async (
     )
     availableBalance += balance[WalletType.Ethereum].amount
   }
-
+  
   const regVaultAbiGetUserGlobalStateOnly =
     getRegVaultAbiGetUserGlobalStateOnly()
 
@@ -178,6 +179,7 @@ const getREG = async (
     : DEFAULT_REG_PRICE / userRate
   const value = tokenPrice * amount
   const totalInvestment = totalTokens * tokenPrice
+
   // Update all balance values with token price
   updateBalanceValues(balance, tokenPrice)
 

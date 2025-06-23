@@ -90,6 +90,15 @@ export interface REGRealtoken extends OtherRealtoken {}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface REGVotingPowertoken extends OtherRealtoken {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface RWARealtoken extends OtherRealtoken {
+  initialLaunchDate: APIRealTokenDate
+}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface REGRealtoken extends OtherRealtoken {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface REGVotingPowertoken extends OtherRealtoken {}
+
 const DAYS_PER_YEAR = 365
 const MONTHS_PER_YEAR = 12
 const AVG_DAYS_PER_MONTH = DAYS_PER_YEAR / MONTHS_PER_YEAR

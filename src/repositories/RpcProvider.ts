@@ -1,5 +1,4 @@
 import { CHAINS as RealtCommonsDefaultChainsConfig } from '@realtoken/realt-commons'
-
 import {
   Contract,
   JsonRpcProvider,
