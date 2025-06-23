@@ -8,7 +8,10 @@ import moment from 'moment'
 import { WalletBalances, WalletType } from 'src/repositories'
 import { UserRealTokenTransfer } from 'src/repositories/transfers/transfers.type'
 import { RootState } from 'src/store/store'
-import { APIRealTokenDate } from 'src/types/APIRealToken'
+import {
+  APIRealTokenDate,
+  APIRealTokenProductType,
+} from 'src/types/APIRealToken'
 import { RealToken, RealTokenCanal } from 'src/types/RealToken'
 import {
   RentCalculation,
@@ -16,8 +19,22 @@ import {
 } from 'src/types/RentCalculation'
 import { computeUCP } from 'src/utils/transfer/computeUCP'
 
+import {
+  CHAIN_ID_ETHEREUM,
+  CHAIN_ID_GNOSIS_XDAI,
+  CHAIN_NAME_ETHEREUM,
+  CHAIN_NAME_GNOSIS_XDAI,
+} from '../../../utils/blockchain/consts/otherTokens'
 import { selectRealtokens } from '../realtokens/realtokensSelector'
 import { selectUserRentCalculation } from '../settings/settingsSelector'
+
+export type BalanceByWalletType = Record<
+  WalletType,
+  {
+    amount: number
+    value: number
+  }
+>
 
 export interface UserRealtoken extends RealToken {
   id: string
@@ -29,19 +46,14 @@ export interface UserRealtoken extends RealToken {
   priceCost?: number
   unrealizedCapitalGain?: number
   lastChanges: string
-  balance: Record<
-    WalletType,
-    {
-      amount: number
-      value: number
-    }
-  >
+  balance: BalanceByWalletType
 }
 
 export interface OtherRealtoken {
   id: string
   fullName: string
   shortName: string
+  productType: APIRealTokenProductType
   amount: number
   value: number
   tokenPrice: number
@@ -50,7 +62,33 @@ export interface OtherRealtoken {
   imageLink: string[]
   isRmmAvailable: boolean
   unitPriceCost: number
+  balance: BalanceByWalletType
 }
+
+/**
+ * Updates all balance values with token price
+ * @param balance
+ * @param tokenPrice
+ */
+export const updateBalanceValues = (
+  balance: BalanceByWalletType,
+  tokenPrice: number,
+) => {
+  // Loop on each record
+  Object.keys(balance).forEach((key) => {
+    balance[key as WalletType].value =
+      balance[key as WalletType].amount * tokenPrice
+  })
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface RWARealtoken extends OtherRealtoken {
+  initialLaunchDate: APIRealTokenDate
+}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface REGRealtoken extends OtherRealtoken {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface REGVotingPowertoken extends OtherRealtoken {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface RWARealtoken extends OtherRealtoken {
@@ -243,3 +281,12 @@ export const selectRmmDetails = createSelector(
     return _mapValues(rmmDetails, (value) => value / rates.XDAI)
   },
 )
+
+export const getWalletChainName = (chainId: number) => {
+  switch (chainId) {
+    case CHAIN_ID_ETHEREUM:
+      return CHAIN_NAME_ETHEREUM
+    case CHAIN_ID_GNOSIS_XDAI:
+      return CHAIN_NAME_GNOSIS_XDAI
+  }
+}
