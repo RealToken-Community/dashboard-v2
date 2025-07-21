@@ -43,10 +43,12 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
   const rentCalculation = useSelector(selectUserRentCalculation)
 
   const realtimeDate = moment(new Date(rentCalculation.date))
-  const rentStartDate = new Date(props.value.rentStartDate.date)
+  const rentStartDate_date = props.value.rentStartDate?.date ?? null
+  const rentStartDate = new Date(rentStartDate_date)
   const isDisabled =
-    rentCalculation.state === RentCalculationState.Realtime &&
-    rentStartDate > realtimeDate.toDate()
+    !rentStartDate_date ||
+    (rentCalculation.state === RentCalculationState.Realtime &&
+    rentStartDate > realtimeDate.toDate())
 
   const rentNotStarted = t('rentNotStarted')
   const isSubsidized =
