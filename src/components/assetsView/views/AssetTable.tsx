@@ -73,6 +73,8 @@ const AssetTableHeader: FC = () => {
       <Table.Th style={{ textAlign: 'right' }}>{t('yearlyRents')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('rentedUnits')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('propertyValue')}</Table.Th>
+      <Table.Th style={{ textAlign: 'right' }}>{t('Priority')}</Table.Th>
+      <Table.Th style={{ textAlign: 'right' }}>{t('Status')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('lastChange')}</Table.Th>
     </Table.Tr>
   )
@@ -155,6 +157,12 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
       </Table.Td>
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {useCurrencyValue(totalInvestment)}
+      </Table.Td>
+      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+        {props.value.extraData?.pitsBI?.actions?.priority}
+      </Table.Td>
+      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+        {props.value.extraData?.pitsBI?.actions?.realt_status}
       </Table.Td>
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {moment(props.value.lastChanges, 'YYYYMMDD')

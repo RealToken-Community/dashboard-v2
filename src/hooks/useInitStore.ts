@@ -5,7 +5,9 @@ import { useWeb3React } from '@web3-react/core'
 
 import { fetchCurrenciesRates } from 'src/store/features/currencies/currenciesSlice'
 import { selectRealtokens } from 'src/store/features/realtokens/realtokensSelector'
-import { fetchRealtokens } from 'src/store/features/realtokens/realtokensSlice'
+import { fetchRealtokens, fetchRealtokensExtraData } from 'src/store/features/realtokens/realtokensSlice'
+// import { fetchRealtokensExtraData } from 'src/store/features/realtokens/realtokensSliceExtraData'
+
 import {
   selectAllUserAddressList,
   selectUserAddressList,
@@ -42,7 +44,13 @@ export default function useInitStore() {
 
   useEffect(() => {
     dispatch(initializeSettings())
+    // dispatch(fetchRealtokens())
+    // // dispatch(fetchRealtokensExtraData())
     dispatch(fetchRealtokens())
+     .then((/* data */) => {
+      console.debug('Realtokens fetched, now fetching extra data...')
+      dispatch(fetchRealtokensExtraData(/* data */))
+    })
     dispatch(fetchCurrenciesRates())
   }, [dispatch])
 
@@ -53,6 +61,7 @@ export default function useInitStore() {
       if (realtokens.length) {
         dispatch(fetchWallets(realtokens))
         // dispatch(fetchTransfers(realtokens))
+        // dispatch(fetchRealtokensExtraData(/* data */))
       }
     } else {
       dispatch(resetWallets())

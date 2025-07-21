@@ -1,3 +1,4 @@
+import { RealTokenPitsBI_Actions, RealTokenPitsBI_Historic } from './APIPitsBI'
 import { APIRealToken } from './APIRealToken'
 import { RealTokenHistoryItem } from './APIRealTokenHistory'
 
@@ -49,4 +50,14 @@ export interface RealToken extends APIRealToken {
   isRmmAvailable: boolean
   rentStatus: RealTokenRentStatus
   history: RealTokenHistoryItem[]
+  extraData?: {
+    // TODO: Explicitly define extra data structure once known
+    // [key: string]: any
+    pitsBI?: {
+      actions?: RealTokenPitsBI_Actions
+      historic?: RealTokenPitsBI_Historic
+    }
+  }
 }
+
+

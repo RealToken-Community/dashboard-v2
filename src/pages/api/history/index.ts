@@ -1,4 +1,5 @@
 import { NextApiHandler } from 'next'
+import { APIRealTokenEnv } from 'src/types/APIRealToken'
 
 import { APIRealTokenHistory } from 'src/types/APIRealTokenHistory'
 import { useCache } from 'src/utils/useCache'
@@ -8,12 +9,12 @@ const getRealTokenHistory = useCache(
     if (!process.env.COMMUNITY_API_KEY) {
       throw new Error('Missing COMMUNITY_API_KEY env variable')
     }
-    if (!process.env.REALTOKENAPI_HISTORY) {
-      throw new Error('Missing REALTOKENAPI_HISTORY env variable')
+    if (!process.env[APIRealTokenEnv.API_HISTORY]) {
+      throw new Error(`Missing ${APIRealTokenEnv.API_HISTORY} env variable`)
     }
-    const response = await fetch(process.env.REALTOKENAPI_HISTORY, {
+    const response = await fetch(process.env[APIRealTokenEnv.API_HISTORY], {
       method: 'GET',
-      headers: { 'X-AUTH-REALT-TOKEN': process.env.COMMUNITY_API_KEY },
+      headers: { [APIRealTokenEnv.AUTH]: process.env[APIRealTokenEnv.COMMUNITY_API_KEY] },
     })
 
     if (!response.ok) {

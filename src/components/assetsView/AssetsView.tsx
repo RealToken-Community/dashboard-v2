@@ -16,6 +16,7 @@ import { useAssetsViewFilters } from './filters/useFilters'
 import { RealtimeIndicator } from './indicators/RealtimeIndicator'
 import { AssetViewType } from './types'
 import { AssetGrid, AssetTable } from './views'
+// import store from 'src/store/store'
 
 interface AssetsViewProps {
   allAssetsData: (UserRealtoken | OtherRealtoken)[]
@@ -33,6 +34,10 @@ export const AssetsView: FC<AssetsViewProps> = ({
   const isOtherAsset = (asset: UserRealtoken | OtherRealtoken) => {
     return !asset.hasOwnProperty('rentStatus') // rely on rentStatus to determine if it's a UserRealtoken
   }
+
+  // store.subscribe(() => {
+  //   console.debug('Store updated:', store.getState().realtokens.isExtraDataLoaded)
+  // })
 
   // Apply search and filter functions
   const filteredData = useMemo(() => {
