@@ -16,7 +16,7 @@
 
 To run the project you will need to set-up a `.env` file in the root folder, by copy/paste `.env.sample` file.
 
-To get a `COMMUNITY_API_KEY`, join the dedicated [telegram dev channel](https://t.me/+XQyoaFfmN61yk7X0) then ask for.
+To get a `REALTOKEN_COMMUNITY_API_KEY`, join the dedicated [telegram dev channel](https://t.me/+XQyoaFfmN61yk7X0) then ask for.
 
 To get a `THEGRAPH_API_KEY`, you need to create an account on [thegraph](https://thegraph.com/docs/en/querying/managing-api-keys/)
 

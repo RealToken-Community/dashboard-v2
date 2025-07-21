@@ -1,37 +1,29 @@
 import { NextApiHandler } from 'next'
 import { APIPitsBiEnv } from 'src/types/APIPitsBI'
-// import { mergeObjects } from 'json-merger'
 
-import { APIRealToken, APIRealTokenEnv } from 'src/types/APIRealToken'
+import { APIRealToken, APIRealTokenCommunityEnv } from 'src/types/APIRealToken'
 import { useCache } from 'src/utils/useCache'
 
 const getRealTokenList = useCache(
   async (): Promise<APIRealToken[]> => {
     console.debug('Fetching RealToken list from Community API... (1)')
     for (const envVar of [
-      APIRealTokenEnv.COMMUNITY_API_KEY,
-      APIRealTokenEnv.API_BASE,
-      APIRealTokenEnv.VERSION,
-      APIRealTokenEnv.GET_ALLTOKENS,
+      APIRealTokenCommunityEnv.API_KEY,
+      APIRealTokenCommunityEnv.API_BASE,
+      APIRealTokenCommunityEnv.VERSION,
+      APIRealTokenCommunityEnv.GET_ALLTOKENS,
     ]) {
       if (!process.env[envVar]) {
         throw new Error(`Missing RealToken Community API ${envVar} env variable`)
       }
     }
     console.debug('Fetching RealToken list from Community API... (2)')
-    const REALTOKEN_API_GET_ALLTOKENS = `${process.env[APIRealTokenEnv.API_BASE]}${process.env[APIRealTokenEnv.VERSION]}/${process.env[APIRealTokenEnv.GET_ALLTOKENS]}`
-    console.debug(`RealToken API GET_ALLTOKENS endpoint: ${REALTOKEN_API_GET_ALLTOKENS} (3)`)
+    const REALTOKEN_COMMUNITY_API_GET_ALLTOKENS = `${process.env[APIRealTokenCommunityEnv.API_BASE]}${process.env[APIRealTokenCommunityEnv.VERSION]}/${process.env[APIRealTokenCommunityEnv.GET_ALLTOKENS]}`
+    console.debug(`RealToken API GET_ALLTOKENS endpoint: ${REALTOKEN_COMMUNITY_API_GET_ALLTOKENS} (3)`)
 
-
-    // if (!process.env.COMMUNITY_API_KEY) {
-    //   throw new Error('Missing COMMUNITY_API_KEY env variable')
-    // }
-    // if (!process.env.REALTOKENAPI) {
-    //   throw new Error('Missing REALTOKENAPI env variable')
-    // }
-    const realTokenApiResponse = await fetch(REALTOKEN_API_GET_ALLTOKENS, {
+    const realTokenApiResponse = await fetch(REALTOKEN_COMMUNITY_API_GET_ALLTOKENS, {
       method: 'GET',
-      headers: { [APIRealTokenEnv.AUTH]: process.env[APIRealTokenEnv.COMMUNITY_API_KEY] as string },
+      headers: { [APIRealTokenCommunityEnv.AUTH]: process.env[APIRealTokenCommunityEnv.API_KEY] as string },
     })
 
     console.debug(`RealToken API response received, status: ${realTokenApiResponse.status} (4)`)
@@ -39,7 +31,7 @@ const getRealTokenList = useCache(
     // const realTokenApiResponseText = !realTokenApiResponse.ok ? (await realTokenApiResponse.text()) : ''
     const realTokenApiResponseError = !realTokenApiResponse.ok
 
-    const realTokenApiErrorMsg = realTokenApiResponseError ? `Failed to fetch RealToken API uri: (${REALTOKEN_API_GET_ALLTOKENS}) status: (${realTokenApiResponse.status}) response : ` + (await realTokenApiResponse.text()) : ''
+    const realTokenApiErrorMsg = realTokenApiResponseError ? `Failed to fetch RealToken API uri: (${REALTOKEN_COMMUNITY_API_GET_ALLTOKENS}) status: (${realTokenApiResponse.status}) response : ` + (await realTokenApiResponse.text()) : ''
     if (realTokenApiResponseError) {
       // throw new Error('Failed to fetch properties : ' + (await realTokenApiResponse.text()))
       // const realTokenApiResponseText = (await realTokenApiResponse.text())
@@ -92,7 +84,7 @@ const getRealTokenList = useCache(
       // and return it with PitsBI extra data
 
       // Return Pitsbi API response if RealToken API is not available
-      console.debug('Returning Pitsbi API response...')
+      console.debug('Returning Pitsbi API response (as RealT API) ...')
       return pitsbiApiResponse.json()
 
       // Load Pitsbi "in the background"
