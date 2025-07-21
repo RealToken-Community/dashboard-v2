@@ -100,10 +100,14 @@ const APRDisabled = (
   token: UserRealtoken,
 ) => {
   const realtimeDate = moment(new Date(rentCalculation.date))
-  const rentStartDate = new Date(token.rentStartDate.date)
+  // Set date to null when rentStartDate(.)date is not defined,
+  // avoid "Cannot read properties of null".
+  // Typically for RWA asset
+  const rentStartDate = new Date(token.rentStartDate?.date ?? null)
   const isDisabled =
-    rentCalculation.state === RentCalculationState.Realtime &&
-    rentStartDate > realtimeDate.toDate()
+    !token.rentStartDate?.date ||
+    (rentCalculation.state === RentCalculationState.Realtime &&
+    rentStartDate > realtimeDate.toDate())
   return isDisabled
 }
 
