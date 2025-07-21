@@ -212,7 +212,7 @@
     "weekly": "Loyers hebdomadaires",
     "yearly": "Loyers annuels",
     "rentedUnits": "Logements loués",
-    "tokenPrice":"Prix d'un token",
+    "tokenPrice": "Prix d'un token",
     "propertyValue": "Valeur de la propriété",
     "rentStartDate": "Date du premier loyer",
     "fullyRentedEstimation": "Rendement 100% loué",
@@ -238,12 +238,14 @@
     "tokenPrice": "Prix du token",
     "unitPriceCost": "Prix de revient",
     "apr": "Rendement annuel",
-    "fullyRentedAPR":"Rendement 100% loué *",
+    "fullyRentedAPR": "Rendement 100% loué *",
     "weeklyRents": "Loyer hebdo",
     "yearlyRents": "Loyer annuel",
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
-    "lastChange": "Dernier changement"
+    "lastChange": "Dernier changement",
+    "priority": "Priorité",
+    "status": "Statut"
   },
   "assetPage": {
     "home": "Accueil",
@@ -423,11 +425,10 @@
     "title": "Chargement initial des données",
     "description": "Récupération de vos transactions en cours. Ce chargement peut prendre un certain temps en fonction du nombre de transactions effecutées (10-20 secondes / 1000 transactions). Lors de vos prochaines visites, seul les nouvelles transactions seront récupérées."
   },
-  "disclaimer":{
+  "disclaimer": {
     "fullyRentedAPR": "Cette estimation est en phase bêta et a été développée par la communauté RealT. Nous vous invitons à signaler tout problème éventuel. Les informations fournies sont à titre indicatif uniquement. La communauté RealT ou RealT ne peut être tenue responsable en cas de décision prise à partir de données inexactes."
-  }
-  ,
-  "errors" : {
+  },
+  "errors": {
     "userNotFound": "User not found"
   }
 }

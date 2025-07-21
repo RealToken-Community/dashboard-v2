@@ -132,7 +132,7 @@ const getRealTokenList = useCache(
     //   throw new Error(`${realTokenApiErrorMsg} and Pitsbi API is not available (missing env variables)`)
     // }
 
-    // console.debug('RealToken API response received, returning RealToken list...')
+    console.debug('RealToken API response received, returning RealToken list...')
 
 
     // return realTokenApiResponse

@@ -124,7 +124,7 @@ export function fetchRealtokensExtraData(/* _data: RealToken[] */) {
 
     try {
       const pitsBiExtraData = await RealtokenRepository.getTokensPitsBiExtraData()
-      console.debug('Fetched pitsBiExtraData :', pitsBiExtraData)
+      console.debug(`Fetched pitsBiExtraData : ${pitsBiExtraData.length}`, pitsBiExtraData)
 
       // Build a map of tokensExtraData by uuid
       const tokensExtraDataMap = new Map<string, APIRealTokenPitsBI_ExtraData>()
@@ -138,6 +138,11 @@ export function fetchRealtokensExtraData(/* _data: RealToken[] */) {
       console.debug('existingTokens length:', existingTokens.length)
 
       existingTokens.forEach((token) => {
+        if (token.productType == APIRealTokenProductType.EquityToken) {
+          console.debug(`Processing token: ${token.uuid} (${token.fullName})`)
+        }
+        
+        
         const tokenExtraData = tokensExtraDataMap.get(token.uuid)
         const { actions, historic } = tokenExtraData || {}
         // Merge existing tokens with PitsBI extra data
@@ -147,12 +152,33 @@ export function fetchRealtokensExtraData(/* _data: RealToken[] */) {
             historic: historic,
           },
         }
+
       })
 
       dispatch({
       type: realtokensExtraDataChangedDispatchType,
-      payload: existingTokens
+      payload: existingTokens.filter(filterProductType),
     })
+
+    // const tokensWithPitsBiExtraData = existingTokens.map((token) => {
+    //   const tokenExtraData = tokensExtraDataMap.get(token.uuid)
+    //   const { actions, historic } = tokenExtraData || {}
+    //   // Merge existing tokens with PitsBI extra data
+    //   return {
+    //     ...token,
+    //     extraData: {
+    //       pitsbi: {
+    //         actions: actions || [],
+    //         historic: historic || [],
+    //       },
+    //     }
+    //   }
+    // })
+    // console.debug(`extraData: tokensWithPitsBiExtraData[${tokensWithPitsBiExtraData.length}]:`, tokensWithPitsBiExtraData)
+    // dispatch({
+    //   type: realtokensExtraDataChangedDispatchType,
+    //   payload: tokensWithPitsBiExtraData.filter(filterProductType),
+    // })
 
     /* 
       const pitsBiExtraData = await RealtokenRepository.getTokensPitsBiExtraData()
@@ -207,7 +233,7 @@ export function fetchRealtokensExtraData(/* _data: RealToken[] */) {
 
   }
 }
-    
+
 export const realtokensReducers = createReducer(
   realtokenInitialState,
   (builder) => {
