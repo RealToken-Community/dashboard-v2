@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
 
-import { Anchor, Badge, ScrollArea, Table, Tooltip, Text, Button } from '@mantine/core'
+import { Anchor, Badge, ScrollArea, Table, Tooltip, Text, Button, ActionIcon } from '@mantine/core'
 
 import moment from 'moment'
 
@@ -17,7 +17,6 @@ import {
 } from 'src/store/features/wallets/walletsSelector'
 
 import {
-  IconBan,
   IconCalendarTime,
   IconCheck,
   IconCircleNumber1,
@@ -104,7 +103,7 @@ AssetTableHeader.displayName = 'AssetTableHeader'
 const StatusIcons = forwardRef<HTMLDivElement, { value: string | undefined }>((props, ref) => {
   const { value, ...rest } = props
   const iconColor = !value||value==='na' ? 'gray' : value === RealTokenToBeFixedStatus.NoExhibit ? 'green' : value === RealTokenToBeFixedStatus.Scheduled ? 'orange' : value === RealTokenToBeFixedStatus.UpgradedAndReady ? 'green' : 'purple'
-  const icon = !value ? <IconLoader size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.NoExhibit ? <IconCheck size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.Scheduled ? <IconCalendarTime size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.UpgradedAndReady ? <IconHomeCheck size={16} color={iconColor}/> : value == 'na' ? <IconLoader size={16} color={iconColor}/> : <IconQuestionMark size={16} color={iconColor}/>
+  const icon = !value ? <IconLoading /> : value === RealTokenToBeFixedStatus.NoExhibit ? <IconCheck size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.Scheduled ? <IconCalendarTime size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.UpgradedAndReady ? <IconHomeCheck size={16} color={iconColor}/> : value == 'na' ? <IconLoader size={16} color={iconColor}/> : <IconQuestionMark size={16} color={iconColor}/>
 
   return (
     <div ref={ref} {...rest}>
@@ -142,14 +141,14 @@ const PriorityIcons = forwardRef<HTMLDivElement, { value: number | undefined }>(
   const badgeColor = iconColor
   // const iconBadge = !value||value===0||value===-1 ? <IconLoader size={16} color={iconColor} /> : value === 1 ? <IconCircleNumber1 size={16} /> : value === 2 ? <IconCircleNumber2 size={16} /> : <IconCircleNumber3 size={14} />
   // const icon = !value||value===0||value===-1 ? <></> : value === 1 ? <IconTrafficCone size={16} color={iconColor} /> : value === 2 ? <IconTool size={16} color={iconColor} /> : <IconHammer size={16} color={iconColor} />
-  const iconBadge = value===0 ? <IconCheck size={16} color={iconColor} /> : !value ? <IconLoader size={16} color={iconColor} /> : value === 1 ? <IconCircleNumber1 size={16} /> : value === 2 ? <IconCircleNumber2 size={16} /> : <IconCircleNumber3 size={14} />
-  const icon = value===0 ? <></> : !value ? <></> : value === 1 ? <IconTrafficCone size={16} color={iconColor} /> : value === 2 ? <IconTool size={16} color={iconColor} /> : <IconHammer size={16} color={iconColor} />
+  const iconBadge = value===0 ? <IconCheck size={16} color={iconColor} /> : !value ? <></> : value === 1 ? <IconCircleNumber1 size={16} /> : value === 2 ? <IconCircleNumber2 size={16} /> : <IconCircleNumber3 size={14} />
+  const icon = value===0 ? <></> : !value ? <IconLoading /> : value === 1 ? <IconTrafficCone size={16} color={iconColor} /> : value === 2 ? <IconTool size={16} color={iconColor} /> : <IconHammer size={16} color={iconColor} />
 
   return (
     <div ref={ref} {...rest}>
       <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-        <Badge color={badgeColor} p={"3px"} pt={"7px"} style={{ display: 'flex', gap: '2px', marginRight: '5px' }}>{iconBadge}</Badge>
-        {icon }
+        {value !== undefined && <Badge color={badgeColor} p={"3px"} pt={"7px"} style={{ display: 'flex', gap: '2px', marginRight: '5px' }}>{iconBadge}</Badge>}
+        {icon}
       </div>
     </div>
   )
@@ -177,7 +176,7 @@ const ExhibitIcons = forwardRef<HTMLDivElement, { exhibitNumber: number | undefi
   const { exhibitNumber, exhibitVolume, ...rest } = props
   const noExhibit = !exhibitNumber && !exhibitVolume || exhibitNumber === -1 && exhibitVolume ===-1
   const iconColor = noExhibit ? 'gray' : 'orange'
-  const icon = exhibitNumber === 0 && exhibitVolume === 0 ? <IconFileOff size={16} color={iconColor} /> : !exhibitNumber && !exhibitVolume ? <IconLoader size={16} color={iconColor} /> : <IconFileAlert size={16} color={iconColor} />
+  const icon = exhibitNumber === 0 && exhibitVolume === 0 ? <IconFileOff size={16} color={iconColor} /> : !exhibitNumber && !exhibitVolume ? <IconLoading /> : <IconFileAlert size={16} color={iconColor} />
   return (
     <div ref={ref} {...rest}>
       <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
@@ -194,11 +193,15 @@ const Exhibit: FC<{ exhibitNumber: number | undefined, exhibitVolume: number | u
 const { t } = useTranslation('common', { keyPrefix: 'assetTable' })
 const toolTipText = exhibitNumber === 0 && exhibitVolume === 0 ? t('lawsuit.na') : !exhibitNumber && !exhibitVolume ? t('lawsuit.unknown') : exhibitNumber === -1 && exhibitVolume ===-1 ? t('lawsuit.na') : t('lawsuit.exhibit')+ ` # ${exhibitNumber} volume ${exhibitVolume}`
 return (
-      <Tooltip label={toolTipText}>
-      <ExhibitIcons exhibitNumber={exhibitNumber} exhibitVolume={exhibitVolume} />
-      </Tooltip>
+  <Tooltip label={toolTipText}>
+    <ExhibitIcons exhibitNumber={exhibitNumber} exhibitVolume={exhibitVolume} />
+  </Tooltip>
 )
 }
+
+const IconLoading = () => (
+  <ActionIcon loading={true} loaderProps={{ type: 'oval' }} color={'gray'} /> 
+)
 
 const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
