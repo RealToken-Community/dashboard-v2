@@ -244,8 +244,26 @@
     "rentedUnits": "Logements loués",
     "propertyValue": "Valeur de la propriété",
     "lastChange": "Dernier changement",
-    "priority": "Priorité",
-    "status": "Statut"
+    "status": {
+      "header": "Statut",
+      "noExhibit": "Non concerné",
+      "scheduled": "Planifié",
+      "upgradedReady": "Réparé, prêt",
+      "unknown": "Inconnu",
+      "ok": "Non concerné"
+    },
+    "priority": {
+      "header": "Priorité",
+      "1": "Priorité 1 (Haute)",
+      "2": "Priorité 2 (Moyenne)",
+      "3": "Priorité 3 (Basse)",
+      "na": "Non concerné"
+    },
+    "lawsuit": {
+      "header": "Poursuite",
+      "na": "Pas de plainte",
+      "exhibit": "Plainte"
+    }
   },
   "assetPage": {
     "home": "Accueil",

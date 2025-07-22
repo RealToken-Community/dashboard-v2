@@ -22,7 +22,7 @@ export enum RealTokenToBeFixedStatus {
 
 export interface RealTokenPitsBI_Actions {
   exhibit_number: number // 0 = no exhibit, 1+ = exhibit number
-  volume: number // Volume = no exhibit, 1+ = volume number
+  volume: number // Volume 0 = no exhibit, 1+ = exhibitvolume number
   priority: RealTokenToBeRepairedPriority // Priority of the action
   realt_status: RealTokenToBeFixedStatus // Status of the action
 }

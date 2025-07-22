@@ -1,10 +1,10 @@
-import { FC } from 'react'
+import { FC, forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
 
-import { Anchor, Badge, ScrollArea, Table } from '@mantine/core'
+import { Anchor, Badge, ScrollArea, Table, Tooltip, Text, Button } from '@mantine/core'
 
 import moment from 'moment'
 
@@ -17,15 +17,19 @@ import {
 } from 'src/store/features/wallets/walletsSelector'
 
 import {
+  IconBan,
   IconCalendarTime,
   IconCheck,
   IconCircleNumber1,
   IconCircleNumber2,
   IconCircleNumber3,
+  IconFileAlert,
+  IconFileOff,
   IconHammer,
   IconHomeCheck,
+  IconQuestionMark,
+  IconTool,
   IconTrafficCone,
-  IconTrash,
 } from '@tabler/icons'
 import { RealTokenToBeFixedStatus } from 'src/types/APIPitsBI'
 
@@ -86,61 +90,110 @@ const AssetTableHeader: FC = () => {
       <Table.Th style={{ textAlign: 'right' }}>{t('yearlyRents')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('rentedUnits')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('propertyValue')}</Table.Th>
-      <Table.Th style={{ textAlign: 'right' }}>{t('status')}</Table.Th>
-      <Table.Th style={{ textAlign: 'right' }}>{t('priority')}</Table.Th>
+      <Table.Th style={{ textAlign: 'right' }}>{t('status.header')}</Table.Th>
+      <Table.Th style={{ textAlign: 'right' }}>{t('priority.header')}</Table.Th>
+      <Table.Th style={{ textAlign: 'right' }}>{t('lawsuit.header')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('lastChange')}</Table.Th>
     </Table.Tr>
   )
 }
 AssetTableHeader.displayName = 'AssetTableHeader'
 
-const Status: FC<{ value: string }> = ({ value }) => {
-  // const { t } = useTranslation('common', {
-  //   keyPrefix: 'realtimeIndicator',
-  // })
+// eslint-disable-next-line react/display-name
+const StatusIcons = forwardRef<HTMLDivElement, { value: string | undefined }>((props, ref) => {
+  const { value, ...rest } = props
+
+  const iconColor = !value ? 'gray' : value === RealTokenToBeFixedStatus.NoExhibit ? 'green' : value === RealTokenToBeFixedStatus.Scheduled ? 'orange' : value === RealTokenToBeFixedStatus.UpgradedAndReady ? 'green' : 'purple'
+  const icon = !value ?  <IconCheck size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.NoExhibit ? <IconCheck size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.Scheduled ? <IconCalendarTime size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.UpgradedAndReady ? <IconHomeCheck size={16} color={iconColor}/> : <IconQuestionMark size={16} color={iconColor}/>
 
   return (
-/*     <Badge key={'realtime'} ml={'15px'}>
-      <span>{'⏰'}</span>
-      <span>{value==0?'-':value}</span>
-    </Badge> */
+    <div ref={ref} {...rest}>
+      <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+        {icon}
+      </div>
+    </div>
+  )
+})
 
-    /* TODO: Icon Hover */
-
-    value === RealTokenToBeFixedStatus.NoExhibit ? (
-        <IconCheck size={16} />
-      ) : value === RealTokenToBeFixedStatus.Scheduled ? (
-        <IconCalendarTime size={16} />
-      ) : value === RealTokenToBeFixedStatus.UpgradedAndReady ? (
-        <IconHomeCheck size={16} />
-      ) : ""
+/* Status Component
+  * Displays a status icon with a tooltip
+*/
+const Status: FC<{ value: string | undefined }> = ({ value }) => {
+const { t } = useTranslation('common', { keyPrefix: 'assetTable' })
+const toolTipText = !value ? t(`status.ok`) : 
+  value === RealTokenToBeFixedStatus.NoExhibit ? t('status.noExhibit') : 
+  value === RealTokenToBeFixedStatus.Scheduled ? t('status.scheduled') : 
+  value === RealTokenToBeFixedStatus.UpgradedAndReady ? t('status.upgradedReady') : t('status.unknown')
+  return (
+    <Tooltip label={toolTipText}>
+      <StatusIcons value={value} />
+    </Tooltip>
   )
 }
 
-const Priority: FC<{ value: number }> = ({ value }) => {
-  // const { t } = useTranslation('common', {
-  //   keyPrefix: 'realtimeIndicator',
-  // })
+/* Priority Icons Component
+ * Displays icons based on priority
+*/
+// eslint-disable-next-line react/display-name
+const PriorityIcons = forwardRef<HTMLDivElement, { value: number | undefined }>((props, ref) => {
+  const { value, ...rest } = props
+  const iconColor = !value||value===0 ? 'gray' : value === 1 ? 'red' : value === 2 ? 'orange' : value === 3 ? 'yellow' : 'purple'
+  const badgeColor = iconColor
+  const iconBadge = !value||value===0 ? <IconBan size={16} color={iconColor} /> : value === 1 ? <IconCircleNumber1 size={16} /> : value === 2 ? <IconCircleNumber2 size={16} /> : <IconCircleNumber3 size={14} />
+  const icon = !value||value===0 ? <></> : value === 1 ? <IconTrafficCone size={16} color={iconColor} /> : value === 2 ? <IconTool size={16} color={iconColor} /> : <IconHammer size={16} color={iconColor} />
 
   return (
-/*     <Badge key={'realtime'} ml={'15px'}>
-      <span>{'⏰'}</span>
-      <span>{value==0?'-':value}</span>
-    </Badge> */
-    value <= 0 ? (
-      null
-    ) : (
-      <>
-        {/* TODO: Icon Hover */}
-        {/* value = 1 = Icone TrafficCone + Icone Hammer + Icone Trash */}
-        {/* value = 2 = Icone Hammer + Icone Trash */}
-        {/* value = 3 = Icone Trash */}
-        {value < 2 && <><IconCircleNumber1 size={20} /><IconTrafficCone size={16} /></>}
-        {value==2 && <IconCircleNumber2 size={16} />}{value < 3 && <IconHammer size={16} />}
-        {value==3 && <IconCircleNumber3 size={14} />}{value < 4 && <IconTrash size={16} />}
-      </>
-    )
+    <div ref={ref} {...rest}>
+      <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+        <Badge color={badgeColor} p={"3px"} pt={"7px"} style={{ display: 'flex', gap: '2px', marginRight: '5px' }}>{iconBadge}</Badge>
+        {icon }
+      </div>
+    </div>
   )
+})
+
+
+/* Priority Badge Component
+ * Displays a badge with an icon representing the priority level, as well as a tooltip with the priority level text.
+*/
+const Priority: FC<{ value: number | undefined }> = ({ value }) => {
+const { t } = useTranslation('common', { keyPrefix: 'assetTable' })
+const toolTipText = value ? t(`priority.${value}`) : t('priority.na')
+return (
+  <Tooltip label={toolTipText}>
+    <PriorityIcons value={value} />
+  </Tooltip>
+)
+}
+
+/* Exhibit Icons Component
+ * Displays an icon based on the exhibit number and volume, with a tooltip showing the exhibit number
+*/
+// eslint-disable-next-line react/display-name
+const ExhibitIcons = forwardRef<HTMLDivElement, { exhibitNumber: number | undefined, exhibitVolume: number | undefined }>((props, ref) => {
+  const { exhibitNumber, exhibitVolume, ...rest } = props
+  const iconColor = !exhibitNumber && !exhibitVolume ? 'gray' : 'orange'
+  const icon = !exhibitNumber && !exhibitVolume ? <IconFileOff size={16} color={iconColor} /> : <IconFileAlert size={16} color={iconColor} />
+  return (
+    <div ref={ref} {...rest}>
+      <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+        {icon}
+      </div>
+    </div>
+  )
+})
+
+/* Exhibit Component
+ * Displays an exhibit icon with a tooltip
+ */
+const Exhibit: FC<{ exhibitNumber: number | undefined, exhibitVolume: number | undefined }> = ({ exhibitNumber, exhibitVolume }) => {
+const { t } = useTranslation('common', { keyPrefix: 'assetTable' })
+const toolTipText = !exhibitNumber && !exhibitVolume ? t('lawsuit.na') : t('lawsuit.exhibit')+ ` # ${exhibitNumber} volume ${exhibitVolume}`
+return (
+      <Tooltip label={toolTipText}>
+      <ExhibitIcons exhibitNumber={exhibitNumber} exhibitVolume={exhibitVolume} />
+      </Tooltip>
+)
 }
 
 const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
@@ -225,7 +278,11 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
       </Table.Td>
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {/* {props.value.extraData?.pitsBI?.actions?.priority} */}
-        <Priority value={props.value.extraData?.pitsBI?.actions?.priority || 0} />
+        <Priority value={props.value.extraData?.pitsBI?.actions?.priority} />
+      </Table.Td>
+      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+        {/* {props.value.extraData?.pitsBI?.actions?.priority} */}
+        <Exhibit exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number} exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume} />
       </Table.Td>
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {moment(props.value.lastChanges, 'YYYYMMDD')

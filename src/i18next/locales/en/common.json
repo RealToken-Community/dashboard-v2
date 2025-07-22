@@ -244,8 +244,26 @@
     "rentedUnits": "Rented units",
     "propertyValue": "Property value",
     "lastChange": "Last change",
-    "priority": "Priority",
-    "status": "Status"
+    "status": {
+      "header": "Status",
+      "noExhibit": "Not applicable",
+      "scheduled": "Scheduled",
+      "upgradedReady": "Upgraded and ready",
+      "unknown": "Unknown",
+      "ok": "Not applicable"
+    },
+    "priority": {
+      "header": "Priority",
+      "1": "Priority 1 (High)",
+      "2": "Priority 2 (Medium)",
+      "3": "Priority 3 (Low)",
+      "na": "Not applicable"
+    },
+    "lawsuit": {
+      "header": "Lawsuit",
+      "na": "No lawsuit",
+      "exhibit": "Exhibit"
+    }
   },
   "assetPage": {
     "home": "Home",

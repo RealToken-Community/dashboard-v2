@@ -145,7 +145,7 @@ export function fetchRealtokensExtraData(/* _data: RealToken[] */) {
         
         const tokenExtraData = tokensExtraDataMap.get(token.uuid)
         const { actions, historic } = tokenExtraData || {}
-        // Merge existing tokens with PitsBI extra data
+        // Merge existing tokens with PitsBI "extra data"
         token.extraData = {
           pitsBI: {
             actions: actions,
