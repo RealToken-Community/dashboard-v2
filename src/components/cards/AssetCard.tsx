@@ -44,6 +44,9 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
 
   const realtimeDate = moment(new Date(rentCalculation.date))
   const rentStartDate_date = props.value.rentStartDate?.date ?? null
+  if (!rentStartDate_date) {
+    console.warn(`Rent start date is not defined for ${props.value.uuid}`)
+  }
   const rentStartDate = new Date(rentStartDate_date)
   const isDisabled =
     !rentStartDate_date ||

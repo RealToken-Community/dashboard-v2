@@ -104,6 +104,9 @@ const APRDisabled = (
   // avoid "Cannot read properties of null".
   // Typically for RWA asset
   const rentStartDate_date = token.rentStartDate?.date ?? null
+  if (!rentStartDate_date) {
+    console.warn(`Rent start date is not defined for ${token.uuid}`)
+  }
   const rentStartDate = new Date(rentStartDate_date)
   const isDisabled =
     !rentStartDate_date ||
