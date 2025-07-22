@@ -250,19 +250,21 @@
       "scheduled": "Planifié",
       "upgradedReady": "Réparé, prêt",
       "unknown": "Inconnu",
-      "ok": "Non concerné"
+      "na": "Non concerné"
     },
     "priority": {
       "header": "Priorité",
       "1": "Priorité 1 (Haute)",
       "2": "Priorité 2 (Moyenne)",
       "3": "Priorité 3 (Basse)",
-      "na": "Non concerné"
+      "na": "Non concerné",
+      "unknown": "Inconnu"
     },
     "lawsuit": {
       "header": "Poursuite",
-      "na": "Pas de plainte",
-      "exhibit": "Plainte"
+      "na": "Sans objet",
+      "exhibit": "Plainte",
+      "unknown": "Inconnu"
     }
   },
   "assetPage": {

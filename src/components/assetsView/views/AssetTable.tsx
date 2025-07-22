@@ -90,10 +90,10 @@ const AssetTableHeader: FC = () => {
       <Table.Th style={{ textAlign: 'right' }}>{t('yearlyRents')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('rentedUnits')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('propertyValue')}</Table.Th>
+      <Table.Th style={{ textAlign: 'right' }}>{t('lastChange')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('status.header')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('priority.header')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('lawsuit.header')}</Table.Th>
-      <Table.Th style={{ textAlign: 'right' }}>{t('lastChange')}</Table.Th>
     </Table.Tr>
   )
 }
@@ -103,8 +103,8 @@ AssetTableHeader.displayName = 'AssetTableHeader'
 const StatusIcons = forwardRef<HTMLDivElement, { value: string | undefined }>((props, ref) => {
   const { value, ...rest } = props
 
-  const iconColor = !value ? 'gray' : value === RealTokenToBeFixedStatus.NoExhibit ? 'green' : value === RealTokenToBeFixedStatus.Scheduled ? 'orange' : value === RealTokenToBeFixedStatus.UpgradedAndReady ? 'green' : 'purple'
-  const icon = !value ?  <IconCheck size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.NoExhibit ? <IconCheck size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.Scheduled ? <IconCalendarTime size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.UpgradedAndReady ? <IconHomeCheck size={16} color={iconColor}/> : <IconQuestionMark size={16} color={iconColor}/>
+  const iconColor = !value||value==='na' ? 'gray' : value === RealTokenToBeFixedStatus.NoExhibit ? 'green' : value === RealTokenToBeFixedStatus.Scheduled ? 'orange' : value === RealTokenToBeFixedStatus.UpgradedAndReady ? 'green' : 'purple'
+  const icon = !value ? <IconBan size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.NoExhibit ? <IconCheck size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.Scheduled ? <IconCalendarTime size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.UpgradedAndReady ? <IconHomeCheck size={16} color={iconColor}/> : value == 'na' ? <IconBan size={16} color={iconColor}/> : <IconQuestionMark size={16} color={iconColor}/>
 
   return (
     <div ref={ref} {...rest}>
@@ -120,7 +120,8 @@ const StatusIcons = forwardRef<HTMLDivElement, { value: string | undefined }>((p
 */
 const Status: FC<{ value: string | undefined }> = ({ value }) => {
 const { t } = useTranslation('common', { keyPrefix: 'assetTable' })
-const toolTipText = !value ? t(`status.ok`) : 
+const toolTipText = !value ? t(`status.unknown`) :
+  value === 'na' ? t('status.na') : 
   value === RealTokenToBeFixedStatus.NoExhibit ? t('status.noExhibit') : 
   value === RealTokenToBeFixedStatus.Scheduled ? t('status.scheduled') : 
   value === RealTokenToBeFixedStatus.UpgradedAndReady ? t('status.upgradedReady') : t('status.unknown')
@@ -137,10 +138,10 @@ const toolTipText = !value ? t(`status.ok`) :
 // eslint-disable-next-line react/display-name
 const PriorityIcons = forwardRef<HTMLDivElement, { value: number | undefined }>((props, ref) => {
   const { value, ...rest } = props
-  const iconColor = !value||value===0 ? 'gray' : value === 1 ? 'red' : value === 2 ? 'orange' : value === 3 ? 'yellow' : 'purple'
+  const iconColor = !value||value===0||value===-1 ? 'gray' : value === 1 ? 'red' : value === 2 ? 'orange' : value === 3 ? 'yellow' : 'purple'
   const badgeColor = iconColor
-  const iconBadge = !value||value===0 ? <IconBan size={16} color={iconColor} /> : value === 1 ? <IconCircleNumber1 size={16} /> : value === 2 ? <IconCircleNumber2 size={16} /> : <IconCircleNumber3 size={14} />
-  const icon = !value||value===0 ? <></> : value === 1 ? <IconTrafficCone size={16} color={iconColor} /> : value === 2 ? <IconTool size={16} color={iconColor} /> : <IconHammer size={16} color={iconColor} />
+  const iconBadge = !value||value===0||value===-1 ? <IconBan size={16} color={iconColor} /> : value === 1 ? <IconCircleNumber1 size={16} /> : value === 2 ? <IconCircleNumber2 size={16} /> : <IconCircleNumber3 size={14} />
+  const icon = !value||value===0||value===-1 ? <></> : value === 1 ? <IconTrafficCone size={16} color={iconColor} /> : value === 2 ? <IconTool size={16} color={iconColor} /> : <IconHammer size={16} color={iconColor} />
 
   return (
     <div ref={ref} {...rest}>
@@ -158,12 +159,12 @@ const PriorityIcons = forwardRef<HTMLDivElement, { value: number | undefined }>(
 */
 const Priority: FC<{ value: number | undefined }> = ({ value }) => {
 const { t } = useTranslation('common', { keyPrefix: 'assetTable' })
-const toolTipText = value ? t(`priority.${value}`) : t('priority.na')
+const toolTipText = !value ? (value === 0 ? t('priority.na') : t('priority.unknown')) : value === -1 ? t('priority.na') : t(`priority.${value}`)
 return (
   <Tooltip label={toolTipText}>
     <PriorityIcons value={value} />
   </Tooltip>
-)
+  )
 }
 
 /* Exhibit Icons Component
@@ -172,8 +173,9 @@ return (
 // eslint-disable-next-line react/display-name
 const ExhibitIcons = forwardRef<HTMLDivElement, { exhibitNumber: number | undefined, exhibitVolume: number | undefined }>((props, ref) => {
   const { exhibitNumber, exhibitVolume, ...rest } = props
-  const iconColor = !exhibitNumber && !exhibitVolume ? 'gray' : 'orange'
-  const icon = !exhibitNumber && !exhibitVolume ? <IconFileOff size={16} color={iconColor} /> : <IconFileAlert size={16} color={iconColor} />
+  const noExhibit = !exhibitNumber && !exhibitVolume || exhibitNumber === -1 && exhibitVolume ===-1
+  const iconColor = noExhibit ? 'gray' : 'orange'
+  const icon = noExhibit ? <IconFileOff size={16} color={iconColor} /> : <IconFileAlert size={16} color={iconColor} />
   return (
     <div ref={ref} {...rest}>
       <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
@@ -188,7 +190,7 @@ const ExhibitIcons = forwardRef<HTMLDivElement, { exhibitNumber: number | undefi
  */
 const Exhibit: FC<{ exhibitNumber: number | undefined, exhibitVolume: number | undefined }> = ({ exhibitNumber, exhibitVolume }) => {
 const { t } = useTranslation('common', { keyPrefix: 'assetTable' })
-const toolTipText = !exhibitNumber && !exhibitVolume ? t('lawsuit.na') : t('lawsuit.exhibit')+ ` # ${exhibitNumber} volume ${exhibitVolume}`
+const toolTipText = exhibitNumber === 0 && exhibitVolume === 0 ? t('lawsuit.na') : !exhibitNumber && !exhibitVolume ? t('lawsuit.unknown') : exhibitNumber === -1 && exhibitVolume ===-1 ? t('lawsuit.na') : t('lawsuit.exhibit')+ ` # ${exhibitNumber} volume ${exhibitVolume}`
 return (
       <Tooltip label={toolTipText}>
       <ExhibitIcons exhibitNumber={exhibitNumber} exhibitVolume={exhibitVolume} />
@@ -274,20 +276,23 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
         {useCurrencyValue(totalInvestment)}
       </Table.Td>
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+        {moment(props.value.lastChanges, 'YYYYMMDD')
+          .toDate()
+          .toLocaleDateString()}
+      </Table.Td>
+      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         <Status value={props.value.extraData?.pitsBI?.actions?.realt_status} />
       </Table.Td>
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {/* {props.value.extraData?.pitsBI?.actions?.priority} */}
         <Priority value={props.value.extraData?.pitsBI?.actions?.priority} />
+        {/* <Priority value={-1} /> */}
       </Table.Td>
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {/* {props.value.extraData?.pitsBI?.actions?.priority} */}
         <Exhibit exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number} exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume} />
-      </Table.Td>
-      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        {moment(props.value.lastChanges, 'YYYYMMDD')
-          .toDate()
-          .toLocaleDateString()}
+        {/* <Exhibit exhibitNumber={-1} exhibitVolume={-1} /> */}
+        {/* <Exhibit exhibitNumber={0} exhibitVolume={0} /> */}
       </Table.Td>
     </Table.Tr>
   )
@@ -345,6 +350,21 @@ const OtherTableRow: FC<{ value: OtherRealtoken }> = (props) => {
       </Table.Td>
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {'-'}
+      </Table.Td>
+      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+        <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+          {'-'}
+        </div>
+      </Table.Td>
+      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+        <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+          {'-'}
+        </div>
+      </Table.Td>
+      <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+        <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+          {'-'}
+        </div>
       </Table.Td>
     </Table.Tr>
   )

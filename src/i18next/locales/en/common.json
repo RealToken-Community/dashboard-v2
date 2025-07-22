@@ -246,23 +246,25 @@
     "lastChange": "Last change",
     "status": {
       "header": "Status",
-      "noExhibit": "Not applicable",
+      "noExhibit": "No exhibit",
       "scheduled": "Scheduled",
       "upgradedReady": "Upgraded and ready",
       "unknown": "Unknown",
-      "ok": "Not applicable"
+      "na": "Not applicable"
     },
     "priority": {
       "header": "Priority",
       "1": "Priority 1 (High)",
       "2": "Priority 2 (Medium)",
       "3": "Priority 3 (Low)",
-      "na": "Not applicable"
+      "na": "Not applicable",
+      "unknown": "Unknown"
     },
     "lawsuit": {
       "header": "Lawsuit",
-      "na": "No lawsuit",
-      "exhibit": "Exhibit"
+      "na": "Not applicable",
+      "exhibit": "Exhibit",
+      "unknown": "Unknown lawsuit"
     }
   },
   "assetPage": {
