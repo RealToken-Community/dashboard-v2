@@ -227,7 +227,29 @@
       "full": "Subventionnée",
       "partial": "Partiellement subventionnée"
     },
-    "subsidy": "Loyer subventioné"
+    "subsidy": "Loyer subventioné",
+    "assetIssues": "Problèmes"
+  },
+  "assetIssues": {
+    "status": {
+      "noExhibit": "Non concerné",
+      "scheduled": "Planifié",
+      "upgradedReady": "Réparé, prêt",
+      "unknown": "Inconnu",
+      "na": "Non concerné"
+    },
+    "priority": {
+      "1": "Priorité 1 (Haute)",
+      "2": "Priorité 2 (Moyenne)",
+      "3": "Priorité 3 (Basse)",
+      "na": "Non concerné",
+      "unknown": "Inconnu"
+    },
+    "lawsuit": {
+      "na": "Sans objet",
+      "exhibit": "Plainte",
+      "unknown": "Inconnu"
+    }
   },
   "assetTable": {
     "property": "Propriété",
@@ -245,26 +267,13 @@
     "propertyValue": "Valeur de la propriété",
     "lastChange": "Dernier changement",
     "status": {
-      "header": "Statut",
-      "noExhibit": "Non concerné",
-      "scheduled": "Planifié",
-      "upgradedReady": "Réparé, prêt",
-      "unknown": "Inconnu",
-      "na": "Non concerné"
+      "header": "Statut"
     },
     "priority": {
-      "header": "Priorité",
-      "1": "Priorité 1 (Haute)",
-      "2": "Priorité 2 (Moyenne)",
-      "3": "Priorité 3 (Basse)",
-      "na": "Non concerné",
-      "unknown": "Inconnu"
+      "header": "Priorité"
     },
     "lawsuit": {
-      "header": "Poursuite",
-      "na": "Sans objet",
-      "exhibit": "Plainte",
-      "unknown": "Inconnu"
+      "header": "Poursuite"
     }
   },
   "assetPage": {

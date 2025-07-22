@@ -22,6 +22,9 @@ import {
   RentStatusTag,
   RmmStatusTag,
   SubsidyStatusTag,
+  ExhibitStatusTag,
+  IssueStatusTag,
+  PriorityStatusTag,
 } from '../commons'
 import styles from './AssetCard.module.sass'
 import { RWACard } from './RWACard'
@@ -176,6 +179,24 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
           {fullyRentedAPR
             ? tNumbers('percent', { value: fullyRentedAPR })
             : '-'}
+        </div>
+      </div>
+
+      {/* Align Yellow text on Yellow background to top */}
+      <div className={styles.groupApart} style={{ alignItems: 'flex-start' }}>
+        <div className={styles.textSm}>
+          {t('assetIssues')}
+        </div>
+        <div className={styles.textSm}>
+          <div className={styles.textSm}>
+            <IssueStatusTag value={props.value.extraData?.pitsBI?.actions?.realt_status} />
+          </div>
+          <div className={styles.textSm}>
+            <PriorityStatusTag value={props.value.extraData?.pitsBI?.actions?.priority} />
+          </div>
+          <div className={styles.textSm}>
+            <ExhibitStatusTag exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number} exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume} />
+          </div>
         </div>
       </div>
 

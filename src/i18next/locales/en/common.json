@@ -227,7 +227,29 @@
       "full": "Subsidized",
       "partial": "Partially subsidized"
     },
-    "subsidy": "Subsidy"
+    "subsidy": "Subsidy",
+    "assetIssues": "Asset issues"
+  },
+  "assetIssues": {
+    "status": {
+      "noExhibit": "No exhibit",
+      "scheduled": "Scheduled",
+      "upgradedReady": "Upgraded and ready",
+      "unknown": "Unknown",
+      "na": "Not applicable"
+    },
+    "priority": {
+      "1": "Priority 1 (High)",
+      "2": "Priority 2 (Medium)",
+      "3": "Priority 3 (Low)",
+      "na": "Not applicable",
+      "unknown": "Unknown"
+    },
+    "lawsuit": {
+      "na": "Not applicable",
+      "exhibit": "Exhibit",
+      "unknown": "Unknown lawsuit"
+    }
   },
   "assetTable": {
     "property": "Property",
@@ -245,26 +267,13 @@
     "propertyValue": "Property value",
     "lastChange": "Last change",
     "status": {
-      "header": "Status",
-      "noExhibit": "No exhibit",
-      "scheduled": "Scheduled",
-      "upgradedReady": "Upgraded and ready",
-      "unknown": "Unknown",
-      "na": "Not applicable"
+      "header": "Status"
     },
     "priority": {
-      "header": "Priority",
-      "1": "Priority 1 (High)",
-      "2": "Priority 2 (Medium)",
-      "3": "Priority 3 (Low)",
-      "na": "Not applicable",
-      "unknown": "Unknown"
+      "header": "Priority"
     },
     "lawsuit": {
-      "header": "Lawsuit",
-      "na": "Not applicable",
-      "exhibit": "Exhibit",
-      "unknown": "Unknown lawsuit"
+      "header": "Lawsuit"
     }
   },
   "assetPage": {
