@@ -228,7 +228,12 @@
       "partial": "Partially subsidized"
     },
     "subsidy": "Subsidy",
-    "assetIssues": "Asset issues"
+    "assetIssues": {
+      "title": "Asset issues",
+      "status": "Status",
+      "priority": "Priority",
+      "lawsuit": "Lawsuit"
+    }
   },
   "assetIssues": {
     "status": {

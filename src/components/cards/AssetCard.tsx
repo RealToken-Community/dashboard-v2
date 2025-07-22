@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import Image from 'next/image'
 
-import { Badge, Card, Group } from '@mantine/core'
+import { Badge, Card, Flex, Group } from '@mantine/core'
 
 import moment from 'moment'
 
@@ -182,21 +182,16 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
         </div>
       </div>
 
-      {/* Align Yellow text on Yellow background to top */}
+      {/* Align to top */}
       <div className={styles.groupApart} style={{ alignItems: 'flex-start' }}>
         <div className={styles.textSm}>
-          {t('assetIssues')}
+          {t('assetIssues.title')}
         </div>
-        <div className={styles.textSm}>
-          <div className={styles.textSm}>
-            <IssueStatusTag value={props.value.extraData?.pitsBI?.actions?.realt_status} />
-          </div>
-          <div className={styles.textSm}>
-            <PriorityStatusTag value={props.value.extraData?.pitsBI?.actions?.priority} />
-          </div>
-          <div className={styles.textSm}>
-            <ExhibitStatusTag exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number} exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume} />
-          </div>
+        {/* Flex container for issue status tags as row, separated by gaps*/}
+        <div className={styles.textXs} style={{ display: 'flex', flexDirection: 'row', gap: '15px' }}>
+            <div className={styles.textXs}>{t('assetIssues.status')}<IssueStatusTag value={props.value.extraData?.pitsBI?.actions?.realt_status} /></div>
+            <div>{t('assetIssues.priority')}<PriorityStatusTag value={props.value.extraData?.pitsBI?.actions?.priority} /></div>
+            <div>{t('assetIssues.lawsuit')}<ExhibitStatusTag exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number} exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume} /></div>
         </div>
       </div>
 

@@ -228,7 +228,12 @@
       "partial": "Partiellement subventionnée"
     },
     "subsidy": "Loyer subventioné",
-    "assetIssues": "Problèmes"
+    "assetIssues": {
+      "title": "Problèmes",
+      "status": "Etat",
+      "priority": "Priorité",
+      "lawsuit": "Poursuite"
+    }
   },
   "assetIssues": {
     "status": {
