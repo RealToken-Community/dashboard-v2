@@ -258,6 +258,9 @@ export const settingsReducers = createReducer(
         const userIncludesOtherAssets = localStorage.getItem(
           USER_INCLUDES_OTHER_ASSETS_LS_KEY,
         )
+        const userDisplayAdditionalData = localStorage.getItem(
+          USER_DISPLAY_ADDITIONAL_DATA_LS_KEY,
+        )
 
         state.user = user ? JSON.parse(user) : undefined
         state.userCurrency = userCurrency
@@ -277,6 +280,8 @@ export const settingsReducers = createReducer(
         state.includesLevinSwap = userIncludesLevinSwap === 'true'
         state.includesRmmV2 = userIncludesRmmV2 === 'true'
         state.includesOtherAssets = userIncludesOtherAssets === 'true'
+        state.displayAdditionalData =
+          userDisplayAdditionalData === 'true'
 
         const { publicRuntimeConfig } = getConfig() as {
           publicRuntimeConfig?: { version: string }
