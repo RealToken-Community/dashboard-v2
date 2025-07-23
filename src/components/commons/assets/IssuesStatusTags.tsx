@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Skeleton, Tooltip } from '@mantine/core'
 
-import { IconCalendarTime, IconCheck, IconCircleNumber1, IconCircleNumber2, IconCircleNumber3, IconFileAlert, IconFileOff, IconFileUnknown, IconHammer, IconHomeCheck, IconTool, IconTrafficCone, IconZoomQuestion } from '@tabler/icons'
+import { IconCalendarTime, IconCheck, IconCircleNumber1, IconCircleNumber2, IconCircleNumber3, IconFileAlert, IconFileOff, IconFileUnknown, IconHammer, IconHomeCheck, IconTool, IconTrafficCone, IconZoomQuestion } from '@tabler/icons-react'
 import { RealTokenToBeFixedStatus } from 'src/types/APIPitsBI'
 import { useSelector } from 'react-redux'
 import { selectRealtokensIsLoadingExtraData } from 'src/store/features/realtokens/realtokensSelector'

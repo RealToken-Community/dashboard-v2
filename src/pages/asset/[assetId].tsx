@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 
 import { Anchor, Breadcrumbs, Button, Flex } from '@mantine/core'
-import { IconExternalLink } from '@tabler/icons'
+import { IconExternalLink } from '@tabler/icons-react'
 
 import { AssetPageHistoryTab } from 'src/components/assetPage/assetPageHistoryTab'
 import { AssetPageMainTab } from 'src/components/assetPage/assetPageMainTab'

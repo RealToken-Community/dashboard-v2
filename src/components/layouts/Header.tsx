@@ -19,7 +19,7 @@ import {
   IconFilePencil,
   IconHome2,
   IconReceipt,
-} from '@tabler/icons'
+} from '@tabler/icons-react'
 
 import { Logo } from 'src/assets'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'

@@ -30,10 +30,10 @@ import {
   IconLanguage,
   IconMoon,
   IconSettings,
-  IconSquareMinus,
-  IconSquarePlus,
+  IconTablePlus,
+  IconTableMinus,
   IconSun,
-} from '@tabler/icons'
+} from '@tabler/icons-react'
 
 import { setCookie } from 'cookies-next'
 
@@ -331,8 +331,8 @@ const FetchDataSettings: FC = () => {
           setUserDisplayAdditionalData(event.currentTarget.checked)
         }
         label={t('displayAdditionalData')}
-        onLabel={<IconSquarePlus size={16} />}
-        offLabel={<IconSquareMinus size={16} />}
+        onLabel={<IconTablePlus size={16} />}
+        offLabel={<IconTableMinus size={16} />}
         style={{ margin: '4px 8px' }}
       />
     </>
