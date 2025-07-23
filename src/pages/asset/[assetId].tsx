@@ -11,6 +11,7 @@ import { IconExternalLink } from '@tabler/icons'
 
 import { AssetPageHistoryTab } from 'src/components/assetPage/assetPageHistoryTab'
 import { AssetPageMainTab } from 'src/components/assetPage/assetPageMainTab'
+import { AssetPageIssuesTab } from 'src/components/assetPage/assetPageIssuesTab'
 import { AssetPagePropertyTab } from 'src/components/assetPage/assetPagePropertyTab'
 import { AssetPageTransfersTab } from 'src/components/assetPage/assetPageTransfersTab'
 import { AssetPageYamStatisticsTab } from 'src/components/assetPage/assetPageYamStatisticsTab'
@@ -23,6 +24,7 @@ import styles from './AssetPage.module.sass'
 
 enum Tabs {
   Main = 'main',
+  Issues = 'issues',
   Property = 'property',
   Transfers = 'transfers',
   History = 'history',
@@ -96,6 +98,19 @@ const AssetPage: NextPage = () => {
               <AssetPageMainTab realtoken={realtoken} />
             </div>
           ) : null}
+
+
+          <TabButton
+            label={t('tabs.issues')}
+            active={activeTab === Tabs.Issues}
+            onClick={() => setActiveTab(Tabs.Issues)}
+          />
+          {activeTab === Tabs.Issues ? (
+            <div style={{ margin: '5px 10px' }}>
+              <AssetPageIssuesTab realtoken={realtoken} />
+            </div>
+          ) : null}
+
 
           <TabButton
             label={t('tabs.property')}

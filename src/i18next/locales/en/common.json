@@ -32,7 +32,8 @@
     "includesEth": "Includes Ethereum",
     "includesLevinSwap": "Includes LevinSwap",
     "includesRmmV2": "Includes RMM V2",
-    "includesOtherAssets": "Includes other assets"
+    "includesOtherAssets": "Includes other assets",
+    "displayIssues": "Display issues"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
@@ -252,8 +253,10 @@
     },
     "lawsuit": {
       "na": "Not applicable",
-      "exhibit": "Exhibit",
-      "unknown": "Unknown"
+      "exhibit": "exhibit",
+      "unknown": "Unknown",
+      "exhibitNumber": "number",
+      "volumeNumber": "volume number"
     }
   },
   "assetTable": {
@@ -286,6 +289,7 @@
     "viewOnRealt": "View on RealT",
     "tabs": {
       "main": "Main informations",
+      "issues": "Issues",
       "property": "Property details",
       "history": "Property changes",
       "transfers": "My transactions",
@@ -307,6 +311,11 @@
       "rentMonth": "Monthly rent",
       "rentYear": "Yearly rent",
       "rentedUnits": "Rented units"
+    },
+    "issues": {
+      "status": "Status",
+      "priority": "Priority",
+      "lawsuit": "Lawsuit"
     },
     "property": {
       "initialLaunchDate": "Launch date",

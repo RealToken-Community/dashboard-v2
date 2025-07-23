@@ -32,7 +32,8 @@
     "includesEth": "Inclure Ethereum",
     "includesLevinSwap": "Inclure LevinSwap",
     "includesRmmV2": "Inclure RMM V2",
-    "includesOtherAssets": "Inclure d'autres actifs"
+    "includesOtherAssets": "Inclure d'autres actifs",
+    "displayIssues": "Afficher les problèmes"
   },
   "walletButton": {
     "connectWallet": "Connecter mon portefeuille",
@@ -252,8 +253,10 @@
     },
     "lawsuit": {
       "na": "Sans objet",
-      "exhibit": "Plainte",
-      "unknown": "Inconnu"
+      "exhibit": "plainte",
+      "unknown": "Inconnu",
+      "exhibitNumber": "numéro",
+      "volumeNumber": "volume"
     }
   },
   "assetTable": {
@@ -286,6 +289,7 @@
     "viewOnRealt": "Voir sur RealT",
     "tabs": {
       "main": "Informations générales",
+      "issues": "Problèmes",
       "property": "Détail du bien",
       "history": "Changements du bien",
       "transfers": "Mes transactions",
@@ -307,6 +311,11 @@
       "rentMonth": "Loyer mensuel",
       "rentYear": "Loyer annuel",
       "rentedUnits": "Logements loués"
+    },
+    "issues": {
+      "status": "Statut",
+      "priority": "Priorité",
+      "lawsuit": "Poursuite"
     },
     "property": {
       "initialLaunchDate": "Mise en vente",
