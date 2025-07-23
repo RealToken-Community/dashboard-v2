@@ -19,8 +19,7 @@ const getRealTokenList = useCache(
       }
     }
     console.debug('Fetching RealToken list from Community API... (2)')
-    // const REALTOKEN_COMMUNITY_API_GET_ALLTOKENS = `${process.env[APIRealTokenCommunityEnv.API_BASE]}${process.env[APIRealTokenCommunityEnv.VERSION]}/${process.env[APIRealTokenCommunityEnv.GET_ALLTOKENS]}`
-    const REALTOKEN_COMMUNITY_API_GET_ALLTOKENS = `${process.env[APIRealTokenCommunityEnv.API_BASE]}${process.env[APIRealTokenCommunityEnv.VERSION]}/${process.env[APIRealTokenCommunityEnv.GET_ALLTOKENS]}/xxx`
+    const REALTOKEN_COMMUNITY_API_GET_ALLTOKENS = `${process.env[APIRealTokenCommunityEnv.API_BASE]}${process.env[APIRealTokenCommunityEnv.VERSION]}/${process.env[APIRealTokenCommunityEnv.GET_ALLTOKENS]}`
     console.debug(`RealToken API GET_ALLTOKENS endpoint: ${REALTOKEN_COMMUNITY_API_GET_ALLTOKENS} (3)`)
 
     // const realTokenApiResponse = await fetch(REALTOKEN_COMMUNITY_API_GET_ALLTOKENS, {
