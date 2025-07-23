@@ -1,10 +1,10 @@
-import { FC, forwardRef } from 'react'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { useRouter } from 'next/router'
 
-import { Anchor, Badge, ScrollArea, Table, Tooltip, Text, Button, ActionIcon } from '@mantine/core'
+import { Anchor, ScrollArea, Table } from '@mantine/core'
 
 import moment from 'moment'
 

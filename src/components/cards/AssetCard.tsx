@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import Image from 'next/image'
 
-import { Badge, Card, Flex, Group } from '@mantine/core'
+import { Badge, Card, Flex, Grid, Group } from '@mantine/core'
 
 import moment from 'moment'
 
@@ -182,17 +182,31 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
         </div>
       </div>
 
-      {/* Align to top */}
       <div className={styles.groupApart} style={{ alignItems: 'flex-start' }}>
         <div className={styles.textSm}>
           {t('assetIssues.title')}
         </div>
-        {/* Flex container for issue status tags as row, separated by gaps*/}
-        <div className={styles.textXs} style={{ display: 'flex', flexDirection: 'row', gap: '15px' }}>
-            <div className={styles.textXs}>{t('assetIssues.status')}<IssueStatusTag value={props.value.extraData?.pitsBI?.actions?.realt_status} /></div>
-            <div>{t('assetIssues.priority')}<PriorityStatusTag value={props.value.extraData?.pitsBI?.actions?.priority} /></div>
-            <div>{t('assetIssues.lawsuit')}<ExhibitStatusTag exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number} exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume} /></div>
-        </div>
+        <Grid className={styles.textXs}>
+          <Grid.Col span={4}>
+            <Grid.Col style={{ padding: '0 5px' }}>{t('assetIssues.status')}</Grid.Col>
+            <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
+              <IssueStatusTag value={props.value.extraData?.pitsBI?.actions?.realt_status} />
+              </Grid.Col>
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Grid.Col style={{ padding: '0 5px' }}>{t('assetIssues.priority')}</Grid.Col>
+            <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
+              <PriorityStatusTag value={props.value.extraData?.pitsBI?.actions?.priority} />
+              </Grid.Col>
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <Grid.Col style={{ padding: '0 5px' }}>{t('assetIssues.lawsuit')}</Grid.Col>
+            {/* center element */}
+            <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
+              <ExhibitStatusTag exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number} exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume} />
+            </Grid.Col>
+          </Grid.Col>
+        </Grid>
       </div>
 
       <div style={{ flex: '1 1 auto' }} />

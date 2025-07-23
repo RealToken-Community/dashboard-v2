@@ -237,7 +237,7 @@
   },
   "assetIssues": {
     "status": {
-      "noExhibit": "No exhibit",
+      "noExhibit": "Not applicable",
       "scheduled": "Scheduled",
       "upgradedReady": "Upgraded and ready",
       "unknown": "Unknown",
@@ -253,7 +253,7 @@
     "lawsuit": {
       "na": "Not applicable",
       "exhibit": "Exhibit",
-      "unknown": "Unknown lawsuit"
+      "unknown": "Unknown"
     }
   },
   "assetTable": {
