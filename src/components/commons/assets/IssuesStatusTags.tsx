@@ -8,6 +8,51 @@ import { RealTokenToBeFixedStatus } from 'src/types/APIPitsBI'
 import { useSelector } from 'react-redux'
 import { selectRealtokensIsLoadingExtraData } from 'src/store/features/realtokens/realtokensSelector'
 
+
+/* Status Icons Component
+ * Displays an icon based on the value, with a tooltip showing the status text
+ * use forwardRef to allow the component to be used as with a tooltip
+*/
+// eslint-disable-next-line react/display-name
+const StatusIcons = forwardRef<HTMLDivElement, { value: string | undefined, priority: number | undefined }>((props, ref) => {
+  const { value, priority, ...rest } = props
+  const iconColor = !value||value==='na' ? 'gray' : value === RealTokenToBeFixedStatus.NoExhibit ? 'green' : value === RealTokenToBeFixedStatus.Scheduled ? (priority === 1 ? 'red' : priority === 2 ? 'orange' : priority === 3 ? 'yellow' : !priority ? 'gray'  : 'purple') : value === RealTokenToBeFixedStatus.UpgradedAndReady ? 'green' : 'purple'
+  const icon = value === RealTokenToBeFixedStatus.NoExhibit || value == 'na' ? <IconCheck size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.Scheduled ? <IconCalendarTime size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.UpgradedAndReady ? <IconHomeCheck size={16} color={iconColor}/> : <IconZoomQuestion size={16} color={iconColor}/>
+  return (
+    <div ref={ref} {...rest}>
+      <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+        {icon}
+      </div>
+    </div>
+  )
+})
+
+/* Status Component
+  * Displays a status icon with a tooltip
+*/
+export const IssueStatusTag: FC<{ value: string | undefined, priority: number | undefined }> = ({ value, priority }) => {
+const { t } = useTranslation('common', { keyPrefix: 'assetIssues' })
+const isLoadingExtraData = useSelector(selectRealtokensIsLoadingExtraData)
+const toolTipText = !value ? t(`status.unknown`) :
+  value === 'na' ? t('status.na') : 
+  value === RealTokenToBeFixedStatus.NoExhibit ? t('status.noExhibit') : 
+  value === RealTokenToBeFixedStatus.Scheduled ? t('status.scheduled') : 
+  value === RealTokenToBeFixedStatus.UpgradedAndReady ? t('status.upgradedReady') : t('status.unknown')
+  return (
+    <>
+      {isLoadingExtraData ? (
+        <Skeleton width={30} height={20} />
+      ) : (
+        <Tooltip label={toolTipText}>
+          <StatusIcons value={value} priority={priority} />
+        </Tooltip>
+      )}
+    </>
+  )
+}
+
+IssueStatusTag.displayName = 'IssueStatusTag'
+
 /* Priority Icons Component
  * Displays icons based on priority
   * @param value: number representing the priority level
@@ -18,7 +63,7 @@ const PriorityIcons = forwardRef<HTMLDivElement, { value: number | undefined }>(
   const { value, ...rest } = props
   const iconColor = !value||value===0||value===-1 ? 'gray' : value === 1 ? 'red' : value === 2 ? 'orange' : value === 3 ? 'yellow' : 'purple'
   const piorityColor = iconColor
-  const prioritySize = 22
+  const prioritySize = !value ? 16 : 22
   const iconSize = 16
   const iconPriority = !value ? value===0 ? <IconCheck size={prioritySize} color={piorityColor} /> : <></> : value === 1 ? <IconCircleNumber1 size={prioritySize} color={piorityColor} /> : value === 2 ? <IconCircleNumber2 size={prioritySize} color={piorityColor} /> : <IconCircleNumber3 size={prioritySize} color={piorityColor} />
   const icon = value===0 ? <></> : value === 1 ? <IconTrafficCone size={iconSize} color={iconColor} /> : value === 2 ? <IconTool size={iconSize} color={iconColor} /> : <IconHammer size={iconSize} color={iconColor} />
@@ -97,48 +142,3 @@ return (
 }
 
 ExhibitStatusTag.displayName = 'ExhibitStatusTag'
-
-
-/* Status Icons Component
- * Displays an icon based on the value, with a tooltip showing the status text
- * use forwardRef to allow the component to be used as with a tooltip
-*/
-// eslint-disable-next-line react/display-name
-const StatusIcons = forwardRef<HTMLDivElement, { value: string | undefined, priority: number | undefined }>((props, ref) => {
-  const { value, priority, ...rest } = props
-  const iconColor = !value||value==='na' ? 'gray' : value === RealTokenToBeFixedStatus.NoExhibit ? 'green' : value === RealTokenToBeFixedStatus.Scheduled ? (priority === 1 ? 'red' : priority === 2 ? 'orange' : priority === 3 ? 'yellow' : !priority ? 'gray'  : 'purple') : value === RealTokenToBeFixedStatus.UpgradedAndReady ? 'green' : 'purple'
-  const icon = value === RealTokenToBeFixedStatus.NoExhibit || value == 'na' ? <IconCheck size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.Scheduled ? <IconCalendarTime size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.UpgradedAndReady ? <IconHomeCheck size={16} color={iconColor}/> : <IconZoomQuestion size={16} color={iconColor}/>
-  return (
-    <div ref={ref} {...rest}>
-      <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-        {icon}
-      </div>
-    </div>
-  )
-})
-
-/* Status Component
-  * Displays a status icon with a tooltip
-*/
-export const IssueStatusTag: FC<{ value: string | undefined, priority: number | undefined }> = ({ value, priority }) => {
-const { t } = useTranslation('common', { keyPrefix: 'assetIssues' })
-const isLoadingExtraData = useSelector(selectRealtokensIsLoadingExtraData)
-const toolTipText = !value ? t(`status.unknown`) :
-  value === 'na' ? t('status.na') : 
-  value === RealTokenToBeFixedStatus.NoExhibit ? t('status.noExhibit') : 
-  value === RealTokenToBeFixedStatus.Scheduled ? t('status.scheduled') : 
-  value === RealTokenToBeFixedStatus.UpgradedAndReady ? t('status.upgradedReady') : t('status.unknown')
-  return (
-    <>
-      {isLoadingExtraData ? (
-        <Skeleton width={30} height={20} />
-      ) : (
-        <Tooltip label={toolTipText}>
-          <StatusIcons value={value} priority={priority} />
-        </Tooltip>
-      )}
-    </>
-  )
-}
-
-IssueStatusTag.displayName = 'IssueStatusTag'
