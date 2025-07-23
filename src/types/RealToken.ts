@@ -51,8 +51,6 @@ export interface RealToken extends APIRealToken {
   rentStatus: RealTokenRentStatus
   history: RealTokenHistoryItem[]
   extraData?: {
-    // TODO: Explicitly define extra data structure once known
-    // [key: string]: any
     pitsBI?: {
       actions?: RealTokenPitsBI_Actions
       historic?: RealTokenPitsBI_Historic

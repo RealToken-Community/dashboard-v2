@@ -44,12 +44,10 @@ export default function useInitStore() {
 
   useEffect(() => {
     dispatch(initializeSettings())
-    // dispatch(fetchRealtokens())
-    // // dispatch(fetchRealtokensExtraData())
     dispatch(fetchRealtokens())
-     .then((/* data */) => {
+     .then(() => {
       console.debug('Realtokens fetched, now fetching extra data...')
-      dispatch(fetchRealtokensExtraData(/* data */))
+      dispatch(fetchRealtokensExtraData())
     })
     dispatch(fetchCurrenciesRates())
   }, [dispatch])
@@ -61,7 +59,6 @@ export default function useInitStore() {
       if (realtokens.length) {
         dispatch(fetchWallets(realtokens))
         // dispatch(fetchTransfers(realtokens))
-        // dispatch(fetchRealtokensExtraData(/* data */))
       }
     } else {
       dispatch(resetWallets())

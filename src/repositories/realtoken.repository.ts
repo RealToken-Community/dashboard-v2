@@ -22,14 +22,11 @@ export const RealtokenRepository = {
       ),
     }))
   },
-  // async getTokensExtraData(): Promise<APIRealTokenPitsBI[]> {
   async getTokensPitsBiExtraData(): Promise<APIRealTokenPitsBI_ExtraData[]> {
     const [tokensExtraData] = await Promise.all([
       fetchTokenListPitsBiExtraData(),
     ])
-    // console.debug('extraData: Fetched tokens extra data:', tokensExtraData)
     console.debug('getTokensPitsBiExtraData: tokensExtraData length:', tokensExtraData.length)
-
     return tokensExtraData.map((tokenExtraData: APIRealTokenPitsBI) => {
       return {
         uuid: tokenExtraData.uuid,
