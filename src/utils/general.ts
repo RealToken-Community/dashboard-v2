@@ -11,10 +11,6 @@ const FETCH_RETRIES_DEFAULT_DELAY = 500;
  * @param delay : number of milliseconds to wait before retrying; zero = no delay, negative = random delay, positive = fixed delay
  */
 const fetchWithRetry = async(url: string, options = {}, retries = FETCH_RETRIES_DEFAULT_COUNT, delay = FETCH_RETRIES_DEFAULT_DELAY): Promise<Response> => {
-  // TODO: remove DEBUG
-  console.debug(`Fetch attempt`, `Url: ${url}, Retries left: ${retries - 1}, Delay: ${delay}ms`);
-  // TODO: remove DEBUG
-  console.debug(`Fetch attempt`, `Options: ${JSON.stringify(options)}`);// Never display options
   if (retries <= 0) {
     throw new Error('Max retries reached');
   }
