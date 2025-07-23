@@ -70,9 +70,9 @@ export function fetchRealtokens() {
     try {
       const data = await RealtokenRepository.getTokens()
       // Check for extraData
-      const hasExtraData = data.some((item) => item.extraData)
+      const hasExtraData = data.some((token) => (token as unknown as APIRealTokenPitsBI_ExtraData).actions || (token as unknown as APIRealTokenPitsBI_ExtraData).historic)
       if (hasExtraData) {
-        console.debug('Realtokens with extra data found')
+        console.debug('Realtokens with Pitsbi EXTRA DATA FOUND')
         // Reformat APIRealTokenPitsBI_ExtraData data
         forEach(data, (token: RealToken) => {
           const { actions, historic } = token as unknown as APIRealTokenPitsBI_ExtraData
@@ -83,9 +83,9 @@ export function fetchRealtokens() {
               historic: historic,
             },
           }
-          // Remove properties "history" from token
+          // Remove 'historic', 'actions' from token
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          delete (token as any).history
+          delete (token as any).historic
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           delete (token as any).actions
         })
