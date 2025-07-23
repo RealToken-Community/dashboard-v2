@@ -3,6 +3,7 @@ import { APIPitsBiEnv } from 'src/types/APIPitsBI'
 // import { mergeObjects } from 'json-merger'
 
 import { APIRealToken } from 'src/types/APIRealToken'
+import { fetchWithRetry } from 'src/utils/general'
 import { useCache } from 'src/utils/useCache'
 
 const getRealTokenListExtraData = useCache(
@@ -38,9 +39,10 @@ const getRealTokenListExtraData = useCache(
 
     console.debug('extraProperties: Proceeding to fetch PitsBi API...')
     const startTime = Date.now()
-    const pitsBiApiResponse = await fetch(PITSBiAPI_GET_ALLTOKENS, {
-      method: 'GET',
-    })
+    // const pitsBiApiResponse = await fetch(PITSBiAPI_GET_ALLTOKENS, {
+    //   method: 'GET',
+    // })
+    const pitsBiApiResponse = await fetchWithRetry(PITSBiAPI_GET_ALLTOKENS, { method: 'GET' }, 2, 5_000)
     const endTime = Date.now()
     console.debug('extraProperties: PitsBi API response received')
     console.debug(`extraProperties: PitsBi API response time: ${endTime - startTime}ms`)

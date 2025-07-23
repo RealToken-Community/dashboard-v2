@@ -2,6 +2,7 @@ import { NextApiHandler } from 'next'
 import { APIPitsBiEnv } from 'src/types/APIPitsBI'
 
 import { APIRealToken, APIRealTokenCommunityEnv } from 'src/types/APIRealToken'
+import { fetchWithRetry } from 'src/utils/general'
 import { useCache } from 'src/utils/useCache'
 
 const getRealTokenList = useCache(
@@ -21,10 +22,15 @@ const getRealTokenList = useCache(
     const REALTOKEN_COMMUNITY_API_GET_ALLTOKENS = `${process.env[APIRealTokenCommunityEnv.API_BASE]}${process.env[APIRealTokenCommunityEnv.VERSION]}/${process.env[APIRealTokenCommunityEnv.GET_ALLTOKENS]}`
     console.debug(`RealToken API GET_ALLTOKENS endpoint: ${REALTOKEN_COMMUNITY_API_GET_ALLTOKENS} (3)`)
 
-    const realTokenApiResponse = await fetch(REALTOKEN_COMMUNITY_API_GET_ALLTOKENS, {
+    // const realTokenApiResponse = await fetch(REALTOKEN_COMMUNITY_API_GET_ALLTOKENS, {
+    //   method: 'GET',
+    //   headers: { [APIRealTokenCommunityEnv.AUTH]: process.env[APIRealTokenCommunityEnv.API_KEY] as string },
+    // })
+
+    const realTokenApiResponse = await fetchWithRetry(REALTOKEN_COMMUNITY_API_GET_ALLTOKENS, {
       method: 'GET',
       headers: { [APIRealTokenCommunityEnv.AUTH]: process.env[APIRealTokenCommunityEnv.API_KEY] as string },
-    })
+    }, 2, 1_000)
 
     console.debug(`RealToken API response received, status: ${realTokenApiResponse.status} (4)`)
 
@@ -68,9 +74,12 @@ const getRealTokenList = useCache(
       const PITSBIAPI_GET_ALLTOKENS = `${process.env[APIPitsBiEnv.BASE]}${process.env[APIPitsBiEnv.VERSION]}/${process.env[APIPitsBiEnv.GET_ALLTOKENS]}`
       console.debug(`Pitsbi API GET_ALLTOKENS endpoint: ${PITSBIAPI_GET_ALLTOKENS}`)
 
-      const pitsbiApiResponse = await fetch(PITSBIAPI_GET_ALLTOKENS, {
+      // const pitsbiApiResponse = await fetch(PITSBIAPI_GET_ALLTOKENS, {
+      //   method: 'GET',
+      // })
+      const pitsbiApiResponse = await fetchWithRetry(PITSBIAPI_GET_ALLTOKENS, {
         method: 'GET',
-      })
+      }, 2, 10_000)
       if (!pitsbiApiResponse.ok) {
         // throw new Error('Failed to fetch Pitsbi API : ' + (await pitsbiApiResponse.text()))
         const pitsbiResponseText = (await pitsbiApiResponse.text())
