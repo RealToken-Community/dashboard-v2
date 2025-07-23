@@ -172,13 +172,19 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
           .toLocaleDateString()}
       </Table.Td>
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        <IssueStatusTag value={props.value.extraData?.pitsBI?.actions?.realt_status} />
+        <IssueStatusTag
+          value={props.value.extraData?.pitsBI?.actions?.realt_status}
+          priority={props.value.extraData?.pitsBI?.actions?.priority} />
       </Table.Td>
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         <PriorityStatusTag value={props.value.extraData?.pitsBI?.actions?.priority} />
       </Table.Td>
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-        <ExhibitStatusTag exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number} exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume} />
+        <ExhibitStatusTag
+          exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number}
+          exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume}
+          priority={props.value.extraData?.pitsBI?.actions?.priority}
+        />
       </Table.Td>
     </Table.Tr>
   )

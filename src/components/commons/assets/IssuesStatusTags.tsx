@@ -58,12 +58,11 @@ PriorityStatusTag.displayName = 'PriorityStatusTag'
  * use forwardRef to allow the component to be used as with a tooltip
 */
 // eslint-disable-next-line react/display-name
-const ExhibitIcons = forwardRef<HTMLDivElement, { exhibitNumber: number | undefined, exhibitVolume: number | undefined }>((props, ref) => {
-  const { exhibitNumber, exhibitVolume, ...rest } = props
+const ExhibitIcons = forwardRef<HTMLDivElement, { exhibitNumber: number | undefined, exhibitVolume: number | undefined, priority: number | undefined }>((props, ref) => {
+  const { exhibitNumber, exhibitVolume, priority, ...rest } = props
   const noExhibit = !exhibitNumber && !exhibitVolume || exhibitNumber === -1 && exhibitVolume ===-1
-  const iconColor = noExhibit ? 'gray' : 'orange'
+  const iconColor = noExhibit ? 'gray' : (priority === 1 ? 'red' : priority === 2 ? 'orange' : priority === 3 ? 'yellow' : !priority ? 'gray' : 'purple')
   const iconSize = 16
-  // const icon = exhibitNumber === 0 && exhibitVolume === 0 ? <IconFileOff size={16} color={iconColor} /> : <IconFileAlert size={16} color={iconColor} />
   const icon = !exhibitNumber && !exhibitVolume ? exhibitNumber === 0 && exhibitVolume === 0 ? <IconFileOff size={iconSize} color={iconColor} />: <IconFileUnknown size={iconSize} color={iconColor} /> : <IconFileAlert size={iconSize} color={iconColor} />
   return (
     <div ref={ref} {...rest}>
@@ -77,7 +76,10 @@ const ExhibitIcons = forwardRef<HTMLDivElement, { exhibitNumber: number | undefi
 /* Exhibit Component
  * Displays an exhibit icon with a tooltip
  */
-export const ExhibitStatusTag: FC<{ exhibitNumber: number | undefined, exhibitVolume: number | undefined }> = ({ exhibitNumber, exhibitVolume }) => {
+export const ExhibitStatusTag: FC<{
+  exhibitNumber: number | undefined,
+  exhibitVolume: number | undefined,
+  priority: number | undefined }> = ({ exhibitNumber, exhibitVolume, priority }) => {
 const { t } = useTranslation('common', { keyPrefix: 'assetIssues' })
 const isLoadingExtraData = useSelector(selectRealtokensIsLoadingExtraData)
 const toolTipText = exhibitNumber === 0 && exhibitVolume === 0 ? t('lawsuit.na') : !exhibitNumber && !exhibitVolume ? t('lawsuit.unknown') : exhibitNumber === -1 && exhibitVolume ===-1 ? t('lawsuit.na') : t('lawsuit.exhibit')+ ` # ${exhibitNumber} volume ${exhibitVolume}`
@@ -87,7 +89,7 @@ return (
       <Skeleton width={30} height={20} />
     ) : (
       <Tooltip label={toolTipText}>
-        <ExhibitIcons exhibitNumber={exhibitNumber} exhibitVolume={exhibitVolume} />
+        <ExhibitIcons exhibitNumber={exhibitNumber} exhibitVolume={exhibitVolume} priority={priority} />
       </Tooltip>
     )}
   </>
@@ -102,9 +104,9 @@ ExhibitStatusTag.displayName = 'ExhibitStatusTag'
  * use forwardRef to allow the component to be used as with a tooltip
 */
 // eslint-disable-next-line react/display-name
-const StatusIcons = forwardRef<HTMLDivElement, { value: string | undefined }>((props, ref) => {
-  const { value, ...rest } = props
-  const iconColor = !value||value==='na' ? 'gray' : value === RealTokenToBeFixedStatus.NoExhibit ? 'green' : value === RealTokenToBeFixedStatus.Scheduled ? 'orange' : value === RealTokenToBeFixedStatus.UpgradedAndReady ? 'green' : 'purple'
+const StatusIcons = forwardRef<HTMLDivElement, { value: string | undefined, priority: number | undefined }>((props, ref) => {
+  const { value, priority, ...rest } = props
+  const iconColor = !value||value==='na' ? 'gray' : value === RealTokenToBeFixedStatus.NoExhibit ? 'green' : value === RealTokenToBeFixedStatus.Scheduled ? (priority === 1 ? 'red' : priority === 2 ? 'orange' : priority === 3 ? 'yellow' : !priority ? 'gray'  : 'purple') : value === RealTokenToBeFixedStatus.UpgradedAndReady ? 'green' : 'purple'
   const icon = value === RealTokenToBeFixedStatus.NoExhibit || value == 'na' ? <IconCheck size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.Scheduled ? <IconCalendarTime size={16} color={iconColor}/> : value === RealTokenToBeFixedStatus.UpgradedAndReady ? <IconHomeCheck size={16} color={iconColor}/> : <IconZoomQuestion size={16} color={iconColor}/>
   return (
     <div ref={ref} {...rest}>
@@ -118,7 +120,7 @@ const StatusIcons = forwardRef<HTMLDivElement, { value: string | undefined }>((p
 /* Status Component
   * Displays a status icon with a tooltip
 */
-export const IssueStatusTag: FC<{ value: string | undefined }> = ({ value }) => {
+export const IssueStatusTag: FC<{ value: string | undefined, priority: number | undefined }> = ({ value, priority }) => {
 const { t } = useTranslation('common', { keyPrefix: 'assetIssues' })
 const isLoadingExtraData = useSelector(selectRealtokensIsLoadingExtraData)
 const toolTipText = !value ? t(`status.unknown`) :
@@ -132,7 +134,7 @@ const toolTipText = !value ? t(`status.unknown`) :
         <Skeleton width={30} height={20} />
       ) : (
         <Tooltip label={toolTipText}>
-          <StatusIcons value={value} />
+          <StatusIcons value={value} priority={priority} />
         </Tooltip>
       )}
     </>

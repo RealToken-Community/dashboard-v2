@@ -190,7 +190,8 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
           <Grid.Col span={4}>
             <Grid.Col style={{ padding: '0 5px' }}>{t('assetIssues.status')}</Grid.Col>
             <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
-              <IssueStatusTag value={props.value.extraData?.pitsBI?.actions?.realt_status} />
+              <IssueStatusTag value={props.value.extraData?.pitsBI?.actions?.realt_status}
+              priority={props.value.extraData?.pitsBI?.actions?.priority} />
               </Grid.Col>
           </Grid.Col>
           <Grid.Col span={4}>
@@ -203,7 +204,10 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
             <Grid.Col style={{ padding: '0 5px' }}>{t('assetIssues.lawsuit')}</Grid.Col>
             {/* center element */}
             <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
-              <ExhibitStatusTag exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number} exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume} />
+              <ExhibitStatusTag
+                exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number}
+                exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume}
+                priority={props.value.extraData?.pitsBI?.actions?.priority} />
             </Grid.Col>
           </Grid.Col>
         </Grid>
