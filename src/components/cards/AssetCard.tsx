@@ -10,7 +10,7 @@ import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { useFullyRentedAPR } from 'src/hooks/useFullyRentedAPR'
-import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
+import { selectUserDisplayAdditionalData, selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
 import {
   OtherRealtoken,
   UserRealtoken,
@@ -29,6 +29,7 @@ import {
 import styles from './AssetCard.module.sass'
 import { RWACard } from './RWACard'
 
+
 interface AssetCardProps {
   value: UserRealtoken | OtherRealtoken
   onClick?: (id: string) => unknown
@@ -42,8 +43,8 @@ interface PropertyCardProps {
 const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
-
   const rentCalculation = useSelector(selectUserRentCalculation)
+  const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
 
   const realtimeDate = moment(new Date(rentCalculation.date))
   const rentStartDate_date = props.value.rentStartDate?.date ?? null
@@ -182,36 +183,38 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
         </div>
       </div>
 
-      <div className={styles.groupApart} style={{ alignItems: 'flex-start' }}>
-        <div className={styles.textSm}>
-          {t('assetIssues.title')}
-        </div>
-        <Grid className={styles.textXs}>
-          <Grid.Col span={4}>
-            <Grid.Col style={{ padding: '0 5px' }}>{t('assetIssues.status')}</Grid.Col>
-            <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
-              <IssueStatusTag value={props.value.extraData?.pitsBI?.actions?.realt_status}
-              priority={props.value.extraData?.pitsBI?.actions?.priority} />
-              </Grid.Col>
-          </Grid.Col>
-          <Grid.Col span={4}>
-            <Grid.Col style={{ padding: '0 5px' }}>{t('assetIssues.priority')}</Grid.Col>
-            <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
-              <PriorityStatusTag value={props.value.extraData?.pitsBI?.actions?.priority} />
-              </Grid.Col>
-          </Grid.Col>
-          <Grid.Col span={4}>
-            <Grid.Col style={{ padding: '0 5px' }}>{t('assetIssues.lawsuit')}</Grid.Col>
-            {/* center element */}
-            <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
-              <ExhibitStatusTag
-                exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number}
-                exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume}
+      {userDisplayAdditionalData &&
+        <div className={styles.groupApart} style={{ alignItems: 'flex-start' }}>
+          <div className={styles.textSm}>
+            {t('assetIssues.title')}
+          </div>
+          <Grid className={styles.textXs}>
+            <Grid.Col span={4}>
+              <Grid.Col style={{ padding: '0 5px' }}>{t('assetIssues.status')}</Grid.Col>
+              <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
+                <IssueStatusTag value={props.value.extraData?.pitsBI?.actions?.realt_status}
                 priority={props.value.extraData?.pitsBI?.actions?.priority} />
+                </Grid.Col>
             </Grid.Col>
-          </Grid.Col>
-        </Grid>
-      </div>
+            <Grid.Col span={4}>
+              <Grid.Col style={{ padding: '0 5px' }}>{t('assetIssues.priority')}</Grid.Col>
+              <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
+                <PriorityStatusTag value={props.value.extraData?.pitsBI?.actions?.priority} />
+                </Grid.Col>
+            </Grid.Col>
+            <Grid.Col span={4}>
+              <Grid.Col style={{ padding: '0 5px' }}>{t('assetIssues.lawsuit')}</Grid.Col>
+              {/* center element */}
+              <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
+                <ExhibitStatusTag
+                  exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number}
+                  exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume}
+                  priority={props.value.extraData?.pitsBI?.actions?.priority} />
+              </Grid.Col>
+            </Grid.Col>
+          </Grid>
+        </div>
+      }
 
       <div style={{ flex: '1 1 auto' }} />
       <Divider height={1} my={'xs'} />

@@ -33,7 +33,7 @@
     "includesLevinSwap": "Inclure LevinSwap",
     "includesRmmV2": "Inclure RMM V2",
     "includesOtherAssets": "Inclure d'autres actifs",
-    "displayIssues": "Afficher les problèmes"
+    "displayAdditionalData": "Afficher des données supplémentaires"
   },
   "walletButton": {
     "connectWallet": "Connecter mon portefeuille",

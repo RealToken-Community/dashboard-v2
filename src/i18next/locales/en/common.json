@@ -33,7 +33,7 @@
     "includesLevinSwap": "Includes LevinSwap",
     "includesRmmV2": "Includes RMM V2",
     "includesOtherAssets": "Includes other assets",
-    "displayIssues": "Display issues"
+    "displayAdditionalData": "Display additional data"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
