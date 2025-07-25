@@ -30,9 +30,9 @@ import {
   IconLanguage,
   IconMoon,
   IconSettings,
-  IconTablePlus,
-  IconTableMinus,
   IconSun,
+  IconTableMinus,
+  IconTablePlus,
 } from '@tabler/icons-react'
 
 import { setCookie } from 'cookies-next'
@@ -40,12 +40,12 @@ import { setCookie } from 'cookies-next'
 import { TransferDatabaseService } from 'src/repositories/transfers/TransferDatabase'
 import {
   selectUserCurrency,
+  selectUserDisplayAdditionalData,
   selectUserIncludesEth,
   selectUserIncludesLevinSwap,
   selectUserIncludesOtherAssets,
   selectUserIncludesRmmV2,
   selectUserRentCalculation,
-  selectUserDisplayAdditionalData,
   selectVersion,
 } from 'src/store/features/settings/settingsSelector'
 import {

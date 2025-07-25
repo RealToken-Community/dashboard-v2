@@ -111,7 +111,7 @@ const APRDisabled = (
   const isDisabled =
     !rentStartDate_date ||
     (rentCalculation.state === RentCalculationState.Realtime &&
-    rentStartDate > realtimeDate.toDate())
+      rentStartDate > realtimeDate.toDate())
   return isDisabled
 }
 

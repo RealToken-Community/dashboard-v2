@@ -1,21 +1,31 @@
 import { NextApiHandler } from 'next'
-import { APIRealTokenCommunityEnv } from 'src/types/APIRealToken'
 
+import { APIRealTokenCommunityEnv } from 'src/types/APIRealToken'
 import { APIRealTokenHistory } from 'src/types/APIRealTokenHistory'
 import { useCache } from 'src/utils/useCache'
 
 const getRealTokenHistory = useCache(
   async (): Promise<APIRealTokenHistory[]> => {
     if (!process.env[APIRealTokenCommunityEnv.API_KEY]) {
-      throw new Error(`Missing ${APIRealTokenCommunityEnv.API_KEY} env variable`)
+      throw new Error(
+        `Missing ${APIRealTokenCommunityEnv.API_KEY} env variable`,
+      )
     }
     if (!process.env[APIRealTokenCommunityEnv.API_HISTORY]) {
-      throw new Error(`Missing ${APIRealTokenCommunityEnv.API_HISTORY} env variable`)
+      throw new Error(
+        `Missing ${APIRealTokenCommunityEnv.API_HISTORY} env variable`,
+      )
     }
-    const response = await fetch(process.env[APIRealTokenCommunityEnv.API_HISTORY], {
-      method: 'GET',
-      headers: { [APIRealTokenCommunityEnv.AUTH]: process.env[APIRealTokenCommunityEnv.API_KEY] },
-    })
+    const response = await fetch(
+      process.env[APIRealTokenCommunityEnv.API_HISTORY],
+      {
+        method: 'GET',
+        headers: {
+          [APIRealTokenCommunityEnv.AUTH]:
+            process.env[APIRealTokenCommunityEnv.API_KEY],
+        },
+      },
+    )
 
     if (!response.ok) {
       throw new Error('Failed to fetch properties history')

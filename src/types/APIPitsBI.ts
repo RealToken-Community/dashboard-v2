@@ -1,4 +1,4 @@
-import { APIRealToken } from "./APIRealToken"
+import { APIRealToken } from './APIRealToken'
 
 export enum APIPitsBiEnv {
   VERSION = 'PITSBI_API_VERSION',
@@ -15,9 +15,9 @@ export enum RealTokenToBeRepairedPriority {
 }
 
 export enum RealTokenToBeFixedStatus {
-  NoExhibit = "No Exhibit",
-  UpgradedAndReady = "Upgraded & Ready",
-  Scheduled = "Scheduled",
+  NoExhibit = 'No Exhibit',
+  UpgradedAndReady = 'Upgraded & Ready',
+  Scheduled = 'Scheduled',
 }
 
 export interface RealTokenPitsBI_Actions {
@@ -52,5 +52,6 @@ export interface APIRealTokenPitsBI_ExtraData {
   historic: RealTokenPitsBI_Historic
 }
 
-export interface APIRealTokenPitsBI extends APIRealToken, APIRealTokenPitsBI_ExtraData {
-}
+export interface APIRealTokenPitsBI
+  extends APIRealToken,
+    APIRealTokenPitsBI_ExtraData {}

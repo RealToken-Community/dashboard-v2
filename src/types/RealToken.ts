@@ -57,5 +57,3 @@ export interface RealToken extends APIRealToken {
     }
   }
 }
-
-

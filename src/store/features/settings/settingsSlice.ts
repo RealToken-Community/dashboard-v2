@@ -20,7 +20,8 @@ const USER_INCLUDES_ETH_LS_KEY = 'store:settings/includesEth'
 const USER_INCLUDES_LEVIN_SWAP_LS_KEY = 'store:settings/includesLevinSwap'
 const USER_INCLUDES_RMM_V2_LS_KEY = 'store:settings/includesRmmV2'
 const USER_INCLUDES_OTHER_ASSETS_LS_KEY = 'store:settings/includesOtherAssets'
-const USER_DISPLAY_ADDITIONAL_DATA_LS_KEY = 'store:settings/displayAdditionalData'
+const USER_DISPLAY_ADDITIONAL_DATA_LS_KEY =
+  'store:settings/displayAdditionalData'
 
 export interface User {
   id: string
@@ -72,7 +73,8 @@ export const userIncludesRmmV2ChangedDispatchType =
   'settings/includesRmmV2Changed'
 export const userIncludesOtherAssetsDispatchType =
   'settings/includesOtherAssets'
-export const userDisplayAdditionalDataDispatchType = 'settings/displayAdditionalData'
+export const userDisplayAdditionalDataDispatchType =
+  'settings/displayAdditionalData'
 // ACTIONS
 export const initializeSettings = createAction(initializeSettingsDispatchType)
 export const userChanged = createAction<User>(userChangedDispatchType)
@@ -280,8 +282,7 @@ export const settingsReducers = createReducer(
         state.includesLevinSwap = userIncludesLevinSwap === 'true'
         state.includesRmmV2 = userIncludesRmmV2 === 'true'
         state.includesOtherAssets = userIncludesOtherAssets === 'true'
-        state.displayAdditionalData =
-          userDisplayAdditionalData === 'true'
+        state.displayAdditionalData = userDisplayAdditionalData === 'true'
 
         const { publicRuntimeConfig } = getConfig() as {
           publicRuntimeConfig?: { version: string }

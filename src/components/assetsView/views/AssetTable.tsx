@@ -10,6 +10,7 @@ import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { useFullyRentedAPR } from 'src/hooks/useFullyRentedAPR'
+import { selectUserDisplayAdditionalData } from 'src/store/features/settings/settingsSelector'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
   OtherRealtoken,
@@ -21,7 +22,6 @@ import {
   IssueStatusTag,
   PriorityStatusTag,
 } from '../../commons/assets'
-import { selectUserDisplayAdditionalData } from 'src/store/features/settings/settingsSelector'
 
 export const AssetTable: FC<{
   realtokens: (UserRealtoken | OtherRealtoken)[]
@@ -83,16 +83,21 @@ const AssetTableHeader: FC = () => {
       <Table.Th style={{ textAlign: 'right' }}>{t('lastChange')}</Table.Th>
       {userDisplayAdditionalData && (
         <>
-          <Table.Th style={{ textAlign: 'right' }}>{t('status.header')}</Table.Th>
-          <Table.Th style={{ textAlign: 'right' }}>{t('priority.header')}</Table.Th>
-          <Table.Th style={{ textAlign: 'right' }}>{t('lawsuit.header')}</Table.Th>
+          <Table.Th style={{ textAlign: 'right' }}>
+            {t('status.header')}
+          </Table.Th>
+          <Table.Th style={{ textAlign: 'right' }}>
+            {t('priority.header')}
+          </Table.Th>
+          <Table.Th style={{ textAlign: 'right' }}>
+            {t('lawsuit.header')}
+          </Table.Th>
         </>
       )}
     </Table.Tr>
   )
 }
 AssetTableHeader.displayName = 'AssetTableHeader'
-
 
 const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
@@ -178,21 +183,28 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
           .toLocaleDateString()}
       </Table.Td>
       {userDisplayAdditionalData && (
-      <>
-        <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-          <IssueStatusTag
-            value={props.value.extraData?.pitsBI?.actions?.realt_status}
-            priority={props.value.extraData?.pitsBI?.actions?.priority} />
-        </Table.Td><Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-            <PriorityStatusTag value={props.value.extraData?.pitsBI?.actions?.priority} />
-        </Table.Td>
-        <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-          <ExhibitStatusTag
-            exhibitNumber={props.value.extraData?.pitsBI?.actions?.exhibit_number}
-            exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume}
-            priority={props.value.extraData?.pitsBI?.actions?.priority} />
-        </Table.Td>
-      </>
+        <>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <IssueStatusTag
+              value={props.value.extraData?.pitsBI?.actions?.realt_status}
+              priority={props.value.extraData?.pitsBI?.actions?.priority}
+            />
+          </Table.Td>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <PriorityStatusTag
+              value={props.value.extraData?.pitsBI?.actions?.priority}
+            />
+          </Table.Td>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <ExhibitStatusTag
+              exhibitNumber={
+                props.value.extraData?.pitsBI?.actions?.exhibit_number
+              }
+              exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume}
+              priority={props.value.extraData?.pitsBI?.actions?.priority}
+            />
+          </Table.Td>
+        </>
       )}
     </Table.Tr>
   )
@@ -253,22 +265,22 @@ const OtherTableRow: FC<{ value: OtherRealtoken }> = (props) => {
       </Table.Td>
       {userDisplayAdditionalData && (
         <>
-        <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-          <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-            {'-'}
-          </div>
-        </Table.Td>
-        <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-          <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-            {'-'}
-          </div>
-        </Table.Td>
-        <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
-          <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-            {'-'}
-          </div>
-        </Table.Td>
-      </>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+              {'-'}
+            </div>
+          </Table.Td>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+              {'-'}
+            </div>
+          </Table.Td>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+              {'-'}
+            </div>
+          </Table.Td>
+        </>
       )}
     </Table.Tr>
   )
