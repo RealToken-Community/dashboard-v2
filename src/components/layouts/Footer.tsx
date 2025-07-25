@@ -5,7 +5,7 @@ import {
   IconBrandDiscord,
   IconBrandMedium,
   IconBrandTelegram,
-} from '@tabler/icons'
+} from '@tabler/icons-react'
 
 import { Logo } from 'src/assets'
 
