@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { Box, Card, Text, Title } from '@mantine/core'
-import { IconArchive, IconBolt, IconBoltOff } from '@tabler/icons'
+import { IconArchive, IconBolt, IconBoltOff } from '@tabler/icons-react'
 
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import { OtherRealtoken } from 'src/store/features/wallets/walletsSelector'

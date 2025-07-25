@@ -32,7 +32,8 @@
     "includesEth": "Includes Ethereum",
     "includesLevinSwap": "Includes LevinSwap",
     "includesRmmV2": "Includes RMM V2",
-    "includesOtherAssets": "Includes other assets"
+    "includesOtherAssets": "Includes other assets",
+    "displayAdditionalData": "Display additional data"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
@@ -227,7 +228,36 @@
       "full": "Subsidized",
       "partial": "Partially subsidized"
     },
-    "subsidy": "Subsidy"
+    "subsidy": "Subsidy",
+    "assetIssues": {
+      "title": "Asset issues",
+      "status": "Status",
+      "priority": "Priority",
+      "lawsuit": "Lawsuit"
+    }
+  },
+  "assetIssues": {
+    "status": {
+      "noExhibit": "Not applicable",
+      "scheduled": "Scheduled",
+      "upgradedReady": "Upgraded and ready",
+      "unknown": "Unknown",
+      "na": "Not applicable"
+    },
+    "priority": {
+      "1": "Priority 1 (High)",
+      "2": "Priority 2 (Medium)",
+      "3": "Priority 3 (Low)",
+      "na": "Not applicable",
+      "unknown": "Unknown"
+    },
+    "lawsuit": {
+      "na": "Not applicable",
+      "exhibit": "exhibit",
+      "unknown": "Unknown",
+      "exhibitNumber": "number",
+      "volumeNumber": "volume number"
+    }
   },
   "assetTable": {
     "property": "Property",
@@ -238,18 +268,28 @@
     "unitPriceCost": "Unit price cost",
     "unrealizedCapitalGain": "Capital gain",
     "apr": "Yield",
-    "fullyRentedAPR":"Fully rented APR *",
+    "fullyRentedAPR": "Fully rented APR *",
     "weeklyRents": "Weekly rents",
     "yearlyRents": "Yearly rents",
     "rentedUnits": "Rented units",
     "propertyValue": "Property value",
-    "lastChange": "Last change"
+    "lastChange": "Last change",
+    "status": {
+      "header": "Status"
+    },
+    "priority": {
+      "header": "Priority"
+    },
+    "lawsuit": {
+      "header": "Lawsuit"
+    }
   },
   "assetPage": {
     "home": "Home",
     "viewOnRealt": "View on RealT",
     "tabs": {
       "main": "Main informations",
+      "issues": "Issues",
       "property": "Property details",
       "history": "Property changes",
       "transfers": "My transactions",
@@ -271,6 +311,11 @@
       "rentMonth": "Monthly rent",
       "rentYear": "Yearly rent",
       "rentedUnits": "Rented units"
+    },
+    "issues": {
+      "status": "Status",
+      "priority": "Priority",
+      "lawsuit": "Lawsuit"
     },
     "property": {
       "initialLaunchDate": "Launch date",
@@ -422,10 +467,10 @@
     "title": "Initial data loading",
     "description": "Retrieving your transactions in progress. This loading can take some time depending on the number of transactions performed (10-20 seconds / 1000 transactions). On your next visits, only new transactions will be retrieved."
   },
-  "disclaimer":{
+  "disclaimer": {
     "fullyRentedAPR": "This is a beta estimation done by RealT community. Please report any issues. Please note that is an indicative value and not a guarantee. RealT community or RealT does not take any responsibility for user actions based on this value."
   },
-  "errors" : {
+  "errors": {
     "userNotFound": "User not found"
   }
 }

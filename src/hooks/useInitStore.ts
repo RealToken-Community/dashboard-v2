@@ -5,10 +5,14 @@ import { useWeb3React } from '@web3-react/core'
 
 import { fetchCurrenciesRates } from 'src/store/features/currencies/currenciesSlice'
 import { selectRealtokens } from 'src/store/features/realtokens/realtokensSelector'
-import { fetchRealtokens } from 'src/store/features/realtokens/realtokensSlice'
+import {
+  fetchRealtokens,
+  fetchRealtokensExtraData,
+} from 'src/store/features/realtokens/realtokensSlice'
 import {
   selectAllUserAddressList,
   selectUserAddressList,
+  selectUserDisplayAdditionalData,
 } from 'src/store/features/settings/settingsSelector'
 import {
   initializeSettings,
@@ -32,6 +36,7 @@ export default function useInitStore() {
   const addressList = useSelector(selectUserAddressList)
   const realtokens = useSelector(selectRealtokens)
   const { account } = useWeb3React()
+  const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
 
   useEffect(() => {
     const accountAddress = account?.toLowerCase()
@@ -59,4 +64,10 @@ export default function useInitStore() {
       dispatch(resetTransfers())
     }
   }, [realtokens, addresses, dispatch])
+
+  useEffect(() => {
+    if (realtokens.length && userDisplayAdditionalData) {
+      dispatch(fetchRealtokensExtraData())
+    }
+  }, [realtokens, userDisplayAdditionalData])
 }
