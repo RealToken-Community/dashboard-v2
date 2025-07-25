@@ -1,4 +1,5 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
+
 import { de } from 'date-fns/locale'
 import { forEach } from 'lodash'
 
@@ -29,7 +30,6 @@ export const filterProductType = (item: APIRealToken) =>
     APIRealTokenProductType.Factoring,
   ].includes(item.productType)
 
-
 // DISPATCH TYPE
 export const realtokensChangedDispatchType = 'realtokens/realtokensChanged'
 export const realtokensIsLoadingDispatchType = 'realtokens/realtokensIsLoading'
@@ -42,11 +42,13 @@ export const realtokensIsLoading = createAction<boolean>(
   realtokensIsLoadingDispatchType,
 )
 
-
 // DISPATCH TYPE
-export const realtokensExtraDataChangedDispatchType = 'realtokens/realtokensExtraDataChanged'
-export const realtokensExtraDataIsLoadingDispatchType = 'realtokens/realtokensExtraDataIsLoading'
-export const realtokensExtraDataLoadedDispatchType = 'realtokens/realtokensExtraDataLoaded'
+export const realtokensExtraDataChangedDispatchType =
+  'realtokens/realtokensExtraDataChanged'
+export const realtokensExtraDataIsLoadingDispatchType =
+  'realtokens/realtokensExtraDataIsLoading'
+export const realtokensExtraDataLoadedDispatchType =
+  'realtokens/realtokensExtraDataLoaded'
 
 // ACTIONS
 export const realtokensExtraDataChanged = createAction<RealToken[]>(
@@ -62,20 +64,23 @@ export const realtokensExtraDataLoaded = createAction<boolean>(
 // THUNKS
 export function fetchRealtokens() {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    const { isLoading, isLoadingExtraData } = getState().realtokens
-
-    console.debug(`Current state isLoading: ${isLoading} isLoadingExtraData: ${isLoadingExtraData}`)
+    const { isLoading } = getState().realtokens
     if (isLoading) return
     dispatch({ type: realtokensIsLoadingDispatchType, payload: true })
     try {
       const data = await RealtokenRepository.getTokens()
-      // Check for extraData
-      const hasExtraData = data.some((token) => (token as unknown as APIRealTokenPitsBI_ExtraData).actions || (token as unknown as APIRealTokenPitsBI_ExtraData).historic)
+      // Check for exiting extraData : if PitsBI has been used as fallback datasource
+      // json will already contain 'actions' and 'historic' properties
+      const hasExtraData = data.some(
+        (token) =>
+          (token as unknown as APIRealTokenPitsBI_ExtraData).actions ||
+          (token as unknown as APIRealTokenPitsBI_ExtraData).historic,
+      )
       if (hasExtraData) {
-        console.debug('Realtokens with Pitsbi EXTRA DATA FOUND')
         // Reformat APIRealTokenPitsBI_ExtraData data
         forEach(data, (token: RealToken) => {
-          const { actions, historic } = token as unknown as APIRealTokenPitsBI_ExtraData
+          const { actions, historic } =
+            token as unknown as APIRealTokenPitsBI_ExtraData
           // Restructure token data: extract PitsBI "extra data"
           token.extraData = {
             pitsBI: {
@@ -91,7 +96,6 @@ export function fetchRealtokens() {
         })
         dispatch({ type: realtokensExtraDataLoadedDispatchType, payload: true })
       }
-      console.debug('Filtering realtokens based on product type...')
       // Dispatch filtered realtokens
       dispatch({
         type: realtokensChangedDispatchType,
@@ -107,49 +111,23 @@ export function fetchRealtokens() {
 
 export function fetchRealtokensExtraData() {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
-    const { isLoading, isLoadingExtraData, isExtraDataLoaded } = getState().realtokens
-    // Wait for the initial realtokens to be loaded
-    console.debug('Fetching realtokens extra data... (0)')
-    console.debug(`Current state isLoading: ${isLoading} isLoadingExtraData: ${isLoadingExtraData} isExtraDataLoaded: ${isExtraDataLoaded}`)
-    if (isLoading) return
-    // TODO: check if additional data is already loaded
-    // TODO: check if additional data is already loaded
-    // TODO: check if additional data is already loaded
-    // TODO: check if additional data is already loaded: find if any realtoken has extraData
-    console.debug('Fetching realtokens extra data... (1)')
-    if (isLoadingExtraData) {
-      console.debug('Realtokens extra data is already being loaded, skipping')
-      return
-    }
-
-    if (isExtraDataLoaded) {
-      console.debug('Realtokens extra data is already loaded, skipping')
-      return
-    }
-
-    console.debug('Fetching realtokens extra data... (2)')
-    console.debug('Fetching realtokens extra data from repository...')
-
+    const { isLoading, isLoadingExtraData, isExtraDataLoaded } =
+      getState().realtokens
+    // Wait for the initial realtokens to be loaded, skip if already loading or loaded
+    if (isLoading || isLoadingExtraData || isExtraDataLoaded) return
     dispatch({ type: realtokensExtraDataIsLoadingDispatchType, payload: true })
 
     try {
-      const pitsBiExtraData = await RealtokenRepository.getTokensPitsBiExtraData()
-      console.debug(`Fetched pitsBiExtraData : ${pitsBiExtraData.length}`, pitsBiExtraData)
-
+      const pitsBiExtraData =
+        await RealtokenRepository.getTokensPitsBiExtraData()
       // Build a map of tokensExtraData by uuid
       const tokensExtraDataMap = new Map<string, APIRealTokenPitsBI_ExtraData>()
       pitsBiExtraData.forEach((item) => {
         tokensExtraDataMap.set(item.uuid, item)
       })
-
-      console.debug('extraData: tokensExtraDataMap size:', tokensExtraDataMap.size)
-      const existingTokens = (await RealtokenRepository.getTokens())
-      console.debug('existingTokens length:', existingTokens.length)
+      const existingTokens = await RealtokenRepository.getTokens()
 
       existingTokens.forEach((token) => {
-        if (token.productType == APIRealTokenProductType.EquityToken) {
-          console.debug(`Processing token: ${token.uuid} (${token.fullName})`)
-        }
         const { actions, historic } = tokensExtraDataMap.get(token.uuid) || {}
         // Update existing token data with PitsBI "extra data"
         token.extraData = {
@@ -167,9 +145,11 @@ export function fetchRealtokensExtraData() {
     } catch (error) {
       console.log(error)
     } finally {
-      dispatch({ type: realtokensExtraDataIsLoadingDispatchType, payload: false })
+      dispatch({
+        type: realtokensExtraDataIsLoadingDispatchType,
+        payload: false,
+      })
     }
-
   }
 }
 

@@ -5,9 +5,11 @@ import { useWeb3React } from '@web3-react/core'
 
 import { fetchCurrenciesRates } from 'src/store/features/currencies/currenciesSlice'
 import { selectRealtokens } from 'src/store/features/realtokens/realtokensSelector'
-import { fetchRealtokens, fetchRealtokensExtraData } from 'src/store/features/realtokens/realtokensSlice'
+import {
+  fetchRealtokens,
+  fetchRealtokensExtraData,
+} from 'src/store/features/realtokens/realtokensSlice'
 // import { fetchRealtokensExtraData } from 'src/store/features/realtokens/realtokensSliceExtraData'
-
 import {
   selectAllUserAddressList,
   selectUserAddressList,
@@ -44,9 +46,7 @@ export default function useInitStore() {
 
   useEffect(() => {
     dispatch(initializeSettings())
-    dispatch(fetchRealtokens())
-     .then(() => {
-      console.debug('Realtokens fetched, now fetching extra data...')
+    dispatch(fetchRealtokens()).then(() => {
       dispatch(fetchRealtokensExtraData())
     })
     dispatch(fetchCurrenciesRates())

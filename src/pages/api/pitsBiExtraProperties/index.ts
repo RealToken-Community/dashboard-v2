@@ -1,13 +1,12 @@
 import { NextApiHandler } from 'next'
-import { APIPitsBiEnv } from 'src/types/APIPitsBI'
 
+import { APIPitsBiEnv } from 'src/types/APIPitsBI'
 import { APIRealToken } from 'src/types/APIRealToken'
 import { fetchWithRetry } from 'src/utils/general'
 import { useCache } from 'src/utils/useCache'
 
 const getRealTokenListExtraData = useCache(
   async (): Promise<APIRealToken[]> => {
-    console.log('extraProperties: Fetching RealToken list from PitsBi API... 1')
     let APIPitsBi_Env_available = true
     for (const envVar of [
       APIPitsBiEnv.VERSION,
@@ -17,7 +16,9 @@ const getRealTokenListExtraData = useCache(
     ]) {
       if (!process.env[envVar]) {
         APIPitsBi_Env_available = false
-        console.warn(`extraProperties: Missing PitsBi API ${envVar} env variable`)
+        console.warn(
+          `extraProperties: Missing PitsBi API ${envVar} env variable`,
+        )
       }
     }
     if (!APIPitsBi_Env_available) {
@@ -27,14 +28,12 @@ const getRealTokenListExtraData = useCache(
     }
 
     const PITSBiAPI_GET_ALLTOKENS = `${process.env[APIPitsBiEnv.BASE]}${process.env[APIPitsBiEnv.VERSION]}/${process.env[APIPitsBiEnv.GET_ALLTOKENS]}`
-    const pitsBiApiResponse = await fetchWithRetry(PITSBiAPI_GET_ALLTOKENS, { method: 'GET' }, 2, 5_000)
-    // if (!pitsBiApiResponse.ok) {
-    //   // throw new Error('Failed to fetch PitsBi API : ' + (await pitsBiApiResponse.text()))
-    //   const pitsBiResponseText = (await pitsBiApiResponse.text())
-    //   const pitsBiErrorMsg = `extraProperties: Failed to fetch PitsBi API uri: (${PITSBiAPI_GET_ALLTOKENS}) status: (${pitsBiApiResponse.status}) response : ` + pitsBiResponseText
-    //   console.error(pitsBiErrorMsg)
-    //   return []
-    // }
+    const pitsBiApiResponse = await fetchWithRetry(
+      PITSBiAPI_GET_ALLTOKENS,
+      { method: 'GET' },
+      2,
+      5_000,
+    )
     return pitsBiApiResponse.json()
   },
   { duration: 1000 * 60 * 60 },
