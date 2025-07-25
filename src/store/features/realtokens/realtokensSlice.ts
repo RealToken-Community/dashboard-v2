@@ -1,9 +1,11 @@
+import { useSelector } from 'react-redux'
+
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
-import { de } from 'date-fns/locale'
 import { forEach } from 'lodash'
 
 import { RealtokenRepository } from 'src/repositories'
+import { selectUserDisplayAdditionalData } from 'src/store/features/settings/settingsSelector'
 import { AppDispatch, RootState } from 'src/store/store'
 import { APIRealTokenPitsBI_ExtraData } from 'src/types/APIPitsBI'
 import { APIRealToken, APIRealTokenProductType } from 'src/types/APIRealToken'
@@ -111,6 +113,10 @@ export function fetchRealtokens() {
 
 export function fetchRealtokensExtraData() {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
+    // Check if user has enabled additional
+    const userDisplayAdditionalData =
+      selectUserDisplayAdditionalData(getState())
+    if (!userDisplayAdditionalData) return
     const { isLoading, isLoadingExtraData, isExtraDataLoaded } =
       getState().realtokens
     // Wait for the initial realtokens to be loaded, skip if already loading or loaded

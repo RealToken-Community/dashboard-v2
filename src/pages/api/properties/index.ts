@@ -5,6 +5,8 @@ import { APIRealToken, APIRealTokenCommunityEnv } from 'src/types/APIRealToken'
 import { fetchWithRetry } from 'src/utils/general'
 import { useCache } from 'src/utils/useCache'
 
+import { URIS } from '../uris'
+
 const getRealTokenList = useCache(
   async (): Promise<APIRealToken[]> => {
     for (const envVar of [
@@ -19,10 +21,9 @@ const getRealTokenList = useCache(
         )
       }
     }
-    const REALTOKEN_COMMUNITY_API_GET_ALLTOKENS = `${process.env[APIRealTokenCommunityEnv.API_BASE]}${process.env[APIRealTokenCommunityEnv.VERSION]}/${process.env[APIRealTokenCommunityEnv.GET_ALLTOKENS]}`
     try {
       const realTokenApiResponse = await fetchWithRetry(
-        REALTOKEN_COMMUNITY_API_GET_ALLTOKENS,
+        URIS.REALTOKEN_COMMUNITY_API_GET_ALLTOKENS,
         {
           method: 'GET',
           headers: {
@@ -52,15 +53,13 @@ const getRealTokenList = useCache(
         console.warn(`Missing Pitsbi API ${envVar} env variable`)
       }
     }
-
     if (!APIPitsbi_Env_available) {
       throw new Error(
         `Failed to fetch properties from RealToken API ; PitsBI API environment variables are not set, unable to fetch data.`,
       )
     }
-    const PITSBIAPI_GET_ALLTOKENS = `${process.env[APIPitsBiEnv.BASE]}${process.env[APIPitsBiEnv.VERSION]}/${process.env[APIPitsBiEnv.GET_ALLTOKENS]}`
     const pitsbiApiResponse = await fetchWithRetry(
-      PITSBIAPI_GET_ALLTOKENS,
+      URIS.PITSBI_API_GET_ALLTOKENS,
       {
         method: 'GET',
       },

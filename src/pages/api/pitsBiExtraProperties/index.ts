@@ -5,6 +5,8 @@ import { APIRealToken } from 'src/types/APIRealToken'
 import { fetchWithRetry } from 'src/utils/general'
 import { useCache } from 'src/utils/useCache'
 
+import { URIS } from '../uris'
+
 const getRealTokenListExtraData = useCache(
   async (): Promise<APIRealToken[]> => {
     let APIPitsBi_Env_available = true
@@ -26,10 +28,8 @@ const getRealTokenListExtraData = useCache(
       // Return empty response
       return []
     }
-
-    const PITSBiAPI_GET_ALLTOKENS = `${process.env[APIPitsBiEnv.BASE]}${process.env[APIPitsBiEnv.VERSION]}/${process.env[APIPitsBiEnv.GET_ALLTOKENS]}`
     const pitsBiApiResponse = await fetchWithRetry(
-      PITSBiAPI_GET_ALLTOKENS,
+      URIS.PITSBI_API_GET_ALLTOKENS,
       { method: 'GET' },
       2,
       5_000,
