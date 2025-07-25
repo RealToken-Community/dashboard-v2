@@ -19,7 +19,7 @@ const getRealTokenList = useCache(
         )
       }
     }
-    const REALTOKEN_COMMUNITY_API_GET_ALLTOKENS = `${process.env[APIRealTokenCommunityEnv.API_BASE]}${process.env[APIRealTokenCommunityEnv.VERSION]}/${process.env[APIRealTokenCommunityEnv.GET_ALLTOKENS]}WXW`
+    const REALTOKEN_COMMUNITY_API_GET_ALLTOKENS = `${process.env[APIRealTokenCommunityEnv.API_BASE]}${process.env[APIRealTokenCommunityEnv.VERSION]}/${process.env[APIRealTokenCommunityEnv.GET_ALLTOKENS]}`
     try {
       const realTokenApiResponse = await fetchWithRetry(
         REALTOKEN_COMMUNITY_API_GET_ALLTOKENS,
