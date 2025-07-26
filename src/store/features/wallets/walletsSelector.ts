@@ -88,6 +88,8 @@ export interface RWARealtoken extends OtherRealtoken {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface REGRealtoken extends OtherRealtoken {}
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface REUSDGRealtoken extends OtherRealtoken {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface REGVotingPowertoken extends OtherRealtoken {}
 
 const DAYS_PER_YEAR = 365
