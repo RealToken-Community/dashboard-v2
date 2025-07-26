@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider } from 'react-redux'
 
@@ -116,7 +116,7 @@ const App = ({
 
   // Customize chains config for Gnosis and Ethereum
   // using rpc urls from props
-  const CustomChainsConfig = {
+  const CustomChainsConfig = useMemo(() => ({
     // Keep Goerli as testnet else an error will arise at init
     [ChainsID.Goerli]: RealtCommonsDefaultChainsConfig[ChainsID.Goerli],
     [ChainsID.Gnosis]: {
@@ -131,30 +131,32 @@ const App = ({
         RealtCommonsDefaultChainsConfig[ChainsID.Ethereum].rpcUrl,
     },
     // TODO: add Polygon
-  }
+  }), [GnosisRpcUrl, EthereumRpcUrl])
 
-  const dashbordChains: ChainSelectConfig<RealtChains> = {
+  const dashbordChains: ChainSelectConfig<RealtChains> = useMemo(() => ({
     allowedChains: parseAllowedChain(ChainsID),
     chainsConfig: CustomChainsConfig,
     defaultChainId: ChainsID.Gnosis, // Explicitly setting Gnosis as the defaultChainId
-  }
+  }), [CustomChainsConfig])
 
   const envName = process.env.NEXT_PUBLIC_ENV ?? 'development'
   const walletConnectKey = process.env.NEXT_PUBLIC_WALLET_CONNECT_KEY ?? ''
 
-  const readOnly = getReadOnlyConnector(dashbordChains)
-  const walletConnect = getWalletConnectV2(
-    dashbordChains,
-    envName,
-    walletConnectKey,
-    false,
-  )
+  const libraryConnectors = useMemo(() => {
+    const readOnly = getReadOnlyConnector(dashbordChains)
+    const walletConnect = getWalletConnectV2(
+      dashbordChains,
+      envName,
+      walletConnectKey,
+      false,
+    )
 
-  const libraryConnectors = getConnectors({
-    readOnly: readOnly,
-    metamask: [metaMask, metaMaskHooks],
-    walletConnectV2: walletConnect,
-  } as unknown as ConnectorsAvailable)
+    return getConnectors({
+      readOnly: readOnly,
+      metamask: [metaMask, metaMaskHooks],
+      walletConnectV2: walletConnect,
+    } as unknown as ConnectorsAvailable)
+  }, [dashbordChains, envName, walletConnectKey])
 
   return (
     <QueryClientProvider client={queryClient}>
