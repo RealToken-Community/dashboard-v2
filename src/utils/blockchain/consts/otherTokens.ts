@@ -1,8 +1,3 @@
-// Each asset must have a different ID (used as KEY assets view)
-const RWA_asset_ID = 0
-const REG_asset_ID = 1
-const REGVotingPower_asset_ID = 2
-
 // Gnosis/xDai, Ethereum
 const RWA_ContractAddress = '0x0675e8F4A52eA6c845CB6427Af03616a2af42170'
 // Gnosis/xDai, Ethereum
@@ -13,6 +8,12 @@ const REG_Vault_Gnosis_ContractAddress =
 // Reg Voting Power only deployed on Gnosis/xDai
 const RegVotingPower_Gnosis_ContractAddress =
   '0x6382856a731Af535CA6aea8D364FCE67457da438'
+
+// Asset IDs for RWA, REG, and REG Voting Power
+// Each asset must have a different ID (used as KEY assets view)
+const RWA_asset_ID = RWA_ContractAddress
+const REG_asset_ID = REG_ContractAddress
+const REGVotingPower_asset_ID = RegVotingPower_Gnosis_ContractAddress
 
 // Gnosis/xDai tokens for prices calculation
 const WXDAI_ContractAddress = '0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d'
