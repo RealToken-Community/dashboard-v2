@@ -116,28 +116,35 @@ const App = ({
 
   // Customize chains config for Gnosis and Ethereum
   // using rpc urls from props
-  const CustomChainsConfig = useMemo(() => ({
-    // Keep Goerli as testnet else an error will arise at init
-    [ChainsID.Goerli]: RealtCommonsDefaultChainsConfig[ChainsID.Goerli],
-    [ChainsID.Gnosis]: {
-      ...RealtCommonsDefaultChainsConfig[ChainsID.Gnosis],
-      rpcUrl:
-        GnosisRpcUrl || RealtCommonsDefaultChainsConfig[ChainsID.Gnosis].rpcUrl,
-    },
-    [ChainsID.Ethereum]: {
-      ...RealtCommonsDefaultChainsConfig[ChainsID.Ethereum],
-      rpcUrl:
-        EthereumRpcUrl ||
-        RealtCommonsDefaultChainsConfig[ChainsID.Ethereum].rpcUrl,
-    },
-    // TODO: add Polygon
-  }), [GnosisRpcUrl, EthereumRpcUrl])
+  const CustomChainsConfig = useMemo(
+    () => ({
+      // Keep Goerli as testnet else an error will arise at init
+      [ChainsID.Goerli]: RealtCommonsDefaultChainsConfig[ChainsID.Goerli],
+      [ChainsID.Gnosis]: {
+        ...RealtCommonsDefaultChainsConfig[ChainsID.Gnosis],
+        rpcUrl:
+          GnosisRpcUrl ||
+          RealtCommonsDefaultChainsConfig[ChainsID.Gnosis].rpcUrl,
+      },
+      [ChainsID.Ethereum]: {
+        ...RealtCommonsDefaultChainsConfig[ChainsID.Ethereum],
+        rpcUrl:
+          EthereumRpcUrl ||
+          RealtCommonsDefaultChainsConfig[ChainsID.Ethereum].rpcUrl,
+      },
+      // TODO: add Polygon
+    }),
+    [GnosisRpcUrl, EthereumRpcUrl],
+  )
 
-  const dashbordChains: ChainSelectConfig<RealtChains> = useMemo(() => ({
-    allowedChains: parseAllowedChain(ChainsID),
-    chainsConfig: CustomChainsConfig,
-    defaultChainId: ChainsID.Gnosis, // Explicitly setting Gnosis as the defaultChainId
-  }), [CustomChainsConfig])
+  const dashbordChains: ChainSelectConfig<RealtChains> = useMemo(
+    () => ({
+      allowedChains: parseAllowedChain(ChainsID),
+      chainsConfig: CustomChainsConfig,
+      defaultChainId: ChainsID.Gnosis, // Explicitly setting Gnosis as the defaultChainId
+    }),
+    [CustomChainsConfig],
+  )
 
   const envName = process.env.NEXT_PUBLIC_ENV ?? 'development'
   const walletConnectKey = process.env.NEXT_PUBLIC_WALLET_CONNECT_KEY ?? ''
