@@ -22,12 +22,14 @@ import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { Currency } from 'src/types/Currencies'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
+  HoneySwapFactory_Address,
+  REG_Vault_Gnosis_ContractAddress,
+} from 'src/utils/blockchain/consts/misc'
+import {
   DEFAULT_REG_PRICE,
   DEFAULT_USDC_USD_RATE,
   DEFAULT_XDAI_USD_RATE,
-  HoneySwapFactory_Address,
   REG_ContractAddress,
-  REG_Vault_Gnosis_ContractAddress,
   REG_asset_ID,
   REGtokenDecimals,
   USDConXdai_ContractAddress,
