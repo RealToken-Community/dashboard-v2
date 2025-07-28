@@ -147,7 +147,7 @@
     "resetFilter": "Reset"
   },
   "assetSubsidy": {
-    "label": "All",
+    "label": "Subsidized rents",
     "options": {
       "all": "No filtered",
       "subsidized": "Subsidized",
