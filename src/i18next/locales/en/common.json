@@ -197,6 +197,15 @@
       "notAvailable": "No"
     }
   },
+  "assetIssueStatus": {
+    "label": "Issue Status",
+    "options": {
+      "all": "All",
+      "noExhibit": "No exhibit",
+      "scheduled": "Scheduled",
+      "upgradedAndReady": "Upgraded and ready"
+    }
+  },
   "assetUserProtocol": {
     "label": "Owned on",
     "options": {

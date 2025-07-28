@@ -197,6 +197,15 @@
       "notAvailable": "Non"
     }
   },
+  "assetIssueStatus": {
+    "label": "Statut des problèmes",
+    "options": {
+      "all": "Tous",
+      "noExhibit": "Non concerné",
+      "scheduled": "Planifié",
+      "upgradedAndReady": "Réparé, prêt"
+    }
+  },
   "assetUserProtocol": {
     "label": "Possédées sur",
     "options": {
