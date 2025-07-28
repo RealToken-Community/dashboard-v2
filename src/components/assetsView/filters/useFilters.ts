@@ -10,6 +10,7 @@ import {
 } from 'src/store/features/wallets/walletsSelector'
 
 import { useAssetsViewProductTypeFilter } from './AssetsViewFilterProductType'
+import { useAssetsViewIssuePriorityFilter } from './AssetsViewIssuePriorityFilter'
 import { useAssetsViewIssueStatusFilter } from './AssetsViewIssuesStatusFilter'
 import { useAssetsViewRentStatusFilter } from './AssetsViewRentStatusFilter'
 import { useAssetsViewRmmStatusFilter } from './AssetsViewRmmStatusFilter'
@@ -38,6 +39,8 @@ export function useAssetsViewFilters() {
     useAssetsViewUserProtocolFilter(activeFilter)
   const { assetIssueStatusFilterFunction } =
     useAssetsViewIssueStatusFilter(activeFilter)
+  const { assetIssuePriorityFilterFunction } =
+    useAssetsViewIssuePriorityFilter(activeFilter)
 
   function assetsViewFilterFunction(
     tokenList: (UserRealtoken | OtherRealtoken)[],
@@ -51,6 +54,14 @@ export function useAssetsViewFilters() {
       .filter(assetRmmStatusFilterFunction)
       .filter(
         userDisplayAdditionalData ? assetIssueStatusFilterFunction : () => true,
+      )
+      .filter(
+        userDisplayAdditionalData ? assetIssueStatusFilterFunction : () => true,
+      )
+      .filter(
+        userDisplayAdditionalData
+          ? assetIssuePriorityFilterFunction
+          : () => true,
       )
       .sort(assetSortFunction)
   }

@@ -206,6 +206,16 @@
       "upgradedAndReady": "Réparé, prêt"
     }
   },
+  "assetIssuePriority": {
+    "label": "Priorité des problèmes",
+    "options": {
+      "all": "Tous",
+      "none": "Sans problème",
+      "high": "Priorité 1 (Haute)",
+      "medium": "Priorité 2 (Moyenne)",
+      "low": "Priorité 3 (Basse)"
+    }
+  },
   "assetUserProtocol": {
     "label": "Possédées sur",
     "options": {

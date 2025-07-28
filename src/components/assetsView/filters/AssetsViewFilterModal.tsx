@@ -19,6 +19,7 @@ import { userIncludesOtherAssetsChanged } from 'src/store/features/settings/sett
 
 import { AssetProductType } from '../types'
 import { AssetsViewProductTypeFilter } from './AssetsViewFilterProductType'
+import { AssetsViewIssuePriorityFilter } from './AssetsViewIssuePriorityFilter'
 import { AssetsViewIssueStatusFilter } from './AssetsViewIssuesStatusFilter'
 import { AssetsViewRentStatusFilter } from './AssetsViewRentStatusFilter'
 import { AssetsViewRmmStatusFilter } from './AssetsViewRmmStatusFilter'
@@ -127,12 +128,20 @@ export const AssetsViewFilterModal: FC<ContextModalProps> = ({
           }}
         />
         {userDisplayAdditionalData && (
-          <AssetsViewIssueStatusFilter
-            filter={filterModel}
-            onChange={(value) => {
-              setFilterModel({ ...filterModel, ...value })
-            }}
-          />
+          <>
+            <AssetsViewIssueStatusFilter
+              filter={filterModel}
+              onChange={(value) => {
+                setFilterModel({ ...filterModel, ...value })
+              }}
+            />
+            <AssetsViewIssuePriorityFilter
+              filter={filterModel}
+              onChange={(value) => {
+                setFilterModel({ ...filterModel, ...value })
+              }}
+            />
+          </>
         )}
       </Flex>
       <Flex justify={'space-between'}>

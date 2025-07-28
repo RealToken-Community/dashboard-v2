@@ -206,6 +206,16 @@
       "upgradedAndReady": "Upgraded and ready"
     }
   },
+  "assetIssuePriority": {
+    "label": "Issue Priority",
+    "options": {
+      "all": "All",
+      "none": "No priority",
+      "high": "High",
+      "medium": "Medium",
+      "low": "Low"
+    }
+  },
   "assetUserProtocol": {
     "label": "Owned on",
     "options": {
