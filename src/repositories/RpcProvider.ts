@@ -259,7 +259,7 @@ export interface ProvidersWithUrls extends Providers {
 }
 
 let initializeProvidersQueue: WaitingQueue<ProvidersWithUrls> | null = null
-let providers: ProvidersWithUrls | undefined = undefined
+// let providers: ProvidersWithUrls | undefined = undefined
 
 export const initializeProviders = async (): Promise<ProvidersWithUrls> => {
   if (initializeProvidersQueue) {
@@ -274,7 +274,7 @@ export const initializeProviders = async (): Promise<ProvidersWithUrls> => {
       ])
     } catch (error) {
       initializeProvidersQueue = null
-      providers = undefined
+      // providers = undefined
       // Relaunch directly without queue
       return await initializeProvidersDirect()
     }

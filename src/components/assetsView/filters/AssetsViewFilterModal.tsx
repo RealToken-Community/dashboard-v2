@@ -14,10 +14,13 @@ import {
   assetsViewFilterAtom,
 } from 'src/states'
 import { selectUserIncludesOtherAssets } from 'src/store/features/settings/settingsSelector'
+import { selectUserDisplayAdditionalData } from 'src/store/features/settings/settingsSelector'
 import { userIncludesOtherAssetsChanged } from 'src/store/features/settings/settingsSlice'
 
 import { AssetProductType } from '../types'
 import { AssetsViewProductTypeFilter } from './AssetsViewFilterProductType'
+import { AssetsViewIssuePriorityFilter } from './AssetsViewIssuePriorityFilter'
+import { AssetsViewIssueStatusFilter } from './AssetsViewIssuesStatusFilter'
 import { AssetsViewRentStatusFilter } from './AssetsViewRentStatusFilter'
 import { AssetsViewRmmStatusFilter } from './AssetsViewRmmStatusFilter'
 import { AssetsViewSort } from './AssetsViewSort'
@@ -59,6 +62,7 @@ export const AssetsViewFilterModal: FC<ContextModalProps> = ({
   const dispatch = useDispatch()
   const setUserIncludesOtherAssets = (value: boolean) =>
     dispatch(userIncludesOtherAssetsChanged(value))
+  const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
 
   const onClose = useCallback(() => {
     context.closeModal(id)
@@ -123,6 +127,22 @@ export const AssetsViewFilterModal: FC<ContextModalProps> = ({
             setFilterModel({ ...filterModel, ...value })
           }}
         />
+        {userDisplayAdditionalData && (
+          <>
+            <AssetsViewIssueStatusFilter
+              filter={filterModel}
+              onChange={(value) => {
+                setFilterModel({ ...filterModel, ...value })
+              }}
+            />
+            <AssetsViewIssuePriorityFilter
+              filter={filterModel}
+              onChange={(value) => {
+                setFilterModel({ ...filterModel, ...value })
+              }}
+            />
+          </>
+        )}
       </Flex>
       <Flex justify={'space-between'}>
         <ResetFilterButton onClick={onClose} />
