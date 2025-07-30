@@ -34,21 +34,6 @@ const REGUSDtokenDecimals = 18
 const USDCtokenDecimals = 6
 const WXDAItokenDecimals = 18
 
-const CHAIN_ID_GNOSIS_XDAI = 100
-const CHAIN_ID_ETHEREUM = 1
-const CHAIN_ID_POLYGON = 137
-
-const CHAIN_NAME_GNOSIS_XDAI = 'gnosis'
-const CHAIN_NAME_ETHEREUM = 'ethereum'
-const CHAIN_NAME_POLYGON = 'polygon'
-
-// Mapping chain IDs to their respective names
-const CHAINS_NAMES: { [key: number]: string } = {
-  [CHAIN_ID_GNOSIS_XDAI]: CHAIN_NAME_GNOSIS_XDAI,
-  [CHAIN_ID_ETHEREUM]: CHAIN_NAME_ETHEREUM,
-  [CHAIN_ID_POLYGON]: CHAIN_NAME_POLYGON,
-}
-
 export {
   RWA_ContractAddress,
   REG_ContractAddress,
@@ -72,11 +57,11 @@ export {
   REG_asset_ID,
   REUSD_asset_ID,
   REGVotingPower_asset_ID,
-  CHAIN_ID_GNOSIS_XDAI,
-  CHAIN_ID_ETHEREUM,
-  CHAIN_ID_POLYGON,
-  CHAIN_NAME_GNOSIS_XDAI,
-  CHAIN_NAME_ETHEREUM,
-  CHAIN_NAME_POLYGON,
-  CHAINS_NAMES,
+  // CHAIN_ID_GNOSIS_XDAI,
+  // CHAIN_ID_ETHEREUM,
+  // CHAIN_ID_POLYGON,
+  // CHAIN_NAME_GNOSIS_XDAI,
+  // CHAIN_NAME_ETHEREUM,
+  // CHAIN_NAME_POLYGON,
+  // CHAINS_NAMES,
 }
