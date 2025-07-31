@@ -328,8 +328,10 @@ const getUniV3AssetPrice = async (
     // console.debug(`token0Decimals`, token0Decimals)
     // console.debug(`token1Decimals`, token1Decimals)
 
+    const amountIn = 10
+
     const amountInBI =
-      1n *
+      BigInt(amountIn) *
       BigInt(
         10 **
           (whichAssetPrice === AssetPrice.TokenA
@@ -356,7 +358,7 @@ const getUniV3AssetPrice = async (
     )
 
     const dividerDecimals =
-      whichAssetPrice === AssetPrice.TokenA ? token0Decimals : token1Decimals
+      whichAssetPrice === AssetPrice.TokenA ? token1Decimals : token0Decimals
     const divider = 10 ** dividerDecimals
     console.debug(`dividerDecimals ${dividerDecimals}  divider = ${divider}`)
 
@@ -370,7 +372,9 @@ const getUniV3AssetPrice = async (
 
     // const priceBN = (BigInt(quotedAmountOut[0]) * amountInBI) / BigInt(divider)
     // const priceBN = BigInt(1000000) * amountIn / BigInt(1000)
-    price = Number(BigInt(quotedAmountOut[0]) / amountInBI / BigInt(divider))
+    // price = Number(BigInt(quotedAmountOut[0]) / amountInBI / BigInt(divider))
+
+    price = Number(quotedAmountOut[0]) / amountIn / divider
 
     console.debug(
       `getUniV3AssetPrice: price ${price} of token${whichAssetPrice ? 'B' : 'A'} in terms of token${
