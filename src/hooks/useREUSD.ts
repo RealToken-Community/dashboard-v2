@@ -122,18 +122,8 @@ const getREUSD = async (
     USDCtokenDecimals,
     GnosisRpcProvider,
   )
-  // const reusdPriceWxdaiHoneyswap = await getUniV2AssetPrice(
-  //   HoneySwapFactory_Address,
-  //   REUSD_ContractAddress,
-  //   WXDAI_ContractAddress,
-  //   REUSDtokenDecimals,
-  //   WXDAItokenDecimals,
-  //   GnosisRpcProvider,
-  // )
+  // const reusdPriceWxdaiHoneyswap = await getUniV2AssetPrice( HoneySwapFactory_Address, REUSD_ContractAddress, WXDAI_ContractAddress, REUSDtokenDecimals, WXDAItokenDecimals, GnosisRpcProvider )
   const reusdPriceWxdaiHoneyswap = null // Honeyswap does not have WXDAI pool (yet)
-
-  // console.dir(reusdPriceWxdaiHoneyswap)
-  // console.dir(reusdPriceUsdcHoneyswap)
 
   // Main pool on Gnosis: Sushiswap @ 0.01% fee
   const reusdPriceUsdcSushiv3 = await getUniV3AssetPrice(
@@ -146,23 +136,9 @@ const getREUSD = async (
     CHAIN_ID__GNOSIS_XDAI,
     FeeAmounts.LOWEST, // 0.01% fee
     AssetPrice.TokenA, // REUSD is token0, USDC is token1
+    20, // Amount of token to quote without decimals
   )
-  // console.debug(`REUSD UniV3 price: ${reusdPriceUsdcSushiv3}`)
-  console.debug(
-    `REUSD UniV3 price: ${reusdPriceUsdcSushiv3} for REUSD token0 and USDC token1`,
-  )
-
-  // const reusdPriceWxdaiSushiv3 = await getUniV3AssetPrice(
-  //   SUSHISWAP_DEPLOYMENTS,
-  //   REUSD_ContractAddress,
-  //   WXDAI_ContractAddress,
-  //   REUSDtokenDecimals,
-  //   WXDAItokenDecimals,
-  //   GnosisRpcProvider,
-  //   CHAIN_ID__GNOSIS_XDAI,
-  //   FeeAmounts.LOWEST, // 0.01% fee
-  //   AssetPrice.TokenA, // REUSD is token0, WXDAI is token1
-  // )
+  // const reusdPriceWxdaiSushiv3 = await getUniV3AssetPrice( SUSHISWAP_DEPLOYMENTS, REUSD_ContractAddress, WXDAI_ContractAddress, REUSDtokenDecimals, WXDAItokenDecimals, GnosisRpcProvider, CHAIN_ID__GNOSIS_XDAI, FeeAmounts.LOWEST ) // 0.01% fee AssetPrice.TokenA, // REUSD is token0, WXDAI is token1
   const reusdPriceWxdaiSushiv3 = null // Sushiswap does not have WXDAI pool (yet)
 
   // Get rates for XDAI and USDC against USD
