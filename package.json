@@ -29,6 +29,8 @@
     "@reduxjs/toolkit": "^2.8.2",
     "@socialgouv/matomo-next": "^1.9.2",
     "@tabler/icons": "^1.119.0",
+    "@uniswap/sdk-core": "^7.7.2",
+    "@uniswap/v3-sdk": "^3.25.2",
     "@web3-react/core": "^8.2.3",
     "cookies-next": "^2.1.2",
     "date-fns": "^3.6.0",

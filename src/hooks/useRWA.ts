@@ -20,11 +20,11 @@ import {
 import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { Currency } from 'src/types/Currencies'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
+import { HoneySwapFactory_Address } from 'src/utils/blockchain/consts/misc'
 import {
   DEFAULT_RWA_PRICE,
   DEFAULT_USDC_USD_RATE,
   DEFAULT_XDAI_USD_RATE,
-  HoneySwapFactory_Address,
   RWA_ContractAddress,
   RWA_asset_ID,
   RWAtokenDecimals,
