@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Contract } from 'ethers'
+import test from 'node:test'
 
 import { WalletType } from 'src/repositories'
 import { initializeProviders } from 'src/repositories/RpcProvider'
@@ -22,10 +23,14 @@ import { APIRealTokenProductType } from 'src/types/APIRealToken'
 import { Currency } from 'src/types/Currencies'
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
+  CHAIN_ID__GNOSIS_XDAI,
+  HoneySwapFactory_Address,
+  SUSHISWAP_DEPLOYMENTS,
+} from 'src/utils/blockchain/consts/misc'
+import {
   DEFAULT_REUSD_PRICE,
   DEFAULT_USDC_USD_RATE,
   DEFAULT_XDAI_USD_RATE,
-  HoneySwapFactory_Address,
   REUSD_ContractAddress,
   REUSD_asset_ID,
   REGtokenDecimals as REUSDtokenDecimals,
@@ -36,8 +41,11 @@ import {
 } from 'src/utils/blockchain/consts/otherTokens'
 import { getAddressesBalances } from 'src/utils/blockchain/erc20Infos'
 import {
+  AssetPrice,
+  FeeAmounts,
   averageValues,
   getUniV2AssetPrice,
+  getUniV3AssetPrice,
 } from 'src/utils/blockchain/poolPrice'
 
 /**
@@ -106,7 +114,7 @@ const getREUSD = async (
   const amount = totalAmount / 10 ** REUSDtokenDecimals
 
   // Get REG token prices in USDC and WXDAI from LPs
-  const reusdPriceUsdc = await getUniV2AssetPrice(
+  const reusdPriceUsdcHoneyswap = await getUniV2AssetPrice(
     HoneySwapFactory_Address,
     REUSD_ContractAddress,
     USDConXdai_ContractAddress,
@@ -114,30 +122,74 @@ const getREUSD = async (
     USDCtokenDecimals,
     GnosisRpcProvider,
   )
-  const reusdPriceWxdai = await getUniV2AssetPrice(
-    HoneySwapFactory_Address,
+  // const reusdPriceWxdaiHoneyswap = await getUniV2AssetPrice( HoneySwapFactory_Address, REUSD_ContractAddress, WXDAI_ContractAddress, REUSDtokenDecimals, WXDAItokenDecimals, GnosisRpcProvider )
+  const reusdPriceWxdaiHoneyswap = null // Honeyswap does not have WXDAI pool (yet)
+
+  // Main pool on Gnosis: Sushiswap @ 0.01% fee
+  const reusdPriceUsdcSushiv3 = await getUniV3AssetPrice(
+    SUSHISWAP_DEPLOYMENTS,
     REUSD_ContractAddress,
-    WXDAI_ContractAddress,
+    USDConXdai_ContractAddress,
     REUSDtokenDecimals,
-    WXDAItokenDecimals,
+    USDCtokenDecimals,
     GnosisRpcProvider,
+    CHAIN_ID__GNOSIS_XDAI,
+    FeeAmounts.LOWEST, // 0.01% fee
+    AssetPrice.TokenA, // REUSD is token0, USDC is token1
+    20, // Amount of token to quote without decimals
   )
+  // const reusdPriceWxdaiSushiv3 = await getUniV3AssetPrice( SUSHISWAP_DEPLOYMENTS, REUSD_ContractAddress, WXDAI_ContractAddress, REUSDtokenDecimals, WXDAItokenDecimals, GnosisRpcProvider, CHAIN_ID__GNOSIS_XDAI, FeeAmounts.LOWEST ) // 0.01% fee AssetPrice.TokenA, // REUSD is token0, WXDAI is token1
+  const reusdPriceWxdaiSushiv3 = null // Sushiswap does not have WXDAI pool (yet)
 
   // Get rates for XDAI and USDC against USD
-  const rateXdaiUsd = currenciesRates?.XDAI
+  const rateXdaiUSD = currenciesRates?.XDAI
     ? currenciesRates.XDAI
     : DEFAULT_XDAI_USD_RATE
-  const rateUsdcUsd = currenciesRates?.USDC
+  const rateUsdcUSD = currenciesRates?.USDC
     ? currenciesRates.USDC
     : DEFAULT_USDC_USD_RATE
-  // Convert token prices to USD
-  const assetPriceUsd1 = reusdPriceUsdc ? reusdPriceUsdc * rateUsdcUsd : null
-  const assetPriceUsd2 = reusdPriceWxdai ? reusdPriceWxdai * rateXdaiUsd : null
-  // Get average token prices in USD
-  const assetAveragePriceUSD = averageValues([assetPriceUsd1, assetPriceUsd2])
+  // Convert Honeyswap token prices to USD
+  const assetPriceUsd1 = reusdPriceUsdcHoneyswap
+    ? reusdPriceUsdcHoneyswap * rateUsdcUSD
+    : null
+  const assetPriceUsd2 = reusdPriceWxdaiHoneyswap
+    ? reusdPriceWxdaiHoneyswap * rateXdaiUSD
+    : null
+  // Get Honeyswap average token prices in USD
+  const assetAveragePriceOnHoneyswapInUSD = averageValues([
+    assetPriceUsd1,
+    assetPriceUsd2,
+  ])
+  // Convert Sushiswap token price to USD
+  const assetPriceUsd3 = reusdPriceUsdcSushiv3
+    ? reusdPriceUsdcSushiv3 * rateUsdcUSD
+    : null
+
+  const assetPriceUsd4 = reusdPriceWxdaiSushiv3
+    ? reusdPriceWxdaiSushiv3 * rateXdaiUSD
+    : null
+
+  // Get Sushiswap average token prices in USD
+  const assetAveragePriceOnSushiswapInUSD = averageValues([
+    assetPriceUsd3,
+    assetPriceUsd4,
+  ])
+
+  // Apply a 20 / 80 ratio between Honeyswap and Sushiswap prices
+  // we SHOULD COMPARE LIQUIDITY instead (todo)
+  const assetPriceInUSD =
+    0.2 *
+      (assetAveragePriceOnHoneyswapInUSD
+        ? assetAveragePriceOnHoneyswapInUSD
+        : DEFAULT_REUSD_PRICE) +
+    0.8 *
+      (assetAveragePriceOnSushiswapInUSD
+        ? assetAveragePriceOnSushiswapInUSD
+        : DEFAULT_REUSD_PRICE)
+
   // Convert prices in Currency by applying rate
-  const tokenPrice = assetAveragePriceUSD
-    ? assetAveragePriceUSD / userRate
+  const tokenPrice = assetPriceInUSD
+    ? assetPriceInUSD / userRate
     : DEFAULT_REUSD_PRICE / userRate
   const value = tokenPrice * amount
   const totalInvestment = totalTokens * tokenPrice

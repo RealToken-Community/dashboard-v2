@@ -20,11 +20,10 @@ import {
 import { computeUCP } from 'src/utils/transfer/computeUCP'
 
 import {
-  CHAIN_ID_ETHEREUM,
-  CHAIN_ID_GNOSIS_XDAI,
-  CHAIN_NAME_ETHEREUM,
-  CHAIN_NAME_GNOSIS_XDAI,
-} from '../../../utils/blockchain/consts/otherTokens'
+  CHAINS_NAMES,
+  CHAIN_ID__ETHEREUM,
+  CHAIN_ID__GNOSIS_XDAI,
+} from '../../../utils/blockchain/consts/misc'
 import { selectRealtokens } from '../realtokens/realtokensSelector'
 import { selectUserRentCalculation } from '../settings/settingsSelector'
 
@@ -277,9 +276,9 @@ export const selectRmmDetails = createSelector(
 
 export const getWalletChainName = (chainId: number) => {
   switch (chainId) {
-    case CHAIN_ID_ETHEREUM:
-      return CHAIN_NAME_ETHEREUM
-    case CHAIN_ID_GNOSIS_XDAI:
-      return CHAIN_NAME_GNOSIS_XDAI
+    case CHAIN_ID__ETHEREUM:
+      return CHAINS_NAMES[CHAIN_ID__ETHEREUM]
+    case CHAIN_ID__GNOSIS_XDAI:
+      return CHAINS_NAMES[CHAIN_ID__GNOSIS_XDAI]
   }
 }
