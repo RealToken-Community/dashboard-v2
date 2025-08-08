@@ -59,8 +59,8 @@ export default function TestRpcPage() {
   if (loading) {
     return (
       <div style={{ padding: '20px' }}>
-        <h1>Test RPC - Chargement...</h1>
-        <p>Test de initializeProviders en cours...</p>
+        <h1>{'Test RPC - Chargement...'}</h1>
+        <p>{'Test de initializeProviders en cours...'}</p>
       </div>
     )
   }
@@ -68,13 +68,13 @@ export default function TestRpcPage() {
   if (!results?.success) {
     return (
       <div style={{ padding: '20px' }}>
-        <h1>Test RPC - Erreur</h1>
-        <h2>❌ initializeProviders a échoué</h2>
+        <h1>{'Test RPC - Erreur'}</h1>
+        <h2>{'❌ initializeProviders a échoué'}</h2>
         <p>
-          <strong>Message:</strong> {results?.error?.message}
+          <strong>{'Message:'}</strong> {results?.error?.message}
         </p>
         <details>
-          <summary>Stack trace</summary>
+          <summary>{'Stack trace'}</summary>
           <pre
             style={{ background: '#f5f5f5', padding: '10px', overflow: 'auto' }}
           >
@@ -87,16 +87,17 @@ export default function TestRpcPage() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Test RPC - Succès</h1>
-      <h2>✅ initializeProviders réussi</h2>
+      <h1>{'Test RPC - Succès'}</h1>
+      <h2>{'✅ initializeProviders réussi'}</h2>
       <p>
-        <strong>Durée:</strong> {results.duration}ms
+        <strong>{'Durée:'}</strong> {results.duration}
+        {'ms\r'}
       </p>
       <p>
-        <strong>Gnosis RPC:</strong> {results.providers?.gnosisUrl}
+        <strong>{'Gnosis RPC:'}</strong> {results.providers?.gnosisUrl}
       </p>
       <p>
-        <strong>Ethereum RPC:</strong> {results.providers?.ethereumUrl}
+        <strong>{'Ethereum RPC:'}</strong> {results.providers?.ethereumUrl}
       </p>
     </div>
   )

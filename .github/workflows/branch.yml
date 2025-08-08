@@ -77,7 +77,7 @@ jobs:
           DOCKER_PASSWD: ${{ secrets.DOCKER_PASSWD }}
           DOMAIN_URL: ${{ secrets.DOMAIN_URL }}
           THEGRAPH_API_KEY: ${{ secrets.THEGRAPH_API_KEY }}
-          COMMUNITY_API_KEY: ${{ secrets.COMMUNITY_API_KEY }}
+          REALTOKEN_COMMUNITY_API_KEY: ${{ secrets.REALTOKEN_COMMUNITY_API_KEY }}
           RPC_URLS_ETH_MAINNET: ${{ secrets.RPC_URLS_ETH_MAINNET }}
           RPC_URLS_GNOSIS_MAINNET: ${{ secrets.RPC_URLS_GNOSIS_MAINNET }}
           MATOMO_ID_PROD: ${{ secrets.MATOMO_ID_PROD }}
@@ -106,9 +106,15 @@ jobs:
             docker login -u "$DOCKER_LOGIN" -p "$DOCKER_PASSWD" \$DOCKER_REGISTRY
       
             THEGRAPH_API_KEY="$THEGRAPH_API_KEY" \
-            COMMUNITY_API_KEY="$COMMUNITY_API_KEY" \
-            REALTOKENAPI="https://api.$DOMAIN_URL/v1/token" \
-            REALTOKENAPI_HISTORY="https://history.api.$DOMAIN_URL/" \
+            REALTOKEN_COMMUNITY_API_KEY="$REALTOKEN_COMMUNITY_API_KEY" \
+            REALTOKEN_COMMUNITY_API_BASE="https://api.$DOMAIN_URL" \
+            REALTOKEN_COMMUNITY_API_VERSION='v1' \
+            REALTOKEN_COMMUNITY_API_GET_ALLTOKENS='token' \
+            REALTOKEN_COMMUNITY_API_HISTORY_BASE="https://history.api.$DOMAIN_URL/" \
+            PITSBI_API_BASE="https://api.pitsbi.io/" \
+            PITSBI_API_VERSION='api' \
+            PITSBI_API_GET_LASTUPDATE='last_get_realTokens_communityDashboard' \
+            PITSBI_API_GET_ALLTOKENS='realTokens_communityDashboard' \
             MATOMO_URL="https://data.$DOMAIN_URL/" \
             MATOMO_SITE_ID="$MATOMO_SITE_ID" \
             RPC_URLS_ETH_MAINNET="$RPC_URLS_ETH_MAINNET" \
