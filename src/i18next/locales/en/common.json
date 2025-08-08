@@ -78,6 +78,7 @@
     "stableBorrow": "RMM borrow",
     "rwa": "RWA",
     "reg": "REG",
+    "reUsd": "REUSD",
     "regVote": "REG Vote Power"
   },
   "worthCard": {

@@ -28,6 +28,8 @@
     "@realtoken/realt-commons": "1.4.20",
     "@reduxjs/toolkit": "^2.8.2",
     "@socialgouv/matomo-next": "^1.9.2",
+    "@uniswap/sdk-core": "^7.7.2",
+    "@uniswap/v3-sdk": "^3.25.2",
     "@tabler/icons-react": "^3.34.1",
     "@web3-react/core": "^8.2.3",
     "cookies-next": "^2.1.2",
