@@ -1,26 +1,74 @@
 import { NextApiHandler } from 'next'
 
-import { APIRealToken } from 'src/types/APIRealToken'
+import { APIPitsBiEnv } from 'src/types/APIPitsBI'
+import { APIRealToken, APIRealTokenCommunityEnv } from 'src/types/APIRealToken'
+import { fetchWithRetry } from 'src/utils/general'
 import { useCache } from 'src/utils/useCache'
+
+import { URIS } from '../uris'
 
 const getRealTokenList = useCache(
   async (): Promise<APIRealToken[]> => {
-    if (!process.env.COMMUNITY_API_KEY) {
-      throw new Error('Missing COMMUNITY_API_KEY env variable')
+    for (const envVar of [
+      APIRealTokenCommunityEnv.API_KEY,
+      APIRealTokenCommunityEnv.API_BASE,
+      APIRealTokenCommunityEnv.VERSION,
+      APIRealTokenCommunityEnv.GET_ALLTOKENS,
+    ]) {
+      if (!process.env[envVar]) {
+        throw new Error(
+          `Missing RealToken Community API ${envVar} env variable`,
+        )
+      }
     }
-    if (!process.env.REALTOKENAPI) {
-      throw new Error('Missing REALTOKENAPI env variable')
+    try {
+      const realTokenApiResponse = await fetchWithRetry(
+        URIS.REALTOKEN_COMMUNITY_API_GET_ALLTOKENS,
+        {
+          method: 'GET',
+          headers: {
+            [APIRealTokenCommunityEnv.AUTH]: process.env[
+              APIRealTokenCommunityEnv.API_KEY
+            ] as string,
+          },
+        },
+        2,
+        1_000,
+      )
+      return realTokenApiResponse.json()
+    } catch (error) {
+      console.error(`Failed to fetch RealToken API: ${error}`)
     }
-    const response = await fetch(process.env.REALTOKENAPI, {
-      method: 'GET',
-      headers: { 'X-AUTH-REALT-TOKEN': process.env.COMMUNITY_API_KEY },
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch properties : ' + (await response.text()))
+    // Use Pitsbi API as fallback datasource if RealToken API is not available
+    // Pitsbi is 100% compatible with RealToken API
+    let APIPitsbi_Env_available = true
+    for (const envVar of [
+      APIPitsBiEnv.VERSION,
+      APIPitsBiEnv.BASE,
+      APIPitsBiEnv.GET_LASTUPDATE,
+      APIPitsBiEnv.GET_ALLTOKENS,
+    ]) {
+      if (!process.env[envVar]) {
+        APIPitsbi_Env_available = false
+        console.warn(`Missing Pitsbi API ${envVar} env variable`)
+      }
     }
-
-    return response.json()
+    if (!APIPitsbi_Env_available) {
+      throw new Error(
+        `Failed to fetch properties from RealToken API ; PitsBI API environment variables are not set, unable to fetch data.`,
+      )
+    }
+    const pitsbiApiResponse = await fetchWithRetry(
+      URIS.PITSBI_API_GET_ALLTOKENS,
+      {
+        method: 'GET',
+      },
+      2,
+      10_000,
+    )
+    // Return Pitsbi API response if RealToken API is not available
+    console.warn(`Pitsbi API used as fallback`)
+    return pitsbiApiResponse.json()
   },
   { duration: 1000 * 60 * 60 },
 )

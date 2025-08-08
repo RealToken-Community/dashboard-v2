@@ -4,13 +4,16 @@ import { useSelector } from 'react-redux'
 
 import Image from 'next/image'
 
-import { Badge, Card, Group } from '@mantine/core'
+import { Badge, Card, Grid, Group } from '@mantine/core'
 
 import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { useFullyRentedAPR } from 'src/hooks/useFullyRentedAPR'
-import { selectUserRentCalculation } from 'src/store/features/settings/settingsSelector'
+import {
+  selectUserDisplayAdditionalData,
+  selectUserRentCalculation,
+} from 'src/store/features/settings/settingsSelector'
 import {
   OtherRealtoken,
   UserRealtoken,
@@ -19,6 +22,9 @@ import { RentCalculationState } from 'src/types/RentCalculation'
 
 import {
   Divider,
+  ExhibitStatusTag,
+  IssueStatusTag,
+  PriorityStatusTag,
   RentStatusTag,
   RmmStatusTag,
   SubsidyStatusTag,
@@ -39,14 +45,19 @@ interface PropertyCardProps {
 const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
   const { t } = useTranslation('common', { keyPrefix: 'assetCard' })
-
   const rentCalculation = useSelector(selectUserRentCalculation)
+  const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
 
   const realtimeDate = moment(new Date(rentCalculation.date))
-  const rentStartDate = new Date(props.value.rentStartDate.date)
+  const rentStartDate_date = props.value.rentStartDate?.date ?? null
+  if (!rentStartDate_date) {
+    console.warn(`Rent start date is not defined for ${props.value.uuid}`)
+  }
+  const rentStartDate = new Date(rentStartDate_date)
   const isDisabled =
-    rentCalculation.state === RentCalculationState.Realtime &&
-    rentStartDate > realtimeDate.toDate()
+    !rentStartDate_date ||
+    (rentCalculation.state === RentCalculationState.Realtime &&
+      rentStartDate > realtimeDate.toDate())
 
   const rentNotStarted = t('rentNotStarted')
   const isSubsidized =
@@ -173,6 +184,50 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
             : '-'}
         </div>
       </div>
+
+      {userDisplayAdditionalData && (
+        <div className={styles.groupApart} style={{ alignItems: 'flex-start' }}>
+          <div className={styles.textSm}>{t('assetIssues.title')}</div>
+          <Grid className={styles.textXs}>
+            <Grid.Col span={4}>
+              <Grid.Col style={{ padding: '0 5px' }}>
+                {t('assetIssues.status')}
+              </Grid.Col>
+              <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
+                <IssueStatusTag
+                  value={props.value.extraData?.pitsBI?.actions?.realt_status}
+                  priority={props.value.extraData?.pitsBI?.actions?.priority}
+                />
+              </Grid.Col>
+            </Grid.Col>
+            <Grid.Col span={4}>
+              <Grid.Col style={{ padding: '0 5px' }}>
+                {t('assetIssues.priority')}
+              </Grid.Col>
+              <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
+                <PriorityStatusTag
+                  value={props.value.extraData?.pitsBI?.actions?.priority}
+                />
+              </Grid.Col>
+            </Grid.Col>
+            <Grid.Col span={4}>
+              <Grid.Col style={{ padding: '0 5px' }}>
+                {t('assetIssues.lawsuit')}
+              </Grid.Col>
+              {/* center element */}
+              <Grid.Col style={{ display: 'flex', justifyContent: 'center' }}>
+                <ExhibitStatusTag
+                  exhibitNumber={
+                    props.value.extraData?.pitsBI?.actions?.exhibit_number
+                  }
+                  exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume}
+                  priority={props.value.extraData?.pitsBI?.actions?.priority}
+                />
+              </Grid.Col>
+            </Grid.Col>
+          </Grid>
+        </div>
+      )}
 
       <div style={{ flex: '1 1 auto' }} />
       <Divider height={1} my={'xs'} />

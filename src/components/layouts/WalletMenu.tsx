@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 import { ActionIcon, Badge, Box, Button, Flex, Menu } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { useModals } from '@mantine/modals'
-import { IconWallet } from '@tabler/icons'
+import { IconWallet } from '@tabler/icons-react'
 import { useWeb3React } from '@web3-react/core'
 
 import { ethers } from 'ethers'
