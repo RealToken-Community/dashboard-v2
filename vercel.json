@@ -6,8 +6,5 @@
       "preprod": true,
       "master": true
     }
-  },
-  "github": {
-    "autoJobCancelation": true
   }
 }
