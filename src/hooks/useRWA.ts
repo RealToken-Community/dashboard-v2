@@ -99,7 +99,6 @@ const getRWA = async (
     WXDAItokenDecimals,
     GnosisRpcProvider,
   )
-
   // Get rates for XDAI and USDC against USD
   const rateXdaiUsd = currenciesRates?.XDAI
     ? currenciesRates.XDAI
@@ -116,6 +115,7 @@ const getRWA = async (
   const tokenPrice = (assetAveragePriceUSD ?? DEFAULT_RWA_PRICE) / userRate
   const value = tokenPrice * amount
   const totalInvestment = totalTokens * tokenPrice
+  
   // Update all balance values with token price
   updateBalanceValues(balance, tokenPrice)
 

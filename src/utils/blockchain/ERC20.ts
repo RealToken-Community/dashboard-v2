@@ -44,3 +44,11 @@ export const ERC20 = {
   isTransferEvent,
   parseTransferEvent,
 }
+
+export const getErc20AbiBalanceOfOnly = (): object[] | null => {
+  const Erc20AbiBalanceOfOnly = ERC20ABI.find((abi) => abi.name === 'balanceOf')
+  if (!Erc20AbiBalanceOfOnly) {
+    throw new Error('balanceOf not found in ERC20 ABI')
+  }
+  return [Erc20AbiBalanceOfOnly]
+}
