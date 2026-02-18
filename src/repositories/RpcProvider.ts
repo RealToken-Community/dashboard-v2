@@ -64,6 +64,7 @@ const getRpcUrls = (chainId: number): string[] => {
 }
 
 const DEFAULT_GNOSIS_RPC_URLS = [
+  'https://gnosis.drpc.org',
   'https://rpc.gnosischain.com',
   'https://rpc.gnosis.gateway.fm',
   'https://rpc.ap-southeast-1.gateway.fm/v4/gnosis/non-archival/mainnet',
@@ -73,6 +74,7 @@ const DEFAULT_GNOSIS_RPC_URLS = [
 ]
 
 const DEFAULT_ETHEREUM_RPC_URLS = [
+  'https://eth.drpc.org',
   'https://rpc.eth.gateway.fm',
   'https://ethereum-rpc.publicnode.com',
   'https://eth-mainnet.public.blastapi.io',
