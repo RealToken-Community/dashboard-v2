@@ -1,6 +1,7 @@
 {
   "name": "realtoken-dashboard-v2",
-  "version": "2.4.2",
+  "version": "2.4.3",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
