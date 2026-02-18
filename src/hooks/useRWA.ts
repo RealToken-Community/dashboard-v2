@@ -115,7 +115,7 @@ const getRWA = async (
   const tokenPrice = (assetAveragePriceUSD ?? DEFAULT_RWA_PRICE) / userRate
   const value = tokenPrice * amount
   const totalInvestment = totalTokens * tokenPrice
-  
+
   // Update all balance values with token price
   updateBalanceValues(balance, tokenPrice)
 

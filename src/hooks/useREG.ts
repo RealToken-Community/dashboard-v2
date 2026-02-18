@@ -106,7 +106,7 @@ const getREG = async (
     )
     availableBalance += balance[WalletType.Ethereum].amount
   }
-  
+
   const regVaultAbiGetUserGlobalStateOnly =
     getRegVaultAbiGetUserGlobalStateOnly()
 
