@@ -26,14 +26,6 @@ export const EthereumClient = lazyInit(
     }),
 )
 
-export const RMM2Client = lazyInit(
-  (API_KEY: string) =>
-    new ApolloClient({
-      uri: `https://gateway-arbitrum.network.thegraph.com/api/${API_KEY}/subgraphs/id/CxvZgcPjmtvFeSoSW9N563K7ZcHCwLVv8kXMbmuBKhv1`,
-      cache: new InMemoryCache(),
-    }),
-)
-
 export const RMM3Client = lazyInit(
   (API_KEY: string) =>
     new ApolloClient({

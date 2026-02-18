@@ -57,7 +57,7 @@ export function fetchWallets(realtokens: RealToken[]) {
     try {
       const [balances, rmmPositions] = await Promise.all([
         WalletsRepository.getBalances(addressList, realtokens, options),
-        RmmRepository.getPositions(addressList, options),
+        RmmRepository.getPositions(addressList),
       ])
       dispatch({ type: balancesChangedDispatchType, payload: balances })
       dispatch({ type: rmmPositionsChangedDispatchType, payload: rmmPositions })

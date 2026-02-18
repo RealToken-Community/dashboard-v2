@@ -2,30 +2,24 @@ import { gql } from '@apollo/client'
 
 import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
-import { RMM2Client, RMM3WrapperClient } from '../clients'
+import { RMM3WrapperClient } from '../clients'
 
-export async function getRmmBalances(
-  addressList: string[],
-  options: {},
-) {
+export async function getRmmBalances(addressList: string[]) {
   const addresses = addressList.map((item) => item.toLowerCase())
-  const [resultRMM2, resultRMM3] = await Promise.all([
+  const [resultRMM3] = await Promise.all([
     Promise.resolve({ data: { users: [] } }),
     executeRMM3Query(addresses),
   ])
-  return formatBalances([...resultRMM2.data.users, ...resultRMM3.data.users])
+  return formatBalances([...resultRMM3.data.users])
 }
 
-export async function getRmmPositions(
-  addressList: string[],
-  options: {},
-) {
+export async function getRmmPositions(addressList: string[]) {
   const addresses = addressList.map((item) => item.toLowerCase())
-  const [resultRMM2, resultRMM3] = await Promise.all([
+  const [resultRMM3] = await Promise.all([
     Promise.resolve({ data: { users: [] } }),
     executeRMM3Query(addresses),
   ])
-  return formatPositions([...resultRMM2.data.users, ...resultRMM3.data.users])
+  return formatPositions([...resultRMM3.data.users])
 }
 
 export interface RmmPosition {
@@ -37,19 +31,6 @@ export interface RmmPosition {
     debt: number
   }[]
 }
-
-const executeRMM2Query = useCacheWithLocalStorage(
-  async (addressList: string[]) =>
-    RMM2Client().query<RmmResult>({
-      query: RmmQuery,
-      variables: { addressList },
-    }),
-  {
-    duration: 1000 * 60 * 60 * 24, // 24 hours
-    usePreviousValueOnError: true,
-    key: 'Rmm2Query',
-  },
-)
 
 const executeRMM3Query = useCacheWithLocalStorage(
   async (addressList: string[]) => {
