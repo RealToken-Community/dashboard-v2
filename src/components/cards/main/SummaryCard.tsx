@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 import { Box, Card, Text, Title } from '@mantine/core'
-import { IconArchive, IconBolt, IconBoltOff } from '@tabler/icons'
+import { IconArchive, IconBolt, IconBoltOff } from '@tabler/icons-react'
 
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import { OtherRealtoken } from 'src/store/features/wallets/walletsSelector'
@@ -18,6 +18,7 @@ interface SummaryCardProps {
   otherAssetsData: {
     rwa: OtherRealtoken | null
     reg: OtherRealtoken | null
+    reUsd: OtherRealtoken | null
     regVotingPower: OtherRealtoken | null
   }
 }
@@ -33,6 +34,7 @@ export const SummaryCard: FC<SummaryCardProps> = ({ otherAssetsData }) => {
 
   const rwaValue = otherAssetsData?.rwa?.value ?? 0
   const regValue = otherAssetsData?.reg?.value ?? 0
+  const reUsdValue = otherAssetsData?.reUsd?.value ?? 0
   const regVotingPowerAmount = otherAssetsData?.regVotingPower?.amount ?? 0
   // Calculate the power logo size of the voting power depending on the amount
   const additionnalPowerSize = Math.floor(Math.log10(regVotingPowerAmount))
@@ -43,6 +45,7 @@ export const SummaryCard: FC<SummaryCardProps> = ({ otherAssetsData }) => {
     realtokensValue.total +
     stableDepositValue +
     rwaValue +
+    reUsdValue +
     regValue -
     stableDebtValue
 
@@ -66,6 +69,7 @@ export const SummaryCard: FC<SummaryCardProps> = ({ otherAssetsData }) => {
         <CurrencyField label={t('stableDeposit')} value={stableDepositValue} />
         <CurrencyField label={t('stableBorrow')} value={stableDebtValue} />
         <CurrencyField label={t('rwa')} value={rwaValue} />
+        <CurrencyField label={t('reUsd')} value={reUsdValue} />
         <CurrencyField label={t('reg')} value={regValue} />
         <DecimalField
           label={t('regVote')}

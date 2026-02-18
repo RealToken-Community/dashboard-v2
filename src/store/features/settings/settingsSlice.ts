@@ -20,6 +20,8 @@ const USER_INCLUDES_ETH_LS_KEY = 'store:settings/includesEth'
 const USER_INCLUDES_LEVIN_SWAP_LS_KEY = 'store:settings/includesLevinSwap'
 const USER_INCLUDES_RMM_V2_LS_KEY = 'store:settings/includesRmmV2'
 const USER_INCLUDES_OTHER_ASSETS_LS_KEY = 'store:settings/includesOtherAssets'
+const USER_DISPLAY_ADDITIONAL_DATA_LS_KEY =
+  'store:settings/displayAdditionalData'
 
 export interface User {
   id: string
@@ -39,6 +41,7 @@ interface SettingsInitialStateType {
   includesLevinSwap: boolean
   includesRmmV2: boolean
   includesOtherAssets: boolean
+  displayAdditionalData: boolean
   version?: string
 }
 
@@ -54,6 +57,7 @@ const settingsInitialState: SettingsInitialStateType = {
   includesLevinSwap: false,
   includesRmmV2: false,
   includesOtherAssets: false,
+  displayAdditionalData: false,
 }
 
 // DISPATCH TYPE
@@ -69,6 +73,8 @@ export const userIncludesRmmV2ChangedDispatchType =
   'settings/includesRmmV2Changed'
 export const userIncludesOtherAssetsDispatchType =
   'settings/includesOtherAssets'
+export const userDisplayAdditionalDataDispatchType =
+  'settings/displayAdditionalData'
 // ACTIONS
 export const initializeSettings = createAction(initializeSettingsDispatchType)
 export const userChanged = createAction<User>(userChangedDispatchType)
@@ -95,6 +101,9 @@ export const userIncludesRmmV2Changed = createAction<boolean>(
 )
 export const userIncludesOtherAssetsChanged = createAction<boolean>(
   userIncludesOtherAssetsDispatchType,
+)
+export const userDisplayAdditionalDataChanged = createAction<boolean>(
+  userDisplayAdditionalDataDispatchType,
 )
 // THUNKS
 export function setUserAddress(address: string) {
@@ -227,6 +236,14 @@ export const settingsReducers = createReducer(
           action.payload.toString(),
         )
       })
+      .addCase(userDisplayAdditionalDataChanged, (state, action) => {
+        state.displayAdditionalData = action.payload
+        localStorage.setItem(
+          USER_DISPLAY_ADDITIONAL_DATA_LS_KEY,
+          action.payload.toString(),
+        )
+      })
+
       .addCase(initializeSettings, (state) => {
         const user = localStorage.getItem(USER_LS_KEY)
         const userCurrency = localStorage.getItem(USER_CURRENCY_LS_KEY)
@@ -242,6 +259,9 @@ export const settingsReducers = createReducer(
         )
         const userIncludesOtherAssets = localStorage.getItem(
           USER_INCLUDES_OTHER_ASSETS_LS_KEY,
+        )
+        const userDisplayAdditionalData = localStorage.getItem(
+          USER_DISPLAY_ADDITIONAL_DATA_LS_KEY,
         )
 
         state.user = user ? JSON.parse(user) : undefined
@@ -262,6 +282,7 @@ export const settingsReducers = createReducer(
         state.includesLevinSwap = userIncludesLevinSwap === 'true'
         state.includesRmmV2 = userIncludesRmmV2 === 'true'
         state.includesOtherAssets = userIncludesOtherAssets === 'true'
+        state.displayAdditionalData = userDisplayAdditionalData === 'true'
 
         const { publicRuntimeConfig } = getConfig() as {
           publicRuntimeConfig?: { version: string }

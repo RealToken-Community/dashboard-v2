@@ -1,7 +1,43 @@
+import { Token } from '@uniswap/sdk-core'
+import {
+  FeeAmount,
+  FeeAmount as Univ3FeeAmount,
+  computePoolAddress,
+} from '@uniswap/v3-sdk'
+
 import { Contract, JsonRpcProvider, ethers } from 'ethers'
 
 import { LevinswapABI as UniswapV2PairABI } from './abi/LevinswapABI'
 import { UniswapV2FactoryABI } from './abi/UniswapV2FactoryABI'
+import { UniswapV3PoolABI as UniV3PoolABI } from './abi/UniswapV3PoolABI'
+import { UniswapV3QuoterV2ABI as Univ3QuoterABI } from './abi/UniswapV3QuoterV2ABI'
+import {
+  Address,
+  ChainId,
+  Decimals,
+  SUPPORTED_CHAINS_IDS,
+  UniV3Deployment,
+} from './consts/misc'
+
+// const FeeAmounts = {
+//   LOWEST: Univ3FeeAmount.LOWEST,
+//   LOW: Univ3FeeAmount.LOW,
+//   MEDIUM: Univ3FeeAmount.MEDIUM,
+//   HIGH: Univ3FeeAmount.HIGH,
+// }
+
+const AssetPrice = {
+  TokenA: 0,
+  TokenB: 1,
+}
+
+const FeeAmounts = {
+  // 1e6
+  LOWEST: Univ3FeeAmount.LOWEST,
+  LOW: Univ3FeeAmount.LOW,
+  MEDIUM: Univ3FeeAmount.MEDIUM,
+  HIGH: Univ3FeeAmount.HIGH,
+}
 
 const isAddressLowererThan = (address0: string, address1: string): boolean => {
   if (!address0 || !address1) {
@@ -152,4 +188,123 @@ const averageValues = (
   return average
 }
 
-export { getUniV2AssetPrice, averageValues }
+const getUniV3PoolAddress = (
+  tokenA_Address: Address,
+  tokenA_Decimals: Decimals,
+  tokenB_Address: Address,
+  tokenB_Decimals: Decimals,
+  fee: number,
+  poolFactoryAddress: Address,
+  chainId: ChainId,
+): string => {
+  // Validate inputs
+  // chainId
+  if (!SUPPORTED_CHAINS_IDS.includes(chainId)) {
+    throw new Error(`Unsupported chainId: ${chainId}`)
+  }
+  // token addresses
+  if (!tokenA_Address || !tokenB_Address || tokenA_Address === tokenB_Address) {
+    throw new Error('Invalid token addresses')
+  }
+  // token decimals
+  if (!tokenA_Decimals || !tokenB_Decimals) {
+    throw new Error('Invalid token decimals')
+  }
+  // fee
+  if (!Object.values(FeeAmounts).includes(fee)) {
+    throw new Error(
+      `Invalid fee: ${fee} - must be one of ${Object.values(FeeAmounts)}`,
+    )
+  }
+  // pool factory address
+  if (!poolFactoryAddress) {
+    throw new Error('Invalid fee or pool factory address')
+  }
+  const tokenA = new Token(chainId, tokenA_Address, tokenA_Decimals)
+  const tokenB = new Token(chainId, tokenB_Address, tokenB_Decimals)
+
+  return computePoolAddress({
+    factoryAddress: poolFactoryAddress,
+    tokenA: tokenA,
+    tokenB: tokenB,
+    fee,
+  })
+}
+
+const getUniV3AssetPrice = async (
+  uniV3Deployment: UniV3Deployment,
+  token0Address: Address,
+  token1Address: Address,
+  token0Decimals: Decimals,
+  token1Decimals: Decimals,
+  provider: JsonRpcProvider,
+  chainId: ChainId,
+  fee = FeeAmount.MEDIUM, // Default to 3000 bips (0.3%)
+  whichAssetPrice = AssetPrice.TokenA, // : 0 for token0 price, 1 for token1 price
+  amountIn = 10, // Amount of token to quote without decimals
+): Promise<number | null> => {
+  let price: number | null = null
+  try {
+    // Validate inputs
+    if (!uniV3Deployment[chainId]) {
+      throw new Error(`No deployment found for chainId ${chainId}`)
+    }
+    const poolAddress = getUniV3PoolAddress(
+      token0Address,
+      token0Decimals,
+      token1Address,
+      token1Decimals,
+      fee,
+      uniV3Deployment[chainId].factory,
+      chainId,
+    )
+    // Check pool address result
+    if (!poolAddress) {
+      throw new Error('Failed to get pool address')
+    }
+    // Quoter
+    const quoterContract = new Contract(
+      uniV3Deployment[chainId].quoter,
+      Univ3QuoterABI,
+      provider,
+    )
+    // Amounts
+    const amountInBI =
+      BigInt(amountIn) *
+      BigInt(
+        10 **
+          (whichAssetPrice === AssetPrice.TokenA
+            ? token0Decimals
+            : token1Decimals),
+      )
+
+    const quotedAmountOut =
+      await quoterContract.quoteExactInputSingle.staticCall({
+        tokenIn:
+          whichAssetPrice === AssetPrice.TokenA ? token0Address : token1Address,
+        tokenOut:
+          whichAssetPrice === AssetPrice.TokenA ? token1Address : token0Address,
+        amountIn: amountInBI,
+        fee: fee,
+        sqrtPriceLimitX96: 0n, // No price limit
+      })
+
+    price =
+      Number(quotedAmountOut[0]) /
+      amountIn /
+      10 **
+        (whichAssetPrice === AssetPrice.TokenA
+          ? token1Decimals
+          : token0Decimals)
+  } catch (error) {
+    console.warn(
+      `Failed to get asset price for factoryAddress ${uniV3Deployment[chainId].factory} token0Address ${token0Address} token1Address ${token1Address} fee ${fee} chainId ${chainId} amountIn ${amountIn} whichAssetPrice ${whichAssetPrice}`,
+      error,
+      provider,
+    )
+  }
+  return price
+}
+
+export { AssetPrice, FeeAmounts }
+export { getUniV2AssetPrice, averageValues, getUniV3AssetPrice }

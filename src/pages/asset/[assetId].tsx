@@ -7,15 +7,19 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 
 import { Anchor, Breadcrumbs, Button, Flex } from '@mantine/core'
-import { IconExternalLink } from '@tabler/icons'
+import { IconExternalLink } from '@tabler/icons-react'
 
 import { AssetPageHistoryTab } from 'src/components/assetPage/assetPageHistoryTab'
+import { AssetPageIssuesTab } from 'src/components/assetPage/assetPageIssuesTab'
 import { AssetPageMainTab } from 'src/components/assetPage/assetPageMainTab'
 import { AssetPagePropertyTab } from 'src/components/assetPage/assetPagePropertyTab'
 import { AssetPageTransfersTab } from 'src/components/assetPage/assetPageTransfersTab'
 import { AssetPageYamStatisticsTab } from 'src/components/assetPage/assetPageYamStatisticsTab'
 import FullyRentedAPRDisclaimer from 'src/components/commons/others/FullyRentedAPRDisclaimer'
-import { selectIsLoading } from 'src/store/features/settings/settingsSelector'
+import {
+  selectIsLoading,
+  selectUserDisplayAdditionalData,
+} from 'src/store/features/settings/settingsSelector'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import { selectAllUserRealtokens } from 'src/store/features/wallets/walletsSelector'
 
@@ -23,6 +27,7 @@ import styles from './AssetPage.module.sass'
 
 enum Tabs {
   Main = 'main',
+  Issues = 'issues',
   Property = 'property',
   Transfers = 'transfers',
   History = 'history',
@@ -51,7 +56,7 @@ const AssetPage: NextPage = () => {
   const { t } = useTranslation('common', { keyPrefix: 'assetPage' })
   const realtokens = useSelector(selectAllUserRealtokens)
   const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
-
+  const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
   const isLoading = useSelector(selectIsLoading)
   const router = useRouter()
   const { assetId } = router.query
@@ -96,6 +101,21 @@ const AssetPage: NextPage = () => {
               <AssetPageMainTab realtoken={realtoken} />
             </div>
           ) : null}
+
+          {userDisplayAdditionalData && (
+            <>
+              <TabButton
+                label={t('tabs.issues')}
+                active={activeTab === Tabs.Issues}
+                onClick={() => setActiveTab(Tabs.Issues)}
+              />
+              {activeTab === Tabs.Issues ? (
+                <div style={{ margin: '5px 10px' }}>
+                  <AssetPageIssuesTab realtoken={realtoken} />
+                </div>
+              ) : null}
+            </>
+          )}
 
           <TabButton
             label={t('tabs.property')}

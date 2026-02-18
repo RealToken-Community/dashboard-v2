@@ -14,6 +14,7 @@ import {
 } from 'src/components/cards'
 import { useREG } from 'src/hooks/useREG'
 import { useRegVotingPower } from 'src/hooks/useREGVotingPower'
+import { useREUSD } from 'src/hooks/useREUSD'
 import { useRWA } from 'src/hooks/useRWA'
 import {
   OtherRealtoken,
@@ -25,6 +26,7 @@ const HomePage: NextPage = () => {
   const realtokens = useSelector(selectUserRealtokens)
   const rwa = useRWA()
   const reg = useREG()
+  const reUsd = useREUSD()
   const regVotingPower = useRegVotingPower()
 
   const allAssetsData = useMemo(() => {
@@ -33,19 +35,21 @@ const HomePage: NextPage = () => {
       ...realtokens,
       rwa,
       reg,
+      reUsd,
       regVotingPower,
     ].filter((asset) => !!asset)
     return assets as (UserRealtoken | OtherRealtoken)[]
-  }, [realtokens, rwa, reg, regVotingPower])
+  }, [realtokens, rwa, reg, reUsd, regVotingPower])
 
   const otherAssetsData = useMemo(() => {
     const assets = {
       rwa,
       reg,
+      reUsd,
       regVotingPower,
     }
     return assets
-  }, [rwa, reg, regVotingPower])
+  }, [rwa, reg, reUsd, regVotingPower])
 
   return (
     <Flex my={'lg'} direction={'column'}>

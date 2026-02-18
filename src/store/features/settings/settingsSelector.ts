@@ -16,6 +16,7 @@ export const selectIsLoading = createSelector(
   (state, realtokens, wallets, currencies, transfers) =>
     !state.isInitialized ||
     realtokens.isLoading ||
+    // realtokens.isLoadingExtraData ?
     wallets.isLoading ||
     currencies.isLoading ||
     transfers.isLoading,
@@ -81,4 +82,9 @@ export const selectUserIncludesRmmV2 = createSelector(
 export const selectUserIncludesOtherAssets = createSelector(
   (state: RootState) => state.settings,
   (state) => state.includesOtherAssets,
+)
+
+export const selectUserDisplayAdditionalData = createSelector(
+  (state: RootState) => state.settings,
+  (state) => state.displayAdditionalData,
 )

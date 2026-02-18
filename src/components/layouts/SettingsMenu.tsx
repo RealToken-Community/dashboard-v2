@@ -31,13 +31,16 @@ import {
   IconMoon,
   IconSettings,
   IconSun,
-} from '@tabler/icons'
+  IconTableMinus,
+  IconTablePlus,
+} from '@tabler/icons-react'
 
 import { setCookie } from 'cookies-next'
 
 import { TransferDatabaseService } from 'src/repositories/transfers/TransferDatabase'
 import {
   selectUserCurrency,
+  selectUserDisplayAdditionalData,
   selectUserIncludesEth,
   selectUserIncludesLevinSwap,
   selectUserIncludesOtherAssets,
@@ -47,6 +50,7 @@ import {
 } from 'src/store/features/settings/settingsSelector'
 import {
   userCurrencyChanged,
+  userDisplayAdditionalDataChanged,
   userIncludesEthChanged,
   userIncludesLevinSwapChanged,
   userIncludesOtherAssetsChanged,
@@ -269,6 +273,7 @@ const FetchDataSettings: FC = () => {
   const userIncludesLevinSwap = useSelector(selectUserIncludesLevinSwap)
   const userIncludesRmmV2 = useSelector(selectUserIncludesRmmV2)
   const userIncludesOtherAssets = useSelector(selectUserIncludesOtherAssets)
+  const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
 
   const setUserIncludesEth = (value: boolean) =>
     dispatch(userIncludesEthChanged(value))
@@ -278,6 +283,8 @@ const FetchDataSettings: FC = () => {
     dispatch(userIncludesRmmV2Changed(value))
   const setUserIncludesOtherAssets = (value: boolean) =>
     dispatch(userIncludesOtherAssetsChanged(value))
+  const setUserDisplayAdditionalData = (value: boolean) =>
+    dispatch(userDisplayAdditionalDataChanged(value))
 
   return (
     <>
@@ -316,6 +323,16 @@ const FetchDataSettings: FC = () => {
         label={t('includesOtherAssets')}
         onLabel={<IconCoins size={16} />}
         offLabel={<IconHome size={16} />}
+        style={{ margin: '4px 8px' }}
+      />
+      <Switch
+        checked={userDisplayAdditionalData}
+        onChange={(event) =>
+          setUserDisplayAdditionalData(event.currentTarget.checked)
+        }
+        label={t('displayAdditionalData')}
+        onLabel={<IconTablePlus size={16} />}
+        offLabel={<IconTableMinus size={16} />}
         style={{ margin: '4px 8px' }}
       />
     </>

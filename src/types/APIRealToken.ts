@@ -14,6 +14,15 @@ export enum APIRealTokenProductType {
   Factoring = 'factoring_profitshare',
 }
 
+export enum APIRealTokenCommunityEnv {
+  API_KEY = 'REALTOKEN_COMMUNITY_API_KEY',
+  AUTH = 'X-AUTH-REALT-TOKEN',
+  API_BASE = 'REALTOKEN_COMMUNITY_API_BASE',
+  VERSION = 'REALTOKEN_COMMUNITY_API_VERSION',
+  GET_ALLTOKENS = 'REALTOKEN_COMMUNITY_API_GET_ALLTOKENS',
+  API_HISTORY = 'REALTOKEN_COMMUNITY_API_HISTORY_BASE',
+}
+
 export interface APIRealTokenDate {
   date: string
   timezone_type: number

@@ -1,4 +1,5 @@
 import { CHAINS as RealtCommonsDefaultChainsConfig } from '@realtoken/realt-commons'
+
 import {
   Contract,
   JsonRpcProvider,
@@ -10,10 +11,10 @@ import {
 import { ERC20ABI } from 'src/utils/blockchain/abi/ERC20ABI'
 import {
   CHAINS_NAMES,
-  CHAIN_ID_ETHEREUM,
-  CHAIN_ID_GNOSIS_XDAI,
-  REG_ContractAddress,
-} from 'src/utils/blockchain/consts/otherTokens'
+  CHAIN_ID__ETHEREUM,
+  CHAIN_ID__GNOSIS_XDAI,
+} from 'src/utils/blockchain/consts/misc'
+import { REG_ContractAddress } from 'src/utils/blockchain/consts/otherTokens'
 import { batchCallOneContractOneFunctionMultipleParams } from 'src/utils/blockchain/contract'
 import { wait } from 'src/utils/general'
 import { WaitingQueue } from 'src/utils/waitingQueue'
@@ -39,17 +40,17 @@ const getRpcUrls = (chainId: number): string[] => {
   let defaultUrls: string[] = []
 
   switch (chainId) {
-    case CHAIN_ID_ETHEREUM:
+    case CHAIN_ID__ETHEREUM:
       envVarName = 'RPC_URLS_ETH_MAINNET'
       // Use the default Ethereum RPC URLs from realt-commons config
       defaultUrls = DEFAULT_ETHEREUM_RPC_URLS.concat(
-        RealtCommonsDefaultChainsConfig[CHAIN_ID_ETHEREUM].rpcUrl,
+        RealtCommonsDefaultChainsConfig[CHAIN_ID__ETHEREUM].rpcUrl,
       )
       break
-    case CHAIN_ID_GNOSIS_XDAI:
+    case CHAIN_ID__GNOSIS_XDAI:
       envVarName = 'RPC_URLS_GNOSIS_MAINNET'
       defaultUrls = DEFAULT_GNOSIS_RPC_URLS.concat(
-        RealtCommonsDefaultChainsConfig[CHAIN_ID_GNOSIS_XDAI].rpcUrl,
+        RealtCommonsDefaultChainsConfig[CHAIN_ID__GNOSIS_XDAI].rpcUrl,
       )
       break
     // TODO: Polygon
@@ -258,7 +259,7 @@ export interface ProvidersWithUrls extends Providers {
 }
 
 let initializeProvidersQueue: WaitingQueue<ProvidersWithUrls> | null = null
-let providers: ProvidersWithUrls | undefined = undefined
+// let providers: ProvidersWithUrls | undefined = undefined
 
 export const initializeProviders = async (): Promise<ProvidersWithUrls> => {
   if (initializeProvidersQueue) {
@@ -273,7 +274,7 @@ export const initializeProviders = async (): Promise<ProvidersWithUrls> => {
       ])
     } catch (error) {
       initializeProvidersQueue = null
-      providers = undefined
+      // providers = undefined
       // Relaunch directly without queue
       return await initializeProvidersDirect()
     }
@@ -295,8 +296,8 @@ async function initializeProvidersDirect(): Promise<ProvidersWithUrls> {
   try {
     const [GnosisRpcProviderWithUrl, EthereumRpcProviderWithUrl] =
       await Promise.all([
-        getWorkingRpc(CHAIN_ID_GNOSIS_XDAI),
-        getWorkingRpc(CHAIN_ID_ETHEREUM),
+        getWorkingRpc(CHAIN_ID__GNOSIS_XDAI),
+        getWorkingRpc(CHAIN_ID__ETHEREUM),
       ])
 
     return {

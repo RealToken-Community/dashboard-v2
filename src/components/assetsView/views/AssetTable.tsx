@@ -10,11 +10,18 @@ import moment from 'moment'
 
 import { useCurrencyValue } from 'src/hooks/useCurrencyValue'
 import { useFullyRentedAPR } from 'src/hooks/useFullyRentedAPR'
+import { selectUserDisplayAdditionalData } from 'src/store/features/settings/settingsSelector'
 import { selectTransfersIsLoaded } from 'src/store/features/transfers/transfersSelector'
 import {
   OtherRealtoken,
   UserRealtoken,
 } from 'src/store/features/wallets/walletsSelector'
+
+import {
+  ExhibitStatusTag,
+  IssueStatusTag,
+  PriorityStatusTag,
+} from '../../commons/assets'
 
 export const AssetTable: FC<{
   realtokens: (UserRealtoken | OtherRealtoken)[]
@@ -49,7 +56,7 @@ AssetTable.displayName = 'AssetTable'
 const AssetTableHeader: FC = () => {
   const { t } = useTranslation('common', { keyPrefix: 'assetTable' })
   const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
-
+  const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
   return (
     <Table.Tr>
       <Table.Th style={{ textAlign: 'left' }}>{t('property')}</Table.Th>
@@ -74,6 +81,19 @@ const AssetTableHeader: FC = () => {
       <Table.Th style={{ textAlign: 'right' }}>{t('rentedUnits')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('propertyValue')}</Table.Th>
       <Table.Th style={{ textAlign: 'right' }}>{t('lastChange')}</Table.Th>
+      {userDisplayAdditionalData && (
+        <>
+          <Table.Th style={{ textAlign: 'right' }}>
+            {t('status.header')}
+          </Table.Th>
+          <Table.Th style={{ textAlign: 'right' }}>
+            {t('priority.header')}
+          </Table.Th>
+          <Table.Th style={{ textAlign: 'right' }}>
+            {t('lawsuit.header')}
+          </Table.Th>
+        </>
+      )}
     </Table.Tr>
   )
 }
@@ -82,6 +102,7 @@ AssetTableHeader.displayName = 'AssetTableHeader'
 const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
   const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
+  const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
   const router = useRouter()
 
   const value = props.value.value
@@ -161,6 +182,30 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
           .toDate()
           .toLocaleDateString()}
       </Table.Td>
+      {userDisplayAdditionalData && (
+        <>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <IssueStatusTag
+              value={props.value.extraData?.pitsBI?.actions?.realt_status}
+              priority={props.value.extraData?.pitsBI?.actions?.priority}
+            />
+          </Table.Td>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <PriorityStatusTag
+              value={props.value.extraData?.pitsBI?.actions?.priority}
+            />
+          </Table.Td>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <ExhibitStatusTag
+              exhibitNumber={
+                props.value.extraData?.pitsBI?.actions?.exhibit_number
+              }
+              exhibitVolume={props.value.extraData?.pitsBI?.actions?.volume}
+              priority={props.value.extraData?.pitsBI?.actions?.priority}
+            />
+          </Table.Td>
+        </>
+      )}
     </Table.Tr>
   )
 }
@@ -168,7 +213,7 @@ const AssetTableRow: FC<{ value: UserRealtoken }> = (props) => {
 const OtherTableRow: FC<{ value: OtherRealtoken }> = (props) => {
   const { t } = useTranslation('common', { keyPrefix: 'numbers' })
   const transfersIsLoaded = useSelector(selectTransfersIsLoaded)
-
+  const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
   const { shortName, value, unitPriceCost, amount, totalInvestment } =
     props.value
 
@@ -218,6 +263,25 @@ const OtherTableRow: FC<{ value: OtherRealtoken }> = (props) => {
       <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
         {'-'}
       </Table.Td>
+      {userDisplayAdditionalData && (
+        <>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+              {'-'}
+            </div>
+          </Table.Td>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+              {'-'}
+            </div>
+          </Table.Td>
+          <Table.Td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+            <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+              {'-'}
+            </div>
+          </Table.Td>
+        </>
+      )}
     </Table.Tr>
   )
 }

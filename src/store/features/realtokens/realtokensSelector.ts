@@ -7,6 +7,11 @@ export const selectRealtokensIsLoading = createSelector(
   (state) => state.isLoading,
 )
 
+export const selectRealtokensIsLoadingExtraData = createSelector(
+  (state: RootState) => state.realtokens,
+  (state) => state.isLoadingExtraData,
+)
+
 export const selectRealtokens = createSelector(
   (state: RootState) => state.realtokens,
   (realtokens) => realtokens.realtokens,
