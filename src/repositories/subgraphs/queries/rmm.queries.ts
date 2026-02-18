@@ -6,13 +6,11 @@ import { RMM2Client, RMM3WrapperClient } from '../clients'
 
 export async function getRmmBalances(
   addressList: string[],
-  options: { includesRmmV2?: boolean } = {},
+  options: {},
 ) {
   const addresses = addressList.map((item) => item.toLowerCase())
   const [resultRMM2, resultRMM3] = await Promise.all([
-    options.includesRmmV2
-      ? executeRMM2Query(addresses)
-      : Promise.resolve({ data: { users: [] } }),
+    Promise.resolve({ data: { users: [] } }),
     executeRMM3Query(addresses),
   ])
   return formatBalances([...resultRMM2.data.users, ...resultRMM3.data.users])
@@ -20,13 +18,11 @@ export async function getRmmBalances(
 
 export async function getRmmPositions(
   addressList: string[],
-  options: { includesRmmV2?: boolean } = {},
+  options: {},
 ) {
   const addresses = addressList.map((item) => item.toLowerCase())
   const [resultRMM2, resultRMM3] = await Promise.all([
-    options.includesRmmV2
-      ? executeRMM2Query(addresses)
-      : Promise.resolve({ data: { users: [] } }),
+    Promise.resolve({ data: { users: [] } }),
     executeRMM3Query(addresses),
   ])
   return formatPositions([...resultRMM2.data.users, ...resultRMM3.data.users])

@@ -18,7 +18,6 @@ const USER_CURRENCY_LS_KEY = 'store:settings/userCurrency'
 const USER_RENT_CALCULATION_LS_KEY = 'store:settings/userRentCalculation'
 const USER_INCLUDES_ETH_LS_KEY = 'store:settings/includesEth'
 const USER_INCLUDES_LEVIN_SWAP_LS_KEY = 'store:settings/includesLevinSwap'
-const USER_INCLUDES_RMM_V2_LS_KEY = 'store:settings/includesRmmV2'
 const USER_INCLUDES_OTHER_ASSETS_LS_KEY = 'store:settings/includesOtherAssets'
 const USER_DISPLAY_ADDITIONAL_DATA_LS_KEY =
   'store:settings/displayAdditionalData'
@@ -39,7 +38,6 @@ interface SettingsInitialStateType {
   rentCalculation: RentCalculation
   includesEth: boolean
   includesLevinSwap: boolean
-  includesRmmV2: boolean
   includesOtherAssets: boolean
   displayAdditionalData: boolean
   version?: string
@@ -55,7 +53,6 @@ const settingsInitialState: SettingsInitialStateType = {
   isInitialized: false,
   includesEth: false,
   includesLevinSwap: false,
-  includesRmmV2: false,
   includesOtherAssets: false,
   displayAdditionalData: false,
 }
@@ -69,8 +66,6 @@ export const userRentCalculationChangedDispatchType =
 export const userIncludesEthChangedDispatchType = 'settings/includesEthChanged'
 export const userIncludesLevinSwapChangedDispatchType =
   'settings/includesLevinSwapChanged'
-export const userIncludesRmmV2ChangedDispatchType =
-  'settings/includesRmmV2Changed'
 export const userIncludesOtherAssetsDispatchType =
   'settings/includesOtherAssets'
 export const userDisplayAdditionalDataDispatchType =
@@ -95,9 +90,6 @@ export const userIncludesEthChanged = createAction<boolean>(
 )
 export const userIncludesLevinSwapChanged = createAction<boolean>(
   userIncludesLevinSwapChangedDispatchType,
-)
-export const userIncludesRmmV2Changed = createAction<boolean>(
-  userIncludesRmmV2ChangedDispatchType,
 )
 export const userIncludesOtherAssetsChanged = createAction<boolean>(
   userIncludesOtherAssetsDispatchType,
@@ -222,13 +214,6 @@ export const settingsReducers = createReducer(
           action.payload.toString(),
         )
       })
-      .addCase(userIncludesRmmV2Changed, (state, action) => {
-        state.includesRmmV2 = action.payload
-        localStorage.setItem(
-          USER_INCLUDES_RMM_V2_LS_KEY,
-          action.payload.toString(),
-        )
-      })
       .addCase(userIncludesOtherAssetsChanged, (state, action) => {
         state.includesOtherAssets = action.payload
         localStorage.setItem(
@@ -254,9 +239,6 @@ export const settingsReducers = createReducer(
         const userIncludesLevinSwap = localStorage.getItem(
           USER_INCLUDES_LEVIN_SWAP_LS_KEY,
         )
-        const userIncludesRmmV2 = localStorage.getItem(
-          USER_INCLUDES_RMM_V2_LS_KEY,
-        )
         const userIncludesOtherAssets = localStorage.getItem(
           USER_INCLUDES_OTHER_ASSETS_LS_KEY,
         )
@@ -280,7 +262,6 @@ export const settingsReducers = createReducer(
 
         state.includesEth = userIncludesEth === 'true'
         state.includesLevinSwap = userIncludesLevinSwap === 'true'
-        state.includesRmmV2 = userIncludesRmmV2 === 'true'
         state.includesOtherAssets = userIncludesOtherAssets === 'true'
         state.displayAdditionalData = userDisplayAdditionalData === 'true'
 

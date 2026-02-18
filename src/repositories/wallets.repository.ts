@@ -25,7 +25,6 @@ export const WalletsRepository = {
     options: {
       includesEth?: boolean
       includesLevinSwap?: boolean
-      includesRmmV2?: boolean
     } = {},
   ): Promise<WalletBalances> =>
     getWalletsBalances(addressList, realtokens, options),
@@ -37,13 +36,12 @@ async function getWalletsBalances(
   options: {
     includesEth?: boolean
     includesLevinSwap?: boolean
-    includesRmmV2?: boolean
   } = {},
 ) {
   const [realtokenBalances, rmmBalances, levinSwapBalances] = await Promise.all(
     [
       getRealtokenBalances(addressList, { includesEth: options.includesEth }),
-      getRmmBalances(addressList, { includesRmmV2: options.includesRmmV2 }),
+      getRmmBalances(addressList),
       getLevinSwapBalances(addressList, realtokens, {
         includesLevinSwap: options.includesLevinSwap,
       }),

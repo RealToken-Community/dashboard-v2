@@ -10,7 +10,7 @@ import { RmmPosition, getRmmPositions } from './subgraphs/queries/rmm.queries'
 export const RmmRepository = {
   async getPositions(
     addressList: string[],
-    options?: { includesRmmV2?: boolean },
+    options?: {},
   ) {
     const result = await getRmmPositions(addressList, options)
     const merged = mergeWalletsPositions(result)

@@ -44,7 +44,6 @@ import {
   selectUserIncludesEth,
   selectUserIncludesLevinSwap,
   selectUserIncludesOtherAssets,
-  selectUserIncludesRmmV2,
   selectUserRentCalculation,
   selectVersion,
 } from 'src/store/features/settings/settingsSelector'
@@ -54,7 +53,6 @@ import {
   userIncludesEthChanged,
   userIncludesLevinSwapChanged,
   userIncludesOtherAssetsChanged,
-  userIncludesRmmV2Changed,
   userRentCalculationChanged,
 } from 'src/store/features/settings/settingsSlice'
 import { Currency } from 'src/types/Currencies'
@@ -271,7 +269,6 @@ const FetchDataSettings: FC = () => {
 
   const userIncludesEth = useSelector(selectUserIncludesEth)
   const userIncludesLevinSwap = useSelector(selectUserIncludesLevinSwap)
-  const userIncludesRmmV2 = useSelector(selectUserIncludesRmmV2)
   const userIncludesOtherAssets = useSelector(selectUserIncludesOtherAssets)
   const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
 
@@ -279,8 +276,6 @@ const FetchDataSettings: FC = () => {
     dispatch(userIncludesEthChanged(value))
   const setUserIncludesLevinSwap = (value: boolean) =>
     dispatch(userIncludesLevinSwapChanged(value))
-  const setUserIncludesRmmV2 = (value: boolean) =>
-    dispatch(userIncludesRmmV2Changed(value))
   const setUserIncludesOtherAssets = (value: boolean) =>
     dispatch(userIncludesOtherAssetsChanged(value))
   const setUserDisplayAdditionalData = (value: boolean) =>
@@ -305,14 +300,6 @@ const FetchDataSettings: FC = () => {
         label={t('includesLevinSwap')}
         onLabel={<IconDatabase size={16} />}
         offLabel={<IconDatabaseOff size={16} />}
-        style={{ margin: '4px 8px' }}
-      />
-      <Switch
-        checked={userIncludesRmmV2}
-        onChange={(event) => setUserIncludesRmmV2(event.currentTarget.checked)}
-        onLabel={<IconBuildingBank size={16} />}
-        offLabel={<IconCircleOff size={16} />}
-        label={t('includesRmmV2')}
         style={{ margin: '4px 8px' }}
       />
       <Switch

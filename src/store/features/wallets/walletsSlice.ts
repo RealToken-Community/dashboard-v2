@@ -50,7 +50,6 @@ export function fetchWallets(realtokens: RealToken[]) {
     const options = {
       includesEth: state.settings.includesEth,
       includesLevinSwap: state.settings.includesLevinSwap,
-      includesRmmV2: state.settings.includesRmmV2,
     }
 
     if (isLoading) return

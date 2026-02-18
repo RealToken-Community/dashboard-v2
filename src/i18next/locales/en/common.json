@@ -31,7 +31,6 @@
     "options": "Options",
     "includesEth": "Includes Ethereum",
     "includesLevinSwap": "Includes LevinSwap",
-    "includesRmmV2": "Includes RMM V2",
     "includesOtherAssets": "Includes other assets",
     "displayAdditionalData": "Display additional data"
   },
