@@ -194,6 +194,10 @@ async function getWorkingRpc(
   let rpcConnectOk = false
   let rpcThresholdValue = 0
   let failedRpcErrorCount = 0
+  let fallbackConnectedProvider: {
+    provider: JsonRpcProvider
+    url: string
+  } | null = null
   const urls = getRpcUrls(chainId)
 
   for (const url of urls) {
@@ -210,10 +214,16 @@ async function getWorkingRpc(
         : // Test for the maximum number of concurrent requests the provider can handle
           await testRpcThresholds(provider, REG_ContractAddress, 5, 5, 5, 150)
       if (rpcThresholdValue < 1) {
-        // Throw error if the threshold is 0
-        // Means the provider is not able to handle required concurrent requests number
-        // skip it and try next one
-        throw new Error('rpcThresholdValue returned 0')
+        // Keep a connected provider as fallback if no endpoint passes threshold checks.
+        if (!fallbackConnectedProvider) {
+          fallbackConnectedProvider = { provider, url }
+        }
+        // Provider is reachable but failed concurrency test, try next one first.
+        failedRpcErrorCount++
+        console.warn(
+          `Successful connection to ${url} but rpcThresholdValue is 0, trying next one...`,
+        )
+        continue
       }
       // If any error has occurred before, log the successful connection
       if (failedRpcErrorCount > 0) {
@@ -227,12 +237,6 @@ async function getWorkingRpc(
       if (!rpcConnectOk) {
         // Connection error
         console.error(`Failed to connect to ${url}, trying next one...`, error)
-      } else if (rpcThresholdValue < 1) {
-        // Threshold error
-        console.error(
-          `Successfull connection to ${url} BUT failed to test rpcThresholdValue, trying next one...`,
-          error,
-        )
       } else {
         // General error
         console.error(`Failed to connect to ${url}, trying next one...`, error)
@@ -243,6 +247,12 @@ async function getWorkingRpc(
     `All RPC URLs (${urls?.length}) failed to connect or test rpcThresholdValue`,
     urls,
   )
+  if (fallbackConnectedProvider) {
+    console.warn(
+      `No RPC URL passed threshold checks for ${CHAINS_NAMES[chainId]} (chainId ${chainId}), using connected fallback ${fallbackConnectedProvider.url}`,
+    )
+    return fallbackConnectedProvider
+  }
   throw new Error(
     `All RPC URLs (${urls?.length}) failed for ${CHAINS_NAMES[chainId]} (chainId ${chainId})`,
   )

@@ -91,7 +91,7 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
             src={props.value.imageLink[0]}
             width={400}
             height={300}
-            objectFit={'cover'}
+            style={{ objectFit: 'cover' }}
             alt={props.value.fullName}
           />
         </div>
