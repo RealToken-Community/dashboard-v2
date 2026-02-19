@@ -17,7 +17,7 @@ import {
 import { DatePickerInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import {
-  IconBuildingBank,
+  // IconBuildingBank,
   IconCash,
   IconCircleOff,
   IconClock,
@@ -336,7 +336,7 @@ const RefreshDataButton: FC = () => {
       expiresLocalStorageCaches()
       await TransferDatabaseService.dropDatabase()
       window.location.reload()
-    } catch (error) {
+    } catch {
       setLoading(false)
     }
   }

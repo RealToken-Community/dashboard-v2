@@ -80,25 +80,12 @@ export const updateBalanceValues = (
   })
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface RWARealtoken extends OtherRealtoken {
+export type RWARealtoken = OtherRealtoken & {
   initialLaunchDate: APIRealTokenDate
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface REGRealtoken extends OtherRealtoken {}
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface REUSDGRealtoken extends OtherRealtoken {}
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface REGVotingPowertoken extends OtherRealtoken {}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface RWARealtoken extends OtherRealtoken {
-  initialLaunchDate: APIRealTokenDate
-}
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface REGRealtoken extends OtherRealtoken {}
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface REGVotingPowertoken extends OtherRealtoken {}
+export type REGRealtoken = OtherRealtoken
+export type REUSDGRealtoken = OtherRealtoken
+export type REGVotingPowertoken = OtherRealtoken
 
 const DAYS_PER_YEAR = 365
 const MONTHS_PER_YEAR = 12

@@ -284,7 +284,7 @@ export const initializeProviders = async (): Promise<ProvidersWithUrls> => {
         initializeProvidersQueue.wait(),
         timeoutPromise,
       ])
-    } catch (error) {
+    } catch {
       initializeProvidersQueue = null
       // providers = undefined
       // Relaunch directly without queue
@@ -318,7 +318,7 @@ async function initializeProvidersDirect(): Promise<ProvidersWithUrls> {
       GnosisRpcUrl: GnosisRpcProviderWithUrl.url,
       EthereumRpcUrl: EthereumRpcProviderWithUrl.url,
     }
-  } catch (error) {
+  } catch {
     console.log('fallback to default RPC URLs')
 
     return {

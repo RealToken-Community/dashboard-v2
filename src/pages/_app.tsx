@@ -102,7 +102,6 @@ const App = ({
 
   // Event tracking
   useEffect(() => {
-    // eslint-disable-next-line no-underscore-dangle
     if (!window._paq) {
       // Note: Triggered twice on page load when using strict mode in DEV
       initMatomoNext({

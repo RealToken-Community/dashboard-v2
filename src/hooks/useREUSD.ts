@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Contract } from 'ethers'
-import test from 'node:test'
 
 import { WalletType } from 'src/repositories'
 import { initializeProviders } from 'src/repositories/RpcProvider'
@@ -36,8 +35,6 @@ import {
   REGtokenDecimals as REUSDtokenDecimals,
   USDConXdai_ContractAddress,
   USDCtokenDecimals,
-  WXDAI_ContractAddress,
-  WXDAItokenDecimals,
 } from 'src/utils/blockchain/consts/otherTokens'
 import { getAddressesBalances } from 'src/utils/blockchain/erc20Infos'
 import {

@@ -1,5 +1,3 @@
-import { useSelector } from 'react-redux'
-
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
 import { forEach } from 'lodash'
