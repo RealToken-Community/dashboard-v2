@@ -35,8 +35,6 @@ import {
   IconTablePlus,
 } from '@tabler/icons-react'
 
-import { setCookie } from 'cookies-next'
-
 import { TransferDatabaseService } from 'src/repositories/transfers/TransferDatabase'
 import {
   selectUserCurrency,
@@ -210,9 +208,9 @@ const LanguageSelect: FC = () => {
   const updateLocale = useCallback(
     (updatedLocale: string) => {
       if (i18n.language !== updatedLocale) {
-        setCookie('react-i18next', updatedLocale, {
-          maxAge: 60 * 60 * 24 * 365,
-        })
+        document.cookie = `react-i18next=${encodeURIComponent(updatedLocale)}; Max-Age=${
+          60 * 60 * 24 * 365
+        }; Path=/`
         i18n.changeLanguage(updatedLocale)
       }
     },
