@@ -29,9 +29,16 @@ const YamStatisticsRow: React.FC<{
 }> = ({ statistics, realtoken }) => {
   if (!realtoken) return null
   const { t: tNumbers } = useTranslation('common', { keyPrefix: 'numbers' })
-  const yamPrice = statistics.volume / statistics.quantity
-  const yamDifference = yamPrice - realtoken.tokenPrice
-  const yamDifferencePercent = (yamDifference / realtoken.tokenPrice) * 100
+  const hasYamData = statistics.quantity > 0 && statistics.volume > 0
+  const yamPrice = hasYamData
+    ? statistics.volume / statistics.quantity
+    : undefined
+  const yamDifference =
+    yamPrice !== undefined ? yamPrice - realtoken.tokenPrice : undefined
+  const yamDifferencePercent =
+    yamDifference !== undefined && realtoken.tokenPrice > 0
+      ? (yamDifference / realtoken.tokenPrice) * 100
+      : undefined
 
   const fallback = '-'
   const tokenPriceValue = useCurrencyValue(realtoken.tokenPrice, fallback)
@@ -39,16 +46,17 @@ const YamStatisticsRow: React.FC<{
   const yamDifferenceValue = useCurrencyValue(yamDifference, fallback)
   const volumeValue = useCurrencyValue(statistics.volume, fallback)
 
-  return yamPriceValue !== fallback ? (
+  return (
     <>
       <tr key={realtoken.id}>
         <td>{realtoken.shortName}</td>
         <td>{tokenPriceValue}</td>
         <td>{yamPriceValue}</td>
         <td>
-          {yamDifferenceValue} {'('}
-          {tNumbers('percent', { value: yamDifferencePercent })}
-          {')'}
+          {yamDifferenceValue}{' '}
+          {yamDifferencePercent !== undefined
+            ? `(${tNumbers('percent', { value: yamDifferencePercent })})`
+            : fallback}
         </td>
         <td>{volumeValue}</td>
       </tr>
@@ -59,7 +67,7 @@ const YamStatisticsRow: React.FC<{
         </td>
       </tr>
     </>
-  ) : null
+  )
 }
 
 const YamStatisticsPage = () => {
@@ -122,6 +130,16 @@ const YamStatisticsPage = () => {
     return yamStatistics.slice(start, end)
   }, [yamStatistics, page, pageSize])
 
+  const paginatedRealtokens: UserRealtoken[] = useMemo(() => {
+    const start = (page - 1) * pageSize
+    const end = start + pageSize
+    return filteredRealtokens.slice(start, end)
+  }, [filteredRealtokens, page, pageSize])
+
+  useEffect(() => {
+    setPage(1)
+  }, [currentFilter])
+
   if (isLoading) {
     return <div>{'Loading...'}</div>
   }
@@ -142,24 +160,24 @@ const YamStatisticsPage = () => {
 
         <div style={{ width: '100%', marginTop: '20px' }}>
           <table style={{ width: '100%' }}>
-            <tr style={{ textAlign: 'left' }}>
-              <th>{t('columns.token')}</th>
-              <th>{t('columns.tokenPrice')}</th>
-              <th>{t('columns.yamPrice')}</th>
-              <th>{t('columns.yamDifference')}</th>
-              <th>{t('columns.yamVolume')}</th>
-            </tr>
-            {paginationYamStatistics.map((statistics, index) => (
-              <YamStatisticsRow
-                key={index}
-                statistics={statistics}
-                realtoken={
-                  filteredRealtokens[index]?.tokenPrice
-                    ? (filteredRealtokens[index] as UserRealtoken)
-                    : null
-                }
-              />
-            ))}
+            <thead>
+              <tr style={{ textAlign: 'left' }}>
+                <th>{t('columns.token')}</th>
+                <th>{t('columns.tokenPrice')}</th>
+                <th>{t('columns.yamPrice')}</th>
+                <th>{t('columns.yamDifference')}</th>
+                <th>{t('columns.yamVolume')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginationYamStatistics.map((statistics, index) => (
+                <YamStatisticsRow
+                  key={index}
+                  statistics={statistics}
+                  realtoken={paginatedRealtokens[index] ?? null}
+                />
+              ))}
+            </tbody>
           </table>
           <Group
             justify={'center'}
