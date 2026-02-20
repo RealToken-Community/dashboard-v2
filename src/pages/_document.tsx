@@ -1,3 +1,38 @@
-import { default as NextDocument } from 'next/document'
+import {
+  Head,
+  Html,
+  Main,
+  NextScript,
+  default as NextDocument,
+} from 'next/document'
 
-export default class _Document extends NextDocument {}
+import { ColorSchemeScript } from '@mantine/core'
+
+export default class _Document extends NextDocument {
+  render() {
+    return (
+      <Html data-mantine-color-scheme={'light'}>
+        <Head>
+          <ColorSchemeScript defaultColorScheme={'light'} />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function () {
+                  var html = document.documentElement;
+                  var current = html.getAttribute('data-mantine-color-scheme');
+                  if (current !== 'light' && current !== 'dark') {
+                    html.setAttribute('data-mantine-color-scheme', 'light');
+                  }
+                })();
+              `,
+            }}
+          />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    )
+  }
+}

@@ -70,7 +70,7 @@ import {
 import { expiresLocalStorageCaches } from 'src/utils/useCache'
 
 const ColorSchemeMenuItem: FC = () => {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme()
+  const { colorScheme, setColorScheme } = useMantineColorScheme()
 
   const { t } = useTranslation('common', { keyPrefix: 'settings' })
 
@@ -81,7 +81,7 @@ const ColorSchemeMenuItem: FC = () => {
         color={'brand'}
         fullWidth={true}
         value={colorScheme}
-        onChange={() => toggleColorScheme()}
+        onChange={(value) => setColorScheme(value as 'light' | 'dark')}
         data={[
           {
             value: 'light',
