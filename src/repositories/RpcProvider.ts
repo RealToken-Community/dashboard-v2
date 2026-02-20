@@ -57,10 +57,16 @@ const getRpcUrls = (chainId: number): string[] => {
     default:
       throw new Error(`Unsupported chain ID: ${chainId}`)
   }
-  // Get the environment variable value, split by comma, add default URLs, remove duplicates and empty values
+  // Get the environment variable value, split by comma, add default URLs, normalize and remove duplicates
   return Array.from(
-    new Set((process.env[envVarName] ?? '').split(',').concat(defaultUrls)),
-  ).filter((url) => url.trim() !== '')
+    new Set(
+      (process.env[envVarName] ?? '')
+        .split(',')
+        .concat(defaultUrls)
+        .map((url) => url.trim())
+        .filter((url) => /^https?:\/\//i.test(url)),
+    ),
+  )
 }
 
 const DEFAULT_GNOSIS_RPC_URLS = [
@@ -205,9 +211,13 @@ async function getWorkingRpc(
       rpcConnectOk = false
       rpcThresholdValue = 0
       const provider = new JsonRpcProvider(url)
-      const network = provider.getNetwork()
-      const currentBlockNumber = provider.getBlockNumber()
-      await Promise.all([network, currentBlockNumber])
+      const providerPingTimeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('RPC ping timeout')), 8000),
+      )
+      await Promise.race([
+        Promise.all([provider.getNetwork(), provider.getBlockNumber()]),
+        providerPingTimeout,
+      ])
       rpcConnectOk = true
       rpcThresholdValue = !checkRpcThresholds
         ? 1

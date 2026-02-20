@@ -220,11 +220,13 @@ export const useREUSD = () => {
   const currenciesRates = useSelector(selectCurrencyRates)
 
   useEffect(() => {
-    if (addressList.length) {
-      getREUSD(addressList, userRate, currenciesRates, includeETH).then(
-        setReusd,
-      )
-    }
+    if (!addressList.length) return
+
+    getREUSD(addressList, userRate, currenciesRates, includeETH)
+      .then(setReusd)
+      .catch((error) => {
+        console.warn('Failed to load REUSD data', error)
+      })
   }, [addressList, userRate, currenciesRates, includeETH])
 
   return reusd
