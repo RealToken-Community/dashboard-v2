@@ -97,20 +97,36 @@ function getRealtokenBalances(
 ) {
   const ethereumContract = realtoken.ethereumContract?.toLowerCase() ?? ''
   const gnosisContract = realtoken.gnosisContract?.toLowerCase() ?? ''
+  const wrapperContractRaw =
+    realtoken.blockchainAddresses?.xDai?.rmmV3WrapperAddress
+  const wrapperContract =
+    wrapperContractRaw && String(wrapperContractRaw) !== '0'
+      ? String(wrapperContractRaw).toLowerCase()
+      : ''
 
   return _mapValues(walletBalances, (balances, type) => {
-    const balance = balances.find((item) => {
-      return {
-        ['ethereum']: item.token === ethereumContract,
-        ['gnosis']: item.token === gnosisContract,
-        ['rmm']: item.token === gnosisContract,
-        ['levinSwap']: item.token === gnosisContract,
-      }[type]
-    })
+    const amount = balances.reduce((acc, item) => {
+      const token = item.token.toLowerCase()
+      switch (type) {
+        case WalletType.Ethereum:
+          return token === ethereumContract ? acc + item.amount : acc
+        case WalletType.Gnosis:
+          return token === gnosisContract ? acc + item.amount : acc
+        case WalletType.RMM:
+          return token === gnosisContract ||
+            (!!wrapperContract && token === wrapperContract)
+            ? acc + item.amount
+            : acc
+        case WalletType.LevinSwap:
+          return token === gnosisContract ? acc + item.amount : acc
+        default:
+          return acc
+      }
+    }, 0)
 
     return {
-      amount: balance?.amount ?? 0,
-      value: (balance?.amount ?? 0) * realtoken.tokenPrice,
+      amount,
+      value: amount * realtoken.tokenPrice,
     }
   })
 }
@@ -250,12 +266,22 @@ export const selectRmmDetails = createSelector(
   (realtokens, rmmProtocol, rates) => {
     const rmmDetails = rmmProtocol.reduce(
       (acc, item) => {
-        const realtoken = realtokens.find(
-          (realtoken) => item.token === realtoken.gnosisContract?.toLowerCase(),
-        )
+        const realtoken = realtokens.find((token) => {
+          const gnosisContract = token.gnosisContract?.toLowerCase() ?? ''
+          const wrapperContractRaw =
+            token.blockchainAddresses?.xDai?.rmmV3WrapperAddress
+          const wrapperContract =
+            wrapperContractRaw && String(wrapperContractRaw) !== '0'
+              ? String(wrapperContractRaw).toLowerCase()
+              : ''
+
+          return item.token === gnosisContract || item.token === wrapperContract
+        })
 
         if (realtoken) {
-          acc.totalDeposit += item.amount * realtoken.tokenPrice
+          const realtokenValue = item.amount * realtoken.tokenPrice
+          acc.totalDeposit += realtokenValue
+          acc.stableDeposit += realtokenValue
         } else {
           acc.totalDeposit += item.amount
           acc.stableDeposit += item.amount
@@ -278,3 +304,18 @@ export const getWalletChainName = (chainId: number) => {
       return CHAINS_NAMES[CHAIN_ID__GNOSIS_XDAI]
   }
 }
+
+export const selectWalletsIsLoading = createSelector(
+  (state: RootState) => state.wallets,
+  (wallets) => wallets.isLoading,
+)
+
+export const selectWalletRpcHealth = createSelector(
+  (state: RootState) => state.wallets,
+  (wallets) => wallets.isWalletRpcHealthy,
+)
+
+export const selectRmmGraphHealth = createSelector(
+  (state: RootState) => state.wallets,
+  (wallets) => wallets.isRmmGraphHealthy,
+)

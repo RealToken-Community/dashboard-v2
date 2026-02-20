@@ -37,6 +37,10 @@ import {
 
 import { TransferDatabaseService } from 'src/repositories/transfers/TransferDatabase'
 import {
+  selectRealtokensApiHealth,
+  selectRealtokensIsLoading,
+} from 'src/store/features/realtokens/realtokensSelector'
+import {
   selectUserCurrency,
   selectUserDisplayAdditionalData,
   selectUserIncludesEth,
@@ -53,6 +57,11 @@ import {
   userIncludesOtherAssetsChanged,
   userRentCalculationChanged,
 } from 'src/store/features/settings/settingsSlice'
+import {
+  selectRmmGraphHealth,
+  selectWalletRpcHealth,
+  selectWalletsIsLoading,
+} from 'src/store/features/wallets/walletsSelector'
 import { Currency } from 'src/types/Currencies'
 import {
   RentCalculation,
@@ -269,6 +278,11 @@ const FetchDataSettings: FC = () => {
   const userIncludesLevinSwap = useSelector(selectUserIncludesLevinSwap)
   const userIncludesOtherAssets = useSelector(selectUserIncludesOtherAssets)
   const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
+  const isWalletsLoading = useSelector(selectWalletsIsLoading)
+  const isRealtokensLoading = useSelector(selectRealtokensIsLoading)
+  const isWalletRpcHealthy = useSelector(selectWalletRpcHealth)
+  const isApiHealthy = useSelector(selectRealtokensApiHealth)
+  const isRmmGraphHealthy = useSelector(selectRmmGraphHealth)
 
   const setUserIncludesEth = (value: boolean) =>
     dispatch(userIncludesEthChanged(value))
@@ -278,6 +292,51 @@ const FetchDataSettings: FC = () => {
     dispatch(userIncludesOtherAssetsChanged(value))
   const setUserDisplayAdditionalData = (value: boolean) =>
     dispatch(userDisplayAdditionalDataChanged(value))
+
+  type HealthStatus = 'ok' | 'loading' | 'error'
+  const getHealthStatus = (
+    isLoading: boolean,
+    isHealthy: boolean,
+  ): HealthStatus => {
+    if (isLoading) return 'loading'
+    return isHealthy ? 'ok' : 'error'
+  }
+
+  const StatusRow = ({
+    label,
+    status,
+  }: {
+    label: string
+    status: HealthStatus
+  }) => {
+    const colors = {
+      ok: '#2f9e44',
+      loading: '#f08c00',
+      error: '#e03131',
+    }
+    return (
+      <Box
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          margin: '2px 8px',
+          fontSize: 13,
+        }}
+      >
+        <Box
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: '50%',
+            backgroundColor: colors[status],
+          }}
+        />
+        <Box style={{ flex: 1 }}>{label}</Box>
+        <Box c={'dimmed'}>{t(`status.${status}`)}</Box>
+      </Box>
+    )
+  }
 
   return (
     <>
@@ -319,6 +378,19 @@ const FetchDataSettings: FC = () => {
         onLabel={<IconTablePlus size={16} />}
         offLabel={<IconTableMinus size={16} />}
         style={{ margin: '4px 8px' }}
+      />
+      <Menu.Label pb={0}>{t('dataHealth')}</Menu.Label>
+      <StatusRow
+        label={t('dataSteps.walletRpc')}
+        status={getHealthStatus(isWalletsLoading, isWalletRpcHealthy)}
+      />
+      <StatusRow
+        label={t('dataSteps.api')}
+        status={getHealthStatus(isRealtokensLoading, isApiHealthy)}
+      />
+      <StatusRow
+        label={t('dataSteps.rmmGraph')}
+        status={getHealthStatus(isWalletsLoading, isRmmGraphHealthy)}
       />
     </>
   )

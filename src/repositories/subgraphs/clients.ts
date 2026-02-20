@@ -29,7 +29,7 @@ export const EthereumClient = lazyInit(
 export const RMM3Client = lazyInit(
   (API_KEY: string) =>
     new ApolloClient({
-      uri: `https://gateway-arbitrum.network.thegraph.com/api/${API_KEY}/subgraphs/id/2xrWGGZ5r8Z7wdNdHxhbRVKcAD2dDgv3F2NcjrZmxifJ`,
+      uri: `https://gateway.thegraph.com/api/${API_KEY}/subgraphs/id/2xrWGGZ5r8Z7wdNdHxhbRVKcAD2dDgv3F2NcjrZmxifJ`,
       cache: new InMemoryCache(),
     }),
 )
@@ -37,7 +37,7 @@ export const RMM3Client = lazyInit(
 export const RMM3WrapperClient = lazyInit(
   (API_KEY: string) =>
     new ApolloClient({
-      uri: `https://gateway-arbitrum.network.thegraph.com/api/${API_KEY}/subgraphs/id/2dMMk7DbQYPX6Gi5siJm6EZ2gDQBF8nJcgKtpiPnPBsK`,
+      uri: `https://gateway.thegraph.com/api/${API_KEY}/subgraphs/id/2dMMk7DbQYPX6Gi5siJm6EZ2gDQBF8nJcgKtpiPnPBsK`,
       cache: new InMemoryCache(),
     }),
 )

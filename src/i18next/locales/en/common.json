@@ -33,7 +33,18 @@
     "includesEth": "Includes Ethereum",
     "includesLevinSwap": "Includes LevinSwap",
     "includesOtherAssets": "Includes other assets",
-    "displayAdditionalData": "Display additional data"
+    "displayAdditionalData": "Display additional data",
+    "dataHealth": "Sources health",
+    "dataSteps": {
+      "walletRpc": "Wallet balance (RPC)",
+      "api": "API",
+      "rmmGraph": "RMM (Graph)"
+    },
+    "status": {
+      "ok": "OK",
+      "loading": "Loading",
+      "error": "Error"
+    }
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
@@ -237,6 +248,7 @@
     "propertyValue": "Property value",
     "rentStartDate": "Rent Start",
     "fullyRentedEstimation": "Fully rented APR",
+    "ownershipPercentTooltip": "Ownership share for this property: {{owned}} token(s) out of {{total}} total token(s).",
     "rentNotStarted": "Rent not started yet",
     "isRmmAvailable": "RMM",
     "rentStatus": {
