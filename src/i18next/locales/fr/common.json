@@ -4,6 +4,7 @@
     "transactions": "Mes transactions",
     "histories": "Historique des changements",
     "yamStatistics": "Statistiques marché secondaire (Yam)",
+    "rmmStatistics": "Statistiques RMM",
     "documentation": "Wiki communautaire",
     "home": "Accueil",
     "realt": "RealT",
@@ -481,6 +482,35 @@
       "subsidized": "Subventionnés",
       "fullySubsidized": "Entièrement subventionnés",
       "notSubsidized": "Non subventionnés"
+    }
+  },
+  "rmmStatisticsPage": {
+    "home": "Accueil",
+    "title": "Statistiques RMM",
+    "window": "Fenêtre",
+    "dailyTitle": "Flux journaliers (stablecoins)",
+    "previous": "Période précédente",
+    "next": "Période suivante",
+    "tx": "tx",
+    "loading": "Chargement...",
+    "noData": "Aucune donnée disponible",
+    "error": "Échec du chargement des statistiques RMM",
+    "cards": {
+      "supply": "Dépôts",
+      "withdraw": "Retraits",
+      "borrow": "Emprunts",
+      "repay": "Remboursements",
+      "liquidation": "Liquidations"
+    },
+    "columns": {
+      "date": "Date",
+      "supply": "Dépôts",
+      "withdraw": "Retraits",
+      "borrow": "Emprunts",
+      "repay": "Remboursements",
+      "liquidation": "Liquidations",
+      "net": "Net",
+      "diffLiquidity": "Diff liquidité restante"
     }
   },
   "initialTransfersLoader": {
