@@ -1,8 +1,6 @@
-const { FlatCompat } = require('@eslint/eslintrc')
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
+const nextCoreWebVitals = require('eslint-config-next/core-web-vitals')
+const tsEslintPlugin = require('@typescript-eslint/eslint-plugin')
+const eslintConfigPrettier = require('eslint-config-prettier')
 
 module.exports = [
   {
@@ -27,12 +25,10 @@ module.exports = [
       'src/types/**',
     ],
   },
-  ...compat.config({
-    extends: [
-      'next/core-web-vitals',
-      'plugin:@typescript-eslint/recommended',
-      'prettier',
-    ],
+  ...nextCoreWebVitals,
+  ...tsEslintPlugin.configs['flat/recommended'],
+  eslintConfigPrettier,
+  {
     rules: {
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-unused-vars': ['warn'],
@@ -41,6 +37,11 @@ module.exports = [
       'react/jsx-boolean-value': ['warn', 'always'],
       'react-hooks/rules-of-hooks': 'off',
       'react-hooks/exhaustive-deps': 'off',
+      'react-hooks/preserve-manual-memoization': 'off',
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/static-components': 'off',
+      'react-hooks/immutability': 'off',
+      'react-hooks/use-memo': 'off',
     },
-  }),
+  },
 ]
