@@ -93,8 +93,8 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
         >
           <Image
             src={props.value.imageLink[0]}
-            width={400}
-            height={300}
+            fill={true}
+            sizes={'(max-width: 768px) 100vw, 33vw'}
             style={{ objectFit: 'cover' }}
             alt={props.value.fullName}
           />
