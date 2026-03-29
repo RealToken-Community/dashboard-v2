@@ -30,3 +30,18 @@ coverage
 
 # Docker artifacts
 docker-compose*.yml
+Dockerfile*
+
+# Docs
+README.md
+*.md
+
+# Tests
+test
+
+# Configs (optionnel)
+tsconfig*.json
+eslint.config.js
+.prettierrc*
+postcss.config.*
+tailwind.config.*
