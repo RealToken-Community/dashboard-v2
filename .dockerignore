@@ -38,10 +38,3 @@ README.md
 
 # Tests
 test
-
-# Configs (optionnel)
-tsconfig*.json
-eslint.config.js
-.prettierrc*
-postcss.config.*
-tailwind.config.*
