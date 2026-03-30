@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Contract } from 'ethers'
+import test from 'node:test'
 
 import { WalletType } from 'src/repositories'
 import { initializeProviders } from 'src/repositories/RpcProvider'
@@ -35,6 +36,8 @@ import {
   REGtokenDecimals as REUSDtokenDecimals,
   USDConXdai_ContractAddress,
   USDCtokenDecimals,
+  WXDAI_ContractAddress,
+  WXDAItokenDecimals,
 } from 'src/utils/blockchain/consts/otherTokens'
 import { getAddressesBalances } from 'src/utils/blockchain/erc20Infos'
 import {
@@ -220,13 +223,11 @@ export const useREUSD = () => {
   const currenciesRates = useSelector(selectCurrencyRates)
 
   useEffect(() => {
-    if (!addressList.length) return
-
-    getREUSD(addressList, userRate, currenciesRates, includeETH)
-      .then(setReusd)
-      .catch((error) => {
-        console.warn('Failed to load REUSD data', error)
-      })
+    if (addressList.length) {
+      getREUSD(addressList, userRate, currenciesRates, includeETH).then(
+        setReusd,
+      )
+    }
   }, [addressList, userRate, currenciesRates, includeETH])
 
   return reusd

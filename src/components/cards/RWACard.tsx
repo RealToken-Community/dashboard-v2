@@ -38,7 +38,7 @@ const RWACardComponent: FC<RWACardProps> = (props) => {
             src={props.value.imageLink[0]}
             width={400}
             height={300}
-            style={{ objectFit: 'cover' }}
+            objectFit={'cover'}
             alt={props.value.fullName}
           />
         </div>

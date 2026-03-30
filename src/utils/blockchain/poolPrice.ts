@@ -9,7 +9,7 @@ import { Contract, JsonRpcProvider, ethers } from 'ethers'
 
 import { LevinswapABI as UniswapV2PairABI } from './abi/LevinswapABI'
 import { UniswapV2FactoryABI } from './abi/UniswapV2FactoryABI'
-// import { UniswapV3PoolABI as UniV3PoolABI } from './abi/UniswapV3PoolABI'
+import { UniswapV3PoolABI as UniV3PoolABI } from './abi/UniswapV3PoolABI'
 import { UniswapV3QuoterV2ABI as Univ3QuoterABI } from './abi/UniswapV3QuoterV2ABI'
 import {
   Address,

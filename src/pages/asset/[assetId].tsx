@@ -86,7 +86,7 @@ const AssetPage: NextPage = () => {
           className={styles.imageContainer}
           width={500}
           height={300}
-          style={{ objectFit: 'cover' }}
+          objectFit={'cover'}
           alt={realtoken.fullName}
         />
 

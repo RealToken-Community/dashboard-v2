@@ -57,20 +57,13 @@ const getRpcUrls = (chainId: number): string[] => {
     default:
       throw new Error(`Unsupported chain ID: ${chainId}`)
   }
-  // Get the environment variable value, split by comma, add default URLs, normalize and remove duplicates
+  // Get the environment variable value, split by comma, add default URLs, remove duplicates and empty values
   return Array.from(
-    new Set(
-      (process.env[envVarName] ?? '')
-        .split(',')
-        .concat(defaultUrls)
-        .map((url) => url.trim())
-        .filter((url) => /^https?:\/\//i.test(url)),
-    ),
-  ).filter((url) => !isBlockedRpcUrl(url))
+    new Set((process.env[envVarName] ?? '').split(',').concat(defaultUrls)),
+  ).filter((url) => url.trim() !== '')
 }
 
 const DEFAULT_GNOSIS_RPC_URLS = [
-  'https://gnosis.drpc.org',
   'https://rpc.gnosischain.com',
   'https://rpc.gnosis.gateway.fm',
   'https://rpc.ap-southeast-1.gateway.fm/v4/gnosis/non-archival/mainnet',
@@ -80,7 +73,6 @@ const DEFAULT_GNOSIS_RPC_URLS = [
 ]
 
 const DEFAULT_ETHEREUM_RPC_URLS = [
-  'https://eth.drpc.org',
   'https://rpc.eth.gateway.fm',
   'https://ethereum-rpc.publicnode.com',
   'https://eth-mainnet.public.blastapi.io',
@@ -89,22 +81,6 @@ const DEFAULT_ETHEREUM_RPC_URLS = [
   'https://rpc.mevblocker.io',
   'https://0xrpc.io/eth',
 ]
-
-const BROWSER_BLOCKED_RPC_URLS = new Set([
-  'https://eth.merkle.io',
-  'https://eth.merkle.io/',
-])
-
-function normalizeRpcUrl(url: string) {
-  return url.trim().toLowerCase().replace(/\/+$/, '')
-}
-
-function isBlockedRpcUrl(url: string) {
-  const normalizedUrl = normalizeRpcUrl(url)
-  return Array.from(BROWSER_BLOCKED_RPC_URLS).some(
-    (blockedUrl) => normalizeRpcUrl(blockedUrl) === normalizedUrl,
-  )
-}
 
 /**
  * Test the RPC provider for finding the maximum number of concurrent requests it can handle
@@ -216,41 +192,26 @@ async function getWorkingRpc(
   let rpcConnectOk = false
   let rpcThresholdValue = 0
   let failedRpcErrorCount = 0
-  let fallbackConnectedProvider: {
-    provider: JsonRpcProvider
-    url: string
-  } | null = null
   const urls = getRpcUrls(chainId)
 
   for (const url of urls) {
-    let provider: JsonRpcProvider | null = null
     try {
       rpcConnectOk = false
       rpcThresholdValue = 0
-      provider = new JsonRpcProvider(url)
-      const providerPingTimeout = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('RPC ping timeout')), 8000),
-      )
-      await Promise.race([
-        Promise.all([provider.getNetwork(), provider.getBlockNumber()]),
-        providerPingTimeout,
-      ])
+      const provider = new JsonRpcProvider(url)
+      const network = provider.getNetwork()
+      const currentBlockNumber = provider.getBlockNumber()
+      await Promise.all([network, currentBlockNumber])
       rpcConnectOk = true
       rpcThresholdValue = !checkRpcThresholds
         ? 1
         : // Test for the maximum number of concurrent requests the provider can handle
           await testRpcThresholds(provider, REG_ContractAddress, 5, 5, 5, 150)
       if (rpcThresholdValue < 1) {
-        // Keep a connected provider as fallback if no endpoint passes threshold checks.
-        if (!fallbackConnectedProvider) {
-          fallbackConnectedProvider = { provider, url }
-        }
-        // Provider is reachable but failed concurrency test, try next one first.
-        failedRpcErrorCount++
-        console.warn(
-          `Successful connection to ${url} but rpcThresholdValue is 0, trying next one...`,
-        )
-        continue
+        // Throw error if the threshold is 0
+        // Means the provider is not able to handle required concurrent requests number
+        // skip it and try next one
+        throw new Error('rpcThresholdValue returned 0')
       }
       // If any error has occurred before, log the successful connection
       if (failedRpcErrorCount > 0) {
@@ -261,10 +222,15 @@ async function getWorkingRpc(
       return { provider, url }
     } catch (error) {
       failedRpcErrorCount++
-      provider?.destroy()
       if (!rpcConnectOk) {
         // Connection error
         console.error(`Failed to connect to ${url}, trying next one...`, error)
+      } else if (rpcThresholdValue < 1) {
+        // Threshold error
+        console.error(
+          `Successfull connection to ${url} BUT failed to test rpcThresholdValue, trying next one...`,
+          error,
+        )
       } else {
         // General error
         console.error(`Failed to connect to ${url}, trying next one...`, error)
@@ -275,12 +241,6 @@ async function getWorkingRpc(
     `All RPC URLs (${urls?.length}) failed to connect or test rpcThresholdValue`,
     urls,
   )
-  if (fallbackConnectedProvider) {
-    console.warn(
-      `No RPC URL passed threshold checks for ${CHAINS_NAMES[chainId]} (chainId ${chainId}), using connected fallback ${fallbackConnectedProvider.url}`,
-    )
-    return fallbackConnectedProvider
-  }
   throw new Error(
     `All RPC URLs (${urls?.length}) failed for ${CHAINS_NAMES[chainId]} (chainId ${chainId})`,
   )
@@ -312,7 +272,7 @@ export const initializeProviders = async (): Promise<ProvidersWithUrls> => {
         initializeProvidersQueue.wait(),
         timeoutPromise,
       ])
-    } catch {
+    } catch (error) {
       initializeProvidersQueue = null
       // providers = undefined
       // Relaunch directly without queue
@@ -333,38 +293,28 @@ export const initializeProviders = async (): Promise<ProvidersWithUrls> => {
 }
 
 async function initializeProvidersDirect(): Promise<ProvidersWithUrls> {
-  const [gnosisResult, ethereumResult] = await Promise.allSettled([
-    getWorkingRpc(CHAIN_ID__GNOSIS_XDAI),
-    getWorkingRpc(CHAIN_ID__ETHEREUM),
-  ])
+  try {
+    const [GnosisRpcProviderWithUrl, EthereumRpcProviderWithUrl] =
+      await Promise.all([
+        getWorkingRpc(CHAIN_ID__GNOSIS_XDAI),
+        getWorkingRpc(CHAIN_ID__ETHEREUM),
+      ])
 
-  const gnosisFallbackUrl = 'https://rpc.gnosischain.com'
-  const ethereumFallbackUrl = 'https://rpc.eth.gateway.fm'
+    return {
+      GnosisRpcProvider: GnosisRpcProviderWithUrl.provider,
+      EthereumRpcProvider: EthereumRpcProviderWithUrl.provider,
+      GnosisRpcUrl: GnosisRpcProviderWithUrl.url,
+      EthereumRpcUrl: EthereumRpcProviderWithUrl.url,
+    }
+  } catch (error) {
+    console.log('fallback to default RPC URLs')
 
-  if (gnosisResult.status === 'rejected') {
-    console.warn('Fallback to default Gnosis RPC URL', gnosisResult.reason)
-  }
-  if (ethereumResult.status === 'rejected') {
-    console.warn('Fallback to default Ethereum RPC URL', ethereumResult.reason)
-  }
-
-  return {
-    GnosisRpcProvider:
-      gnosisResult.status === 'fulfilled'
-        ? gnosisResult.value.provider
-        : new JsonRpcProvider(gnosisFallbackUrl),
-    EthereumRpcProvider:
-      ethereumResult.status === 'fulfilled'
-        ? ethereumResult.value.provider
-        : new JsonRpcProvider(ethereumFallbackUrl),
-    GnosisRpcUrl:
-      gnosisResult.status === 'fulfilled'
-        ? gnosisResult.value.url
-        : gnosisFallbackUrl,
-    EthereumRpcUrl:
-      ethereumResult.status === 'fulfilled'
-        ? ethereumResult.value.url
-        : ethereumFallbackUrl,
+    return {
+      GnosisRpcProvider: new JsonRpcProvider('https://rpc.gnosischain.com'),
+      EthereumRpcProvider: new JsonRpcProvider('https://rpc.eth.gateway.fm'),
+      GnosisRpcUrl: 'https://rpc.gnosischain.com',
+      EthereumRpcUrl: 'https://rpc.eth.gateway.fm',
+    }
   }
 }
 

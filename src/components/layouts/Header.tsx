@@ -83,11 +83,6 @@ export const Header: FC = () => {
           leftSection={<IconFilePencil size={'1rem'} stroke={1.5} />}
           onClick={() => router.push('/yamStatistics').then(() => close())}
         />
-        <NavLink
-          label={t('rmmStatistics')}
-          leftSection={<IconFilePencil size={'1rem'} stroke={1.5} />}
-          onClick={() => router.push('/rmmStatistics').then(() => close())}
-        />
 
         <div style={{ marginTop: '20px' }} />
         <NavLink
