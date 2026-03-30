@@ -13,7 +13,7 @@ function isOfferAcceptedEvent(log: ethers.Log) {
   try {
     const decodedLog = YamInterface.parseLog(log)
     return decodedLog?.name === 'OfferAccepted'
-  } catch (error) {
+  } catch {
     return false
   }
 }

@@ -7,14 +7,21 @@ const { version } = require('./package.json')
 /** @type { NextConfig } */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    outputStandalone: true,
-  },
+  output: 'standalone',
   images: {
-    domains: ['realt.co', 'static.debank.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'realt.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.debank.com',
+      },
+    ],
   },
-  publicRuntimeConfig: {
-    version,
+  env: {
+    NEXT_PUBLIC_APP_VERSION: version,
   },
 }
 

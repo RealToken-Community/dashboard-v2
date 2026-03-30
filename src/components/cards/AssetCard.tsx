@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import Image from 'next/image'
 
-import { Badge, Card, Grid, Group } from '@mantine/core'
+import { Badge, Card, Grid, Group, Tooltip } from '@mantine/core'
 
 import moment from 'moment'
 
@@ -70,6 +70,10 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
   const totalInvestment = props.value.totalInvestment
 
   const fullyRentedAPR = useFullyRentedAPR(props.value)
+  const ownershipPercent =
+    props.value.totalTokens > 0
+      ? (props.value.amount / props.value.totalTokens) * 100
+      : 0
 
   return (
     <Card
@@ -80,7 +84,7 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
       className={props.onClick ? styles.clickable : undefined}
       onClick={() => props.onClick?.(props.value.id)}
     >
-      <Card.Section>
+      <Card.Section className={styles.imageSection}>
         <div
           className={
             styles.imageContainer + ' ' + (isDisabled ? styles.disabled : '')
@@ -89,12 +93,29 @@ const PropertyCardComponent: FC<PropertyCardProps> = (props) => {
         >
           <Image
             src={props.value.imageLink[0]}
-            width={400}
-            height={300}
-            objectFit={'cover'}
+            fill={true}
+            sizes={'(max-width: 768px) 100vw, 33vw'}
+            style={{ objectFit: 'cover' }}
             alt={props.value.fullName}
           />
         </div>
+        {props.value.balance.rmm.amount > 0 ? (
+          <div className={styles.rmmBadge}>{'RMM'}</div>
+        ) : null}
+        <Tooltip
+          withArrow={true}
+          multiline={true}
+          w={260}
+          position={'top-end'}
+          label={t('ownershipPercentTooltip', {
+            owned: tNumbers('decimal', { value: props.value.amount }),
+            total: tNumbers('integer', { value: props.value.totalTokens }),
+          })}
+        >
+          <div className={styles.ownershipBadge}>
+            {tNumbers('percent', { value: ownershipPercent })}
+          </div>
+        </Tooltip>
       </Card.Section>
 
       <Group justify={'space-between'} mt={'md'}>

@@ -20,15 +20,21 @@ const getAddressesBalances = async (
   let totalAmount = 0
   try {
     if (!contractAddress) {
-      consoleWarnOnError && console.error('Invalid contract address')
+      if (consoleWarnOnError) {
+        console.error('Invalid contract address')
+      }
       return totalAmount
     }
     if (!addressList?.length) {
-      consoleWarnOnError && console.error('Invalid address list')
+      if (consoleWarnOnError) {
+        console.error('Invalid address list')
+      }
       return totalAmount
     }
     if (!provider) {
-      consoleWarnOnError && console.error('Invalid providers')
+      if (consoleWarnOnError) {
+        console.error('Invalid providers')
+      }
       return totalAmount
     }
 
@@ -41,7 +47,9 @@ const getAddressesBalances = async (
         walletBalanceProviderAddress = AaveV3Ethereum.WALLET_BALANCE_PROVIDER
         break
       default:
-        consoleWarnOnError && console.error('Invalid provider')
+        if (consoleWarnOnError) {
+          console.error('Invalid provider')
+        }
         return totalAmount
     }
 

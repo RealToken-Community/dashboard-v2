@@ -16,6 +16,13 @@ const rootReducer = combineReducers({
 
 const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Large wallet/token payloads can be slow to scan in dev.
+        warnAfter: 128,
+      },
+    }),
 })
 
 export default store

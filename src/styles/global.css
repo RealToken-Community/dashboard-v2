@@ -1,0 +1,17 @@
+:root {
+  --mantine-color-body: #f8f9fa;
+  --mantine-color-text: #1a1b1e;
+}
+
+html[data-mantine-color-scheme='dark'] {
+  --mantine-color-body: #111827;
+  --mantine-color-text: #f3f4f6;
+}
+
+html,
+body,
+#__next {
+  min-height: 100%;
+  background-color: var(--mantine-color-body, #111827);
+  color: var(--mantine-color-text, #1a1b1e);
+}

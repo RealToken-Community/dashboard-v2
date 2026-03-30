@@ -1,11 +1,16 @@
 {
   "name": "realtoken-dashboard-v2",
-  "version": "2.4.2",
+  "version": "2.4.4",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.1.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
     "typecheck": "tsc --noEmit",
     "prettier:check": "prettier --check src/.",
     "prettier:format": "prettier --write src/.",
@@ -18,7 +23,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.13.8",
-    "@bgd-labs/aave-address-book": "^4.21.0",
+    "@bgd-labs/aave-address-book": "^4.44.22",
     "@mantine/core": "^7.13.4",
     "@mantine/dates": "^7.13.4",
     "@mantine/form": "^7.13.4",
@@ -28,11 +33,11 @@
     "@realtoken/realt-commons": "1.4.20",
     "@reduxjs/toolkit": "^2.8.2",
     "@socialgouv/matomo-next": "^1.9.2",
-    "@uniswap/sdk-core": "^7.7.2",
-    "@uniswap/v3-sdk": "^3.25.2",
     "@tabler/icons-react": "^3.34.1",
+    "@uniswap/sdk-core": "^7.7.2",
+    "@uniswap/v3-sdk": "^3.27.0",
     "@web3-react/core": "^8.2.3",
-    "cookies-next": "^2.1.2",
+    "cookies-next": "^6.1.1",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
     "del-cli": "^6.0.0",
@@ -43,7 +48,7 @@
     "jotai": "^1.13.1",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
-    "next": "12.1.5",
+    "next": "^16.1.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^12.3.1",
@@ -60,10 +65,10 @@
     "@types/react-dom": "18.2.19",
     "@types/react-redux": "^7.1.34",
     "@types/redux": "^3.6.0",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^12.3.7",
+    "@typescript-eslint/eslint-plugin": "^8.56.0",
+    "@typescript-eslint/parser": "^8.56.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16.1.6",
     "eslint-config-prettier": "^9.1.0",
     "postcss": "^8.5.3",
     "postcss-preset-mantine": "^1.17.0",
@@ -72,7 +77,13 @@
     "sass": "^1.89.0",
     "typescript": "^5.8.3"
   },
+  "resolutions": {
+    "cookie": "^0.7.0",
+    "ws": "^8.17.1"
+  },
   "overrides": {
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "cookie": "^0.7.0",
+    "ws": "^8.17.1"
   }
 }

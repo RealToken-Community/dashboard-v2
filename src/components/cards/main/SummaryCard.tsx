@@ -31,6 +31,8 @@ export const SummaryCard: FC<SummaryCardProps> = ({ otherAssetsData }) => {
 
   const stableDepositValue = rmmDetails.stableDeposit
   const stableDebtValue = rmmDetails.stableDebt
+  const realtokensValueExcludingRmm =
+    realtokensValue.total - realtokensValue.rmm
 
   const rwaValue = otherAssetsData?.rwa?.value ?? 0
   const regValue = otherAssetsData?.reg?.value ?? 0
@@ -42,7 +44,7 @@ export const SummaryCard: FC<SummaryCardProps> = ({ otherAssetsData }) => {
   // Change the fill color of the bolt icon based on the power size (filled if > 3 = > 1000)
   const iconPowerFillColor = additionnalPowerSize > 3 ? 'orange' : 'none'
   const totalNetValue =
-    realtokensValue.total +
+    realtokensValueExcludingRmm +
     stableDepositValue +
     rwaValue +
     reUsdValue +
@@ -58,7 +60,7 @@ export const SummaryCard: FC<SummaryCardProps> = ({ otherAssetsData }) => {
         </Text>
         <CurrencyField
           label={t('realtokenValue')}
-          value={realtokensValue.total}
+          value={realtokensValueExcludingRmm}
         />
         {transfersIsLoaded ? (
           <CurrencyField

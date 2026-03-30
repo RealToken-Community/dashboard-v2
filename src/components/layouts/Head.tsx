@@ -3,8 +3,6 @@ import { FC } from 'react'
 import { default as NextHead } from 'next/head'
 import { StaticImageData } from 'next/image'
 
-import { ColorSchemeScript } from '@mantine/core'
-
 type HeadProps = {
   title: string
   description: string
@@ -22,7 +20,6 @@ export const Head: FC<HeadProps> = ({ title, description, favicon }) => {
         />
         <meta name={'Description'} content={description} />
         <link rel={'icon'} href={favicon.src} />
-        <ColorSchemeScript />
       </NextHead>
     </div>
   )

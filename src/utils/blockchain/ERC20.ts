@@ -18,7 +18,7 @@ function isTransferEvent(log: ethers.Log) {
   try {
     const decodedLog = ERC20Interface.parseLog(log)
     return decodedLog?.name === 'Transfer'
-  } catch (error) {
+  } catch {
     return false
   }
 }
