@@ -115,7 +115,7 @@ jobs:
             PITSBI_API_VERSION='api' \
             PITSBI_API_GET_LASTUPDATE='last_get_realTokens_communityDashboard' \
             PITSBI_API_GET_ALLTOKENS='realTokens_communityDashboard' \
-            MATOMO_URL="https://data.$DOMAIN_URL" \
+            MATOMO_URL="https://data.$DOMAIN_URL/" \
             MATOMO_SITE_ID="$MATOMO_SITE_ID" \
             RPC_URLS_ETH_MAINNET="$RPC_URLS_ETH_MAINNET" \
             RPC_URLS_GNOSIS_MAINNET="$RPC_URLS_GNOSIS_MAINNET" \

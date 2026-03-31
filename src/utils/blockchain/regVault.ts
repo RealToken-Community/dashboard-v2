@@ -36,9 +36,7 @@ const getAddressesLockedBalances = async (
   try {
     // Check parameters consistency
     if (!contractsAddressesAbiFunctionnameByProvider?.length) {
-      if (consoleWarnOnError) {
-        console.warn('Invalid contracts addresses')
-      }
+      consoleWarnOnError && console.warn('Invalid contracts addresses')
       return totalAmount
     }
     // Sum all contractsAddressesByProvider lengths using reduce
@@ -54,23 +52,18 @@ const getAddressesLockedBalances = async (
       )
     // Nothing to do if not any contract addresse(s)/abi(s)/function name(s) provided
     if (!contractAddressesSum) {
-      if (consoleWarnOnError) {
+      consoleWarnOnError &&
         console.error(
           'Invalid contracts addresses sum (no contract addresse(s)/abi(s)/function name(s))',
         )
-      }
       return totalAmount
     }
     if (!addressList?.length) {
-      if (consoleWarnOnError) {
-        console.error('Invalid address list')
-      }
+      consoleWarnOnError && console.error('Invalid address list')
       return totalAmount
     }
     if (!providers?.length) {
-      if (consoleWarnOnError) {
-        console.error('Invalid providers')
-      }
+      consoleWarnOnError && console.error('Invalid providers')
       return totalAmount
     }
     // Convert addressList to object once for all providers
@@ -82,18 +75,15 @@ const getAddressesLockedBalances = async (
       (provider: JsonRpcProvider, providerIdx) => {
         if (!contractsAddressesAbiFunctionnameByProvider[providerIdx]?.length) {
           // No contract(s) for this provider
-          if (consoleWarnOnError) {
-            console.warn('No contract(s) for this provider')
-          }
+          consoleWarnOnError && console.warn('No contract(s) for this provider')
           return []
         }
         return contractsAddressesAbiFunctionnameByProvider[providerIdx].map(
           ([contractAddress, abi, functionName]) => {
             // Must have 3 elements: contractAddress, abi, functionName
             if (!contractAddress || !abi || !functionName) {
-              if (consoleWarnOnError) {
+              consoleWarnOnError &&
                 console.warn('ABI, contract address or function name missing')
-              }
               return null
             }
             const RegVaultGetUserGlobalStateContract = new Contract(

@@ -39,7 +39,6 @@ import { MantineProviders } from 'src/providers'
 import InitStoreProvider from 'src/providers/InitStoreProvider'
 import { initializeProviders } from 'src/repositories/RpcProvider'
 import store from 'src/store/store'
-import 'src/styles/global.css'
 
 // Matomo property added to window object
 declare global {
@@ -62,13 +61,6 @@ type AppProps = NextAppProps & {
   }
   GnosisRpcUrl?: string
   EthereumRpcUrl?: string
-}
-
-function sanitizeColorScheme(
-  value: unknown,
-  fallback: MantineColorScheme = 'light',
-): MantineColorScheme {
-  return value === 'dark' || value === 'light' ? value : fallback
 }
 
 const queryClient = new QueryClient({})
@@ -110,6 +102,7 @@ const App = ({
 
   // Event tracking
   useEffect(() => {
+    // eslint-disable-next-line no-underscore-dangle
     if (!window._paq) {
       // Note: Triggered twice on page load when using strict mode in DEV
       initMatomoNext({
@@ -202,7 +195,6 @@ const App = ({
 App.getInitialProps = async ({ ctx }: { ctx: GetServerSidePropsContext }) => {
   // Call initializeProviders to get custom RPC URLs
   const providers = await initializeProviders()
-  const rawColorScheme = getCookie('mantine-color-scheme', ctx)
 
   return {
     env: {
@@ -212,7 +204,7 @@ App.getInitialProps = async ({ ctx }: { ctx: GetServerSidePropsContext }) => {
       RPC_URLS_ETH_MAINNET: process.env.RPC_URLS_ETH_MAINNET,
       RPC_URLS_GNOSIS_MAINNET: process.env.RPC_URLS_GNOSIS_MAINNET,
     },
-    colorScheme: sanitizeColorScheme(rawColorScheme, 'light'),
+    colorScheme: getCookie('mantine-color-scheme', ctx) || 'dark',
     locale: getCookie('react-i18next', ctx) || 'fr',
     GnosisRpcUrl: providers.GnosisRpcUrl,
     EthereumRpcUrl: providers.EthereumRpcUrl,

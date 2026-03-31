@@ -1,7 +1,5 @@
 import { default as common } from './common.json'
 
-const locale = {
+export default {
   common,
 }
-
-export default locale

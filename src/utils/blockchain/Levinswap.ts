@@ -12,7 +12,7 @@ function isEventName(log: ethers.Log, name: string) {
   try {
     const decodedLog = LevinswapInterface.parseLog(log)
     return decodedLog?.name === name
-  } catch {
+  } catch (error) {
     return false
   }
 }

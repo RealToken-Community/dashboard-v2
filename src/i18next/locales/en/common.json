@@ -3,8 +3,7 @@
     "title": "Realtoken Dashboard",
     "transactions": "My transactions",
     "histories": "Changes history",
-    "yamStatistics": "YAM statistics (Secondary market)",
-    "rmmStatistics": "RMM statistics (Lending)",
+    "yamStatistics": "Secondary market statistics (Yam)",
     "documentation": "Community Wiki",
     "home": "Home",
     "realt": "RealT",
@@ -32,19 +31,9 @@
     "options": "Options",
     "includesEth": "Includes Ethereum",
     "includesLevinSwap": "Includes LevinSwap",
+    "includesRmmV2": "Includes RMM V2",
     "includesOtherAssets": "Includes other assets",
-    "displayAdditionalData": "Display additional data",
-    "dataHealth": "Sources health",
-    "dataSteps": {
-      "walletRpc": "Wallet balance (RPC)",
-      "api": "API",
-      "rmmGraph": "RMM (Graph)"
-    },
-    "status": {
-      "ok": "OK",
-      "loading": "Loading",
-      "error": "Error"
-    }
+    "displayAdditionalData": "Display additional data"
   },
   "walletButton": {
     "connectWallet": "Connect wallet",
@@ -248,7 +237,6 @@
     "propertyValue": "Property value",
     "rentStartDate": "Rent Start",
     "fullyRentedEstimation": "Fully rented APR",
-    "ownershipPercentTooltip": "Ownership share for this property: {{owned}} token(s) out of {{total}} total token(s).",
     "rentNotStarted": "Rent not started yet",
     "isRmmAvailable": "RMM",
     "rentStatus": {
@@ -493,35 +481,6 @@
       "subsidized": "Subsidized",
       "fullySubsidized": "Fully subsidized",
       "notSubsidized": "Not subsidized"
-    }
-  },
-  "rmmStatisticsPage": {
-    "home": "Home",
-    "title": "RMM statistics",
-    "window": "Window",
-    "dailyTitle": "Daily flows (stablecoins)",
-    "previous": "Previous period",
-    "next": "Next period",
-    "tx": "tx",
-    "loading": "Loading...",
-    "noData": "No data available",
-    "error": "Failed to load RMM statistics",
-    "cards": {
-      "supply": "Deposits",
-      "withdraw": "Withdrawals",
-      "borrow": "Borrows",
-      "repay": "Repays",
-      "liquidation": "Liquidations"
-    },
-    "columns": {
-      "date": "Date",
-      "supply": "Deposits",
-      "withdraw": "Withdrawals",
-      "borrow": "Borrows",
-      "repay": "Repays",
-      "liquidation": "Liquidations",
-      "net": "Net",
-      "diffLiquidity": "Remaining liquidity diff"
     }
   },
   "initialTransfersLoader": {

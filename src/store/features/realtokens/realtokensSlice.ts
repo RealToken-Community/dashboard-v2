@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux'
+
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
 import { forEach } from 'lodash'
@@ -14,7 +16,6 @@ interface RealtokenInitialStateType {
   isLoading: boolean
   isLoadingExtraData: boolean
   isExtraDataLoaded: boolean
-  isApiHealthy: boolean
 }
 
 const realtokenInitialState: RealtokenInitialStateType = {
@@ -22,7 +23,6 @@ const realtokenInitialState: RealtokenInitialStateType = {
   isLoading: false,
   isLoadingExtraData: false,
   isExtraDataLoaded: false,
-  isApiHealthy: true,
 }
 // Filter function for product types
 export const filterProductType = (item: APIRealToken) =>
@@ -35,8 +35,6 @@ export const filterProductType = (item: APIRealToken) =>
 // DISPATCH TYPE
 export const realtokensChangedDispatchType = 'realtokens/realtokensChanged'
 export const realtokensIsLoadingDispatchType = 'realtokens/realtokensIsLoading'
-export const realtokensApiHealthChangedDispatchType =
-  'realtokens/realtokensApiHealthChanged'
 
 // ACTIONS
 export const realtokensChanged = createAction<RealToken[]>(
@@ -44,9 +42,6 @@ export const realtokensChanged = createAction<RealToken[]>(
 )
 export const realtokensIsLoading = createAction<boolean>(
   realtokensIsLoadingDispatchType,
-)
-export const realtokensApiHealthChanged = createAction<boolean>(
-  realtokensApiHealthChangedDispatchType,
 )
 
 // DISPATCH TYPE
@@ -108,10 +103,8 @@ export function fetchRealtokens() {
         type: realtokensChangedDispatchType,
         payload: data.filter(filterProductType),
       })
-      dispatch({ type: realtokensApiHealthChangedDispatchType, payload: true })
     } catch (error) {
       console.log(error)
-      dispatch({ type: realtokensApiHealthChangedDispatchType, payload: false })
     } finally {
       dispatch({ type: realtokensIsLoadingDispatchType, payload: false })
     }
@@ -183,9 +176,6 @@ export const realtokensReducers = createReducer(
     })
     builder.addCase(realtokensExtraDataLoaded, (state, action) => {
       state.isExtraDataLoaded = action.payload
-    })
-    builder.addCase(realtokensApiHealthChanged, (state, action) => {
-      state.isApiHealthy = action.payload
     })
   },
 )

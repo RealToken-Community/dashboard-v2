@@ -1,74 +1,27 @@
 import { ethers } from 'ethers'
 import _sumBy from 'lodash/sumBy'
 
-import { RealToken } from 'src/types/RealToken'
 import { UsdcAddress, WxdaiAddress } from 'src/utils/blockchain/Stablecoin'
 import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
 import { initializeProviders } from './RpcProvider'
-import { getRmmPositions } from './subgraphs/queries/rmm.queries'
+import { RmmPosition, getRmmPositions } from './subgraphs/queries/rmm.queries'
 
 export const RmmRepository = {
-  async getPositions(addressList: string[], realtokens: RealToken[]) {
-    const [rmmPositionsResult, stableBalancesResult] = await Promise.allSettled(
-      [
-        getRmmPositions(addressList),
-        Promise.all(addressList.map(getBalanceOfStableRMM3)),
-      ],
+  async getPositions(
+    addressList: string[],
+    options?: { includesRmmV2?: boolean },
+  ) {
+    const result = await getRmmPositions(addressList, options)
+    const merged = mergeWalletsPositions(result)
+    const stableRMM3 = await Promise.all(
+      addressList.map(getBalanceOfStableRMM3),
     )
-
-    const stableRMM3 =
-      stableBalancesResult.status === 'fulfilled'
-        ? stableBalancesResult.value
-        : []
-    if (stableBalancesResult.status === 'rejected') {
-      console.warn(
-        'Failed to fetch stable RMM balances, using empty fallback',
-        stableBalancesResult.reason,
-      )
-    }
-
-    const rmmPositions =
-      rmmPositionsResult.status === 'fulfilled' ? rmmPositionsResult.value : []
-    if (rmmPositionsResult.status === 'rejected') {
-      console.warn(
-        'Failed to fetch RMM graph positions, using empty fallback',
-        rmmPositionsResult.reason,
-      )
-    }
-
-    const tokenPriceByAddress = new Map<string, number>()
-    realtokens.forEach((item) => {
-      const gnosisContract = item.gnosisContract?.toLowerCase()
-      if (gnosisContract) {
-        tokenPriceByAddress.set(gnosisContract, item.tokenPrice)
-      }
-      const wrapperAddress = item.blockchainAddresses?.xDai?.rmmV3WrapperAddress
-      if (wrapperAddress && String(wrapperAddress) !== '0') {
-        tokenPriceByAddress.set(
-          String(wrapperAddress).toLowerCase(),
-          item.tokenPrice,
-        )
-      }
-    })
-
-    const wrapperCollateralValue = rmmPositions.reduce((acc, position) => {
-      const tokenPrice = tokenPriceByAddress.get(position.token) ?? 0
-      return acc + position.amount * tokenPrice
-    }, 0)
-    if (process.env.NODE_ENV !== 'production') {
-      console.info('[RMM_WRAPPER_DEBUG] Collateral valuation', {
-        positions: rmmPositions.length,
-        wrapperCollateralValue,
-      })
-    }
-
-    const merged: WalletRmmPosition[] = []
 
     merged.push({
       token: UsdcAddress,
       name: 'USD//C on xDai',
-      amount: _sumBy(stableRMM3, 'aUSDC') + wrapperCollateralValue,
+      amount: _sumBy(stableRMM3, 'aUSDC'),
       debt: _sumBy(stableRMM3, 'vUSDC'),
     })
 
@@ -88,6 +41,23 @@ export interface WalletRmmPosition {
   name: string
   amount: number
   debt: number
+}
+
+function mergeWalletsPositions(wallets: RmmPosition[]) {
+  return wallets.reduce<WalletRmmPosition[]>((acc, wallet) => {
+    wallet.positions.forEach((position) => {
+      const existingPosition = acc.find((b) => b.token === position.token)
+
+      if (existingPosition) {
+        existingPosition.amount += position.amount
+        existingPosition.debt += position.debt
+      } else {
+        acc.push({ ...position })
+      }
+    })
+
+    return acc
+  }, [])
 }
 
 const ABI = ['function balanceOf(address) view returns (uint256)']

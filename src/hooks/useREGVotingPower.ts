@@ -92,13 +92,9 @@ export const useRegVotingPower = () => {
   const addressList = useSelector(selectUserAddressList)
 
   useEffect(() => {
-    if (!addressList.length) return
-
-    getRegVotingPower(addressList)
-      .then(setRegVotingPower)
-      .catch((error) => {
-        console.warn('Failed to load REG voting power data', error)
-      })
+    if (addressList.length) {
+      getRegVotingPower(addressList).then(setRegVotingPower)
+    }
   }, [addressList])
 
   return regVotingPower
