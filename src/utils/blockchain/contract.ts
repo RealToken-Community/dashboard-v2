@@ -52,7 +52,9 @@ const batchCallOneContractOneFunctionMultipleParams = async (
     }
     do {
       // wait if attempt > 0 and grow wait time for each attempt
-      attempt && wait(BATCH_WAIT_BETWEEN_ATTEMPTS_MS * attempt)
+      if (attempt > 0) {
+        await wait(BATCH_WAIT_BETWEEN_ATTEMPTS_MS * attempt)
+      }
       attempt++
       try {
         let results: object[] = []
@@ -71,18 +73,18 @@ const batchCallOneContractOneFunctionMultipleParams = async (
         for (let i = 0; i < chunks.length; i++) {
           const chunkPromises: object[] = []
           const _argsChunk = chunks[i]
-          _argsChunk.forEach(async (_args) => {
+          _argsChunk.forEach((_args) => {
             chunkPromises.push(contractCall(_contract, _methodName, _args))
           })
           const chunkResults = await Promise.all(chunkPromises)
           results = results.concat(chunkResults)
           // wait between remaining chunks
           if (i < chunks.length - 1) {
-            wait(BATCH_WAIT_BETWEEN_CHUNKS_MS)
+            await wait(BATCH_WAIT_BETWEEN_CHUNKS_MS)
           }
         }
         return results
-      } catch (error) {
+      } catch {
         if (consoleWarnOnError) {
           const chainId =
             (await _contract?.runner?.provider?.getNetwork())?.chainId ??

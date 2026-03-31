@@ -17,7 +17,7 @@ import {
 import { DatePickerInput } from '@mantine/dates'
 import { useDisclosure } from '@mantine/hooks'
 import {
-  IconBuildingBank,
+  // IconBuildingBank,
   IconCash,
   IconCircleOff,
   IconClock,
@@ -35,16 +35,17 @@ import {
   IconTablePlus,
 } from '@tabler/icons-react'
 
-import { setCookie } from 'cookies-next'
-
 import { TransferDatabaseService } from 'src/repositories/transfers/TransferDatabase'
+import {
+  selectRealtokensApiHealth,
+  selectRealtokensIsLoading,
+} from 'src/store/features/realtokens/realtokensSelector'
 import {
   selectUserCurrency,
   selectUserDisplayAdditionalData,
   selectUserIncludesEth,
   selectUserIncludesLevinSwap,
   selectUserIncludesOtherAssets,
-  selectUserIncludesRmmV2,
   selectUserRentCalculation,
   selectVersion,
 } from 'src/store/features/settings/settingsSelector'
@@ -54,9 +55,13 @@ import {
   userIncludesEthChanged,
   userIncludesLevinSwapChanged,
   userIncludesOtherAssetsChanged,
-  userIncludesRmmV2Changed,
   userRentCalculationChanged,
 } from 'src/store/features/settings/settingsSlice'
+import {
+  selectRmmGraphHealth,
+  selectWalletRpcHealth,
+  selectWalletsIsLoading,
+} from 'src/store/features/wallets/walletsSelector'
 import { Currency } from 'src/types/Currencies'
 import {
   RentCalculation,
@@ -65,7 +70,7 @@ import {
 import { expiresLocalStorageCaches } from 'src/utils/useCache'
 
 const ColorSchemeMenuItem: FC = () => {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme()
+  const { colorScheme, setColorScheme } = useMantineColorScheme()
 
   const { t } = useTranslation('common', { keyPrefix: 'settings' })
 
@@ -76,7 +81,7 @@ const ColorSchemeMenuItem: FC = () => {
         color={'brand'}
         fullWidth={true}
         value={colorScheme}
-        onChange={() => toggleColorScheme()}
+        onChange={(value) => setColorScheme(value as 'light' | 'dark')}
         data={[
           {
             value: 'light',
@@ -212,13 +217,9 @@ const LanguageSelect: FC = () => {
   const updateLocale = useCallback(
     (updatedLocale: string) => {
       if (i18n.language !== updatedLocale) {
-        setCookie(
-          'react-i18next',
-          updatedLocale,
-          {
-            maxAge: 60 * 60 * 24 * 365,
-          } as Parameters<typeof setCookie>[2],
-        )
+        document.cookie = `react-i18next=${encodeURIComponent(updatedLocale)}; Max-Age=${
+          60 * 60 * 24 * 365
+        }; Path=/`
         i18n.changeLanguage(updatedLocale)
       }
     },
@@ -275,20 +276,67 @@ const FetchDataSettings: FC = () => {
 
   const userIncludesEth = useSelector(selectUserIncludesEth)
   const userIncludesLevinSwap = useSelector(selectUserIncludesLevinSwap)
-  const userIncludesRmmV2 = useSelector(selectUserIncludesRmmV2)
   const userIncludesOtherAssets = useSelector(selectUserIncludesOtherAssets)
   const userDisplayAdditionalData = useSelector(selectUserDisplayAdditionalData)
+  const isWalletsLoading = useSelector(selectWalletsIsLoading)
+  const isRealtokensLoading = useSelector(selectRealtokensIsLoading)
+  const isWalletRpcHealthy = useSelector(selectWalletRpcHealth)
+  const isApiHealthy = useSelector(selectRealtokensApiHealth)
+  const isRmmGraphHealthy = useSelector(selectRmmGraphHealth)
 
   const setUserIncludesEth = (value: boolean) =>
     dispatch(userIncludesEthChanged(value))
   const setUserIncludesLevinSwap = (value: boolean) =>
     dispatch(userIncludesLevinSwapChanged(value))
-  const setUserIncludesRmmV2 = (value: boolean) =>
-    dispatch(userIncludesRmmV2Changed(value))
   const setUserIncludesOtherAssets = (value: boolean) =>
     dispatch(userIncludesOtherAssetsChanged(value))
   const setUserDisplayAdditionalData = (value: boolean) =>
     dispatch(userDisplayAdditionalDataChanged(value))
+
+  type HealthStatus = 'ok' | 'loading' | 'error'
+  const getHealthStatus = (
+    isLoading: boolean,
+    isHealthy: boolean,
+  ): HealthStatus => {
+    if (isLoading) return 'loading'
+    return isHealthy ? 'ok' : 'error'
+  }
+
+  const StatusRow = ({
+    label,
+    status,
+  }: {
+    label: string
+    status: HealthStatus
+  }) => {
+    const colors = {
+      ok: '#2f9e44',
+      loading: '#f08c00',
+      error: '#e03131',
+    }
+    return (
+      <Box
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          margin: '2px 8px',
+          fontSize: 13,
+        }}
+      >
+        <Box
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: '50%',
+            backgroundColor: colors[status],
+          }}
+        />
+        <Box style={{ flex: 1 }}>{label}</Box>
+        <Box c={'dimmed'}>{t(`status.${status}`)}</Box>
+      </Box>
+    )
+  }
 
   return (
     <>
@@ -312,14 +360,6 @@ const FetchDataSettings: FC = () => {
         style={{ margin: '4px 8px' }}
       />
       <Switch
-        checked={userIncludesRmmV2}
-        onChange={(event) => setUserIncludesRmmV2(event.currentTarget.checked)}
-        onLabel={<IconBuildingBank size={16} />}
-        offLabel={<IconCircleOff size={16} />}
-        label={t('includesRmmV2')}
-        style={{ margin: '4px 8px' }}
-      />
-      <Switch
         checked={userIncludesOtherAssets}
         onChange={(event) =>
           setUserIncludesOtherAssets(event.currentTarget.checked)
@@ -339,6 +379,19 @@ const FetchDataSettings: FC = () => {
         offLabel={<IconTableMinus size={16} />}
         style={{ margin: '4px 8px' }}
       />
+      <Menu.Label pb={0}>{t('dataHealth')}</Menu.Label>
+      <StatusRow
+        label={t('dataSteps.walletRpc')}
+        status={getHealthStatus(isWalletsLoading, isWalletRpcHealthy)}
+      />
+      <StatusRow
+        label={t('dataSteps.api')}
+        status={getHealthStatus(isRealtokensLoading, isApiHealthy)}
+      />
+      <StatusRow
+        label={t('dataSteps.rmmGraph')}
+        status={getHealthStatus(isWalletsLoading, isRmmGraphHealthy)}
+      />
     </>
   )
 }
@@ -353,7 +406,7 @@ const RefreshDataButton: FC = () => {
       expiresLocalStorageCaches()
       await TransferDatabaseService.dropDatabase()
       window.location.reload()
-    } catch (error) {
+    } catch {
       setLoading(false)
     }
   }

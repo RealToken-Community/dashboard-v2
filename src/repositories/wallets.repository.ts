@@ -25,7 +25,6 @@ export const WalletsRepository = {
     options: {
       includesEth?: boolean
       includesLevinSwap?: boolean
-      includesRmmV2?: boolean
     } = {},
   ): Promise<WalletBalances> =>
     getWalletsBalances(addressList, realtokens, options),
@@ -37,18 +36,46 @@ async function getWalletsBalances(
   options: {
     includesEth?: boolean
     includesLevinSwap?: boolean
-    includesRmmV2?: boolean
   } = {},
 ) {
-  const [realtokenBalances, rmmBalances, levinSwapBalances] = await Promise.all(
-    [
+  const [realtokenBalancesResult, rmmBalancesResult, levinSwapBalancesResult] =
+    await Promise.allSettled([
       getRealtokenBalances(addressList, { includesEth: options.includesEth }),
-      getRmmBalances(addressList, { includesRmmV2: options.includesRmmV2 }),
+      getRmmBalances(addressList),
       getLevinSwapBalances(addressList, realtokens, {
         includesLevinSwap: options.includesLevinSwap,
       }),
-    ],
-  )
+    ])
+
+  const realtokenBalances =
+    realtokenBalancesResult.status === 'fulfilled'
+      ? realtokenBalancesResult.value
+      : { gnosis: [], ethereum: [] }
+  const rmmBalances =
+    rmmBalancesResult.status === 'fulfilled' ? rmmBalancesResult.value : []
+  const levinSwapBalances =
+    levinSwapBalancesResult.status === 'fulfilled'
+      ? levinSwapBalancesResult.value
+      : []
+
+  if (realtokenBalancesResult.status === 'rejected') {
+    console.warn(
+      'Failed to fetch wallet realtoken balances, using empty fallback',
+      realtokenBalancesResult.reason,
+    )
+  }
+  if (rmmBalancesResult.status === 'rejected') {
+    console.warn(
+      'Failed to fetch RMM graph balances, using empty fallback',
+      rmmBalancesResult.reason,
+    )
+  }
+  if (levinSwapBalancesResult.status === 'rejected') {
+    console.warn(
+      'Failed to fetch LevinSwap balances, using empty fallback',
+      levinSwapBalancesResult.reason,
+    )
+  }
 
   return {
     [WalletType.Gnosis]: mergeWalletsBalances(realtokenBalances.gnosis),

@@ -212,9 +212,13 @@ export const useREG = () => {
   const currenciesRates = useSelector(selectCurrencyRates)
 
   useEffect(() => {
-    if (addressList.length) {
-      getREG(addressList, userRate, currenciesRates, includeETH).then(setReg)
-    }
+    if (!addressList.length) return
+
+    getREG(addressList, userRate, currenciesRates, includeETH)
+      .then(setReg)
+      .catch((error) => {
+        console.warn('Failed to load REG data', error)
+      })
   }, [addressList, userRate, currenciesRates, includeETH])
 
   return reg

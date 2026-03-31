@@ -31,6 +31,11 @@ To get a `THEGRAPH_API_KEY`, you need to create an account on [thegraph](https:/
    ```sh
    yarn dev
    ```
+5. Check the code
+   ```sh
+   yarn lint
+   yarn prettier:check
+   ```
 
 # Contact
 

@@ -1,35 +1,44 @@
 import { gql } from '@apollo/client'
 
+import { formatUnits } from 'ethers'
+
 import { useCacheWithLocalStorage } from 'src/utils/useCache'
 
-import { RMM2Client, RMM3WrapperClient } from '../clients'
+import { RMM3Client, RMM3WrapperClient } from '../clients'
 
-export async function getRmmBalances(
-  addressList: string[],
-  options: { includesRmmV2?: boolean } = {},
-) {
+export async function getRmmBalances(addressList: string[]) {
   const addresses = addressList.map((item) => item.toLowerCase())
-  const [resultRMM2, resultRMM3] = await Promise.all([
-    options.includesRmmV2
-      ? executeRMM2Query(addresses)
-      : Promise.resolve({ data: { users: [] } }),
-    executeRMM3Query(addresses),
-  ])
-  return formatBalances([...resultRMM2.data.users, ...resultRMM3.data.users])
+  const resultRMM3Wrapper = await executeRMM3WrapperQuery(addresses)
+  const balances = formatWrapperBalances([...resultRMM3Wrapper.data.users])
+  if (process.env.NODE_ENV !== 'production') {
+    console.info('[RMM_WRAPPER_DEBUG] RMM balances fetched', {
+      addresses: addresses.length,
+      wallets: balances.length,
+      nonEmptyWallets: balances.filter((wallet) => wallet.balances.length > 0)
+        .length,
+    })
+  }
+  return balances
 }
 
-export async function getRmmPositions(
-  addressList: string[],
-  options: { includesRmmV2?: boolean } = {},
-) {
+export async function getRmmPositions(addressList: string[]) {
   const addresses = addressList.map((item) => item.toLowerCase())
-  const [resultRMM2, resultRMM3] = await Promise.all([
-    options.includesRmmV2
-      ? executeRMM2Query(addresses)
-      : Promise.resolve({ data: { users: [] } }),
-    executeRMM3Query(addresses),
+  const [resultRMM3Pool, resultRMM3Wrapper] = await Promise.all([
+    executeRMM3PoolQuery(addresses),
+    executeRMM3WrapperQuery(addresses),
   ])
-  return formatPositions([...resultRMM2.data.users, ...resultRMM3.data.users])
+  const merged = mergeWalletsPositions([
+    ...formatPoolPositions([...resultRMM3Pool.data.users]),
+    ...formatWrapperPositions([...resultRMM3Wrapper.data.users]),
+  ])
+  if (process.env.NODE_ENV !== 'production') {
+    console.info('[RMM_WRAPPER_DEBUG] RMM positions fetched', {
+      addresses: addresses.length,
+      positions: merged.length,
+      uniqueTokens: new Set(merged.map((item) => item.token)).size,
+    })
+  }
+  return merged
 }
 
 export interface RmmPosition {
@@ -42,52 +51,52 @@ export interface RmmPosition {
   }[]
 }
 
-const executeRMM2Query = useCacheWithLocalStorage(
-  async (addressList: string[]) =>
-    RMM2Client().query<RmmResult>({
-      query: RmmQuery,
+const executeRMM3PoolQuery = useCacheWithLocalStorage(
+  async (addressList: string[]) => {
+    return RMM3Client().query<RmmPoolResult>({
+      query: RmmPoolQuery,
       variables: { addressList },
-    }),
+    })
+  },
   {
     duration: 1000 * 60 * 60 * 24, // 24 hours
     usePreviousValueOnError: true,
-    key: 'Rmm2Query',
+    key: 'Rmm3PoolQuery-v1',
   },
 )
 
-const executeRMM3Query = useCacheWithLocalStorage(
+const executeRMM3WrapperQuery = useCacheWithLocalStorage(
   async (addressList: string[]) => {
     const result = await RMM3WrapperClient().query<RmmWrapperResult>({
       query: RmmWrapperQuery,
       variables: { addressList },
     })
-
-    return {
-      data: {
-        users: result.data.users.map((user) => ({
-          id: user.id,
-          reserves: user.balances.map((balance) => ({
-            reserve: {
-              underlyingAsset: balance.token.address,
-              name: balance.token.name,
-              decimals: balance.token.decimals,
-            },
-            currentATokenBalance: balance.amount,
-            currentTotalDebt: '0',
-          })),
-        })),
-      },
-    }
+    return result
   },
   {
     duration: 1000 * 60 * 60 * 24, // 24 hours
     usePreviousValueOnError: true,
-    key: 'Rmm3Query',
+    key: 'Rmm3WrapperQuery-v3',
   },
 )
 
-const RmmQuery = gql`
-  query RmmQuery($addressList: [String]!) {
+interface RmmPoolResult {
+  users: {
+    id: string
+    reserves: {
+      reserve: {
+        underlyingAsset: string
+        name: string
+        decimals: number
+      }
+      currentATokenBalance: string
+      currentTotalDebt: string
+    }[]
+  }[]
+}
+
+const RmmPoolQuery = gql`
+  query RmmPoolQuery($addressList: [String]!) {
     users(where: { id_in: $addressList }) {
       id
       reserves(
@@ -107,21 +116,6 @@ const RmmQuery = gql`
     }
   }
 `
-
-interface RmmResult {
-  users: {
-    id: string
-    reserves: {
-      reserve: {
-        underlyingAsset: string
-        name: string
-        decimals: number
-      }
-      currentATokenBalance: string
-      currentTotalDebt: string
-    }[]
-  }[]
-}
 
 const RmmWrapperQuery = gql`
   query RmmQuery($addressList: [String]!) {
@@ -153,28 +147,75 @@ interface RmmWrapperResult {
   }[]
 }
 
-function formatBalances(users: RmmResult['users']) {
+function formatWrapperBalances(users: RmmWrapperResult['users']) {
   return users.map((user) => ({
     address: user.id,
-    balances: user.reserves.map((balance) => ({
-      token: balance.reserve.underlyingAsset,
-      amount:
-        parseInt(balance.currentATokenBalance) / 10 ** balance.reserve.decimals,
+    balances: user.balances.map((balance) => ({
+      token: balance.token.address.toLowerCase(),
+      amount: parseTokenAmount(balance.amount, balance.token.decimals),
     })),
   }))
 }
 
-function formatPositions(users: RmmResult['users']): RmmPosition[] {
+function formatPoolPositions(users: RmmPoolResult['users']): RmmPosition[] {
   return users.map((user) => ({
     address: user.id,
     positions: user.reserves.map((position) => ({
-      token: position.reserve.underlyingAsset,
+      token: position.reserve.underlyingAsset.toLowerCase(),
       name: position.reserve.name,
       amount:
-        parseInt(position.currentATokenBalance) /
+        parseFloat(position.currentATokenBalance) /
         10 ** position.reserve.decimals,
       debt:
-        parseInt(position.currentTotalDebt) / 10 ** position.reserve.decimals,
+        parseFloat(position.currentTotalDebt) / 10 ** position.reserve.decimals,
     })),
   }))
+}
+
+function formatWrapperPositions(
+  users: RmmWrapperResult['users'],
+): RmmPosition[] {
+  return users.map((user) => ({
+    address: user.id,
+    positions: user.balances.map((position) => ({
+      token: position.token.address.toLowerCase(),
+      name: position.token.name,
+      amount: parseTokenAmount(position.amount, position.token.decimals),
+      debt: 0,
+    })),
+  }))
+}
+
+function parseTokenAmount(rawAmount: string, decimals: number) {
+  try {
+    return Number(formatUnits(rawAmount, decimals))
+  } catch {
+    return 0
+  }
+}
+
+function mergeWalletsPositions(wallets: RmmPosition[]) {
+  const merged: Record<
+    string,
+    {
+      token: string
+      name: string
+      amount: number
+      debt: number
+    }
+  > = {}
+
+  wallets.forEach((wallet) => {
+    wallet.positions.forEach((position) => {
+      const key = position.token
+      if (!merged[key]) {
+        merged[key] = { ...position }
+      } else {
+        merged[key].amount += position.amount
+        merged[key].debt += position.debt
+      }
+    })
+  })
+
+  return Object.values(merged)
 }

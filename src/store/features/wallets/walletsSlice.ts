@@ -14,6 +14,8 @@ interface WalletsInitialStateType {
   balances: WalletBalances
   rmmPositions: WalletRmmPosition[]
   isLoading: boolean
+  isWalletRpcHealthy: boolean
+  isRmmGraphHealthy: boolean
 }
 
 const walletsInitialState: WalletsInitialStateType = {
@@ -25,12 +27,16 @@ const walletsInitialState: WalletsInitialStateType = {
   },
   rmmPositions: [],
   isLoading: false,
+  isWalletRpcHealthy: true,
+  isRmmGraphHealthy: true,
 }
 
 // DISPATCH TYPE
 const balancesChangedDispatchType = 'wallets/balancesChanged'
 const rmmPositionsChangedDispatchType = 'wallets/rmmPositionsChanged'
 const isLoadingDispatchType = 'wallets/isLoading'
+const walletRpcHealthChangedDispatchType = 'wallets/walletRpcHealthChanged'
+const rmmGraphHealthChangedDispatchType = 'wallets/rmmGraphHealthChanged'
 
 // ACTIONS
 const balancesChanged = createAction<WalletBalances>(
@@ -40,6 +46,12 @@ const rmmPositionsChanged = createAction<WalletRmmPosition[]>(
   rmmPositionsChangedDispatchType,
 )
 const balancesIsLoading = createAction<boolean>(isLoadingDispatchType)
+const walletRpcHealthChanged = createAction<boolean>(
+  walletRpcHealthChangedDispatchType,
+)
+const rmmGraphHealthChanged = createAction<boolean>(
+  rmmGraphHealthChangedDispatchType,
+)
 
 // THUNKS
 export function fetchWallets(realtokens: RealToken[]) {
@@ -50,18 +62,44 @@ export function fetchWallets(realtokens: RealToken[]) {
     const options = {
       includesEth: state.settings.includesEth,
       includesLevinSwap: state.settings.includesLevinSwap,
-      includesRmmV2: state.settings.includesRmmV2,
     }
 
     if (isLoading) return
     dispatch({ type: isLoadingDispatchType, payload: true })
     try {
-      const [balances, rmmPositions] = await Promise.all([
+      const [balancesResult, rmmPositionsResult] = await Promise.allSettled([
         WalletsRepository.getBalances(addressList, realtokens, options),
-        RmmRepository.getPositions(addressList, options),
+        RmmRepository.getPositions(addressList, realtokens),
       ])
-      dispatch({ type: balancesChangedDispatchType, payload: balances })
-      dispatch({ type: rmmPositionsChangedDispatchType, payload: rmmPositions })
+
+      if (balancesResult.status === 'fulfilled') {
+        dispatch({
+          type: balancesChangedDispatchType,
+          payload: balancesResult.value,
+        })
+        dispatch({ type: walletRpcHealthChangedDispatchType, payload: true })
+      } else {
+        console.warn(
+          'Failed to fetch wallets balances, keeping previous state',
+          balancesResult.reason,
+        )
+        dispatch({ type: walletRpcHealthChangedDispatchType, payload: false })
+      }
+
+      if (rmmPositionsResult.status === 'fulfilled') {
+        dispatch({
+          type: rmmPositionsChangedDispatchType,
+          payload: rmmPositionsResult.value,
+        })
+        dispatch({ type: rmmGraphHealthChangedDispatchType, payload: true })
+      } else {
+        console.warn(
+          'Failed to fetch RMM positions, using empty fallback',
+          rmmPositionsResult.reason,
+        )
+        dispatch({ type: rmmPositionsChangedDispatchType, payload: [] })
+        dispatch({ type: rmmGraphHealthChangedDispatchType, payload: false })
+      }
     } catch (error) {
       console.log(error)
     } finally {
@@ -92,5 +130,11 @@ export const walletsReducers = createReducer(walletsInitialState, (builder) => {
   })
   builder.addCase(balancesIsLoading, (state, action) => {
     state.isLoading = action.payload
+  })
+  builder.addCase(walletRpcHealthChanged, (state, action) => {
+    state.isWalletRpcHealthy = action.payload
+  })
+  builder.addCase(rmmGraphHealthChanged, (state, action) => {
+    state.isRmmGraphHealthy = action.payload
   })
 })

@@ -16,3 +16,8 @@ export const selectRealtokens = createSelector(
   (state: RootState) => state.realtokens,
   (realtokens) => realtokens.realtokens,
 )
+
+export const selectRealtokensApiHealth = createSelector(
+  (state: RootState) => state.realtokens,
+  (realtokens) => realtokens.isApiHealthy,
+)

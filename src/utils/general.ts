@@ -24,12 +24,17 @@ const fetchWithRetry = async (
     if (response.ok) {
       return response
     } else {
-      // Handle specific error cases if needed
-      // if (response.status === 401) throw ...
-      // if (response.status === 503) throw ...
       throw response
     }
   } catch (error) {
+    if (error instanceof Response) {
+      // Authentication/authorization errors are not transient.
+      if (error.status === 401 || error.status === 403) {
+        throw new Error(
+          `HTTP ${error.status} ${error.statusText} for URL: ${url}`,
+        )
+      }
+    }
     const errorMsg =
       error instanceof Error
         ? error.message

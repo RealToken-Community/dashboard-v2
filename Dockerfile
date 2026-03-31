@@ -14,6 +14,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+RUN yarn lint
+RUN yarn prettier:check
 RUN yarn build
 
 # 3. Runtime minimal
