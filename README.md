@@ -1,12 +1,5 @@
 # RealToken Dashboard V2
 
-## TODO
-
-- [x] Display assets in a table
-- [x] Allow to sort assets
-- [ ] Create Readme
-- [ ] Integrate CD/CI
-
 # Getting Started
 
 ## Requirements
@@ -31,12 +24,12 @@ To get a `THEGRAPH_API_KEY`, you need to create an account on [thegraph](https:/
    ```
 2. Install NPM packages
    ```sh
-   npm i
+   yarn
    ```
 3. Create the env file (instructions [here](#env))
 4. Start the application in dev mode
    ```sh
-   npm run dev
+   yarn dev
    ```
 
 # Contact
