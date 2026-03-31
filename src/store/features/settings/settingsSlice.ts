@@ -1,5 +1,3 @@
-import getConfig from 'next/config'
-
 import { createAction, createReducer } from '@reduxjs/toolkit'
 
 import { t } from 'i18next'
@@ -284,10 +282,7 @@ export const settingsReducers = createReducer(
         state.includesOtherAssets = userIncludesOtherAssets === 'true'
         state.displayAdditionalData = userDisplayAdditionalData === 'true'
 
-        const { publicRuntimeConfig } = getConfig() as {
-          publicRuntimeConfig?: { version: string }
-        }
-        const version = publicRuntimeConfig?.version ?? ''
+        const version = process.env.NEXT_PUBLIC_APP_VERSION ?? ''
         const lastVersionUsed = localStorage.getItem('lastVersionUsed')
         if (lastVersionUsed && lastVersionUsed !== version) {
           expiresLocalStorageCaches()
